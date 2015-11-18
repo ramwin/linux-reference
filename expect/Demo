@@ -1,0 +1,11 @@
+#!/usr/bin/expect -f
+set password zettage321
+set originpath [lindex $argv 0]
+spawn scp guacamole@192.168.1.161:$originpath /home/wangx/wangx10.war
+set timeout 300
+expect "guacamole@192.168.1.161's password:"
+set timeout 300
+send "$password\r"
+set timeout 300
+send "exit\r"
+expect eof www.2cto.com
