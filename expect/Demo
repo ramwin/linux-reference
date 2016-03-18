@@ -7,7 +7,7 @@ set originpath [lindex $argv 2]
 set destinationpath [lindex $argv 3]
 spawn scp $username@$hostip:$originpath $destinationpath
 set timeout 300
-expect "guacamole@192.168.1.161's password:"
+expect "$username@$hostip's password:"
 set timeout 300
 send "$password\r"
 set timeout 300
