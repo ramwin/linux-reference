@@ -1,0 +1,12 @@
+date 
+whoami
+pwd
+cd ~
+pwd
+ls
+man ls
+find . -name '*.jpg'
+tree -d .
+cat <filename>
+date > RightNow.txt # 输出写入文件
+date >> RightNow.txt    # 输出添加到文件
