@@ -1,0 +1,29 @@
+n=1
+while [ $n -le 6 ]; do
+    echo $n
+    let n++
+done
+
+y=1
+while [ $y -le 12 ]; do
+    x=1
+    while [ $x -le 12 ]; do
+        printf "% 4d" $(( $x * $y ))
+        let x++
+    done
+    echo ""
+    let y++
+done
+
+PS3="Choose (1-5):"
+echo "Choose from the list below."
+select name in red green blue yellow magenta
+do
+    break
+done
+echo "You choose $name."
+
+if [ "$name" = "" ]; then
+    echo "Error in entry."
+    exit 1
+fi
