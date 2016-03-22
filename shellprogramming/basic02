@@ -9,3 +9,4 @@ wc < RightNow.txt
 test    # 测试文件是否存在等等 存在返回0 否则返回1
 true && echo "Yes." # 第一个成功了，第二个才执行
 false || echo "Yes."    # 第一个失败了，第二个才执行
+command1 && command2 && command3 && command4
