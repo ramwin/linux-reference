@@ -9,3 +9,7 @@ iconv 转化文件编码
     iconv -f GBK -t utf-8 originfile -o target
 zip 压缩文件
     zip -r target.zip sourcedirectory/
+移除硬件
+    sudo apt-get install udisks
+    udisks --umount /dev/sdb1
+    udisks --detach /dev/sdb
