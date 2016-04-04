@@ -6,6 +6,6 @@ split 分割文件
 less <filename>
     打开文件
 iconv 转化文件编码
-    iconv -f GBK -u utf-8 originfile -o target
+    iconv -f GBK -t utf-8 originfile -o target
 zip 压缩文件
     zip -r target.zip sourcedirectory/
