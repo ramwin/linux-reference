@@ -1,0 +1,1 @@
+INSERT INTO "TESET" ( "NAME" ) VALUES ( "TEST" ) , ( "TEST2" );
