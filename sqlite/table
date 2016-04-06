@@ -1,0 +1,7 @@
+创建表
+    CREATE TABLE "dbxd" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+    "time" datetime NOT NULL, 
+    "contentid" varchar(32) NOT NULL,
+    "charge1" integer NOT NULL, 
+    "channel" varchar(32) NOT NULL);
