@@ -47,3 +47,5 @@ v = A(1:10)  % 返回Ａ的第一个到第十个的数据,一般用于 vector
 save hello.mat A;   % 保存数据到文件 二进制
     save hello.txt v -ascii % 通过ASICC码进行保存数据, 无变量名了
 load hello.mat; % 载入之前保存的变量(并且变量名不变)
+
+addpath('/home/wangx/Documents/octave'); % 添加lib的路径
