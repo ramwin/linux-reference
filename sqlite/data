@@ -1,1 +1,11 @@
-INSERT INTO "TESET" ( "NAME" ) VALUES ( "TEST" ) , ( "TEST2" );
+插入
+    INSERT INTO "TESET" ( "NAME" ) VALUES ( "TEST" ) , ( "TEST2" );
+
+查询
+    SELECT * FROM TABLE;
+    SELECT DISTINCT ID FROM TABLE;  # 去重, 这个distinct是用来修饰SELECT的
+    select * from order_dayorder, order_country where   # 外键查询 
+            order_dayorder.country_id = order_country.id;
+
+修改
+    UPDATE <table> SET column1=value1, column2=value2 WHERE column3=value3;
