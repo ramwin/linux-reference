@@ -1,0 +1,5 @@
+数据导出
+    .output test.txt
+    select * from table;
+数据导入
+    .import 文件名 表名
