@@ -5,3 +5,4 @@
     "contentid" varchar(32) NOT NULL,
     "charge1" integer NOT NULL, 
     "channel" varchar(32) NOT NULL);
+

@@ -1,0 +1,3 @@
+开启ssh服务
+    systemctl start sshd.service
+    systemctl enable sshd.service
