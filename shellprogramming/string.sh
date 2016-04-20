@@ -27,3 +27,6 @@ echo ${x#* }    # 从左删除到空格
 echo ${x##* }   # 删除到最后一个空格
 echo ${x% *}    # 从右边删除到第一个空格
 echo ${x%% *}   # 从右删除到最后一个空格
+a=$(chardet3 string.sh)
+a=${a#* }
+echo ${a%% *}
