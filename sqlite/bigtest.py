@@ -3,6 +3,7 @@
 # Xiang Wang @ ramwin@qq.com 2016-04-15 09:12:56
 
 import uuid
+# 运行后不要把文件放入git仓库
 file = open('bigtext.csv','w')
 text = '\n'.join(
         map(
