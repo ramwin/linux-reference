@@ -1,0 +1,2 @@
+# 把变量传递到下面的脚本
+ls | grep swp | xargs rm
