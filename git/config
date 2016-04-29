@@ -1,3 +1,6 @@
+设置用户名邮箱:
+    git config --global user.email "1846468966@qq.com"
+    git config --global user.name "Xiang Wang"
 设置默认的 pull 和 push
     git branch --set-upstream-to=origin/origin master
     git config --global push.default matching
