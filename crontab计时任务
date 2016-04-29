@@ -1,0 +1,9 @@
+链接: http://www.cnblogs.com/itech/archive/2011/02/09/1950226.html
+# /etc/crontab
+# m h dom mon dow user command
+* * * * * root wangx.sh
+# 分钟 小时 天 月 星期 以什么用户 执行什么代码
+*   代表了任意的数字
+/n  每5个单位
+a-b 从a单位到b单位
+a,b,c a,b,c的时候执行
