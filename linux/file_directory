@@ -20,3 +20,6 @@ zip 压缩文件
 文件系统
     truncate -s 100KB <filepath>
     sudo mkfs.xfs <filepath>
+修改卷标
+    e2label /dev/sdb1/ UDISK
+    ntfslabel /dev/sdb3/ LENOVO
