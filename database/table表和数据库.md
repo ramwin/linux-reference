@@ -1,7 +1,7 @@
 # sqlite
-创建数据库
+## 创建数据库
     sqlite3 test.db
-创建表
+## 创建表
     CREATE TABLE "dbxd" (
     "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
     "time" datetime NOT NULL, 
@@ -10,13 +10,13 @@
     "channel" varchar(32) NOT NULL);
 
 # Mysql
-创建数据库
+## 创建数据库
     create database scrapy character set utf8;
-创建表
-    create table user (
+## 创建表
+    create table user ( == 绝对不能有引号 ==
         id SMALLINT unsigned not null auto_increment primary key,
         name VARCHAR(50) comment '用户名',  # comment来写注释)
-删除表
+## 删除表
     drop table <tablename>;
-查看表
+## 查看表
     show full columns from user;
