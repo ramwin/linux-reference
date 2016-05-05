@@ -13,9 +13,13 @@
 ## 创建数据库
     create database scrapy character set utf8;
 ## 创建表
-    create table user ( == 绝对不能有引号 ==
+__表的名称绝对不能有引号__  
+__最后一行千万不要有逗号__  
+
+    create table user ( 
         id SMALLINT unsigned not null auto_increment primary key,
-        name VARCHAR(50) comment '用户名',  # comment来写注释)
+        name VARCHAR(50) comment '用户名',  -- comment来写注释
+        )
 ## 删除表
     drop table <tablename>;
 ## 查看表
