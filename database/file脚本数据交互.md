@@ -11,6 +11,7 @@
 # mysql
 ## 执行sql脚本
     mysql -h localhost -u root -p < ./test.sql
+
 ## 数据导出
     SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
     FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'

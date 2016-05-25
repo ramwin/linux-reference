@@ -21,8 +21,14 @@ _最后一行千万不要有逗号_
         name VARCHAR(50) comment '用户名',  -- comment来写注释
         )
 ## 删除表
-    drop table <tablename>; --表整个删除
+    drop table <table>; --表整个删除
     delete from table;  -- 保留表的结构
+## 重命名表
+    alter table <table> rename <table2>
 ## 查看表
     desribe <tablename>;
     show full columns from user;
+## 插入字段
+    alter table <table> add <column> <data-type> [after <column>]
+## 删除字段
+    alter table <table> drop <column>
