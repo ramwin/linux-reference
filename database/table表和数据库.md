@@ -1,4 +1,6 @@
 # sqlite
+## 查看表的详细信息
+    .schema <table>
 ## 创建数据库
     sqlite3 test.db
 ## 创建表
