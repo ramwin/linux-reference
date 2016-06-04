@@ -3,10 +3,15 @@
     INSERT INTO "TESET" ( "NAME" ) VALUES ( "TEST" ) , ( "TEST2" );
 
 ## 查询
+#### 简单查询
     SELECT * FROM TABLE;
     SELECT DISTINCT ID FROM TABLE;  # 去重, 这个distinct是用来修饰SELECT的
     select * from order_dayorder, order_country where   # 外键查询 
             order_dayorder.country_id = order_country.id;
+    SELECT * FROM <table> where <column> like "%王%" and id < 5 and age > 20;  # 模糊查询
+
+## 删除
+    DELETE from <table> where <condition>
 
 ## 修改
     UPDATE <table> SET column1=value1, column2=value2 WHERE column3=value3;
@@ -20,5 +25,12 @@
 
 # MySQL
 ## 查询
+#### INNER JOIN
+    SELECT a.column, b.column FROM table1 a INNER JOIN table2 b ON a.column_id = b.column_id
+
+#### LEFT JOIN
+    SELECT a.column, b.column FROM table1 a LEFT JOIN table2 b ON a.column_id = b.column_id;
+#### RIGHT JOIN
+    SELECT a.column, b.column FROM table1 a RIGHT JOIN table2 b ON a.column_id = b.column_id;
 ### 制定多个字段排序
     select * from <table> order by date desc, time desc limit 100;
