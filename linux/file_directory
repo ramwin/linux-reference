@@ -19,9 +19,11 @@ zip 压缩文件
     sudo apt-get install udisks
     udisks --umount /dev/sdb1
     udisks --detach /dev/sdb
+    udiskctl power-off -b /dev/sdb
 文件系统
     truncate -s 100KB <filepath>
     sudo mkfs.xfs <filepath>
 修改卷标
     e2label /dev/sdb1/ UDISK
     ntfslabel /dev/sdb3/ LENOVO
+    fatlabel /dev/sdb1 MI

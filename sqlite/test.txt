@@ -1,4 +1,0 @@
-NULL|ew
-NULL|fds
-NULL|gfd
-NULL|gre
