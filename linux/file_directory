@@ -1,3 +1,5 @@
+重新挂载系统
+    mount -o remount rw /   # 解决 read-only filesystem 问题
 split 分割文件
     split -b 1900 test result   将文件分割成1900字节
     split -C 500 test result    将文件分割成每个最多500字节
