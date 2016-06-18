@@ -1,3 +1,4 @@
 彻底删除某个文件
     git filter-branch --tree-filter 'rm -f <filename>' HEAD
     git push -f
+# 测试，之后删除
