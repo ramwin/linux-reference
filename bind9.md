@@ -9,9 +9,11 @@
 # 用作 *缓存* 服务器
 1. 编辑 `/etc/bind/named.conf.options` 文件
     forwarders {
-        114.114.114.114;
-        8.8.8.8
-    }
+        121.41.61.10;
+    };
+    allow-query { any; };
+    allow-query-cache { any; };
+
 2. 重启服务 `sudo systemctl restart bind9.service`  
 
 # 用作 *Master* 服务器
