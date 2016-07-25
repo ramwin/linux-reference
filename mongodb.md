@@ -16,3 +16,6 @@
 
 ## 数据查询
     db.user.find()
+
+## 删除数据库
+    db.user.drop()
