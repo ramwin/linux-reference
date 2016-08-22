@@ -12,4 +12,10 @@
 [学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)  
 
 * 函数，变量的跳转  [ + ctrl + i
-    
+
+
+# 多窗口
+* ^ws 拆分窗口
+* ^wv 垂直拆分窗口
+* ^ww 切换窗口
+* ^wq 退出窗口
