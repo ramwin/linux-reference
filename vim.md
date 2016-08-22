@@ -1,3 +1,6 @@
+# 选择
+* ci'、ci"、ci<、快速更改
+* di'、di"、di(  快速删除
 # 移动
 * 移动到屏幕位置    H, M, L
 * 移动到制定列  n|
@@ -12,4 +15,3 @@
 [学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)  
 
 * 函数，变量的跳转  [ + ctrl + i
-    
