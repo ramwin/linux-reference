@@ -7,6 +7,7 @@ i=0;
 while [ $i -lt $len ]; do
     echo ../${project[$i]}
     cd ../${project[$i]}
+    git config core.filemode false;
     git status;
     let i++
 done

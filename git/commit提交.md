@@ -1,3 +1,6 @@
+# add 后查看修改
+    git diff --cached
+
 # 多次提交很简单的代码
     git commit --amend  # 这样就能修改上次提交的信息，不创建新版本
 
