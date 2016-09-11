@@ -7,3 +7,6 @@
 
 # git中文不显示utf8编码而显示中文:
     git config --global core.quotepath false
+
+# 设置忽略文件权限修改
+    git config core.filemode false
