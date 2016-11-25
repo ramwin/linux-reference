@@ -14,8 +14,18 @@
     help    # 显示帮助文档
     use test   # 使用数据库
 
+## 插入数据
+    # 如果没有_id,就会自己生成_id, _id必须保证唯一性
+    db.user.insert(
+        "name": "ramwin",
+        "身高": 170,
+        "家庭": [
+            "父亲": {},
+            "母亲": {},
+        ]
+    )
 ## 数据查询
-    db.user.find()
+    db.user.find({"name": "ramwin"})
 
 ## 删除数据库
     db.user.drop()
