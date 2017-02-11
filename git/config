@@ -10,3 +10,9 @@
 
 # 设置忽略文件权限修改
     git config core.filemode false
+
+# 全局设定
+    设置 .gitconfig
+        [core]
+            excludesfile = ~/.gitignore_global
+    编辑 .gitignore_global
