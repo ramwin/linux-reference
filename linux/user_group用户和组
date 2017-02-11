@@ -7,5 +7,5 @@ sudo免密码:
 删除用户:   deluser git
 
 添加组:
-    usermod -a -G docker wangx
+    sudo usermod -aG docker wang
 

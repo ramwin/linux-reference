@@ -1,23 +1,58 @@
+
+
 # 选择
 * ci'、ci"、ci<、快速更改
 * di'、di"、di(  快速删除
+* da', da", da(  delete all '这个就是包括两边进行删除了
 # 移动
+* W, w 前进一个单词(大写忽略标点)
+* B, b 后退一个单词(大些忽略标点)
 * 移动到屏幕位置    H, M, L
 * 移动到制定列  n|
 * 下一行 ctrl + E 
 * 上一行 ctrl + Y 
 
+# [折叠](http://www.cnblogs.com/welkinwalker/archive/2011/05/30/2063587.html)
+* 折叠所有 vM
+* 折叠  zc
+* 折叠当前范围 zC
+* 打开折叠 zo
+* 打开当前最大折叠 zO
+
 # 替换
     :%s/old/net/gc
     :%s/\s\+$// # 删除行末的空格
+    :100,200s/old/new/gc # 只替换100行到200行的数据
 
 # 跳转
-[学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)  
-
+* [学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)  
+* `[ i`查看上一次的用法
+* `[ ctrl i` 跳转到上面的定义
+* `] ctrl i` 跳转到下面
+* `] i` 查看下一次的用法
+* `g; g.` 跳转到之前编辑的地方
 * 函数，变量的跳转  [ + ctrl + i
+* `ctrl + O` 跳转到上次位置
+* `ctrl + I` 跳转到下次位置
 
 # 多窗口
 * ^ws 拆分窗口
 * ^wv 垂直拆分窗口
 * ^ww 切换窗口
 * ^wq 退出窗口
+
+# 编辑
+* x 删除一个字符
+* d 删除
+    * dw, d$, dd 删除单词，末尾，一行
+    * dfx 删除到某个字符
+    * dtx 删除到某个字符，不包括这个字符
+
+# 参考
+* [链接](http://dsec.pku.edu.cn/~jinlong/vi/Vi.html)
+
+# 宏
+* 输入`q`进入命令模式
+* 输入`a-z0-9`选择宏的命名
+* 持续性操作，知道按`q`退出
+* 输入`@+命名`执行录制的宏
