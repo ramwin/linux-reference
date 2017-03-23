@@ -2,8 +2,7 @@
 Description=Job that runs the wangx server
 
 [Service]
-ExecStart=/srv/run.sh
-ExecStop=/srv/run.sh
+ExecStart=/etc/init.d/run.sh
 
 [Install]
 WantedBy=multi-user.target
