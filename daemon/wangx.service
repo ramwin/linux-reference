@@ -1,0 +1,9 @@
+[Unit]
+Description=Job that runs the wangx server
+
+[Service]
+ExecStart=/srv/run.sh
+ExecStop=/srv/run.sh
+
+[Install]
+WantedBy=multi-user.target
