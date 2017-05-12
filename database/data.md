@@ -24,6 +24,7 @@
     CREATE INDEX "table_city_4a5754ed" ON "table_city" ("province_id");
 
 # MySQL
+* [官方参考](https://dev.mysql.com/doc/refman/5.7/en/functions.html)
 ## 查询
 #### INNER JOIN
     SELECT a.column, b.column FROM table1 a INNER JOIN table2 b ON a.column_id = b.column_id
@@ -34,3 +35,12 @@
     SELECT a.column, b.column FROM table1 a RIGHT JOIN table2 b ON a.column_id = b.column_id;
 ### 制定多个字段排序
     select * from <table> order by date desc, time desc limit 100;
+
+
+## 过滤
+
+### [时间](https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html)
+* [DAYOFWEEK](https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_dayofweek)
+```
+    DAYOFWEEK(date) in (1, 7) 找到周六和周日的, 1:周日, 7: 周六
+```
