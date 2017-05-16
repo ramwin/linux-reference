@@ -41,6 +41,10 @@
 
 ### [时间](https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html)
 * [DAYOFWEEK](https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_dayofweek)
-```
+    ```
     DAYOFWEEK(date) in (1, 7) 找到周六和周日的, 1:周日, 7: 周六
-```
+    ```
+* [DATE_ADD](https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_date-add)
+    ```
+    select * from table where DATE_ADD(date, INTERVAL 1 DAY)="2015-01-16";
+    ```
