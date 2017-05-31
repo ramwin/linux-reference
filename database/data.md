@@ -25,6 +25,12 @@
 
 # MySQL
 * [官方参考](https://dev.mysql.com/doc/refman/5.7/en/functions.html)
+
+## 插入
+```
+    INSERT INTO table_name (field1, field2) values (value1, value2), (value3, value4);
+```
+
 ## 查询
 #### INNER JOIN
     SELECT a.column, b.column FROM table1 a INNER JOIN table2 b ON a.column_id = b.column_id
