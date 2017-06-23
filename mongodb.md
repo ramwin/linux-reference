@@ -29,3 +29,9 @@
 
 ## 删除数据库
     db.user.drop()
+
+## 备份与还原
+```
+    mongodump -h localhost -d matchup -o `date +%Y年%m月%d日mongo数据库备份`
+    mongorestore -h <hostname><:port> -d dbname <path>
+```
