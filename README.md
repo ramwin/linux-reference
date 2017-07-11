@@ -4,15 +4,24 @@
 # Linux
 * [系统](./linux/system.md)
 * [user & group](./linux/user_group.md)
+* [文本处理](./text.md)
 
 
 # 软件
 * [git](./git/README.md)
+* [screen](./screen.md) *用来开启后台shell*
+    ```
+    screen -list
+    screen -S sjtupt    # 创建新的screen
+    ctrl + A + D    # 关闭当前screen
+    screen -r sjtupt    # 还原之前的screen
+    ```
 * [MySQL](./database/README.md)
     * [Grant权限控制](./database/mysql_grant.md)
 * [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
 * [nginx](./nginx.md)
+* [redis](./redis/README.md)
 * smtp邮件服务器
     * [digitalocean.com教程](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04)
     ```
