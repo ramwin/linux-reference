@@ -7,6 +7,12 @@
 * [文本处理](./text.md)
 
 
+# 常用口令
+* find
+    * `find . -path "*/migrations/*.py"` 查找文件
+    * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
+
+
 # 软件
 * [git](./git/README.md)
 * [screen](./screen.md) *用来开启后台shell*
