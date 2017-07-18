@@ -9,7 +9,7 @@
 
 # 常用口令
 * find
-    * `find . -path "*/migrations/*.py"` 查找文件
+    * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
 
 
