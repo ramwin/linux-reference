@@ -13,3 +13,6 @@
 ```
     git diff --word-diff
 ```
+
+* status
+    * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
