@@ -1,7 +1,10 @@
 #### Xiang Wang @ 2016-05-25 10:37:15
 
 # 导航
+* [vim viki](http://vim.wikia.com/wiki/Main_Page)
+* [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
 * [多窗口](#split)
+
 
 ### 插入
 * `i, I` 插入,开头插入
@@ -22,7 +25,7 @@
 * V, v 列选择, 行选择
 * yaw, yiw 也适用，把单词当作括号处理
 
-### 光标移动
+### [光标移动](http://vim.wikia.com/wiki/Moving_around)
 * h, j, k, l 左下上右移动
 * W, w 前进一个单词(大写忽略标点)
 * E, e 前进到一个单词的最后一个字母(大写忽略标点)
@@ -33,8 +36,9 @@
     n, 按照上次查找反方向查找n次
 * B, b 后退一个单词(大写忽略标点)
 * g, G 移动到指定行数(大写最后一行)
-* H, M, L 移动到屏幕位置
+* H(ead), M(iddle), L(ow) 移动到屏幕位置
 * 移动到制定列  n|
+* `#` `*` 找到当前位置单词的上一个/下一个
 
 ### 屏幕移动
 * 下一行 ctrl + E 
@@ -84,7 +88,7 @@
     `ctrl + w + `-`|`+`|`<`|`>``
 
 ### 编辑
-* x 删除一个字符
+* x, X 删除(左边，右边)一个字符
 * d, D 删除
     * D 删除到行末
     * dw, d$, dd 删除单词, 末尾, 一行

@@ -15,6 +15,7 @@
 
 # 软件
 * [git](./git/README.md)
+* [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
 * [screen](./screen.md) *用来开启后台shell*
     ```
     screen -list
