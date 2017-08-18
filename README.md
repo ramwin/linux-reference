@@ -5,6 +5,7 @@
 * [系统](./linux/system.md)
 * [user & group](./linux/user_group.md)
 * [文本处理](./text.md)
+* [markdown](./markdown.md)
 
 
 # 常用口令

@@ -1,9 +1,11 @@
 #### Xiang Wang @ 2016-05-25 10:37:15
 
 # 导航
-* [vim viki](http://vim.wikia.com/wiki/Main_Page)
 * [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
 * [多窗口](#split)
+* 参考资料
+    * [vim viki](http://vim.wikia.com/wiki/Main_Page)
+    * [vimeo](https://vimeo.com/15443936)
 
 
 ### 插入
@@ -48,18 +50,30 @@
 * `z + b` 把光标行移动到bottom
 
 ### [折叠](http://www.cnblogs.com/welkinwalker/archive/2011/05/30/2063587.html)
-* 折叠所有 vM
+* zv 查看此行(展开到当前行。用于查看日志，跳转到行数后直接展开)
 * 折叠  zc
 * 折叠当前范围 zC
 * 打开折叠 zo
 * 打开当前最大折叠 zO
+* 折叠文件 zm
+* 折叠文件到最高层 zM
+* 打开文件 zr
+* 打开所有折叠 zR
 
 ### 正则匹配
 * [别人博客参考](http://www.cnblogs.com/PegasusWang/p/3153300.html)
 * 案例  
     * `/\d\{0,2}\t.*$`
+    * `<[^<]*>$`  *找到文件的最后一个中括号标签*
 
 ### 替换
+* 位置的选择
+    * :s 当前行
+    * :%s 所有行
+    * :5,12s 第5行到第12行
+    * :.,-12s 当前行到上面12行
+    * :g/^bar/s 找前三个字母为 `baz` 的行进行替换
+* 示例
 ```
     :%s/old/net/gc
     :%s/\s\+$// # 删除行末的空格
