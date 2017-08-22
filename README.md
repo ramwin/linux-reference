@@ -12,6 +12,8 @@
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
+* rename
+    * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
 
 
 # 软件
