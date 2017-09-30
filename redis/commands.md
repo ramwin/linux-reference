@@ -15,6 +15,11 @@
         ```
         GET foo
         ```
+* list
+    * `lpop`
+        ```
+        lpop(key)  如果没有数据了，返回None
+        ```
 * keys
     * TTL [教程](https://redis.io/commands/ttl)  
         ```

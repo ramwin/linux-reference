@@ -6,6 +6,7 @@
 * [user & group](./linux/user_group.md)
 * [文本处理](./text.md)
 * [markdown](./markdown.md)
+* [bash, shell编程](./shellprogramming/README.md)
 
 
 # 常用口令
@@ -14,6 +15,10 @@
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
+* zentify
+    * `zenity --info --text '保护视力，休息一会'
+* notify-send
+    * `notify-send 保护视力，休息一会`
 
 
 # 软件
