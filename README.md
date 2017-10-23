@@ -47,3 +47,7 @@
     ```
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
+* [chromium]
+    ```
+    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
+    ```
