@@ -16,6 +16,7 @@ iconv 转化文件编码
 zip 压缩文件
     zip -r target.zip sourcedirectory/
 移除硬件
+    fdisk /dev/sdb 分区操作
     sudo apt-get install udisks
     udisks --umount /dev/sdb1
     udisks --detach /dev/sdb
