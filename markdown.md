@@ -30,6 +30,19 @@
 ## 内嵌代码 `用 tab `
     !/usrbin/env python3
     import this`
+### 指定代码格式
+```javascript
+    // javascript
+    function test() {
+        alert(2) // 注释
+    }
+```
+```python
+    # python
+    def main() {
+        print(3) # 注释
+    }
+```
 
 ### 一点点代码  
 

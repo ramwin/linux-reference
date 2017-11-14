@@ -11,6 +11,12 @@
     "charge1" integer NOT NULL, 
     "channel" varchar(32) NOT NULL);  
 
+## 导入其他的数据库
+```
+    attach "filename" as <dbname>;
+```
+
+
 # Mysql
 ## 创建数据库  
     create database scrapy character set utf8;

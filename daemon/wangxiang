@@ -1,0 +1,23 @@
+#!/bin/sh
+if [ $1 = 'start' ]; then {
+    if [ ! \( -f /var/run/wangxiang.pid \) ]; then {
+        echo 'starting service wangxiang.py'
+        python /etc/init.d/wangxiang.py &
+        echo $! > /var/run/wangxiang.pid
+        echo 'service wangxiang.py has been started'
+        }
+    else
+        echo '进程已经启动'
+    fi
+    }
+elif [ $1 = 'stop' ]; then {
+    echo 'your tried to stop the wangxiang.py'
+    # 之前用的grep来获取进程ID 
+    # processnum=`ps -ef | grep /etc/init.d/wangxiang.py | grep python |cut -b 11-14`
+    processnum=`cat /var/run/wangxiang.pid`
+    rm /var/run/wangxiang.pid
+    echo "killing process ${processnum}"
+    kill -s 9 $processnum
+    }
+fi
+exit 0
