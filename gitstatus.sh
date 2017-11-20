@@ -6,10 +6,13 @@ do
     if [ "$project" = "other" ]; then
         continue
     fi
-    echo $project;
+    echo "正在查看项目:" $project;
     cd ../${project}
     git config core.filemode false;
-    git status -s;
+    git pull origin master
+    git push origin master
+    git status
+    echo ""
 done
 # echo $project
 # len=${#project[*]};

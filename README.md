@@ -10,6 +10,7 @@
 
 
 # 常用口令
+* exit # 退出
 * fdisk # 对磁盘进行分区
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
