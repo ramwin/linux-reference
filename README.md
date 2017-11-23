@@ -27,6 +27,7 @@
 # 软件
 * [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
+    * [mysql](./mysql.md)
 * [chromium]
     ```
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
