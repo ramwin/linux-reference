@@ -8,6 +8,7 @@ do
     fi
     echo "正在查看项目:" $project;
     cd ../${project}
+    git gc
     git config core.filemode false;
     git pull origin master
     git push origin master
