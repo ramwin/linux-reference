@@ -1,13 +1,16 @@
-# Linux 知识快速查询  
+**Linux 知识快速查询**  
 *这个是我平时遇到各种问题的时候记录下来的笔记.*
 
-# Linux
-* [系统](./linux/system.md)
-* [user & group](./linux/user_group.md)
-* [文本处理](./text.md)
+# 页面导航
+* [command 常用口令](#常用口令)
+* [software 软件](#软件)
+* [regular expression 正则表达式学习](#正则表达式)
+
+* [system 系统](./linux/system.md)
+* [user & group 用户和组](./linux/user_group.md)
+* [file 文本处理](./text.md)
 * [markdown](./markdown.md)
 * [bash, shell编程](./shellprogramming/README.md)
-
 
 # 常用口令
 * exit # 退出
@@ -22,7 +25,11 @@
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
-
+# 常用组合命令
+* [批量修改文件名](https://stackoverflow.com/questions/6840332/rename-multiple-files-by-replacing-a-particular-pattern-in-the-filenames-using-a)
+```shell
+for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
+```
 
 # 软件
 * [database数据库](./database/README.md)
@@ -34,6 +41,10 @@
     ```
 * except  # 自动输入账号密码的工具，用来自动化脚本里面避免卡住
 * [git](./git/README.md)
+* [gpg](https://statistics.berkeley.edu/computing/encrypt)
+    * 创建密钥 gpg --full-gen-key
+    * 加密文件 gpg -e -r USERNAME <file>
+    * 解密文件 gpg -d -o <target> <file>
 * [MySQL](./database/README.md)
     * [Grant权限控制](./database/mysql_grant.md)
 * [nginx](./nginx.md)
@@ -56,3 +67,12 @@
     ```
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
 * [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
+
+# 正则表达式
+* [在线学习](https://regexone.com)
+* 规则:
+    1. 基础 abc
+    2. 数字 \d
+    3. 通配符 .
+    4. 任意选择 [abc] 匹配中间任何一个 [^abc] 反向匹配，不要出现abc任何一个
+    5. [a-z] 匹配 a 到 z的小写字母

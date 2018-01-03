@@ -65,6 +65,7 @@
 * 案例  
     * `/\d\{0,2}\t.*$`
     * `<[^<]*>$`  *找到文件的最后一个中括号标签*
+    * [跨行搜索](http://vim.wikia.com/wiki/Search_across_multiple_lines)
 
 ### 替换
 * 位置的选择
