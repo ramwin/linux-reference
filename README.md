@@ -40,6 +40,7 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     ```
 * except  # 自动输入账号密码的工具，用来自动化脚本里面避免卡住
 * [git](./git/README.md)
+* [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
     * 加密文件 gpg -e -r USERNAME <file>
@@ -65,6 +66,11 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     service postfix restart
     ```
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
+* terminal终端
+    * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
+    * 快捷键:
+        * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
+        * 移动一个单词: alt+b | alt+f
 * [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
 
 # 正则表达式
