@@ -1,5 +1,6 @@
 ## Xiang Wang @ 2016-05-25 10:37:15
 
+
 # 导航
 * [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
 * [多窗口](#split)
@@ -93,7 +94,8 @@
 * `[ ctrl i` 跳转到上面的定义
 * `] ctrl i` 跳转到下面
 * `] i` 查看下一次的用法
-* `g; g.` 跳转到之前编辑的地方
+* `g; g, \`,` 跳转到上一次/下一个/最后一次编辑的地方
+
 * 函数, 变量的跳转  [ + ctrl + i
 * `ctrl + O` 跳转到上次位置
 * `ctrl + I` 跳转到下次位置
