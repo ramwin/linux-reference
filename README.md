@@ -12,6 +12,18 @@
 * [bash, shell编程](./shellprogramming/README.md)
 
 # 常用口令
+* diff:
+```
+    -c:  把不同之处以及前3行和后3行显示出来。
+    -r（recursively） 把子目录区别也比较出来
+    -i :忽略大小写
+    -w ：忽略空格和tab
+    diff3: 比较3个文件的不同。
+        diff3 MY-FILE COMMON-FILE YOUR-FILE。把两边的都和中间的文件比较
+    diff -Nur originalfile newfile > patchfile:把旧文件和新的文件进行比较，生成文件的差，一次作为升级包
+    patch -p1 < patchfile：把升级包应用于文件夹
+    patch originalfile patchfile：把升级包应用于单个文件
+```
 * exit # 退出
 * fdisk # 对磁盘进行分区
 * find
