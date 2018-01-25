@@ -46,6 +46,7 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
 * [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
     * [mysql](./mysql.md)
+        * [Grant权限控制](./database/mysql_grant.md)
 * [chromium]
     ```
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
@@ -57,8 +58,6 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     * 创建密钥 gpg --full-gen-key
     * 加密文件 gpg -e -r USERNAME <file>
     * 解密文件 gpg -d -o <target> <file>
-* [MySQL](./database/README.md)
-    * [Grant权限控制](./database/mysql_grant.md)
 * [nginx](./nginx.md)
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
@@ -83,6 +82,7 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     * 快捷键:
         * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
         * 移动一个单词: alt+b | alt+f
+        * 清屏: ctrl+l
 * [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
 
 # 正则表达式

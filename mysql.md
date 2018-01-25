@@ -2,8 +2,20 @@
 
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
-* `CREATE DATABASE menagerie;`
-* `CREATE TABLE <tablename> (column, column);`
+* ## CREATE
+    * 示例
+    ```
+        CREATE DATABASE menagerie;
+        CREATE TABLE <tablename> (column, column);
+        CREATE TABLE shop (
+            article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
+            dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
+            price   DOUBLE(16,2)             DEFAULT '0.00' NOT NULL,
+        )
+    ```
+    * 参考
+        * DEFAULT: 默认值
+        * NOT NULL: 不能为空
 * `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
     ```mysql
@@ -59,6 +71,16 @@
     UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     ```
 * USE <databasename>
+* batch
+    ```
+    mysql < batch-file > outfile
+    ```
+* 一些复杂的查询:
+```
+    select @min_price:=MIN(price) from shop;
+    select @min_price;
+    select * FROM shop WHERE price=@min_price;
+```
 
 
 # tutorial 函数大全
@@ -69,6 +91,7 @@
     * `DATABASE()`: 当前数据库
     * `DATE_ADD(CURDATE(), INTERVAL 1 MONTH)`: 返回下个月的今天。1月29, 30, 31的结果都一样
     * `DAYOFMONTH`: 返回日期
+    * `MAX(column)`: 最大值
     * `MOD(MONTH(CURDATE()), 12) + 1`: MOD去模，用来返回下个月的月份
     * `MONTH`: 返回月份
     * `NOW()`: 当前时间
@@ -105,3 +128,8 @@
 # 过滤
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
+
+# 有待整理
+* [file backup restore 和文件相关的操作](./file脚本数据交互.md)
+* [data 基础操作](./data.md)
+* [和数据库, 表有关的操作](./table表和数据库.md)
