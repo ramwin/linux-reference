@@ -2,6 +2,7 @@
 
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
+
 * ## CREATE
     * 示例
     ```
@@ -36,6 +37,7 @@
     ```
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
+
 * ## SELECT  
     * A条件 AND B条件 OR C条件, AND的优先级比较高，但是为了不弄混，还是加括号()比较好
     * DISTINCT是针对结果的。结果数据一致就算是一致
@@ -65,22 +67,38 @@
     ```mysql
     SELECT [DISTINCT] field FROM table WHERE conditions_to_satisfy ORDER BY column [DESC];
     ```
-* SHOW DATABASES; SHOW TABLES; SHOW CREATE TABLE pet SHOW INDEX FROM pet;
-* UPDATE
+    * ### 用户自定义变量:
+    ```
+        select @min_price:=MIN(price) from shop;
+        select @min_price;
+        select * FROM shop WHERE price=@min_price;
+    ```
+    * ### 使用外键
+    ```
+    CREATE TABLE shirt (
+        id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        style ENUM('t-shirt', 'polo', 'dress') NOT NULL,
+        color ENUM('red', 'blue', 'orange', 'white', 'black') NOT NULL,
+        owner SMALLINT UNSIGNED NOT NULL REFERENCES person(id),
+        PRIMARY KEY (id)
+    );
+    ```
+
+* ## SHOW
+    * SHOW DATABASES;
+    * SHOW TABLES;
+    * SHOW CREATE TABLE pet;
+    * SHOW INDEX FROM pet;
+    * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
+* ## UPDATE
     ```mysql
     UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     ```
-* USE <databasename>
-* batch
+* ## USE <databasename>
+* ## batch
     ```
     mysql < batch-file > outfile
     ```
-* 一些复杂的查询:
-```
-    select @min_price:=MIN(price) from shop;
-    select @min_price;
-    select * FROM shop WHERE price=@min_price;
-```
 
 
 # tutorial 函数大全
@@ -91,6 +109,7 @@
     * `DATABASE()`: 当前数据库
     * `DATE_ADD(CURDATE(), INTERVAL 1 MONTH)`: 返回下个月的今天。1月29, 30, 31的结果都一样
     * `DAYOFMONTH`: 返回日期
+    * `LAST_INSERT_ID`: 最后一次插入的数据
     * `MAX(column)`: 最大值
     * `MOD(MONTH(CURDATE()), 12) + 1`: MOD去模，用来返回下个月的月份
     * `MONTH`: 返回月份
@@ -99,6 +118,8 @@
     * `USER()`: 当前用户
     * `VERSION()`: 查看版本
 
+* 不常用函数
+    * `BIT_OR`: 
 * 数学函数
     * `PI()`: 3.141592
     * `SIN`: sin三角函数
@@ -107,6 +128,10 @@
 # [Data Types 数据类型](https://dev.mysql.com/doc/refman/5.7/en/data-types.html)
 ## [Data Type Overview]()
 ## [数字类型]()
+    * 基础: INT(2)
+    * 可用参数: `UNSIGNED, ZEROFILL, AUTO_INCREMENT`
+    * `ALTER TABLE tb1 AUTO_INCREMENT = 100;`  # 不是自动加1,而是自动加100
+    * YEAR(4)
 ## [时间和日期]()
 ## [字符串类型]()
 ## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/5.7/en/spatial-types.html)
