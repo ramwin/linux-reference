@@ -104,3 +104,4 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     13. | 代表或者 (cats|dogs)
     14. \w 数字或者字母
     15. \D \S \W 代表反过来
+    16. (?!abc) 不能出现abc
