@@ -26,6 +26,7 @@
 ```
 * exit # 退出
 * fdisk # 对磁盘进行分区
+    * `fdisk -l`: 查看电脑上有多少硬盘
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
