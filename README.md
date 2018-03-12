@@ -56,8 +56,9 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
-    * 加密文件 gpg -e -r USERNAME <file>
-    * 解密文件 gpg -d -o <target> <file>
+    * 加密文件 gpg -e -r USERNAME <file>  生成file.gpg文件
+    * 解密文件 gpg -d -o <新的文件名> <加密的gpg文件>
+* iotop: `查看磁盘当前读写速度`
 * [nginx](./nginx.md)
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
