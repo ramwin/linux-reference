@@ -53,7 +53,7 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
 * except  # 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* [git](./git/README.md)
+* [git](./git.md)
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
