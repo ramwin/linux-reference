@@ -3,6 +3,10 @@
 ### git知识
 
 
+# blame
+```
+git blame filepath  # 查看某个文件的修改记录
+```
 
 # diff
 ```
