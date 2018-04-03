@@ -26,6 +26,7 @@
 ```
 * exit # 退出
 * fdisk # 对磁盘进行分区
+    * `fdisk -l`: 查看电脑上有多少硬盘
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
@@ -33,6 +34,12 @@
     * `notify-send 保护视力，休息一会`
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
+* sed
+    * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
+    * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*
+* tr
+    * [参考网站](http://www.linfo.org/tr.html)
+    * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
@@ -52,12 +59,13 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
 * except  # 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* [git](./git/README.md)
+* [git](./git.md)
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
-    * 加密文件 gpg -e -r USERNAME <file>
-    * 解密文件 gpg -d -o <target> <file>
+    * 加密文件 gpg -e -r USERNAME <file>  生成file.gpg文件
+    * 解密文件 gpg -d -o <新的文件名> <加密的gpg文件>
+* iotop: `查看磁盘当前读写速度`
 * [nginx](./nginx.md)
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)

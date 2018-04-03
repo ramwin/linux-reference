@@ -154,7 +154,18 @@
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
+# 备份与恢复
+## mysqldump
+* 示例代码
+```
+mysqldump -u root -p test --extended-insert=FALSE > test.sql
+mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
+```
+* 选项
+    * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
+    * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
+
 # 有待整理
-* [file backup restore 和文件相关的操作](./file脚本数据交互.md)
-* [data 基础操作](./data.md)
-* [和数据库, 表有关的操作](./table表和数据库.md)
+* [file backup restore 和文件相关的操作](./database/file脚本数据交互.md)
+* [data 基础操作](./database/data.md)
+* [和数据库, 表有关的操作](./database/table表和数据库.md)
