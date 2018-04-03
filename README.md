@@ -34,6 +34,12 @@
     * `notify-send 保护视力，休息一会`
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
+* sed
+    * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
+    * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*
+* tr
+    * [参考网站](http://www.linfo.org/tr.html)
+    * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
