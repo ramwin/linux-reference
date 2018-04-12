@@ -18,6 +18,9 @@ git diff --word-diff
 * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M'`
 * %h %H 简短/完整的哈希字符串
 
+# pull
+* 拉取远程分支 git pull origin <branch>:<local_branch>
+
 # status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
 
