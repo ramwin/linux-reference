@@ -8,6 +8,9 @@
 git blame filepath  # 查看某个文件的修改记录
 ```
 
+# checkout
+* `git checkout versin -- file1/to/restore file2/to/restore`
+
 # diff
 ```
 git diff --word-diff
