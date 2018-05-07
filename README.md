@@ -44,6 +44,8 @@
 * sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*
+* timedatectl
+    `timedatectl set-local-rtc 1`: 关闭使用utc时间
 * tr
     * [参考网站](http://www.linfo.org/tr.html)
     * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
