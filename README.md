@@ -49,6 +49,9 @@
 * tr
     * [参考网站](http://www.linfo.org/tr.html)
     * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
+* unzip
+    * `unzip -O gbk filename.zip`: 处理windows的zip文件
+    * `unzip -O gbk -l filename.zip`: 只看看，不解压
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
