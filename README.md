@@ -12,6 +12,10 @@
 * [bash, shell编程](./shellprogramming/README.md)
 
 # 常用口令
+* [ ] awk
+```
+awk '{print $1}' filename
+```
 * cp:
 复制一个文件或者文件夹  
     * 不会删除原有的文件
@@ -43,7 +47,8 @@
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
 * sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
-    * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*
+    * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
+* [ ] tee  
 * timedatectl
     `timedatectl set-local-rtc 1`: 关闭使用utc时间
 * tr
