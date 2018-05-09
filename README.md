@@ -1,10 +1,6 @@
 **Linux 知识快速查询**  
-*这个是我平时遇到各种问题的时候记录下来的笔记.*
 
 # 页面导航
-* [command 常用口令](#常用口令)
-* [software 软件](#软件)
-* [regular expression 正则表达式学习](#正则表达式)
 * [system 系统](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [file 文本处理](./text.md)
@@ -35,8 +31,8 @@ awk '{print $1}' filename
     patch -p1 < patchfile：把升级包应用于文件夹
     patch originalfile patchfile：把升级包应用于单个文件
 ```
-* exit # 退出
-* fdisk # 对磁盘进行分区
+* exit: 退出
+* fdisk: 对磁盘进行分区
     * `fdisk -l`: 查看电脑上有多少硬盘
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
@@ -60,12 +56,6 @@ awk '{print $1}' filename
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
-# 常用组合命令
-* [批量修改文件名](https://stackoverflow.com/questions/6840332/rename-multiple-files-by-replacing-a-particular-pattern-in-the-filenames-using-a)
-```shell
-for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
-```
-
 # 软件
 * [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
@@ -75,7 +65,7 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     ```
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
-* except  # 自动输入账号密码的工具，用来自动化脚本里面避免卡住
+* except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
 * [git](./git.md)
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
@@ -87,12 +77,12 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
-    ```
-    screen -list
-    screen -S sjtupt    # 创建新的screen
-    ctrl + A + D    # 关闭当前screen
-    screen -r sjtupt    # 还原之前的screen
-    ```
+```
+screen -list
+screen -S sjtupt    # 创建新的screen
+ctrl + A + D    # 关闭当前screen
+screen -r sjtupt    # 还原之前的screen
+```
 * smtp邮件服务器
     * [digitalocean.com教程](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04)
     ```
@@ -104,6 +94,9 @@ for f in *.png; do mv "$f" "`echo $f | sed s/file/ffff/`"; done
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
 * terminal终端
     * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
+    * 删除快捷键:
+        alt+d: 删除光标右边的单词
+        ctrl+w: 删除当前光标左边的单词
     * 快捷键:
         * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
         * 移动一个单词: alt+b | alt+f
