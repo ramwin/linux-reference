@@ -1,7 +1,4 @@
-#### Xiang Wang @ 2017-06-21 10:59:41
-
-### git知识
-
+**Xiang Wang @ 2017-06-21 10:59:41**
 
 # blame
 ```
@@ -10,6 +7,37 @@ git blame filepath  # 查看某个文件的修改记录
 
 # checkout
 * `git checkout versin -- file1/to/restore file2/to/restore`
+
+# commit
+* add 后查看修改: `git diff --cached`
+
+* 多次提交很简单的代码 `git commit --amend  # 这样就能修改上次提交的信息，不创建新版本`
+
+* 提交了一次错误的版本 `git rever <commitid>  # 把那次commit之后的修改都reset掉，并生成一个新的commit`
+
+# config
+* 设置用户名邮箱:
+```
+git config --global user.email "ramwin@qq.com"
+git config --global user.name "Xiang Wang"
+```
+* 设置默认的 pull 和 push
+```
+git branch --set-upstream-to=origin/origin master
+git config --global push.default matching
+```
+
+* git中文不显示utf8编码而显示中文: `git config --global core.quotepath false`
+
+* 设置忽略文件权限修改: `git config core.filemode false`
+
+* 全局设定
+```
+设置 .gitconfig
+    [core]
+        excludesfile = ~/.gitignore_global
+编辑 .gitignore_global
+```
 
 # diff
 ```
