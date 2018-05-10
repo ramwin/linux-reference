@@ -31,6 +31,10 @@ awk '{print $1}' filename
     patch -p1 < patchfile：把升级包应用于文件夹
     patch originalfile patchfile：把升级包应用于单个文件
 ```
+* du
+```
+du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
+```
 * exit: 退出
 * fdisk: 对磁盘进行分区
     * `fdisk -l`: 查看电脑上有多少硬盘
@@ -44,6 +48,7 @@ awk '{print $1}' filename
 * sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
+* sort: `sort -h 根据文件尺寸来排序`
 * [ ] tee  
 * timedatectl
     `timedatectl set-local-rtc 1`: 关闭使用utc时间
@@ -66,7 +71,7 @@ awk '{print $1}' filename
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* [git](./git.md)
+## [git](./git.md)
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
