@@ -103,6 +103,12 @@ Tidy Advocacy Community Group.
 * [nginx](./nginx.md)
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
 * [rabbitmq](https://www.rabbitmq.com/)
+    * [Tutorials](https://www.rabbitmq.com/getstarted.html)
+    * change password  
+    ````
+    rabbitmqctl change_password <username> <password>  # changepassword
+    rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
+    ````
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
