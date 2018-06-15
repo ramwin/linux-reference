@@ -1,13 +1,13 @@
-**Linux 知识快速查询**  
+**Xiang Wang @ 2015-11-18**  
 
-# 页面导航
+# menu
 * [system 系统](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [file 文本处理](./text.md)
 * [markdown](./markdown.md)
 * [bash, shell编程](./shellprogramming/README.md)
 
-# 常用口令
+# command
 * [ ] awk
 ```
 awk '{print $1}' filename
@@ -50,6 +50,11 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
 * sort: `sort -h 根据文件尺寸来排序`
 * [ ] tee  
+* tidy
+> Tidy is a console application which corrects and cleans up HTML and XML
+documents by fixing markup errors and upgrading legacy code to modern
+standards. Tidy is a product of the World Wide Web Consortium and the HTML
+Tidy Advocacy Community Group.
 * timedatectl
     `timedatectl set-local-rtc 1`: 关闭使用utc时间
 * tr
@@ -61,8 +66,8 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
-# 软件
-* [database数据库](./database/README.md)
+# software
+* ## [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
     * [mysql](./mysql.md)
         * [Grant权限控制](./database/mysql_grant.md)
@@ -71,14 +76,33 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-## [git](./git.md)
+* ## [git](./git.md)  
+    * build your git server
+    ```
+    [root:~/] sudo adduser git
+    [git:~/] git init --bare repository.git
+    [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
+    ```
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
     * 加密文件 gpg -e -r USERNAME <file>  生成file.gpg文件
     * 解密文件 gpg -d -o <新的文件名> <加密的gpg文件>
 * iotop: `查看磁盘当前读写速度`
+* ## postgresql
+    * [install and use postgresql ](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
+    ```
+    sudo apt install postgresql postgresql-contrib
+    sudo -i -u postgres
+    psql
+    sudo -u postgres psql
+    createuser --interactive
+    ```
+    * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
+
 * [nginx](./nginx.md)
+* [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
+* [rabbitmq](https://www.rabbitmq.com/)
 * [redis](./redis/README.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
@@ -106,9 +130,10 @@ screen -r sjtupt    # 还原之前的screen
         * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
         * 移动一个单词: alt+b | alt+f
         * 清屏: ctrl+l
-* [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
+* ## [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
+* 7z
 
-# 正则表达式
+# regular expression
 * [在线学习](https://regexone.com)
 * [在线测试](https://regex101.com/#python)
 * 规则:
