@@ -103,6 +103,9 @@ Tidy Advocacy Community Group.
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
 
 * [nginx](./nginx.md)
+    * [Download](http://nginx.org/)
+    * [Tutorial in Didital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
+    * [Compile and Configure](http://nginx.org/en/docs/configure.html)
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
 * [rabbitmq](https://www.rabbitmq.com/)
     * [Tutorials](https://www.rabbitmq.com/getstarted.html)
