@@ -67,6 +67,8 @@ Tidy Advocacy Community Group.
     * `zenity --info --text '保护视力，休息一会'
 
 # software
+* ## [celery](http://docs.celeryproject.org/en/latest/index.html)
+`celery -A tasks worker --loglevel=info`
 * ## [database数据库](./database/README.md)
     * [mongodb](./mongodb.md)
     * [mysql](./mysql.md)
