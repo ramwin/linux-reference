@@ -142,6 +142,8 @@ screen -r sjtupt    # 还原之前的screen
         * 移动一个单词: alt+b | alt+f
         * 清屏: ctrl+l
 * ## [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
+    * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
+        `:MultipleCursorsFind <regrexmatch>`
 * 7z
 
 # regular expression
