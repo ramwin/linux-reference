@@ -39,9 +39,59 @@
     > scard game:1:deck  # count the amounts of remaining members
     (integer) 47
     ```
-* [ ] redis sorted sets
+* ## [redis sorted sets](https://redis.io/topics/data-types-intro#redis-sorted-sets)
+    * tutorial
+    ```
+    > zadd hackers 1940 "Allan Kay"
+    (integer) 1
+    > zadd hackers 1957 "Sophie Wilson"
+    (integer) 1
 
-# [Command 命令](./redis/commands.md)
+    > zrange hackers 0 -1
+    > zrevrange hackers 0 -1
+    > zrange hackers 0 -1 withscores
+    > zrangebyscore hackers -inf 1950
+    > zremrangebyscore hackers 1940 1960
+    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
+
+    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
+    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
+  "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
+  0 "Linus Torvalds" 0 "Alan Turing"
+    > zrange hackers 0 -1
+    > zrangebylex hackers [B [P
+    ```
+
+# [Command 命令](https://redis.io/commands)
+* [ ] Keys
+    * TTL [教程](https://redis.io/commands/ttl)  
+        ```
+        * 返回一个key的remaining time
+        * >=0, 剩余时间
+        * -1, 这个key不存在expire time
+        * -2, key不存在
+        ```
+* [ ] Lists
+    * `lpop`
+        ```
+        lpop(key)  如果没有数据了，返回None
+        ```
+* [ ] String
+    * `SET key value [EX seconds] [PX milliseconds] [NX|XX]` [参考](https://redis.io/commands/set)
+        ```
+        # SET key value [EX seconds] [PX milliseconds] [NX|XX]
+        # NX only set the key if it does not already exist
+        # XX only set the key if it already exist
+        SET foo bar
+        # 利用这个 NX 可以做成一个资源锁。当client申请资源的时候, set key value ex 3600 NX, 如果返回ok就操作，否则就申请失败
+        ```
+    * GET
+        ```
+        GET foo
+        ```
+
+## Sorted Sets
+* [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
 
 # [database 数据库]
     * change database 切换数据: `select 1`
