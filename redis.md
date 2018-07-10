@@ -91,19 +91,20 @@
     ```
 
 # [Command 命令](https://redis.io/commands)
-* connections
-    * [ ] auth
-    * echo argument: return argument
-    * [ping](https://redis.io/commands/ping)
-    ```
-    ping [argument]: return "pong" if argument is mepty or <argument>
-    use this command to test if a connection is still alive
-    ```
-    * quit: close the connection
-    * [ ] select
-    * swapdb index index: swap two redis databases, the clients connected with database 1 will see the data that was formerly of database 0
+## connections
+* [ ] auth
+* echo argument: return argument
+* [ping](https://redis.io/commands/ping)
+```
+ping [argument]: return "pong" if argument is mepty or <argument>
+use this command to test if a connection is still alive
+```
+* quit: close the connection
+* select: select index switch to different database
+* swapdb index index: swap two redis databases, the clients connected with database 1 will see the data that was formerly of database 0
 
-* [ ] Keys
+
+## Keys
     * TTL [教程](https://redis.io/commands/ttl)  
         ```
         * 返回一个key的remaining time
@@ -133,6 +134,3 @@
 
 ## Sorted Sets
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
-
-# [database 数据库]
-    * change database 切换数据: `select 1`
