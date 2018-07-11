@@ -103,6 +103,12 @@ use this command to test if a connection is still alive
 * select: select index switch to different database
 * swapdb index index: swap two redis databases, the clients connected with database 1 will see the data that was formerly of database 0
 
+## [Geo](https://redis.io/commands#geo)
+* GEOADD `GEOADD key longitude latitude member [longitude latitude member ... ]`
+* GEODIST `GEODIST key member1 member2 unit`
+* GEORADIUS `GEORADIUS key 15 37 100 km`
+
+
 
 ## Keys
     * TTL [教程](https://redis.io/commands/ttl)  
