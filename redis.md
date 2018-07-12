@@ -107,6 +107,13 @@ use this command to test if a connection is still alive
 * GEOADD `GEOADD key longitude latitude member [longitude latitude member ... ]`
 * GEODIST `GEODIST key member1 member2 unit`
 * GEORADIUS `GEORADIUS key 15 37 100 km`
+* GEOHASH `GEOHASH key member [member1 [member2]]`
+    1. They can be shortened removing characters from the right. It will lose precision but will still point to the same area.
+    2. Strings with a similar prefix are nearby, but the contrary is not true, it is possible that strings with different prefixes are nearby too.
+* GEOPOS `GEOPOS key member [member1]`
+return longitude latitude
+* GEODIS `GEODIS key member1 member2 [unit|m|km|mi|ft]`
+return the distance of two position
 
 
 
