@@ -114,6 +114,13 @@ use this command to test if a connection is still alive
 return longitude latitude
 * GEODIS `GEODIS key member1 member2 [unit|m|km|mi|ft]`
 return the distance of two position
+* GEORADIUS
+```
+GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count] [ASC|DESC] [STORE key] [STOREDIST key]
+```
+Query very large areas with a very small COUNT option may be slow.
+* GEORADIUSBYMEMBER
+THis command is exactly like GEORADIUS except you should use a member to replace the longitude and latitude
 
 
 
