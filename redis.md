@@ -122,9 +122,12 @@ Query very large areas with a very small COUNT option may be slow.
 * GEORADIUSBYMEMBER
 THis command is exactly like GEORADIUS except you should use a member to replace the longitude and latitude
 
-
-
 ## Keys
+    * DEL
+    ```
+    DEL key1 [key2 [key3]]
+    (integer) 2  # return how many keys has really been deleted
+    ```
     * TTL [教程](https://redis.io/commands/ttl)  
         ```
         * 返回一个key的remaining time

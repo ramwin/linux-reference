@@ -67,24 +67,25 @@ Tidy Advocacy Community Group.
     * `zenity --info --text '保护视力，休息一会'
 
 # software
-* ## [celery](http://docs.celeryproject.org/en/latest/index.html)
+## [celery](http://docs.celeryproject.org/en/latest/index.html)
 `celery -A tasks worker --loglevel=info`
-* ## [database数据库](./database/README.md)
-    * [mongodb](./mongodb.md)
-    * [mysql](./mysql.md)
-        * [Grant权限控制](./database/mysql_grant.md)
-* [chromium]
-    ```
-    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
-    ```
-* except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* ## [git](./git.md)  
+## [git](./git.md)  
     * build your git server
     ```
     [root:~/] sudo adduser git
     [git:~/] git init --bare repository.git
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
+## [mongodb](./mongodb.md)
+## [mysql](./mysql.md)
+* [Grant权限控制](./database/mysql_grant.md)
+
+## other
+* [chromium]
+    ```
+    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
+    ```
+* except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
@@ -92,14 +93,35 @@ Tidy Advocacy Community Group.
     * 解密文件 gpg -d -o <新的文件名> <加密的gpg文件>
 * iotop: `查看磁盘当前读写速度`
 * ## postgresql
-    * [install and use postgresql ](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
+    1. [install and use postgresql ](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  [Getting Started](https://www.postgresql.org/docs/10/static/tutorial-start.html)
     ```
     sudo apt install postgresql postgresql-contrib
     sudo -i -u postgres
     psql
     sudo -u postgres psql
     createuser --interactive
+
+    createdb [<databasename>] default name is the username
+    dropdb <databasename>
+
+    psql <databasename>
     ```
+    2. The SQL Language
+        1. Introduction
+        ```
+        cd ..../src/tutorial
+        make
+        cd ..../toturial
+        psql -s mydb
+        mydb=> \i basics.sql
+        ```
+    3. Advanced Features
+        2. Views
+        ```
+        CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
+        SELECT * FROM myview;
+        ```
+
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
 
 * [nginx](./nginx.md)
