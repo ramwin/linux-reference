@@ -123,19 +123,38 @@ Query very large areas with a very small COUNT option may be slow.
 THis command is exactly like GEORADIUS except you should use a member to replace the longitude and latitude
 
 ## Keys
-    * DEL
+* DEL
+```
+DEL key1 [key2 [key3]]
+(integer) 2  # return how many keys has really been deleted
+```
+* DUMP
+> Return a serialized version of the value stored at the specified key, it does not contain expire information
+
+* EXISTS `EXISTS KEY1 [KEY2] KEY[3]`
+> Return the number of keys that exists
+
+* EXPIRE `EXPIRE key seconds`  
+    1. DEL, SET, GETSET will clear the timeout  
+    2. `RENAME Key_B Key_A`: the new timeout will inherit all the characteristics of `Key_B`  
+    3. Call `EXPIRE/PEXPIRE` with a non-positive timeout or `EXPIREAT/PEXPIREAT` with a time in the past will delete the key rather than expired  
+    4. return 1 if the key exists and 0 if the key does not exist  
+    5. The expire accuracy error is from 0 to 1 milliseconds since 2.6
+    6. The expire information is stored as absolute Unix timestamps, so even the Redis instance is not active, the time still flows.
+    7. delete the key in passive way and active way.
+
+* EXPIREAT `EXPIREAT key timestamp`
+
+* TTL [教程](https://redis.io/commands/ttl)  
     ```
-    DEL key1 [key2 [key3]]
-    (integer) 2  # return how many keys has really been deleted
+    * 返回一个key的remaining time
+    * >=0, 剩余时间
+    * -1, 这个key不存在expire time
+    * -2, key不存在
     ```
-    * TTL [教程](https://redis.io/commands/ttl)  
-        ```
-        * 返回一个key的remaining time
-        * >=0, 剩余时间
-        * -1, 这个key不存在expire time
-        * -2, key不存在
-        ```
-* [ ] Lists
+
+
+## [ ] Lists
     * `lpop`
         ```
         lpop(key)  如果没有数据了，返回None
