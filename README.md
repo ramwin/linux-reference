@@ -79,6 +79,26 @@ Tidy Advocacy Community Group.
 ## [mongodb](./mongodb.md)
 ## [mysql](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
+## shadowsocks
+* 各个服务器的测速
+    * [linode](https://www.linode.com/speedtest)
+    ```
+    wget http://speedtest.newark.linode.com/100MB-newark.bin
+    wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
+    wget http://speedtest.dallas.linode.com/100MB-dallas.bin
+    wget http://speedtest.fremont.linode.com/100MB-fremont.bin
+    wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
+    wget http://speedtest.london.linode.com/100MB-london.bin
+    wget http://speedtest.singapore.linode.com/100MB-singapore.bin
+    wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin
+    ```
+    * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
+    * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
+    ```
+    wget https://raw.githubusercontent.com/oooldking/script/master/superspeed.sh
+    sh superspeed.sh
+    ```
+    * [多个地点ping服务器](http://ping.chinaz.com/)
 
 ## other
 * [chromium]

@@ -16,6 +16,9 @@
     src/redis-server
 ```
 
+# Progamming with Redis
+## [Redis as an LRU cache](https://redis.io/topics/lru-cache)
+
 # [Data Types 数据类型](https://redis.io/topics/data-types-intro)
 * [Redis Strings](https://redis.io/topics/data-types-intro#redis-strings)
     * tutorial
@@ -144,6 +147,38 @@ DEL key1 [key2 [key3]]
     7. delete the key in passive way and active way.
 
 * EXPIREAT `EXPIREAT key timestamp`
+
+* KEYS
+> don't use in in production environment, consider using scan or sets
+
+* migrate
+> transfer a key from a Redis instance to another one.
+
+* move key db
+> move a key to another database (the key must don't exist in the other database); return 1 if key was moved 0 if it was not moved.
+
+* OBJECT
+    * REFCOUNT: for debugging
+    * ENCODING: show "embstr" or "int"
+    * IDLETIME: seconds since the object stored at the specified key is idle.
+
+* PERSIST
+> Remopve the existing timeout on key.
+
+* PEXPIRE
+> Like EXPIRE but the time to live of the key is in milliseconds.
+
+* PEXPIREAT
+> Like EXPIREAT but the Unix time is specified in milliseconds
+
+* PTTL
+> Returns the remaining time of live of a key. -2 if the key does not exist and -1 if the key exists but has no associated expire.
+
+* RANDOMKEY
+> Return a random key from currently selected database.
+
+* RENAME
+> 
 
 * TTL [教程](https://redis.io/commands/ttl)  
     ```
