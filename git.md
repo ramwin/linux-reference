@@ -36,6 +36,7 @@ git config --global push.default matching
 设置 .gitconfig
     [core]
         excludesfile = ~/.gitignore_global
+        bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
 编辑 .gitignore_global
 ```
 

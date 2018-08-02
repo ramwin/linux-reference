@@ -1,7 +1,7 @@
 **Xiang Wang @ 2015-11-18**  
 
 # menu
-* [system 系统](./linux/system.md)
+* [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [file 文本处理](./text.md)
 * [markdown](./markdown.md)
