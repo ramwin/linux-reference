@@ -19,6 +19,13 @@ awk '{print $1}' filename
     * -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
     * -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
     * -v: 显示复制的过程
+* dd:
+复制文件
+    * [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
+    ```
+    $ sync; dd if=/dev/zero of=tempfile bs=1M count=1024; sync  # 测试写入速度
+    $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
+    ```
 * diff:
 ```
     -c:  把不同之处以及前3行和后3行显示出来。
