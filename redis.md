@@ -178,7 +178,12 @@ DEL key1 [key2 [key3]]
 > Return a random key from currently selected database.
 
 * RENAME
-> 
+> Renames key to new key. It returns an error when key does not exist, overwrite the key if exists (using DEL operation).
+
+* RENAMEX
+> Renames key to newkey if newkey does not yet exist.
+
+* [ ] restore
 
 * TTL [教程](https://redis.io/commands/ttl)  
     ```
