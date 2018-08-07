@@ -208,6 +208,10 @@ DEL key1 [key2 [key3]]
         lpop(key)  如果没有数据了，返回None
         ```
 
+## [Pub/Sub 订阅消息](https://redis.io/commands#pubsub)
+* SUBSCRIBE: `SUBSCRIBE channel [channel]`
+* PUBLISH: `PUBLISH channel message` return the number of clients that received the message
+
 ## String
 * `SET key value [EX seconds] [PX milliseconds] [NX|XX]` [参考](https://redis.io/commands/set)
     ```
