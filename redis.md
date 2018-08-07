@@ -18,6 +18,14 @@
 
 # Progamming with Redis
 ## [Redis as an LRU cache](https://redis.io/topics/lru-cache)
+* maxmemory 最大允许使用的内存 如果是用10M代表了10000000字节，如果是10MB代表了 10MiB
+* maxmemory-policy 占用内存过多时的操作
+* maxmemory-samples 5 控制的精准度 (从几个sample里面找到不需要的key去删除)
+
+## Redis as an LFU mode
+Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
+* lfu-decay-time 1: 每过多少时间，key的counter会减少
+* lfu-log-factor 10: 需要次命中后，counter达到最大。我们系统里匹配一个人大概匹配几千次。所以匹配1000次后认为最大，暂时不删除, factor设置成0, decay-time要坚持数据保存一天，255次需要6分钟才允许删除一次。一共需要减少16次，所以设置成10吧
 
 # [Data Types 数据类型](https://redis.io/topics/data-types-intro)
 * [Redis Strings](https://redis.io/topics/data-types-intro#redis-strings)
@@ -216,3 +224,9 @@ DEL key1 [key2 [key3]]
 
 ## Sorted Sets
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
+
+# Config 配置
+* maxmemory 100mb
+    * string 72b 
+    * list 168b
+    * set 72b
