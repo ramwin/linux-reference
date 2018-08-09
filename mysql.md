@@ -169,3 +169,10 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 * [file backup restore 和文件相关的操作](./database/file脚本数据交互.md)
 * [data 基础操作](./database/data.md)
 * [和数据库, 表有关的操作](./database/table表和数据库.md)
+
+# 配置
+* [utf8与utf8mb4的问题](https://mathiasbynens.be/notes/mysql-utf8mb4)
+    1. ALTER DATABASE database_name CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    2. ALTER TABLE table_name CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    3. ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    4. SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';

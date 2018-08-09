@@ -36,12 +36,14 @@ git config --global push.default matching
 设置 .gitconfig
     [core]
         excludesfile = ~/.gitignore_global
+        bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
 编辑 .gitignore_global
 ```
 
 # diff
 ```
 git diff --word-diff
+git diff HEAD HEAD^^ --stat  # only see the different name
 ```
 
 # log
@@ -79,4 +81,9 @@ git stash pop = git stash apply; git stash drop
 * 找到大文件
 ```
     git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')"
+```
+
+# gc
+```
+git gc  # 优化仓库
 ```
