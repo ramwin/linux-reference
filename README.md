@@ -164,8 +164,7 @@ Tidy Advocacy Community Group.
     rabbitmqctl change_password <username> <password>  # changepassword
     rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
     ````
-* ## [redis](./redis/README.md)
-    * ### [data types](./redis.md#Data Types)
+* ## [redis](./redis.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
 ```

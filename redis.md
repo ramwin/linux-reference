@@ -234,3 +234,6 @@ DEL key1 [key2 [key3]]
     * string 72b 
     * list 168b
     * set 72b
+* bind 允许通过哪个IP访问，一般设置成127.0.0.1(本机访问)或者自己的IP(都能访问), useless
+* requirepass `<longpassword>`: password，longer than 32
+* daemonize no: if it is yes, redis will create `/var/run/redis.pid`
