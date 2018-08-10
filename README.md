@@ -50,6 +50,8 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
 * notify-send
     * `notify-send 保护视力，休息一会`
+* rar
+    * `rar a -v1024k netease.rar netease`: 把netease创建成多个压缩文件，最大1024k
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
 * ## sed
@@ -68,6 +70,9 @@ Tidy Advocacy Community Group.
 * tr
     * [参考网站](http://www.linfo.org/tr.html)
     * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
+* unrar
+    `unrar x file.part01.rar` 解压文件，会自动把多个文件一起解压
+    `unrar e netease.part01.rar  <director>`  解压文件到指定路径
 * unzip
     * `unzip -O gbk filename.zip`: 处理windows的zip文件
     * `unzip -O gbk -l filename.zip`: 只看看，不解压
