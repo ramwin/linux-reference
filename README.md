@@ -54,9 +54,10 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     * `rar a -v1024k netease.rar netease`: 把netease创建成多个压缩文件，最大1024k
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
-* sed
+* ## sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
+    * `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
 * sort: `sort -h 根据文件尺寸来排序`
 * [ ] tee  
 * tidy
@@ -168,8 +169,7 @@ Tidy Advocacy Community Group.
     rabbitmqctl change_password <username> <password>  # changepassword
     rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
     ````
-* ## [redis](./redis/README.md)
-    * ### [data types](./redis.md#Data Types)
+* ## [redis](./redis.md)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
 ```
