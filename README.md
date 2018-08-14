@@ -95,7 +95,7 @@ Tidy Advocacy Community Group.
 * 各个服务器的测速
     * [linode](https://www.linode.com/speedtest)
     ```
-    wget http://speedtest.newark.linode.com/100MB-newark.bin
+    wget http://speedtest.newark.linode.com/100MB-newark.bin 23kb/s(宿舍，长城宽带，凌晨1点)
     wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
     wget http://speedtest.dallas.linode.com/100MB-dallas.bin
     wget http://speedtest.fremont.linode.com/100MB-fremont.bin
