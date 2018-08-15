@@ -51,6 +51,9 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M'`
 * %h %H 简短/完整的哈希字符串
 
+# ls-remote
+展示远程仓库的分支
+
 # pull
 * 拉取远程分支 git pull origin <branch>:<local_branch>
 
