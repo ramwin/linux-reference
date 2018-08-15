@@ -5,7 +5,7 @@
 * [user & group 用户和组](./linux/user_group.md)
 * [file 文本处理](./text.md)
 * [markdown](./markdown.md)
-* [bash, shell编程](./shellprogramming/README.md)
+* [shell编程](./shellprogramming/README.md)
 
 # command
 * [ ] awk
