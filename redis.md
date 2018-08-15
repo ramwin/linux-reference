@@ -78,28 +78,6 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
     > scard game:1:deck  # count the amounts of remaining members
     (integer) 47
     ```
-* ## [redis sorted sets](https://redis.io/topics/data-types-intro#redis-sorted-sets)
-    * tutorial
-    ```
-    > zadd hackers 1940 "Allan Kay"
-    (integer) 1
-    > zadd hackers 1957 "Sophie Wilson"
-    (integer) 1
-
-    > zrange hackers 0 -1
-    > zrevrange hackers 0 -1
-    > zrange hackers 0 -1 withscores
-    > zrangebyscore hackers -inf 1950
-    > zremrangebyscore hackers 1940 1960
-    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
-
-    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
-    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
-  "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
-  0 "Linus Torvalds" 0 "Alan Turing"
-    > zrange hackers 0 -1
-    > zrangebylex hackers [B [P
-    ```
 
 # [Command 命令](https://redis.io/commands)
 ## connections
@@ -227,6 +205,30 @@ DEL key1 [key2 [key3]]
     ```
 
 ## Sorted Sets
+* tutorial
+    ```
+    > zadd hackers 1940 "Allan Kay"
+    (integer) 1
+    > zadd hackers 1957 "Sophie Wilson"
+    (integer) 1
+
+    > zrange hackers 0 -1
+    > zrevrange hackers 0 -1
+    > zrange hackers 0 -1 withscores
+    > zrangebyscore hackers -inf 1950
+    > zremrangebyscore hackers 1940 1960
+    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
+
+    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
+    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
+        "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
+        0 "Linus Torvalds" 0 "Alan Turing"
+    > zrange hackers 0 -1
+    > zrangebylex hackers [B [P
+    ```
+* [ZADD](https://redis.io/commands/zadd)
+    * `ZADD key <score> member`
+    * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
 
 # Config 配置

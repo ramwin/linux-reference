@@ -1,19 +1,22 @@
 #!/bin/bash
 # Xiang Wang @ 2016-05-31 14:37:07
 
-for project in `ls ..`
-do
-    if [ "$project" = "other" ]; then
+for project in `ls ..`; do
+    echo "正在查看项目:$project";
+    if [ -f "../$project" ]; then
+        echo "文件$project不处理"
         continue
     fi
-    echo "正在查看项目:" $project;
+    if [ "$project" = "other" ]; then
+        echo "其他人的项目不处理"
+        continue
+    fi
     cd ../${project}
     # git gc
-    git config core.filemode false;
-    git pull origin master
-    git push origin master
-    git status
-    echo ""
+    # git config core.filemode false;
+    # git pull origin master
+    # git push origin master
+    git status -s
 done
 # echo $project
 # len=${#project[*]};
