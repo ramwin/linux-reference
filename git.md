@@ -40,11 +40,18 @@ git config --global push.default matching
 编辑 .gitignore_global
 ```
 
+* 服务器允许pull指定的commit
+uploadpack.allowReachableSHA1InWant=true
+
 # diff
 ```
 git diff --word-diff
 git diff HEAD HEAD^^ --stat  # only see the different name
 ```
+
+# fetch
+* 拉取指定的commit
+`git fetch --depth=1 <remote> $SHA1`
 
 # log
 * [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
