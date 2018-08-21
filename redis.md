@@ -169,7 +169,20 @@ DEL key1 [key2 [key3]]
 * RENAMEX
 > Renames key to newkey if newkey does not yet exist.
 
-* [ ] restore
+* restore
+`RESTORE key expire(milliseconds) dumpdata`
+if expire is 0, the key is created without any expire
+
+* SORT
+> return the elements contained in the list
+1. SORT mylist
+2. SORT mylist DESC
+3. SORT mylist ALPHA 0 2  # limit the amount
+4. `SORT mylist By weight_*`  # this will get the key and get the value of `weight_<key>`, and then order by the value
+5. `SORT mylist By weight_* get object_*`  # after sort, it will return the value of `object_<key>`
+6. `SORT mylist By weight_* STORE resultkey`  # after sorting, store it in `<resultkey>`
+
+* [ ] touch
 
 * TTL [教程](https://redis.io/commands/ttl)  
     ```
