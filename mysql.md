@@ -155,6 +155,14 @@
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
 # 备份与恢复
+## outfile
+    ```
+    SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
+    FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    FROM test_table;
+    ```
+
 ## mysqldump
 * 示例代码
 ```
@@ -164,6 +172,14 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 * 选项
     * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
+
+## 恢复
+    ```
+    mysql -h localhost -u root -p < ./test.sql  # 处理dump出来的
+    mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结果
+      -> FIELDS TERMINATED BY ':'
+      -> LINES TERMINATED BY '\r\n';
+    ```
 
 # 有待整理
 * [file backup restore 和文件相关的操作](./database/file脚本数据交互.md)

@@ -92,6 +92,7 @@ Tidy Advocacy Community Group.
 ## [mongodb](./mongodb.md)
 ## [mysql](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
+
 ## shadowsocks
 * 各个服务器的测速
     * [linode](https://www.linode.com/speedtest)
@@ -112,6 +113,25 @@ Tidy Advocacy Community Group.
     sh superspeed.sh
     ```
     * [多个地点ping服务器](http://ping.chinaz.com/)
+
+## [SQLite](http://www.sqlitetutorial.net/)
+* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
+    ```
+    .output backup.sql
+    .dump
+    .exit
+
+    或者
+    .output test.txt
+    select * from table;
+    ```
+
+* read 还原数据库
+    ```
+    sqlite3 test.db
+    .read <filename>
+    .import 文件名 表名
+    ```
 
 ## other
 * [chromium]
