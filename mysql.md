@@ -154,7 +154,7 @@
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
-# 备份与恢复
+# backup and restore 备份与恢复
 ## outfile
     ```
     SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
@@ -182,7 +182,6 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
     ```
 
 # 有待整理
-* [file backup restore 和文件相关的操作](./database/file脚本数据交互.md)
 * [data 基础操作](./database/data.md)
 * [和数据库, 表有关的操作](./database/table表和数据库.md)
 

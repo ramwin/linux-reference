@@ -93,6 +93,7 @@ Tidy Advocacy Community Group.
 ## [mongodb](./mongodb.md)
 ## [mysql](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
+* [mysqldump](./mysql.md)
 
 ## shadowsocks
 * 各个服务器的测速
