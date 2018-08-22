@@ -249,6 +249,9 @@ if expire is 0, the key is created without any expire
     * string 72b 
     * list 168b
     * set 72b
-* bind 允许通过哪个IP访问，一般设置成127.0.0.1(本机访问)或者自己的IP(都能访问), useless
+* bind 允许通过哪个IP访问，一般设置成127.0.0.1(本机访问)或者自己的IP(都能访问), useless，不是防火墙的只允许哪些地址访问的意思
+    * bind 127.0.0.1  只监听本机  
+    * bind 192.168.1.111  这个ip必须是本机的ip, 其他机子 redis-cli -h 192.168.1.111 就能访问  
+    * 192.168.1.111 127.0.0.1  这样就能直接 localhost访问或者其他机器 -h 192.168.1.111 访问了。
 * requirepass `<longpassword>`: password，longer than 32
 * daemonize no: if it is yes, redis will create `/var/run/redis.pid`
