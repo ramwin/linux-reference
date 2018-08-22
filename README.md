@@ -3,7 +3,6 @@
 # menu
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
-* [file 文本处理](./text.md)
 * [markdown](./markdown.md)
 * [shell编程](./shellprogramming/README.md)
 
@@ -48,6 +47,8 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
+* grep
+`grep string <file>`: 从file中找到文字
 * notify-send
     * `notify-send 保护视力，休息一会`
 * rar
