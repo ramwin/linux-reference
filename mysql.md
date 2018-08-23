@@ -154,7 +154,7 @@
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
-# backup and restore 备份与恢复
+# [backup and restore 备份与恢复](https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html)
 ## outfile
     ```
     SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
@@ -163,15 +163,17 @@
     FROM test_table;
     ```
 
-## mysqldump
+## [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 * 示例代码
 ```
-mysqldump -u root -p test --extended-insert=FALSE > test.sql
+mysqldump -u root -p test --extended-insert=FALSE > test.sql  # windows下不正确，因为windows用了UTF-16
 mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 ```
 * 选项
     * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
+* Performance and Scalability Considerations 性能和企业数据要考虑
+> It's recommended to use mysqlbackup command of MySQL Enterprise Backup product, 因为mysqldump要考虑索引，io，处理大型数据会很慢
 
 ## 恢复
     ```

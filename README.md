@@ -55,6 +55,7 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     * `rar a -v1024k netease.rar netease`: 把netease创建成多个压缩文件，最大1024k
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
+    * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
 * ## sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
