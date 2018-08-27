@@ -231,7 +231,7 @@ if expire is 0, the key is created without any expire
     GET foo
     ```
 
-## Sorted Sets
+## [Sorted Sets](https://redis.io/commands#sorted_set)
 * tutorial
     ```
     > zadd hackers 1940 "Allan Kay"
@@ -256,7 +256,12 @@ if expire is 0, the key is created without any expire
 * [ZADD](https://redis.io/commands/zadd)
     * `ZADD key <score> member`
     * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
+* [ZRANGE](https://redis.io/commands/zrange)
+    1. > 从0开始, -1是最后一个， -2是倒数第二个
+    2. > 前后都是闭区间
+    3. > 不会报错，如果start大于stop，或者start大于长度，返回 []
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
+* [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
 # Config 配置
 * maxmemory 100mb
