@@ -82,6 +82,7 @@ Tidy Advocacy Community Group.
     * `zenity --info --text '保护视力，休息一会'
 
 # software
+## alarm-clock-applet 闹钟
 ## [celery](http://docs.celeryproject.org/en/latest/index.html)
 `celery -A tasks worker --loglevel=info`
 ## [git](./git.md)  
