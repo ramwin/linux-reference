@@ -81,7 +81,7 @@ Tidy Advocacy Community Group.
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 
-# software
+# software 软件
 ## alarm-clock-applet 闹钟
 ## [celery](http://docs.celeryproject.org/en/latest/index.html)
 `celery -A tasks worker --loglevel=info`
@@ -93,7 +93,7 @@ Tidy Advocacy Community Group.
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
 ## [mongodb](./mongodb.md)
-## [mysql](./mysql.md)
+## [mysql 数据库](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
 * [mysqldump](./mysql.md)
 

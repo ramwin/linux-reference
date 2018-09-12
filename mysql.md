@@ -183,6 +183,43 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
       -> LINES TERMINATED BY '\r\n';
     ```
 
+# [Optimization 性能优化](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
+## [Optimization and Indexes 索引](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
+1. [How MySQL Uses Indexes](https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html)
+    * If there is a choice between multiple indexes, MySQL normally uses the index that find the smallest number of rows(most selective index)
+    * multiple-column index can be used by the leftmost prefix of the index, (col1, col2, col3) 的联合索引可以用于 (col1), (col1, col2), (col1, col2, col3)
+    * If a query uses from a table only columns that are included in some index, the selected values can be retrieved from the index tree for greater speed.
+2. [Primary Key Optimization 主键优化](https://dev.mysql.com/doc/refman/8.0/en/primary-key-optimization.html)
+    * set primary key not null 设置成非null
+    * With the InnoDB storage engine, the table data is physically organized to do ultra-fast lookups 主键非常快
+    * if it does not have an obvious column or set of columns to use as a primary key, create a separate column with auto-increment 必要要有主键
+3. [ ] SPATIAL Index Optimization
+4. [ ] Foreign Key Optimization
+5. [ ] Column Indexes
+6. [ ] Multiple-Column Indexes
+7. [ ] Verifying Index Usage
+8. [ ] InnoDB and MyISAM Index Statistics Collection
+9. [ ] Comparison of B-Tree and Hash Indexes
+10. [ ] Use of Index Extensions
+11. [ ] Optimizer Use of Generated Column Indexes
+12. [ ] Invisible Indexes
+13. [ ] Descending Indexes
+
+## to be continued
+* [ ] Optimization Overview
+* [ ] Optimizing SQL Statements
+* [ ] Database Structure
+* [ ] Optimizing for InnoDB Tables
+* [ ] Optimizing for MyISAM Tables
+* [ ] Optimizing for MEMORY Tables
+* [ ] Understand the Query Execution Plan
+* [ ] Controlling the Query Optimizer
+* [ ] Buffering and Caching
+* [ ] Optimizing Locking Operations
+* [ ] Optimizing the MySQL Server
+* [ ] Measuring Performance
+* [ ] Examining Thread Information
+
 # 有待整理
 * [data 基础操作](./database/data.md)
 * [和数据库, 表有关的操作](./database/table表和数据库.md)
