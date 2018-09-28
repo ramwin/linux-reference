@@ -50,6 +50,7 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
 * grep
 `grep string <file>`: 从file中找到文字
+* hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8 originfile -o target`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * notify-send

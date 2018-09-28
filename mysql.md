@@ -1,5 +1,7 @@
 *Xiang Wang @ 2017-11-22 11:18:53*
 
+* [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
 
@@ -219,6 +221,32 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 * [ ] Optimizing the MySQL Server
 * [ ] Measuring Performance
 * [ ] Examining Thread Information
+
+# SQL Statement Syntax
+## Data Definition Statements
+* [ALTER TABLE Syntax](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
+ALTER TABLE score smallint unsigned not null; this will set the **default value** 0
+    * [案例](https://dev.mysql.com/doc/refman/8.0/en/alter-table-examples.html)
+    ```sql
+    alter table <table> add <column> <data-type> [after <column>]
+    ALTER TABLE t1 RENAME t2;
+    ALTER TABLE t2 MODIFY a TYNYINT NOT NULL, CHANGE b c CHAR(20);
+    ALTER TABLE t1 RENAME COLUMN hometown_match TO hometown_match2;  -- 重命名
+    ALTER TABLE t2 ADD d TIMESTAMP;
+    ALTER TABLE t2 ADD INDEX (d), ADD UNIQUE (a);
+    ALTER TABLE t2 DROP COLUMN c;
+    ALTER TABLE t2 ADD c INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (c);
+    ```
+    * Performance and Space Requirements
+    ALTER TABLE use one the the following algorithms (COPY, INPLACE(before 5.7), INSTANT(new in 8.0.12 default))
+    ALTER 的时候，会复制原先的数据表，此时数据库处于只读状态，不能改写或插入(除非是把一个table移动到另外一个文件夹的RENAME TO操作)
+* [CREATE INDEX Syntax](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
+    * 不能够加双引号，加了会导致报错
+    ```
+    CREATE INDEX t1_hometown_match_28b57695 ON t1 (hometown_match);
+    SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = 'test' AND TABLE_NAME="t1";
+    DROP INDEX index_name on tbl_name
+    ```
 
 # 有待整理
 * [data 基础操作](./database/data.md)
