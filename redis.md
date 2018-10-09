@@ -78,28 +78,6 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
     > scard game:1:deck  # count the amounts of remaining members
     (integer) 47
     ```
-* ## [redis sorted sets](https://redis.io/topics/data-types-intro#redis-sorted-sets)
-    * tutorial
-    ```
-    > zadd hackers 1940 "Allan Kay"
-    (integer) 1
-    > zadd hackers 1957 "Sophie Wilson"
-    (integer) 1
-
-    > zrange hackers 0 -1
-    > zrevrange hackers 0 -1
-    > zrange hackers 0 -1 withscores
-    > zrangebyscore hackers -inf 1950
-    > zremrangebyscore hackers 1940 1960
-    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
-
-    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
-    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
-  "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
-  0 "Linus Torvalds" 0 "Alan Turing"
-    > zrange hackers 0 -1
-    > zrangebylex hackers [B [P
-    ```
 
 # [Command 命令](https://redis.io/commands)
 ## connections
@@ -191,7 +169,20 @@ DEL key1 [key2 [key3]]
 * RENAMEX
 > Renames key to newkey if newkey does not yet exist.
 
-* [ ] restore
+* restore
+`RESTORE key expire(milliseconds) dumpdata`
+if expire is 0, the key is created without any expire
+
+* SORT
+> return the elements contained in the list
+1. SORT mylist
+2. SORT mylist DESC
+3. SORT mylist ALPHA 0 2  # limit the amount
+4. `SORT mylist By weight_*`  # this will get the key and get the value of `weight_<key>`, and then order by the value
+5. `SORT mylist By weight_* get object_*`  # after sort, it will return the value of `object_<key>`
+6. `SORT mylist By weight_* STORE resultkey`  # after sorting, store it in `<resultkey>`
+
+* [ ] touch
 
 * TTL [教程](https://redis.io/commands/ttl)  
     ```
@@ -202,11 +193,25 @@ DEL key1 [key2 [key3]]
     ```
 
 
-## [ ] Lists
-    * `lpop`
-        ```
-        lpop(key)  如果没有数据了，返回None
-        ```
+## Lists
+    * blpop
+    * brpop
+    * brpoplpush: 和rpoplpush类似，但是会block
+    * lindex: 返回一个元素在List的位置
+    * `linsert key BEFORE|AFTER value1 new_value`: 插入新的数据
+    * llen: 长度
+    * `lpop`: `lpop(key)  如果没有数据了，返回None`
+    * lpush
+    * lpushx: only insert if the key exists
+    * rpoplpush
+    * lrange
+    * `lrem key count value`: 删除list里面的元素,count代表几次。0代表所有，count>0从head往tail删，count<0从tail往head删除
+    * lset key index value: 修改元素index的值
+    * ltrim key start stop: 只保留list中部分的数值
+    * rpop
+    * rpoplpush
+    * rpush
+    * rpushx: 必须有这个key，这个key是list才会push
 
 ## [Pub/Sub 订阅消息](https://redis.io/commands#pubsub)
 * SUBSCRIBE: `SUBSCRIBE channel [channel]`
@@ -226,14 +231,46 @@ DEL key1 [key2 [key3]]
     GET foo
     ```
 
-## Sorted Sets
+## [Sorted Sets](https://redis.io/commands#sorted_set)
+* tutorial
+    ```
+    > zadd hackers 1940 "Allan Kay"
+    (integer) 1
+    > zadd hackers 1957 "Sophie Wilson"
+    (integer) 1
+
+    > zrange hackers 0 -1
+    > zrevrange hackers 0 -1
+    > zrange hackers 0 -1 withscores
+    > zrangebyscore hackers -inf 1950
+    > zremrangebyscore hackers 1940 1960
+    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
+
+    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
+    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
+        "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
+        0 "Linus Torvalds" 0 "Alan Turing"
+    > zrange hackers 0 -1
+    > zrangebylex hackers [B [P
+    ```
+* [ZADD](https://redis.io/commands/zadd)
+    * `ZADD key <score> member`
+    * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
+* [ZRANGE](https://redis.io/commands/zrange)
+    1. > 从0开始, -1是最后一个， -2是倒数第二个
+    2. > 前后都是闭区间
+    3. > 不会报错，如果start大于stop，或者start大于长度，返回 []
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
+* [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
 # Config 配置
 * maxmemory 100mb
     * string 72b 
     * list 168b
     * set 72b
-* bind 允许通过哪个IP访问，一般设置成127.0.0.1(本机访问)或者自己的IP(都能访问), useless
+* bind 允许通过哪个IP访问，一般设置成127.0.0.1(本机访问)或者自己的IP(都能访问), useless，不是防火墙的只允许哪些地址访问的意思
+    * bind 127.0.0.1  只监听本机  
+    * bind 192.168.1.111  这个ip必须是本机的ip, 其他机子 redis-cli -h 192.168.1.111 就能访问  
+    * 192.168.1.111 127.0.0.1  这样就能直接 localhost访问或者其他机器 -h 192.168.1.111 访问了。
 * requirepass `<longpassword>`: password，longer than 32
 * daemonize no: if it is yes, redis will create `/var/run/redis.pid`

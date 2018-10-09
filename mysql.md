@@ -1,5 +1,7 @@
 *Xiang Wang @ 2017-11-22 11:18:53*
 
+* [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
 
@@ -154,19 +156,99 @@
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
-# 备份与恢复
-## mysqldump
+# [backup and restore 备份与恢复](https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html)
+## outfile
+    ```
+    SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
+    FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    FROM test_table;
+    ```
+
+## [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 * 示例代码
 ```
-mysqldump -u root -p test --extended-insert=FALSE > test.sql
+mysqldump -u root -p test --extended-insert=FALSE > test.sql  # windows下不正确，因为windows用了UTF-16
 mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 ```
 * 选项
     * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
+* Performance and Scalability Considerations 性能和企业数据要考虑
+> It's recommended to use mysqlbackup command of MySQL Enterprise Backup product, 因为mysqldump要考虑索引，io，处理大型数据会很慢
+
+## 恢复
+    ```
+    mysql -h localhost -u root -p < ./test.sql  # 处理dump出来的
+    mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结果
+      -> FIELDS TERMINATED BY ':'
+      -> LINES TERMINATED BY '\r\n';
+    ```
+
+# [Optimization 性能优化](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
+## [Optimization and Indexes 索引](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
+1. [How MySQL Uses Indexes](https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html)
+    * If there is a choice between multiple indexes, MySQL normally uses the index that find the smallest number of rows(most selective index)
+    * multiple-column index can be used by the leftmost prefix of the index, (col1, col2, col3) 的联合索引可以用于 (col1), (col1, col2), (col1, col2, col3)
+    * If a query uses from a table only columns that are included in some index, the selected values can be retrieved from the index tree for greater speed.
+2. [Primary Key Optimization 主键优化](https://dev.mysql.com/doc/refman/8.0/en/primary-key-optimization.html)
+    * set primary key not null 设置成非null
+    * With the InnoDB storage engine, the table data is physically organized to do ultra-fast lookups 主键非常快
+    * if it does not have an obvious column or set of columns to use as a primary key, create a separate column with auto-increment 必要要有主键
+3. [ ] SPATIAL Index Optimization
+4. [ ] Foreign Key Optimization
+5. [ ] Column Indexes
+6. [ ] Multiple-Column Indexes
+7. [ ] Verifying Index Usage
+8. [ ] InnoDB and MyISAM Index Statistics Collection
+9. [ ] Comparison of B-Tree and Hash Indexes
+10. [ ] Use of Index Extensions
+11. [ ] Optimizer Use of Generated Column Indexes
+12. [ ] Invisible Indexes
+13. [ ] Descending Indexes
+
+## to be continued
+* [ ] Optimization Overview
+* [ ] Optimizing SQL Statements
+* [ ] Database Structure
+* [ ] Optimizing for InnoDB Tables
+* [ ] Optimizing for MyISAM Tables
+* [ ] Optimizing for MEMORY Tables
+* [ ] Understand the Query Execution Plan
+* [ ] Controlling the Query Optimizer
+* [ ] Buffering and Caching
+* [ ] Optimizing Locking Operations
+* [ ] Optimizing the MySQL Server
+* [ ] Measuring Performance
+* [ ] Examining Thread Information
+
+# SQL Statement Syntax
+## Data Definition Statements
+* [ALTER TABLE Syntax](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
+ALTER TABLE score smallint unsigned not null; this will set the **default value** 0
+    * [案例](https://dev.mysql.com/doc/refman/8.0/en/alter-table-examples.html)
+    ```sql
+    alter table <table> add <column> <data-type> [after <column>]
+    ALTER TABLE t1 RENAME t2;
+    ALTER TABLE t2 MODIFY a TYNYINT NOT NULL, CHANGE b c CHAR(20);
+    ALTER TABLE t1 RENAME COLUMN hometown_match TO hometown_match2;  -- 重命名
+    ALTER TABLE t2 ADD d TIMESTAMP;
+    ALTER TABLE t2 ADD INDEX (d), ADD UNIQUE (a);
+    ALTER TABLE t2 DROP COLUMN c;
+    ALTER TABLE t2 ADD c INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (c);
+    ```
+    * Performance and Space Requirements
+    ALTER TABLE use one the the following algorithms (COPY, INPLACE(before 5.7), INSTANT(new in 8.0.12 default))
+    ALTER 的时候，会复制原先的数据表，此时数据库处于只读状态，不能改写或插入(除非是把一个table移动到另外一个文件夹的RENAME TO操作)
+* [CREATE INDEX Syntax](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
+    * 不能够加双引号，加了会导致报错
+    ```
+    CREATE INDEX t1_hometown_match_28b57695 ON t1 (hometown_match);
+    SELECT INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS WHERE TABLE_SCHEMA = 'test' AND TABLE_NAME="t1";
+    DROP INDEX index_name on tbl_name
+    ```
 
 # 有待整理
-* [file backup restore 和文件相关的操作](./database/file脚本数据交互.md)
 * [data 基础操作](./database/data.md)
 * [和数据库, 表有关的操作](./database/table表和数据库.md)
 

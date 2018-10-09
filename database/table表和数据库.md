@@ -36,7 +36,5 @@ _最后一行千万不要有逗号_
 ## 查看表
     desribe <tablename>;
     show full columns from user;
-## 插入字段
-    alter table <table> add <column> <data-type> [after <column>]
 ## 删除字段
     alter table <table> drop <column>

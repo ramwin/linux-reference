@@ -84,9 +84,13 @@
 
 # 正则
 * 规则:
-    1. 数量: `\d\{1,3\}`, `\+`
+    1. 数量: `\d\{1,3}`, `\+`
     2. 代码块: `\(pattern\)`
     3. 使用代码块: `\1`
+    4. 大小写: `\c`: ignore case `\C` match case
+* 案例:
+    * 删除某一类错误: `\[ERROR\]\(.*\n\)\{1,6\}AttributeError:.*\n`
+    * 删除多余的空行: ``
 
 # 跳转
 * [学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)

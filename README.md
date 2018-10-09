@@ -3,15 +3,15 @@
 # menu
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
-* [file 文本处理](./text.md)
 * [markdown](./markdown.md)
-* [bash, shell编程](./shellprogramming/README.md)
+* [shell编程](./shellprogramming/README.md)
 
 # command
 * [ ] awk
 ```
 awk '{print $1}' filename
 ```
+* chardet3 检测文件编码
 * cp:
 复制一个文件或者文件夹  
     * 不会删除原有的文件
@@ -48,17 +48,25 @@ du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
+* grep
+`grep string <file>`: 从file中找到文字
+* hddtemp: 查看硬盘的温度
+* iconv: 转化文件编码 `iconv -f GBK -t utf-8 originfile -o target`
+* less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * notify-send
     * `notify-send 保护视力，休息一会`
 * rar
     * `rar a -v1024k netease.rar netease`: 把netease创建成多个压缩文件，最大1024k
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
+    * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
 * ## sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
     * `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
-* sort: `sort -h 根据文件尺寸来排序`
+* sort:
+    * 按照文件尺寸来排序: `sort -h`
+    * 直接按照一行的文字来排序: `sort -n`
 * [ ] tee  
 * tidy
 > Tidy is a console application which corrects and cleans up HTML and XML
@@ -76,10 +84,14 @@ Tidy Advocacy Community Group.
 * unzip
     * `unzip -O gbk filename.zip`: 处理windows的zip文件
     * `unzip -O gbk -l filename.zip`: 只看看，不解压
+* wc
+    * 按照文件的行数来排序: `ls | xargs wc -l | sort -nr`
 * zentify
     * `zenity --info --text '保护视力，休息一会'
+* zip 压缩文件 zip -r target.zip sourcedirectory/
 
-# software
+# software 软件
+## alarm-clock-applet 闹钟
 ## [celery](http://docs.celeryproject.org/en/latest/index.html)
 `celery -A tasks worker --loglevel=info`
 ## [git](./git.md)  
@@ -89,10 +101,14 @@ Tidy Advocacy Community Group.
     [git:~/] git init --bare repository.git
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
+## kazam 录屏软件
+此外还有 greenrecorder, vokoscreen
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
-## [mysql](./mysql.md)
+## [mysql 数据库](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
+* [mysqldump](./mysql.md)
+
 ## shadowsocks
 * 各个服务器的测速
     * [linode](https://www.linode.com/speedtest)
@@ -113,6 +129,25 @@ Tidy Advocacy Community Group.
     sh superspeed.sh
     ```
     * [多个地点ping服务器](http://ping.chinaz.com/)
+
+## [SQLite](http://www.sqlitetutorial.net/)
+* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
+    ```
+    .output backup.sql
+    .dump
+    .exit
+
+    或者
+    .output test.txt
+    select * from table;
+    ```
+
+* read 还原数据库
+    ```
+    sqlite3 test.db
+    .read <filename>
+    .import 文件名 表名
+    ```
 
 ## other
 * [chromium]
@@ -201,6 +236,35 @@ screen -r sjtupt    # 还原之前的screen
     * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
         `:MultipleCursorsFind <regrexmatch>`
 * 7z
+
+# hardware 硬件
+* 重新挂载系统 `mount -o remount rw /   # 解决 read-only filesystem 问题`
+* split 分割文件
+    ```
+    split -b 1900 test result   将文件分割成1900字节
+    split -C 500 test result    将文件分割成每个最多500字节
+    split -l 100 test result    将文件分割成每个100行
+    split -d -l 10000 test result/block_    -d 用数字进行编号
+    ```
+* 移除硬件
+    ```
+    fdisk /dev/sdb 分区操作
+    sudo apt-get install udisks
+    udisks --umount /dev/sdb1
+    udisks --detach /dev/sdb
+    udiskctl power-off -b /dev/sdb
+    ```
+* 文件系统
+    ```
+    truncate -s 100KB <filepath>
+    sudo mkfs.xfs <filepath>
+    ```
+* 修改卷标
+    ```
+    e2label /dev/sdb1/ UDISK
+    ntfslabel /dev/sdb3/ LENOVO
+    fatlabel /dev/sdb1 MI
+    ```
 
 # regular expression
 * [在线学习](https://regexone.com)
