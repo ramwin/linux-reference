@@ -89,6 +89,7 @@ Tidy Advocacy Community Group.
     [git:~/] git init --bare repository.git
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
+## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
 ## [mysql](./mysql.md)
 * [Grant权限控制](./database/mysql_grant.md)
@@ -103,7 +104,7 @@ Tidy Advocacy Community Group.
     wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
     wget http://speedtest.london.linode.com/100MB-london.bin
     wget http://speedtest.singapore.linode.com/100MB-singapore.bin
-    wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin
+    wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin 330kb/s(宿舍，长城宽带，晚上11点)
     ```
     * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
     * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
