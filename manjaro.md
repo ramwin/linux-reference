@@ -12,3 +12,6 @@ export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=”@im=fcitx”
 ```
+
+* [manjaro自动补全](https://forum.manjaro.org/t/git-missing-bash-completion/5939)
+安装 bash-completion

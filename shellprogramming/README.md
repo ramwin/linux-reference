@@ -6,12 +6,16 @@
 * [ ] [learning website](https://www.shellscript.sh/)
 
 # [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
-* example
+* 赋值变量
 ```
 STR="Hello World!"  # 等号两端不能有空格
 echo $STR
 OF=/var/my-backup-$(date +%Y%m%d).tgz
 tar -cZf $OF /home/me/
+# 把语句赋值给变量
+version=`lsb_release -d`
+version = $(lsb_release -d)
+echo $version
 ```
 * local variables
 ```
@@ -28,6 +32,11 @@ echo $HELLO
 # String 字符串
 ```
 $'Hello\nWorld'  # 使用$可以把里面的字符转移，注意必须用单引号
+```
+* [大小写](https://stackoverflow.com/questions/2264428/how-to-convert-a-string-to-lower-case-in-bash): `${tring,,} ${string^^}`
+* 判断是否包含字符串
+```
+if [[ ${version,,} == *"manjaro"* ]]; then
 ```
 
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)

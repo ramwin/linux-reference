@@ -5,6 +5,7 @@
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)
 * [shell编程](./shellprogramming/README.md)
+* [linux命令搜索网站](https://wangchujiang.com/linux-command/)
 
 # command
 * [ ] awk
@@ -109,6 +110,7 @@ Tidy Advocacy Community Group.
 * [Grant权限控制](./database/mysql_grant.md)
 * [mysqldump](./mysql.md)
 
+## rinetd: 用来端口转发
 ## shadowsocks
 * 各个服务器的测速
     * [linode](https://www.linode.com/speedtest)
