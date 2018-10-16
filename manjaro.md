@@ -15,3 +15,11 @@ export XMODIFIERS=”@im=fcitx”
 
 * [manjaro自动补全](https://forum.manjaro.org/t/git-missing-bash-completion/5939)
 安装 bash-completion
+
+* [manjaro安装mysql, maria](https://forum.manjaro.org/t/install-apache-mariadb-php-lamp-2016/1243)
+```
+sudo pacman -S mysql
+sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+sudo systemctl enable mysqld
+sudo systemctl start mysqld
+```

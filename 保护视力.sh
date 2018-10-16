@@ -3,6 +3,7 @@
 echo "$(date) 运行保护视力脚本" >> /tmp/保护视力.log
 version=$(lsb_release -d)
 if [[ ${version,,} == *"manjaro"* ]]; then
+    export DISPLAY=:1
     notify-send "保护视力，休息一下，眺望远处"
 else
     exit 400
