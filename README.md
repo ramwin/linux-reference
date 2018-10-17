@@ -5,6 +5,7 @@
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)
 * [shell编程](./shellprogramming/README.md)
+* [linux命令搜索网站](https://wangchujiang.com/linux-command/)
 
 # command
 * [ ] awk
@@ -91,68 +92,87 @@ Tidy Advocacy Community Group.
 * zip 压缩文件 zip -r target.zip sourcedirectory/
 
 # software 软件
-## alarm-clock-applet 闹钟
-## [celery](http://docs.celeryproject.org/en/latest/index.html)
-`celery -A tasks worker --loglevel=info`
-## [git](./git.md)  
+* ## alarm-clock-applet 闹钟
+* ## [celery](http://docs.celeryproject.org/en/latest/index.html)
+`celery -A tasks worker --loglevel=info`  
+
+* chromium
+    ```
+    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
+    ```
+* ## [git](./git.md)  
     * build your git server
     ```
     [root:~/] sudo adduser git
     [git:~/] git init --bare repository.git
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
-## kazam 录屏软件
+* kazam 录屏软件
 此外还有 greenrecorder, vokoscreen
-## [mongodb](./mongodb.md)
-## [mysql 数据库](./mysql.md)
-* [Grant权限控制](./database/mysql_grant.md)
-* [mysqldump](./mysql.md)
+* ## [manjaro](./manjaro.md)
+* ## [mongodb](./mongodb.md)
+* ## [mysql 数据库](./mysql.md)
+    * [Grant权限控制](./database/mysql_grant.md)
+    * [mysqldump](./mysql.md)
 
-## shadowsocks
-* 各个服务器的测速
-    * [linode](https://www.linode.com/speedtest)
-    ```
-    wget http://speedtest.newark.linode.com/100MB-newark.bin 23kb/s(宿舍，长城宽带，凌晨1点)
-    wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
-    wget http://speedtest.dallas.linode.com/100MB-dallas.bin
-    wget http://speedtest.fremont.linode.com/100MB-fremont.bin
-    wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
-    wget http://speedtest.london.linode.com/100MB-london.bin
-    wget http://speedtest.singapore.linode.com/100MB-singapore.bin
-    wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin
-    ```
-    * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
-    * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
-    ```
-    wget https://raw.githubusercontent.com/oooldking/script/master/superspeed.sh
-    sh superspeed.sh
-    ```
-    * [多个地点ping服务器](http://ping.chinaz.com/)
+* [proxychains](https://wiki.archlinux.org/index.php/Proxy_settings#Using_a_SOCKS_proxy)
+```
+    proxychains <program>
+```
 
-## [SQLite](http://www.sqlitetutorial.net/)
-* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
-    ```
-    .output backup.sql
-    .dump
-    .exit
+* rinetd: 用来端口转发
+* ## shadowsocks
+    * 各个服务器的测速
+        * [linode](https://www.linode.com/speedtest)
+        ```
+        wget http://speedtest.newark.linode.com/100MB-newark.bin 23kb/s(宿舍，长城宽带，凌晨1点)
+        wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
+        wget http://speedtest.dallas.linode.com/100MB-dallas.bin
+        wget http://speedtest.fremont.linode.com/100MB-fremont.bin
+        wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
+        wget http://speedtest.london.linode.com/100MB-london.bin
+        wget http://speedtest.singapore.linode.com/100MB-singapore.bin
+        wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin 330kb/s(宿舍，长城宽带，晚上11点)
+        ```
+        * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
+        * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
+        ```
+        wget https://raw.githubusercontent.com/oooldking/script/master/superspeed.sh
+        sh superspeed.sh
+        ```
+        * [多个地点ping服务器](http://ping.chinaz.com/)
 
-    或者
-    .output test.txt
-    select * from table;
-    ```
+* ## [SQLite](http://www.sqlitetutorial.net/)
+    * [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
+        ```
+        .output backup.sql
+        .dump
+        .exit
 
-* read 还原数据库
+        或者
+        .output test.txt
+        select * from table;
+        ```
+
+    * read 还原数据库
+        ```
+        sqlite3 test.db
+        .read <filename>
+        .import 文件名 表名
+        ```
+
+* tsocks 让应用启动的时候走代理
     ```
-    sqlite3 test.db
-    .read <filename>
-    .import 文件名 表名
+    # 配置tsocks
+    vim /etc/tsocks.conf
+    server = 127.0.0.1
+    server_port = 1080
+    server_type = 5
+    # 启动
+    tsocks firefox
     ```
 
 ## other
-* [chromium]
-    ```
-    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
-    ```
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
