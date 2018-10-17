@@ -64,6 +64,13 @@ greeting_1="hello, ${your_name} !"
 if [[ ${version,,} == *"manjaro"* ]]; then
 ```
 
+# [数组](https://www.runoob.com/linux/linux-shell-array.html)
+```
+list=($(cat test.txt))  # 读取文件，把所有单词变成一个数组, 注意不是所有行
+echo ${list[0]}  # 第0行
+echo ${list[*]}  # 所有行用@也可以。但是如果没有*和@就会变成输出第一个元素
+```
+
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
 ```
 for i in $( ls ); do
