@@ -25,7 +25,7 @@
 * ci'、ci"、ci<、快速更改
 * di'、di"、di(  快速删除
 * da', da", da(  delete all '这个就是包括两边进行删除了
-* V, v 列选择, 行选择
+* `V`, v 列选择, 行选择
 * yaw, yiw 也适用，把单词当作括号处理
 
 # [光标移动](http://vim.wikia.com/wiki/Moving_around)

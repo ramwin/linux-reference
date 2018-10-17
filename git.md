@@ -6,7 +6,14 @@ git blame filepath  # 查看某个文件的修改记录
 ```
 
 # checkout
-* `git checkout versin -- file1/to/restore file2/to/restore`
+* 把文件还原到之前的某个版本
+```
+git checkout versin -- file1/to/restore file2/to/restore
+```
+* 把已经add的文件还原到没add的状态
+```
+git reset HEAD filename
+```
 
 # commit
 * add 后查看修改: `git diff --cached`
