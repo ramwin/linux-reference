@@ -4,6 +4,7 @@
 * [返回linux-totorial](../README.md)  
 * [runoob 菜鸟网站](https://www.runoob.com/linux/linux-shell.html)
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
+    * 传递参数
 * [ ] [learning website](https://www.shellscript.sh/)
 
 # [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
@@ -39,6 +40,13 @@ function hello {
 echo $HELLO
 hello
 echo $HELLO
+```
+
+# parameter 参数
+```
+echo "当前脚本的文件名: $0"
+echo "第一个参数 $1"
+echo "一共 $#个参数"  # 不算如文件名
 ```
 
 # String 字符串
@@ -97,10 +105,3 @@ fi
 -f 'filename' 判断文件是否存在
 -d 'directory' 判断文件夹是否存在
 ```
-
-# ~~[shell scripts learning](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html)~~: **deprecated**
-
-## [tables](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-11.html)
-may be this title should be operations
-* [String comparison operators](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-11.html#ss11.1)  
-After reading this, I found there are too many error in this article (maybe it's my fault or not, anyway, this article didn't suit for me).
