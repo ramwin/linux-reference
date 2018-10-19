@@ -1,7 +1,8 @@
 **Xiang Wang @ 2018-10-09 22:35:33**
 
 ## Manjaro
-* [manjaro下安装输入法](https://www.jianshu.com/p/d7c8f29be182)
+* [manjaro下安装输入法](https://www.jianshu.com/p/d7c8f29be182)  
+
 ```
 sudo pacman -S fcitx-sogoupinyin
 sudo pacman -S fcitx-im     # 全部安装
