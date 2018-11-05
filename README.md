@@ -63,6 +63,7 @@ x,y,z代表了属性
 * hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8 originfile -o target`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
+* `lshw -c disk`: "显示硬盘信息"
 * notify-send
     * `notify-send 保护视力，休息一会`
 * rar
