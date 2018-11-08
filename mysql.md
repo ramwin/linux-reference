@@ -14,11 +14,13 @@
             article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
             dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
             price   DOUBLE(16,2)             DEFAULT '0.00' NOT NULL,
+            `title` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL
         )
     ```
     * 参考
         * DEFAULT: 默认值
         * NOT NULL: 不能为空
+        * COLLATE: 编码
 * `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
     ```mysql
@@ -92,6 +94,7 @@
     * SHOW CREATE TABLE pet;
     * SHOW INDEX FROM pet;
     * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
+    * `show full columns from group_group`; 查看所有的信息
 * ## UPDATE
     ```mysql
     UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
