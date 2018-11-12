@@ -1,0 +1,8 @@
+[Unit]
+Description=Job that runs the shadowsocks server
+
+[Service]
+ExecStart=sslocal -c /home/wangx/github/Public/ssconf.json -d start
+
+[Install]
+WantedBy=multi-user.target

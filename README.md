@@ -103,13 +103,22 @@ Tidy Advocacy Community Group.
 
 # software 软件
 ## [celery](http://docs.celeryproject.org/en/latest/index.html)
-`celery -A tasks worker --loglevel=info`  
+```
+terminal1: cd test && celery -A tasks worker --loglevel=info
+terminal2: cd test && python3 test_tasks.py
+```
+* [测试代码](./test/tasks.py) [测试脚本](./test/test_tasks.py)
+* 不需要启动多个celery, 因为celery本身就是多线程的. 并且里面的变量是共享的
+* 如果启动了多个celery, 一个请求过去只有一个celery的里面一个线程会收到任务
+* 默认启动了4个worker, 所以如果是4个以内的请求,耗时为一倍, 5个到8个耗时为2倍
 
 ## chromium
 * 代理
     ```
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
+
+## [daemon 守护进程](./daemon/README.md)
 
 ## [git](./git.md)  
     * build your git server
