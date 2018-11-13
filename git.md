@@ -79,6 +79,7 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 git stash
 git stash list
 git stash pop = git stash apply; git stash drop
+git stash --all  # 把新建的文件也stash掉
 ```
 
 
