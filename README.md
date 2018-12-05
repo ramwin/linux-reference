@@ -58,6 +58,7 @@ x,y,z代表了属性
 * find
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
+    * `find -name '*.py' -not -path './EVN/*`
 * grep
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
@@ -281,7 +282,7 @@ terminal2: cd test && python3 test_tasks.py
     * 解密文件 gpg -d -o <新的文件名> <加密的gpg文件>
 * iotop: `查看磁盘当前读写速度`
 * kazam 录屏软件
-此外还有 greenrecorder, vokoscreen
+此外还有 greenrecorder, vokoscreen, simplescreenrecorder(manjaro上好用)
 * [nginx](./nginx.md)
     * [Download](http://nginx.org/)
     * [Tutorial in Didital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
@@ -296,7 +297,6 @@ terminal2: cd test && python3 test_tasks.py
     rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
     ````
 
-* [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * [screen](./screen.md) *用来开启后台shell*
 ```
 screen -list
@@ -304,6 +304,7 @@ screen -S sjtupt    # 创建新的screen
 ctrl + A + D    # 关闭当前screen
 screen -r sjtupt    # 还原之前的screen
 ```
+* simplescreenrecorder *录屏软件*
 * smtp邮件服务器
     * [digitalocean.com教程](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04)
     ```
@@ -313,6 +314,7 @@ screen -r sjtupt    # 还原之前的screen
     service postfix restart
     ```
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
+* [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
 * terminal终端
     * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
     * 删除快捷键:
