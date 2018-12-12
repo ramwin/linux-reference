@@ -164,10 +164,28 @@ mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
     2. Administrator方面
     MySQL保存密码到mysql.user表, 不能给任何人权限访问
     3. [ ] Passwords和Logging
-    log日志因为会保存, 所以要保证log table和log file不能让别人访问. 在master和slave之间尤其要注意.
+    log日志因为会保存, 所以要保证log table和log file不能让别人访问. 在master和slave之间尤其要注意. log日志在哪目前还不知道, 但是默认肯定是root才能访问的.
+3. Making MySQL Secure Against Attackers  
+直接链接,别人都会检测到. 所以需要使用加密的SSL链接
+    * 保证所有账户都要有个密码
+    * 只有运行mysqld的账户(一般是root, mysql)才能进入mysql的目录
+    * 永远不要使用root用户去执行MySQL. 因为会创造出一些 ~root/.bashrc
+    所以默认这是mysqld的运行账户是mysql
+    * 不要把文件授权给别的用户
+    也要防止mysql可以直接读取类似`/etc/passwd`的文件, 参见 5.1.8 Server System Variables
+    * 不要把PROCESS或者SUPER权限给非管理员用户. 
+    * 不要允许表的symlinks
+    * Stored programs和views需要控制
+    * GRAND的时候, 如果你不信任你的DNS, 最好使用IP而不是DNS. 如果使用通配符必须格外小心
+    * 限制用户的max user connections
+    * 要防止plugin directory是writable
 
-## The MySQL Access Privilege System
+
+## [ ] The MySQL Access Privilege System
 ## MySQL User Account Management
+1. User Names and Passwords
+2. Adding User Accounts
+
 ## Using Encrypted Connections
 ## Security Components and Plugins
 ## FIPS Support
