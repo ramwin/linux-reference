@@ -129,6 +129,30 @@
     * `PI()`: 3.141592
     * `SIN`: sin三角函数
 
+# Installing and Upgrading MySQL
+### Postinstallation Setup and Testing
+* Securing the Initial MySQL Account
+```
+mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
+```
+
+# Security 安全机制
+## General Security Issues 基本安全 [官网](https://dev.mysql.com/doc/refman/8.0/en/general-security-issues.html)
+1. Security Guidelines
+    * 不要给任何用户(除了root)拥有`user`表的权限
+    * 学习 MySQL Access Privilege System, 使用 GRANT 和 REVODE来下发权限, 不要给更多的权限. 不要把权限给所有的hosts
+    * 不要保存明文密码, 使用SHA2或者其他方法保存密码到数据库, 防止别人用彩虹表, 所以要hash加盐再hash
+    * 密码不要用word, 因为有break passwords的programs(我都是用python随机生成的)
+    * 使用防火墙, 把mysql放在demilitarized zone(DMZ) `telnet server_host 3306`
+    * 任何由用户生成的数据都是不可靠的, 需要防止sql注入
+    * 不要直接链接, 使用SSL或者SSH协议, 或者通过SSH隧道来创建communication `sudo tcpdump -l -i enp4s0 -w - src or dst port 3306 | strings`
+2. Keeyping Passwords Secure
+
+## The MySQL Access Privilege System
+## MySQL User Account Management
+## Using Encrypted Connections
+## Security Components and Plugins
+## FIPS Support
 
 # [Data Types 数据类型](https://dev.mysql.com/doc/refman/5.7/en/data-types.html)
 ## [Data Type Overview]()

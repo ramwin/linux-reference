@@ -63,6 +63,7 @@ x,y,z代表了属性
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8 originfile -o target`
+* ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
 * notify-send
@@ -79,6 +80,7 @@ x,y,z代表了属性
 * sort:
     * 按照文件尺寸来排序: `sort -h`
     * 直接按照一行的文字来排序: `sort -n`
+* tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
 * tidy
 > Tidy is a console application which corrects and cleans up HTML and XML
