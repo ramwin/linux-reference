@@ -68,6 +68,9 @@
     * `<[^<]*>$`  *找到文件的最后一个中括号标签*
     * [跨行搜索](http://vim.wikia.com/wiki/Search_across_multiple_lines)
 
+# 搜索
+使用`/`按键来进行搜索.搜索结束后输入`:noh`来[关闭高亮](https://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting)
+
 # 替换
 * 位置的选择
     * :s 当前行
