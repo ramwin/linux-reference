@@ -121,12 +121,8 @@ terminal2: cd test && python3 test_tasks.py
 ## [daemon 守护进程](./daemon/README.md)
 
 ## [git](./git.md)  
-    * build your git server
-    ```
-    [root:~/] sudo adduser git
-    [git:~/] git init --bare repository.git
-    [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
-    ```
+一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
+
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
 ## [mysql 数据库](./mysql.md)
