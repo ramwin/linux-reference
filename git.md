@@ -44,11 +44,27 @@ git config --global push.default matching
     [core]
         excludesfile = ~/.gitignore_global
         bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
-编辑 .gitignore_global
+编辑 `.gitignore_global`
 ```
 
 * 服务器允许pull指定的commit
 uploadpack.allowReachableSHA1InWant=true
+
+* core.compression 和 core.looseCompression
+只要设置了core.compression, 得到的pack就是一样的, 但是md5和原始文件不同
+    * test 文件夹, 默认, 一个windows10安装包 4.7G(5,010,587,648), 联想的普通机械硬盘
+    ```
+    git add .  # 耗时3分20秒
+    git commit -m "" # 立马结束
+    pack-c36xxx76f5.pack 4.6G
+    ```
+    * test1 文件夹, 都设置成0
+    ```
+    git add .  # 耗时1分25秒
+    git commit -m "" # 立马结束
+    pack-585xxx2d65.pack 4.7G
+    ```
+
 
 ### diff
 ```
