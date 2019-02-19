@@ -1,5 +1,6 @@
 # 启动与退出
-    docker run -d -p 27017:27017 -p 28017:28017 --name mongodb -e AUTH=no tutum/mongodb
+    docker pull mongo
+    docker run --name some-mogo -d -p 27017:27017 -p 28017:28017 mongo:tag 
 
 # python相关
 [pymongo](https://docs.mongodb.org/getting-started/python/client/)

@@ -52,17 +52,59 @@ uploadpack.allowReachableSHA1InWant=true
 
 * core.compression 和 core.looseCompression
 只要设置了core.compression, 得到的pack就是一样的, 但是md5和原始文件不同
-    * test 文件夹, 默认, 一个windows10安装包 4.7G(5,010,587,648), 联想的普通机械硬盘
+    * test 文件夹, 默认, 一个windows10安装包 4.7G(5,010,587,648), 联想的普通机械硬盘, origin是同一个文件夹下面的另外一个文件夹
     ```
     git add .  # 耗时3分20秒
     git commit -m "" # 立马结束
-    pack-c36xxx76f5.pack 4.6G
+    objects/pack-c36dxxx76f5.pack 4.6G 4953058178字节
+    git push origin master  # 耗时6分21秒
+    objects/85/44441acexxxx3c21 4954989512字节
+    test_origin的配置
+        user.name=Xiang Wang
+        user.email=ramwin@qq.com
+        core.quotepath=false
+        core.filemode=false
+        core.excludesfile=~/.gitignore_global
+        core.bigfilethreshold=200K
+        pack.windowmemory=1g
+        core.repositoryformatversion=0
+        core.filemode=true
+        core.bare=true
     ```
+
     * test1 文件夹, 都设置成0
     ```
     git add .  # 耗时1分25秒
     git commit -m "" # 立马结束
-    pack-585xxx2d65.pack 4.7G
+    pack-5854xxx2d65.pack 4.7G 5011352247字节
+    git push origin master  # 耗时6分17秒
+    objects/85/44441acexxxx3c21  4954989512字节
+    test_origin1的配置
+        user.name=Xiang Wang
+        user.email=ramwin@qq.com
+        core.quotepath=false
+        core.filemode=false
+        core.excludesfile=~/.gitignore_global
+        core.bigfilethreshold=200K
+        pack.windowmemory=1g
+        core.repositoryformatversion=0
+        core.filemode=true
+        core.bare=true
+    test_origin2的配置
+        user.name=Xiang Wang
+        user.email=ramwin@qq.com
+        core.quotepath=false
+        core.filemode=false
+        core.excludesfile=~/.gitignore_global
+        core.bigfilethreshold=200K
+        pack.windowmemory=1g
+        core.repositoryformatversion=0
+        core.filemode=true
+        core.bare=true
+        core.compression=0
+        core.loosecompression=0
+    git push origin2 master  # 耗时4分11秒
+    objects/85/44441acexxxx3c21 5011352225字节
     ```
 
 

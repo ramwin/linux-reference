@@ -132,6 +132,12 @@ terminal2: cd test && python3 test_tasks.py
     * [Grant权限控制](./database/mysql_grant.md)
     * [mysqldump](./mysql.md)
 
+## nnn
+文件管理
+```
+pacman -S nnn
+```
+
 ## postgresql
 * 教程
     1. [install and use postgresql ](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  [Getting Started](https://www.postgresql.org/docs/10/static/tutorial-start.html)
