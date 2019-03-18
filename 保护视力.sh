@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 echo "$(date) 运行保护视力脚本" >> /tmp/保护视力.log
 version=$(lsb_release -d)

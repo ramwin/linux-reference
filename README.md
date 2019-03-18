@@ -62,7 +62,7 @@ x,y,z代表了属性
 * grep
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
-* iconv: 转化文件编码 `iconv -f GBK -t utf-8 originfile -o target`
+* iconv: 转化文件编码 `iconv -f GBK -t utf-8//IGNORE originfile -o target`
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
