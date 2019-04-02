@@ -129,7 +129,9 @@ let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
 showTodoRest -> {{
   var doms = document.getElementsByClassName("todo-rest")
   for (var i=0; i<doms.length; i++) {
-    doms[i].setAttribute("contenteditable", true)
+    var dom = doms[i];
+    dom.setAttribute("tabindex", true);
+
   }
 }}
 call showTodoRest
