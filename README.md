@@ -257,25 +257,31 @@ pacman -S nnn
         ```
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
-## [SQLite](http://www.sqlitetutorial.net/)
-* 教程
-    * [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
-        ```
-        .output backup.sql
-        .dump
-        .exit
+## SQLite
+[官网](http://www.sqlitetutorial.net/)
 
-        或者
-        .output test.txt
-        select * from table;
-        ```
+* [ ] autoincrement
+* alter
+[官网](http://www.sqlitetutorial.net/sqlite-alter-table/)  
+sqlite不支持删除字段，只支持rename表和添加column. 所以如果你想删除某个字段，就先rename这个表，然后创建一个新表,然后再把数据复制过来
+* [ ] drop
 
-    * read 还原数据库
-        ```
-        sqlite3 test.db
-        .read <filename>
-        .import 文件名 表名
-        ```
+* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
+```
+.output backup.sql
+.dump
+.exit
+或者
+.output test.txt
+select * from table;
+```
+
+* read 还原数据库
+```
+sqlite3 test.db
+.read <filename>
+.import 文件名 表名
+```
 
 ## tsocks 让应用启动的时候走代理
     ```
@@ -287,6 +293,7 @@ pacman -S nnn
     # 启动
     tsocks firefox
     ```
+
 
 ## terminal终端
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
