@@ -120,6 +120,20 @@ terminal2: cd test && python3 test_tasks.py
     ```
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
     ```
+* cvim
+一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
+```
+let searchlimit = 4
+let blacklists = ["https://ecs.console.aliyun.com/*"]
+let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
+showTodoRest -> {{
+  var doms = document.getElementsByClassName("todo-rest")
+  for (var i=0; i<doms.length; i++) {
+    doms[i].setAttribute("contenteditable", true)
+  }
+}}
+call showTodoRest
+```
 
 ## [daemon 守护进程](./daemon/README.md)
 
@@ -272,9 +286,21 @@ pacman -S nnn
     tsocks firefox
     ```
 
-## [vim](./vim.md) [tutorial教程](http://www.openvim.com/)
-    * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
-        `:MultipleCursorsFind <regrexmatch>`
+## terminal终端
+* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
+* 删除快捷键:
+    alt+d: 删除光标右边的单词
+    ctrl+w: 删除当前光标左边的单词
+* 移动
+    * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
+    * 移动一个单词: alt+b | alt+f
+* 快捷键:
+    * 清屏: ctrl+l
+
+## [vim](./vim.md)
+[交互式的tutorial教程](http://www.openvim.com/)
+* [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
+    `:MultipleCursorsFind <regrexmatch>`
 
 ## other
 * alarm-clock-applet 闹钟
@@ -319,15 +345,6 @@ screen -r sjtupt    # 还原之前的screen
     ```
     * [配置文档](http://blog.csdn.net/reage11/article/details/9295005)
 * [阮一峰的oauth讲解](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)
-* terminal终端
-    * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
-    * 删除快捷键:
-        alt+d: 删除光标右边的单词
-        ctrl+w: 删除当前光标左边的单词
-    * 快捷键:
-        * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
-        * 移动一个单词: alt+b | alt+f
-        * 清屏: ctrl+l
 * 7z
 
 # hardware 硬件
