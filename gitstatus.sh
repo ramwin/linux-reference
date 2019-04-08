@@ -22,7 +22,7 @@ for project in `ls ..`; do
         continue
     fi
 
-    ignore_project=('$RECYCLE.BIN' 'other')
+    ignore_project=('$RECYCLE.BIN' 'other' 'secret')
     for i in ${ignore_project[*]}; do
         if [ "$project" = "$i" ]; then
             echo "文件夹${i}不处理"
