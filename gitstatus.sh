@@ -16,6 +16,7 @@ remote="/run/media/wangx/WX/github/"
 checkRemote $remote
 
 for project in `ls ..`; do
+# for project in 'zhihuer' ; do
     echo "处理$project"
     if [ -f "../$project" ]; then
         # echo "文件$project不处理"
