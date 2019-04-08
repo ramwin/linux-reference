@@ -6,6 +6,7 @@
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
     * 传递参数
 * [ ] [learning website](https://www.shellscript.sh/)
+* [ ] [tutorials point](https://www.tutorialspoint.com/unix/unix-loop-control.htm)
 
 # [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
 * 赋值变量
@@ -81,7 +82,7 @@ echo ${list[*]}  # 所有行用@也可以。但是如果没有*和@就会变成�
 
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
 ```
-for i in $( ls ); do
+for i in $( ls ); do  # 循环命令的结果列表
     if [ -d $i ]; then
         echo "directory: "
     elif [ $i = 'certainname' ]; then
@@ -91,7 +92,7 @@ for i in $( ls ); do
     echo item: $i
 done
 
-for i in file1 file2 file3; do
+for i in file1 file2 file3; do  # 循环给定的列表
     rm $i
 done
 ```
@@ -130,4 +131,10 @@ for i in "nnn" "node"; do
         pacman -S $i
     fi
 done
+```
+
+# exceptions
+```
+echo "error"
+exit 123
 ```
