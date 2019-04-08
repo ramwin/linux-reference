@@ -37,12 +37,11 @@ checkWx(){
 }
 
 runGit() {
-    git pull -q WX master
-    pushresult=`git push -q WX master`
-    if [[ $pushresult ]]; then
-        echo "提交成功"
-    else
+    # echo "git push -q --porcelain WX master"
+    pushresult=`git push -q --porcelain WX master`
+    if [[ $pushresult != 'Done' ]]; then
         echo "请检查 $1"
+        exit 1
     fi
 }
 
@@ -62,11 +61,6 @@ for project in `ls ..`; do
         fi
     done
     cd ../${project}
-    # git gc
-    # git config core.filemode false;
-    # git pull origin master
-    # git push origin master
-    # git remote add WX 
     remote_dir="$remote$project.git"
     checkWx $remote_dir
     runGit $project
