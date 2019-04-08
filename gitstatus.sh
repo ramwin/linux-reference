@@ -3,6 +3,14 @@
 
 system=`lsb_release -d | awk '{print $2}'`
 
+if [ $system = 'Ubuntu' ]; then
+    echo "当前为ubuntu系统 $system"
+    remote="/media/wangx/WX/github/"
+else
+    echo "当前为manjaro系统 $system"
+    remote="/run/media/wangx/WX/github/"
+fi
+
 checkRemote(){
     echo "检查远程仓库地址 $1 "
     if [ -d "$1" ]; then
@@ -12,21 +20,37 @@ checkRemote(){
         exit 123
     fi
 }
-
-if [ $system = 'Ubuntu' ]; then
-    echo "当前为ubuntu系统 $system"
-    remote="/media/wangx/WX/github/"
-else
-    echo "当前为manjaro系统 $system"
-    remote="/run/media/wangx/WX/github/"
-fi
-
 checkRemote $remote
 
+checkWx(){
+    if [[ ! -d $1 ]]; then
+        echo "远程仓库不存在"
+        echo "git init --bare $1"
+        git init --bare $1
+    fi
+    result=`git remote show WX`
+    if [[ ! $result ]]; then
+        echo "没有仓库"
+        echo "git remote add WX $1"
+        git remote add WX $1
+    fi
+}
+
+runGit() {
+    git pull -q WX master
+    pushresult=`git push -q WX master`
+    if [[ $pushresult ]]; then
+        echo "提交成功"
+    else
+        echo "请检查 $1"
+    fi
+}
+
 for project in `ls ..`; do
+    echo ""
     echo "处理$project"
     if [ -f "../$project" ]; then
-        # echo "文件$project不处理"
+        echo "文件$project不处理"
         continue
     fi
 
@@ -44,41 +68,6 @@ for project in `ls ..`; do
     # git push origin master
     # git remote add WX 
     remote_dir="$remote$project.git"
-    status=`git status`
-    if [ -d "$remote_dir" ]; then
-        echo "远程仓库$remote_dir存在"
-        # 第一步，先看看
-        # git remote add WX $remote_dir
-        git remote set-url WX $remote_dir
-        git pull WX master
-        git push WX master
-        git status
-    else
-        echo "远程仓库不存在"
-        echo "git init --bare $remote$project.git"
-        git init --bare $remote$project.git
-    fi
-    string='string'
-    # status="On branch master\nYour branch is up to date with 'origin/master'.\n\nnothing to commit, working tree clean"
-    if [ "$status" = $'On branch master\nYour branch is up to date with \'origin/master\'.\n\nnothing to commit, working tree clean' ]; then
-        echo "项目$project一切正常"
-        continue
-    elif [ "$status" = $'On branch master\nnothing to commit, working tree clean' ]; then
-        echo "项目$project一切正常"
-        continue
-    else
-        echo "请查看项目$project"
-        break
-    fi
+    checkWx $remote_dir
+    runGit $project
 done
-# echo $project
-# len=${#project[*]};
-# i=0;
-# echo $len;
-# while [ $i -lt $len ]; do
-#     echo ../${project[$i]}
-#     cd ../${project[$i]}
-#     git config core.filemode false;
-#     git status;
-#     let i++
-# done
