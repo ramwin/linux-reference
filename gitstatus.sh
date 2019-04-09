@@ -1,6 +1,7 @@
 #!/bin/bash
 # Xiang Wang @ 2016-05-31 14:37:07
 
+system=`lsb_release -d | awk '{print $2}'`
 
 checkRemote(){
     echo "检查远程仓库地址 $1 "
@@ -12,7 +13,14 @@ checkRemote(){
     fi
 }
 
-remote="/run/media/wangx/WX/github/"
+if [ $system = 'Ubuntu' ]; then
+    echo "当前为ubuntu系统 $system"
+    remote="/media/wangx/WX/github/"
+else
+    echo "当前为manjaro系统 $system"
+    remote="/run/media/wangx/WX/github/"
+fi
+
 checkRemote $remote
 
 for project in `ls ..`; do
