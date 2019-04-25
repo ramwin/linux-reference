@@ -15,11 +15,16 @@ checkStatus() {
 
 pull() {
     local result=`git pull -q origin master`
-    echo $result
     if [[ $result ]]; then
-        echo "拉取到了新代码"
+        echo $result
+        echo "拉取到了origin新代码"
     # else
     #     echo "没有拉取到新代码"
+    fi
+    local WXresult=`git pull -q WX master`
+    if [[ $WXresult ]]; then
+        echo $WXresult
+        echo "拉取到了WX新代码"
     fi
 }
 
