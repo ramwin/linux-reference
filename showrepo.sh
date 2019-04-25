@@ -8,8 +8,6 @@ checkStatus() {
     if [[ $status ]]; then
         echo "当前暂存区或者工作区有改动"
         echo $status
-    else
-        echo "没有编辑"
     fi
 }
 
