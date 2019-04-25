@@ -28,13 +28,26 @@ pull() {
     fi
 }
 
+push() {
+    local result=`git push -q origin master`
+    echo $result
+    if [[ $result ]]; then
+        echo "上传失败"
+    fi
+    local WXresult=`git push -q WX master`
+    echo $WXresult
+    if [[ $result ]]; then
+        echo "上传失败"
+    fi
+}
+
 diffCheck() {
     local origindiff=`git diff --exit-code --shortstat origin/master`
     if [[ $origindiff ]]; then
         echo $origindiff
         echo "和origin不一样"
-    else
-        echo "和origin一样"
+    # else
+    #     echo "和origin一样"
     fi
     local WXdiff=`git diff --exit-code --shortstat WX/master`
     if [[ $WXdiff ]]; then
@@ -47,4 +60,5 @@ diffCheck() {
 
 checkStatus
 pull
+push
 diffCheck
