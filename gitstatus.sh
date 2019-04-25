@@ -7,7 +7,7 @@ checkStatus() {
     # 这个只会看暂存区，工作区是否有编辑
     status=`git status --porcelain` 
     if [[ $status ]]; then
-        echo "当前暂存区或者工作区有改动"
+        echo -e "\e[91m当前暂存区或者工作区有改动\e[m"
         echo $status
         pwd
     # else
@@ -18,26 +18,26 @@ checkStatus() {
 pull() {
     local result=`git pull -q origin master`
     if [[ $result ]]; then
-        echo $result
+        echo -n $result
         echo "拉取到了origin新代码"
     # else
     #     echo "没有拉取到新代码"
     fi
     local WXresult=`git pull -q WX master`
     if [[ $WXresult ]]; then
-        echo $WXresult
+        echo -n $WXresult
         echo "拉取到了WX新代码"
     fi
 }
 
 push() {
     local result=`git push -q origin master`
-    echo $result
+    echo -n $result
     if [[ $result ]]; then
-        echo "上传失败"
+        echo -e "\e[91m上传失败\e[m"
     fi
     local WXresult=`git push -q WX master`
-    echo $WXresult
+    echo -n $WXresult
     if [[ $result ]]; then
         echo "上传失败"
     fi
@@ -100,7 +100,7 @@ pullPushgit() {
 for project in `ls ..`; do
 # projects=("html-reference" "linux-reference")
 # for project in ${projects[*]} ; do
-    # echo "处理$project"
+    echo "处理$project"
     if [ -f "../$project" ]; then
         continue
     fi
