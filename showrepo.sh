@@ -53,8 +53,8 @@ diffCheck() {
     if [[ $WXdiff ]]; then
         echo $WXdiff
         echo "和WX不一样"
-    else
-        echo "和WX一样"
+    # else
+    #     echo "和WX一样"
     fi
 }
 

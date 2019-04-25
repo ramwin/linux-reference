@@ -3,6 +3,64 @@
 
 system=`lsb_release -d | awk '{print $2}'`
 
+checkStatus() {
+    # 这个只会看暂存区，工作区是否有编辑
+    status=`git status --porcelain` 
+    if [[ $status ]]; then
+        echo "当前暂存区或者工作区有改动"
+        echo $status
+        pwd
+    # else
+    #     echo "没有编辑"
+    fi
+}
+
+pull() {
+    local result=`git pull -q origin master`
+    if [[ $result ]]; then
+        echo $result
+        echo "拉取到了origin新代码"
+    # else
+    #     echo "没有拉取到新代码"
+    fi
+    local WXresult=`git pull -q WX master`
+    if [[ $WXresult ]]; then
+        echo $WXresult
+        echo "拉取到了WX新代码"
+    fi
+}
+
+push() {
+    local result=`git push -q origin master`
+    echo $result
+    if [[ $result ]]; then
+        echo "上传失败"
+    fi
+    local WXresult=`git push -q WX master`
+    echo $WXresult
+    if [[ $result ]]; then
+        echo "上传失败"
+    fi
+}
+
+diffCheck() {
+    local origindiff=`git diff --exit-code --shortstat origin/master`
+    if [[ $origindiff ]]; then
+        echo $origindiff
+        echo "和origin不一样"
+    # else
+    #     echo "和origin一样"
+    fi
+    local WXdiff=`git diff --exit-code --shortstat WX/master`
+    if [[ $WXdiff ]]; then
+        echo $WXdiff
+        echo "和WX不一样"
+        pwd
+    # else
+    #     echo "和WX一样"
+    fi
+}
+
 # 第一步，检查远程仓库
 checkRemote(){
     echo "检查远程仓库地址 $1 "
@@ -33,9 +91,6 @@ checkGitRemote() {
     fi
 }
 
-checkGitStatus() {
-
-}
 
 pullPushgit() {
     git pull -q WX master
@@ -45,7 +100,7 @@ pullPushgit() {
 for project in `ls ..`; do
 # projects=("html-reference" "linux-reference")
 # for project in ${projects[*]} ; do
-    echo "处理$project"
+    # echo "处理$project"
     if [ -f "../$project" ]; then
         continue
     fi
@@ -53,14 +108,17 @@ for project in `ls ..`; do
     ignore_project=('$RECYCLE.BIN' 'other' 'secret' 'System Volume Information' '王祥')
     for i in ${ignore_project[*]}; do
         if [ "$project" = "$i" ]; then
-            echo "文件夹${i}不处理"
+            # echo "文件夹${i}不处理"
             continue 2
         fi
     done
     cd ../${project}
     remote_dir="$remote$project.git"
+    checkStatus
+    pull
+    push
+    diffCheck
     checkGitRemote
-    checkGitStatus
     pullPushgit
     continue
     echo "执行完毕"
