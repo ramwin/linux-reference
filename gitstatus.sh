@@ -70,7 +70,6 @@ diffCheck() {
 }
 
 # 第一步，检查远程仓库
->>>>>>> ceb5cd4bc305f9876a730e123fcba41a5f41e610
 checkRemote(){
     echo "检查远程仓库地址 $1 "
     if [ -d "$1" ]; then
