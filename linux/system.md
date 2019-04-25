@@ -10,3 +10,16 @@ cat /proc/meminfo
 echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
 sysctl vm.overcommit_memory=1
 ```
+* 创建虚拟内存
+```
+fallocate -l 4G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile none swap defaults 0 0" > /etc/fstab
+```
+如果偶尔不可以，要设置
+```
+sudo sysctl vm.swappiness=10
+echo "vm.swappiness=10" >> /etc/sysctl.conf
+```

@@ -73,6 +73,7 @@ x,y,z代表了属性
 * rename
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
     * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
+    * `rename -v '20190415' '2019-04-15' *.json`
 * ## sed
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
@@ -405,3 +406,4 @@ screen -r sjtupt    # 还原之前的screen
     14. \w 数字或者字母
     15. \D \S \W 代表反过来
     16. (?!abc) 不能出现abc
+
