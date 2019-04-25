@@ -406,3 +406,4 @@ screen -r sjtupt    # 还原之前的screen
     14. \w 数字或者字母
     15. \D \S \W 代表反过来
     16. (?!abc) 不能出现abc
+
