@@ -3,6 +3,7 @@
 
 system=`lsb_release -d | awk '{print $2}'`
 
+# 第一步，检查远程仓库
 checkRemote(){
     echo "检查远程仓库地址 $1 "
     if [ -d "$1" ]; then
@@ -23,11 +24,29 @@ fi
 
 checkRemote $remote
 
+checkGitRemote() {
+    # echo "检查git项目里是否存在 WX remote"
+    remotes=`git remote show | grep '^WX$'`
+    if [ ! $remotes ]; then
+        echo "不存在git remote WX"
+        exit 1 
+    fi
+}
+
+checkGitStatus() {
+
+}
+
+pullPushgit() {
+    git pull -q WX master
+    git push -q WX master
+}
+
 for project in `ls ..`; do
-# for project in 'zhihuer' ; do
+# projects=("html-reference" "linux-reference")
+# for project in ${projects[*]} ; do
     echo "处理$project"
     if [ -f "../$project" ]; then
-        # echo "文件$project不处理"
         continue
     fi
 
@@ -39,12 +58,14 @@ for project in `ls ..`; do
         fi
     done
     cd ../${project}
-    # git gc
-    # git config core.filemode false;
-    # git pull origin master
-    # git push origin master
-    # git remote add WX 
     remote_dir="$remote$project.git"
+    checkGitRemote
+    checkGitStatus
+    pullPushgit
+    continue
+    echo "执行完毕"
+    exit 1
+
     status=`git status`
     if [ -d "$remote_dir" ]; then
         echo "远程仓库$remote_dir存在"
