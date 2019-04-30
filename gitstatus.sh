@@ -4,6 +4,14 @@
 system=`lsb_release -d | awk '{print $2}'`
 origin=$false
 
+if [ $system = 'Ubuntu' ]; then
+    echo "当前为ubuntu系统 $system"
+    remote="/media/wangx/WX/github/"
+else
+    echo "当前为manjaro系统 $system"
+    remote="/run/media/wangx/WX/github/"
+fi
+
 checkStatus() {
     # 这个只会看暂存区，工作区是否有编辑
     status=`git status --porcelain` 
@@ -78,16 +86,30 @@ checkRemote(){
         exit 123
     fi
 }
-
-if [ $system = 'Ubuntu' ]; then
-    echo "当前为ubuntu系统 $system"
-    remote="/media/wangx/WX/github/"
-else
-    echo "当前为manjaro系统 $system"
-    remote="/run/media/wangx/WX/github/"
-fi
-
 checkRemote $remote
+
+checkWx(){
+    if [[ ! -d $1 ]]; then
+        echo "远程仓库不存在"
+        echo "git init --bare $1"
+        git init --bare $1
+    fi
+    result=`git remote show WX`
+    if [[ ! $result ]]; then
+        echo "没有仓库"
+        echo "git remote add WX $1"
+        git remote add WX $1
+    fi
+}
+
+runGit() {
+    # echo "git push -q --porcelain WX master"
+    pushresult=`git push -q --porcelain WX master`
+    if [[ $pushresult != 'Done' ]]; then
+        echo "请检查 $1"
+        exit 1
+    fi
+}
 
 checkGitRemote() {
     # echo "检查git项目里是否存在 WX remote"
@@ -158,14 +180,3 @@ for project in `ls ..`; do
         break
     fi
 done
-# echo $project
-# len=${#project[*]};
-# i=0;
-# echo $len;
-# while [ $i -lt $len ]; do
-#     echo ../${project[$i]}
-#     cd ../${project[$i]}
-#     git config core.filemode false;
-#     git status;
-#     let i++
-# done
