@@ -2,6 +2,7 @@
 # Xiang Wang @ 2016-05-31 14:37:07
 
 system=`lsb_release -d | awk '{print $2}'`
+origin=$false
 
 checkStatus() {
     # 这个只会看暂存区，工作区是否有编辑
@@ -16,12 +17,15 @@ checkStatus() {
 }
 
 pull() {
-    local result=`git pull -q origin master`
-    if [[ $result ]]; then
-        echo -n $result
-        echo "拉取到了origin新代码"
-    # else
-    #     echo "没有拉取到新代码"
+    if [[ $origin ]]; then
+        echo "git pull -q origin master"
+        local result=`git pull -q origin master`
+        if [[ $result ]]; then
+            echo -n $result
+            echo "拉取到了origin新代码"
+        # else
+        #     echo "没有拉取到新代码"
+        fi
     fi
     local WXresult=`git pull -q WX master`
     if [[ $WXresult ]]; then
@@ -31,10 +35,13 @@ pull() {
 }
 
 push() {
-    local result=`git push -q origin master`
-    echo -n $result
-    if [[ $result ]]; then
-        echo -e "\e[91m上传失败\e[m"
+    if [[ $origin ]]; then
+        echo "git push -q origin master"
+        local result=`git push -q origin master`
+        echo -n $result
+        if [[ $result ]]; then
+            echo -e "\e[91m上传失败\e[m"
+        fi
     fi
     local WXresult=`git push -q WX master`
     echo -n $WXresult

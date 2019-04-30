@@ -144,11 +144,57 @@ git stash --all  # 把新建的文件也stash掉
 ```
 
 
-### tag
+### [tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
+* Listing Your Tags
 ```
-    git tag -n
-    git tag -m "新增公司信息存储功能" v2.0.0
-    git tag -l --format="%(tag) %(subject)"
+git tag [-l] or [-list]
+git tag -l "v1.8.5*"  这时候的-l就必须存在了。
+```
+* Creating tags
+git支持2种tag, *lightweight* 和 *annotated*
+
+* Creating Annotated Tags
+annotated tag会保留谁在什么时候提交的tag
+```
+git tag -a v1.4 -m "version 1.4"
+git show v1.4
+```
+
+* Creating Lightweight Tags
+这个lightweight tag仅仅是保存一个标签。就没有谁创建的tag这种信息了
+```
+git tag v1.4-lw
+```
+
+* Tagging Later
+```
+git tag -a v1.2 <checksum> 给指定的某个提交添加tag
+```
+
+* Sharing Tags
+默认情况下`git push`不会上传tag到服务器
+```
+git push origin v1.5
+git push origin --tags
+```
+
+* Deleting Tags
+```
+git tag -d v1.4-lw  # 默认不会删除服务器的tag
+git push origin :refs/tags/v1.4-lw
+git push origin --delete <tagname>
+```
+
+* Checkouting out tags
+```
+git checkout 2.0.0
+```
+
+* 其他
+```
+git tag -n
+git tag -m "新增公司信息存储功能" v2.0.0
+git tag -l --format="%(tag) %(subject)"
 ```
 
 ### 文件处理
@@ -174,3 +220,7 @@ git gc  # 优化仓库
     [git:~/] git init --bare repository.git
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
+
+### 其他
+* [ ] working with remotes
+* [ ] git aliases
