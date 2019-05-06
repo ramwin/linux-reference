@@ -256,6 +256,16 @@ if expire is 0, the key is created without any expire
 * [ZADD](https://redis.io/commands/zadd)
     * `ZADD key <score> member`
     * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
+* [ZCARD](https://redis.io/commands/zcard)
+返回一个sorted sets的长度, 如果key不存在，就返回0
+* ZCOUNT
+返回scrore在min和max之间的元素的数量
+默认是闭区间，如果想要得到开区间，就在对应的数字上加`(`
+```
+ZCOUNT myset -inf +inf
+ZCOUNT myset 1 3
+```
+
 * [ZRANGE](https://redis.io/commands/zrange)
     1. > 从0开始, -1是最后一个， -2是倒数第二个
     2. > 前后都是闭区间
