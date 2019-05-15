@@ -92,8 +92,8 @@
     3. 使用代码块: `\1`
     4. 大小写: `\c`: ignore case `\C` match case
 * 案例:
-    * 删除某一类错误: `\[ERROR\]\(.*\n\)\{1,6\}AttributeError:.*\n`
-    * 删除多余的空行: ``
+    * 删除某一类错误: `\[ERROR\]\（.*\n\）\{1,6\}AttributeError:.*\n`
+    * 删除多余的空行: `:.,+12s/\ \+\n/\r/g`
 
 # 跳转
 * [学习链接](http://blog.csdn.net/xxxsz/article/details/7454290)

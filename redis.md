@@ -265,6 +265,13 @@ if expire is 0, the key is created without any expire
 ZCOUNT myset -inf +inf
 ZCOUNT myset 1 3
 ```
+* ZPOPMAX  
+返回score最大的若干个elements, 如果超过了，不会报错
+```
+> ZPOPMAX key [count]
+[('three', 3.0), ('b', 2.0)]
+[('c', 2.0)]
+```
 
 * [ZRANGE](https://redis.io/commands/zrange)
     1. > 从0开始, -1是最后一个， -2是倒数第二个
