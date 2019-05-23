@@ -81,6 +81,10 @@ x,y,z代表了属性
 * sort:
     * 按照文件尺寸来排序: `sort -h`
     * 直接按照一行的文字来排序: `sort -n`
+* su:
+```
+su -s /bin/bash www-data  # 使用www-data来执行bash命令
+```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
 * tidy

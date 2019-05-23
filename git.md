@@ -1,6 +1,11 @@
 **Xiang Wang @ 2017-06-21 10:59:41**
 
-* [git官网](https://git-scm.com/doc)
+[git官网](https://git-scm.com/doc)
+
+### init
+```
+git init <directory>  # 初始化仓库
+```
 
 ### blame
 ```
@@ -135,12 +140,13 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 ### status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
 
-### stash
+### [stash](https://git-scm.com/docs/git-stash)
 ```
 git stash
 git stash list
 git stash pop = git stash apply; git stash drop
 git stash --all  # 把新建的文件也stash掉
+git stash -- <file1> [<file2>]  # 指定部分文件stash
 ```
 
 
