@@ -1,6 +1,8 @@
 **Xiang Wang @ 2017-06-21 10:59:41**
 
-[git官网](https://git-scm.com/doc)
+[git官网](https://git-scm.com/doc)  
+[git reference](https://git-scm.com/docs)  
+[git book](https://git-scm.com/book/en/v2)
 
 ### init
 ```
@@ -28,6 +30,11 @@ git reset HEAD filename
 * 多次提交很简单的代码 `git commit --amend  # 这样就能修改上次提交的信息，不创建新版本`
 
 * 提交了一次错误的版本 `git rever <commitid>  # 把那次commit之后的修改都reset掉，并生成一个新的commit`
+
+### branch
+```
+git branch [branchname] [startpoint]  # 指定从哪个版本里开出一个新的分支
+```
 
 ### config
 * 设置用户名邮箱:
