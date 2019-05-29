@@ -1,4 +1,6 @@
-链接: http://www.cnblogs.com/itech/archive/2011/02/09/1950226.html
+[参考](http://www.cnblogs.com/itech/archive/2011/02/09/1950226.html)
+
+```
 # /etc/crontab
 # m h dom mon dow user command
 * * * * * root wangx.sh
@@ -13,3 +15,4 @@ a,b,c a,b,c的时候执行
 # 结果在 00 07 14 21 28 35 42 49 56 运行了，之后又是00的时候运行了
 
 # 我写成每10分钟运行一次
+```

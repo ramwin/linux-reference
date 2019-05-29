@@ -278,6 +278,20 @@ ZCOUNT myset 1 3
     2. > 前后都是闭区间
     3. > 不会报错，如果start大于stop，或者start大于长度，返回 []
 * [ZRANGEBYLEX](https://redis.io/commands/zrangebylex)
+* [ ] ZRANK
+* [ZREM](https://redis.io/commands/zrem): 删除一个元素  
+基础代码
+```
+ZREM key member [member ...]
+> 0  # 只要有一个member存在，就会返回1, 否则返回0
+```
+python用法
+```
+client.zrem(key, 'member', 'member2')
+> 0 或者 1 # 只要一个member存在就返回1
+```
+
+* [ ] ZREMRANGEBYLEX
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
 # Config 配置
