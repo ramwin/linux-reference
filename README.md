@@ -314,6 +314,24 @@ sqlite3 test.db
 * 快捷键:
     * 清屏: ctrl+l
 
+## ufw
+* 打开/关闭ufw
+```
+ufw enable/disable
+```
+* 开放某个端口
+```
+ufw allow 22
+```
+* 查看当前状态
+```
+ufw status numbered
+```
+* 允许某个host通过某个端口
+```
+ufw allow from 172.16.15.66 to any port 6379
+```
+
 ## [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
 * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)

@@ -255,6 +255,7 @@ if expire is 0, the key is created without any expire
     ```
 * [ZADD](https://redis.io/commands/zadd)
     * `ZADD key <score> member`
+    * python: `redis.zadd(key, mapping)`
     * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
 * [ZCARD](https://redis.io/commands/zcard)
 返回一个sorted sets的长度, 如果key不存在，就返回0
@@ -272,8 +273,13 @@ ZCOUNT myset 1 3
 [('three', 3.0), ('b', 2.0)]
 [('c', 2.0)]
 ```
+* ZSCORE: `ZSCORE key member`
+返回一个key里面member的score, 如果key不存在会返回nill(None)
 
 * [ZRANGE](https://redis.io/commands/zrange)
+```
+zrange('mykey', 0, -1)
+```
     1. > 从0开始, -1是最后一个， -2是倒数第二个
     2. > 前后都是闭区间
     3. > 不会报错，如果start大于stop，或者start大于长度，返回 []
@@ -294,7 +300,8 @@ client.zrem(key, 'member', 'member2')
 * [ ] ZREMRANGEBYLEX
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
-# Config 配置
+# Administration
+## Config 配置
 * maxmemory 100mb
     * string 72b 
     * list 168b
@@ -305,3 +312,22 @@ client.zrem(key, 'member', 'member2')
     * 192.168.1.111 127.0.0.1  这样就能直接 localhost访问或者其他机器 -h 192.168.1.111 访问了。
 * requirepass `<longpassword>`: password，longer than 32
 * daemonize no: if it is yes, redis will create `/var/run/redis.pid`
+
+## Persistence
+redis有2种保存方式
+* RDB保存直接保存当前的快照
+* AOF保存所有的操作
+
+### RDB的优势
+* 仅仅生成一个文件，方便备份
+* 方便恢复
+* 性能高，会生成一个子进程来备份
+* 恢复时启动块
+
+### RDB缺点
+* 不是及时的，2次备份间隔期间的数据会因为下次备份没生成而丢失
+* 数据很大，cpu不高会卡顿
+
+## To be continued
+* [ ] Replication
+* [ ] Redis Administration
