@@ -266,6 +266,9 @@ if expire is 0, the key is created without any expire
 ZCOUNT myset -inf +inf
 ZCOUNT myset 1 3
 ```
+* ZINCRBY key increment member
+如果key不存在，就创建这个key, 如果member不存在，就加入member
+increment可以是小数，整数，负数, 返回当前的value
 * ZPOPMAX  
 返回score最大的若干个elements, 如果超过了，不会报错
 ```

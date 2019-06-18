@@ -16,6 +16,7 @@ checkStatus() {
     # 这个只会看暂存区，工作区是否有编辑
     status=`git status --porcelain` 
     if [[ $status ]]; then
+        echo `pwd`
         echo -e "\e[91m当前暂存区或者工作区有改动\e[m"
         echo $status
         pwd
@@ -129,7 +130,7 @@ pullPushgit() {
 for project in `ls ..`; do
 # projects=("html-reference" "linux-reference")
 # for project in ${projects[*]} ; do
-    echo "处理$project"
+    # echo "处理$project"
     if [ -f "../$project" ]; then
         continue
     fi

@@ -1,7 +1,6 @@
 **Xiang Wang @ 2018-05-04 19:52:09**
 
 # menu 目录
-* [返回linux-totorial](../README.md)  
 * [runoob 菜鸟网站](https://www.runoob.com/linux/linux-shell.html)
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
     * 传递参数
@@ -97,8 +96,17 @@ for i in file1 file2 file3; do  # 循环给定的列表
 done
 ```
 
-# [judgement 判断](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-6.html#ss6.3)
+# [judgement 判断](https://www.runoob.com/linux/linux-shell-process-control.html)
+[测试](./ifelse.sh)
+* 格式
 ```
+if condition
+then
+    command1
+    command2
+else
+    command
+fi
 if [ "foo" = "foo" ]; then  # 中括号旁边必须有空格,等号前后也必须有空格, 而且只有一个等号
 else
 fi
