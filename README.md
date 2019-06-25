@@ -290,6 +290,7 @@ sqlite3 test.db
 .read <filename>
 .import 文件名 表名
 ```
+## supervisord 守护进程
 
 ## tsocks 让应用启动的时候走代理
     ```
