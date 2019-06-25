@@ -130,7 +130,7 @@ pullPushgit() {
 for project in `ls ..`; do
 # projects=("html-reference" "linux-reference")
 # for project in ${projects[*]} ; do
-    # echo "处理$project"
+    echo -e "\e[32m处理$project\e[m"
     if [ -f "../$project" ]; then
         continue
     fi
