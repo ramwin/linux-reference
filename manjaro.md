@@ -4,6 +4,7 @@
 * [manjaro下安装输入法](https://www.jianshu.com/p/d7c8f29be182)  
 
 ```
+sudo pacman-mirrors -c China  # 设置国内的软件源
 sudo pacman -S fcitx-sogoupinyin
 sudo pacman -S fcitx-im     # 全部安装
 sudo pacman -S fcitx-configtool     # 图形化配置工具
