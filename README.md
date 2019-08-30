@@ -157,8 +157,8 @@ call showTodoRest
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
 ## [mysql 数据库](./mysql.md)
-    * [Grant权限控制](./database/mysql_grant.md)
-    * [mysqldump](./mysql.md)
+* [Grant权限控制](./database/mysql_grant.md)
+* [mysqldump](./mysql.md)
 
 ## nnn
 文件管理
@@ -362,6 +362,7 @@ ufw allow from 172.16.15.66 to any port 6379
     * [Compile and Configure](http://nginx.org/en/docs/configure.html)
 
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
+* [postfix](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-18-04)
 * [rabbitmq](./rabbitmq/README.md)
 
 * [screen](./screen.md) *用来开启后台shell*
@@ -372,8 +373,8 @@ ctrl + A + D    # 关闭当前screen
 screen -r sjtupt    # 还原之前的screen
 ```
 * simplescreenrecorder *录屏软件*
-* smtp邮件服务器
-    * [digitalocean.com教程](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04)
+* smtp邮件服务器  **新版参考postfix**
+    * [digitalocean.com教程](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-18-04)
     ```
     sudo apt install mailutils
     sudo apt install postfix
