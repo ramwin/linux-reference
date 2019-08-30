@@ -63,6 +63,10 @@ x,y,z代表了属性
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8//IGNORE originfile -o target`
+* iftop:
+```
+iftop -i ens3 -P 查看某个网卡的网络进出情况
+```
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
@@ -325,7 +329,7 @@ ufw enable/disable
 ```
 * 开放某个端口
 ```
-ufw allow 22
+ufw allow 22 comment "允许ssh登录"
 ```
 * 查看当前状态
 ```
@@ -358,13 +362,7 @@ ufw allow from 172.16.15.66 to any port 6379
     * [Compile and Configure](http://nginx.org/en/docs/configure.html)
 
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
-* [rabbitmq](https://www.rabbitmq.com/)
-    * [Tutorials](https://www.rabbitmq.com/getstarted.html)
-    * change password  
-    ````
-    rabbitmqctl change_password <username> <password>  # changepassword
-    rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
-    ````
+* [rabbitmq](./rabbitmq/README.md)
 
 * [screen](./screen.md) *用来开启后台shell*
 ```
