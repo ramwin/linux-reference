@@ -89,6 +89,15 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
 ```
 su -s /bin/bash www-data  # 使用www-data来执行bash命令
 ```
+* swap
+```
+fallocate -l 8G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile none swap sw 0 0" > /etc/fstab
+echo "vm.swappiness=10" > /etc/sysctl.conf
+```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
 * tidy
