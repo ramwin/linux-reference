@@ -20,6 +20,9 @@ awk '{print $1}' filename
     * -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
     * -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
     * -v: 显示复制的过程
+* curl
+    * post请求: `curl -d 'name=value' <url>`
+    * 发送文件: `curl -F 'data=@path/to/local/file' <url>`
 * dd:
 复制文件
     * [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
@@ -303,13 +306,25 @@ pacman -S nnn
 
 ## SQLite
 [官网](http://www.sqlitetutorial.net/)
-
-* [ ] autoincrement
 * alter
 [官网](http://www.sqlitetutorial.net/sqlite-alter-table/)  
 sqlite不支持删除字段，只支持rename表和添加column. 所以如果你想删除某个字段，就先rename这个表，然后创建一个新表,然后再把数据复制过来
+* attach
+导入其他的数据库
+```
+attach "filename" as <dbname>;
+```
+* [ ] autoincrement
+* CREATE 创建表
+```
+CREATE TABLE "dbxd" (
+"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+"time" datetime NOT NULL, 
+"contentid" varchar(32) NOT NULL,
+"charge1" integer NOT NULL, 
+"channel" varchar(32) NOT NULL);  
+```
 * [ ] drop
-
 * [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
 ```
 .output backup.sql
@@ -319,13 +334,15 @@ sqlite不支持删除字段，只支持rename表和添加column. 所以如果你
 .output test.txt
 select * from table;
 ```
-
 * read 还原数据库
 ```
 sqlite3 test.db
 .read <filename>
 .import 文件名 表名
 ```
+* .schema <table>
+查看某个表的格式  
+
 ## supervisord 守护进程
 
 ## tsocks 让应用启动的时候走代理
