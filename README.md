@@ -63,6 +63,10 @@ x,y,z代表了属性
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8//IGNORE originfile -o target`
+* iftop:
+```
+iftop -i ens3 -P 查看某个网卡的网络进出情况
+```
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
@@ -84,6 +88,15 @@ x,y,z代表了属性
 * su:
 ```
 su -s /bin/bash www-data  # 使用www-data来执行bash命令
+```
+* swap
+```
+fallocate -l 8G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile none swap sw 0 0" > /etc/fstab
+echo "vm.swappiness=10" > /etc/sysctl.conf
 ```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
@@ -112,13 +125,33 @@ Tidy Advocacy Community Group.
 # software 软件
 ## [celery](http://docs.celeryproject.org/en/latest/index.html)
 ```
-terminal1: cd test && celery -A tasks worker --loglevel=info
+terminal1: cd test && celery -A tasks worker --loglevel=info --concurrency=1
 terminal2: cd test && python3 test_tasks.py
 ```
 * [测试代码](./test/tasks.py) [测试脚本](./test/test_tasks.py)
 * 不需要启动多个celery, 因为celery本身就是多线程的. 并且里面的变量是共享的
 * 如果启动了多个celery, 一个请求过去只有一个celery的里面一个线程会收到任务
 * 默认启动了4个worker, 所以如果是4个以内的请求,耗时为一倍, 5个到8个耗时为2倍
+* celery使用rabbitmq也会遇到一样的问题，是round-robin的.　需要配置`worker_prefetch_multiplier`
+* 内存分析
+    * 多线程对于大变量内存影响不大．所以celery应该是多个concurrency共享内存变量的
+
+程序|线程|大内存变量|VIRT|RES|备注
+----|----|---------------------------------|---|---|---
+python|1|0|17884|9992|大型变量用list(range(100000))
+python|1|1|21836(+3952)|14012(+4020)|和没有变量相比
+python|1|2||
+celery| 1|0|50428(+32544)|28988(+18996)|和python_1_0相比
+celery| 2|0|52896(+2468) |37280(+8292)|和celery_1_0相比
+celery| 4|0|52908(+2480) |37108(+8210)|和celery_1_0相比
+celery| 8|0|52924(+2496) |37232(+8244)|和celery_1_0相比
+celery|16|1|53220(+2792) |37212(+8824)|和celery_1_0相比
+celery|1|1|57100(+6672)|41212(+12224)|和celery_1_0相比
+celery|1|2|61172(+10744)|45084(+16096)|和celery_1_0相比
+celery|4|1|52904|37248|和celery_1_0相比
+celery|4|4|69228|53024|和celery_1_0相比
+
+
 
 ## chromium
 * 代理
@@ -161,6 +194,9 @@ call showTodoRest
 ```
 pacman -S nnn
 ```
+
+## [pandoc](https://pandoc.org/)
+把各种markup格式的格式转化成其他各种文档格式
 
 ## postgresql
 * 教程
@@ -322,7 +358,7 @@ ufw enable/disable
 ```
 * 开放某个端口
 ```
-ufw allow 22
+ufw allow 22 comment "允许ssh登录"
 ```
 * 查看当前状态
 ```
@@ -356,13 +392,7 @@ ufw allow from 172.16.15.66 to any port 6379
 
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
 * [postfix](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-18-04)
-* [rabbitmq](https://www.rabbitmq.com/)
-    * [Tutorials](https://www.rabbitmq.com/getstarted.html)
-    * change password  
-    ````
-    rabbitmqctl change_password <username> <password>  # changepassword
-    rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
-    ````
+* [rabbitmq](./rabbitmq/README.md)
 
 * [screen](./screen.md) *用来开启后台shell*
 ```
