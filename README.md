@@ -340,6 +340,12 @@ sqlite3 test.db
 .read <filename>
 .import 文件名 表名
 ```
+* rename
+```
+ALTER TABLE <表> RENAME TO <临时表名>
+CREATE TABLE <表>
+INSERT INTO <表> SELECT * FROM <临时表名>
+```
 * .schema <table>
 查看某个表的格式  
 
