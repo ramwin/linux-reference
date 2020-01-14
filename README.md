@@ -304,50 +304,7 @@ pacman -S nnn
         ```
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
-## SQLite
-[官网](http://www.sqlitetutorial.net/)
-* alter
-[官网](http://www.sqlitetutorial.net/sqlite-alter-table/)  
-sqlite不支持删除字段，只支持rename表和添加column. 所以如果你想删除某个字段，就先rename这个表，然后创建一个新表,然后再把数据复制过来
-* attach
-导入其他的数据库
-```
-attach "filename" as <dbname>;
-```
-* [ ] autoincrement
-* CREATE 创建表
-```
-CREATE TABLE "dbxd" (
-"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
-"time" datetime NOT NULL, 
-"contentid" varchar(32) NOT NULL,
-"charge1" integer NOT NULL, 
-"channel" varchar(32) NOT NULL);  
-```
-* [ ] drop
-* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
-```
-.output backup.sql
-.dump
-.exit
-或者
-.output test.txt
-select * from table;
-```
-* read 还原数据库
-```
-sqlite3 test.db
-.read <filename>
-.import 文件名 表名
-```
-* rename
-```
-ALTER TABLE <表> RENAME TO <临时表名>
-CREATE TABLE <表>
-INSERT INTO <表> SELECT * FROM <临时表名>
-```
-* .schema <table>
-查看某个表的格式  
+## [SQLite](./sqlite/README.md)
 
 ## supervisord 守护进程
 
@@ -361,7 +318,6 @@ INSERT INTO <表> SELECT * FROM <临时表名>
     # 启动
     tsocks firefox
     ```
-
 
 ## terminal终端
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
