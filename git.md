@@ -144,6 +144,12 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 ### pull
 * 拉取远程分支 git pull origin <branch>:<local_branch>
 
+### show  
+查看某个文件的版本
+```
+git show ref:filepath > tmp
+```
+
 ### status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
 
