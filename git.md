@@ -4,6 +4,13 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
+### 查看和比较 Inspection and Comparison
+* [show](https://git-scm.com/docs/git-show)
+```
+git show <ref>  # 查看某个版本的修改
+git show <ref>:<file>  # 查看某个版本的文件
+```
+
 ### init
 ```
 git init <directory>  # 初始化仓库
