@@ -306,18 +306,34 @@ pacman -S nnn
 
 ## [SQLite](./sqlite/README.md)
 
-## supervisord 守护进程
+## [supervisor](http://supervisord.org/index.html)
+守护进程设置
+* [配置文件](http://supervisord.org/configuration.html#program-x-section-example)
+```
+redirect_stderr=false
+stdout_logfile=/a/path
+stdout_logfile_maxbytes=1MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+stderr_logfile=/a/path
+stderr_logfile_maxbytes=1MB
+stderr_logfile_backups=10
+stderr_capture_maxbytes=1MB
+stderr_events_enabled=false
+```
+* [日志](http://supervisord.org/logging.html)
 
 ## tsocks 让应用启动的时候走代理
-    ```
-    # 配置tsocks
-    vim /etc/tsocks.conf
-    server = 127.0.0.1
-    server_port = 1080
-    server_type = 5
-    # 启动
-    tsocks firefox
-    ```
+```
+# 配置tsocks
+vim /etc/tsocks.conf
+server = 127.0.0.1
+server_port = 1080
+server_type = 5
+# 启动
+tsocks firefox
+```
 
 ## terminal终端
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
