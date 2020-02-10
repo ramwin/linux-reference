@@ -308,8 +308,19 @@ pacman -S nnn
 
 ## [supervisor](http://supervisord.org/index.html)
 守护进程设置
+* 运行supervisor
+    * supervisorctl
+    ```
+    supervisorctl stop <name>  停止一个进程
+    ```
 * [配置文件](http://supervisord.org/configuration.html#program-x-section-example)
 ```
+[program:redis]
+user=dev
+directory = /var/www/project
+command=gunicorn project.wsgi -c deploy/gunicorn.conf.py
+autostart=true
+autorestart=true
 redirect_stderr=false
 stdout_logfile=/a/path
 stdout_logfile_maxbytes=1MB

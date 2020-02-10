@@ -4,6 +4,21 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
+### 通用
+#### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
+* creatordate
+
+### 分支和合并 Branching and Merging
+#### [tag](https://git-scm.com/docs/git-tag)
+* `--sort=<key>`
+> 这里的排序使用的是和`git for-each-ref`一致的key  
+> 使用`git config tag.sort`可以设置tag的默认排序  
+```
+git config tag.sort -creatordate
+git tag -n | head -n 10
+```
+
+
 ### 查看和比较 Inspection and Comparison
 * [show](https://git-scm.com/docs/git-show)
 ```
