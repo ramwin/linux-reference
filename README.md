@@ -234,6 +234,10 @@ pacman -S nnn
 
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
 
+## [prettier](https://prettier.io/docs/en/options.html)
+### 配置
+* trailingComma: "es5", 是否要在后面加分隔符逗号
+
 ## [proxychains](https://wiki.archlinux.org/index.php/Proxy_settings#Using_a_SOCKS_proxy)
 ```
     proxychains <program>
@@ -305,6 +309,14 @@ pacman -S nnn
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
 ## [SQLite](./sqlite/README.md)
+
+## sshd
+[配置文档](https://linux.die.net/man/5/sshd_config)
+
+```
+vim /etc/ssh/sshd_config
+ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一个
+```
 
 ## [supervisor](http://supervisord.org/index.html)
 守护进程设置
