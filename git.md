@@ -4,6 +4,33 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
+### 通用
+#### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
+* creatordate
+
+### 分支和合并 Branching and Merging
+#### [tag](https://git-scm.com/docs/git-tag)
+* `--sort=<key>`
+> 这里的排序使用的是和`git for-each-ref`一致的key  
+> 使用`git config tag.sort`可以设置tag的默认排序  
+```
+git config tag.sort -creatordate
+git tag -n | head -n 10
+```
+
+
+### 查看和比较 Inspection and Comparison
+* [show](https://git-scm.com/docs/git-show)
+```
+git show <ref>  # 查看某个版本的修改
+git show <ref>:<file>  # 查看某个版本的文件
+```
+* [log](https://git-scm.com/docs/git-log)
+    * [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
+    * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
+    * %h %H 简短/完整的哈希字符串
+    * %d %D ref的name, %D代表了不用括号括起来
+
 ### init
 ```
 git init <directory>  # 初始化仓库
@@ -132,17 +159,18 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 * 拉取指定的commit
 `git fetch --depth=1 <remote> $SHA1`
 
-### log
-* [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
-* `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
-* %h %H 简短/完整的哈希字符串
-* %d %D ref的name, %D代表了不用括号括起来
 
 ### ls-remote
 展示远程仓库的分支
 
 ### pull
 * 拉取远程分支 git pull origin <branch>:<local_branch>
+
+### show  
+查看某个文件的版本
+```
+git show ref:filepath > tmp
+```
 
 ### status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*

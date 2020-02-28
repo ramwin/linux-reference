@@ -20,6 +20,9 @@ awk '{print $1}' filename
     * -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
     * -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
     * -v: 显示复制的过程
+* curl
+    * post请求: `curl -d 'name=value' <url>`
+    * 发送文件: `curl -F 'data=@path/to/local/file' <url>`
 * dd:
 复制文件
     * [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
@@ -243,6 +246,10 @@ pacman -S nnn
 
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
 
+## [prettier](https://prettier.io/docs/en/options.html)
+### 配置
+* trailingComma: "es5", 是否要在后面加分隔符逗号
+
 ## [proxychains](https://wiki.archlinux.org/index.php/Proxy_settings#Using_a_SOCKS_proxy)
 ```
     proxychains <program>
@@ -313,44 +320,55 @@ pacman -S nnn
         ```
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
-## SQLite
-[官网](http://www.sqlitetutorial.net/)
+## [SQLite](./sqlite/README.md)
 
-* [ ] autoincrement
-* alter
-[官网](http://www.sqlitetutorial.net/sqlite-alter-table/)  
-sqlite不支持删除字段，只支持rename表和添加column. 所以如果你想删除某个字段，就先rename这个表，然后创建一个新表,然后再把数据复制过来
-* [ ] drop
+## sshd
+[配置文档](https://linux.die.net/man/5/sshd_config)
 
-* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
 ```
-.output backup.sql
-.dump
-.exit
-或者
-.output test.txt
-select * from table;
+vim /etc/ssh/sshd_config
+ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一个
 ```
 
-* read 还原数据库
+## [supervisor](http://supervisord.org/index.html)
+守护进程设置
+* 运行supervisor
+    * supervisorctl
+    ```
+    supervisorctl stop <name>  停止一个进程
+    ```
+* [配置文件](http://supervisord.org/configuration.html#program-x-section-example)
 ```
-sqlite3 test.db
-.read <filename>
-.import 文件名 表名
+[program:redis]
+user=dev
+directory = /var/www/project
+command=gunicorn project.wsgi -c deploy/gunicorn.conf.py
+autostart=true
+autorestart=true
+redirect_stderr=false
+stdout_logfile=/a/path
+stdout_logfile_maxbytes=1MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+stderr_logfile=/a/path
+stderr_logfile_maxbytes=1MB
+stderr_logfile_backups=10
+stderr_capture_maxbytes=1MB
+stderr_events_enabled=false
 ```
-## supervisord 守护进程
+* [日志](http://supervisord.org/logging.html)
 
 ## tsocks 让应用启动的时候走代理
-    ```
-    # 配置tsocks
-    vim /etc/tsocks.conf
-    server = 127.0.0.1
-    server_port = 1080
-    server_type = 5
-    # 启动
-    tsocks firefox
-    ```
-
+```
+# 配置tsocks
+vim /etc/tsocks.conf
+server = 127.0.0.1
+server_port = 1080
+server_type = 5
+# 启动
+tsocks firefox
+```
 
 ## terminal终端
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
