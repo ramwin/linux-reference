@@ -98,6 +98,11 @@ swapon /swapfile
 echo "/swapfile none swap sw 0 0" > /etc/fstab
 echo "vm.swappiness=10" > /etc/sysctl.conf
 ```
+* tar
+```
+tar -zcvf github.tar.gz github
+tar -c -f project.tar --exclude=".git*" project/
+```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
 * tidy
@@ -182,6 +187,13 @@ call showTodoRest
 
 ## [git](./git.md)  
 一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
+
+## [language-pack-zh-hans](https://www.jianshu.com/p/2ae564a1f131)  
+安装中文支持
+```
+apt install language-pack-zh-hans
+LANG="zh_CN.UTF-8"
+```
 
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
