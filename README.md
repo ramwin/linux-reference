@@ -222,6 +222,7 @@ pacman -Syy  # 更新数据库
 pacman -Syu  # 安装最新软件
 pacman -S package_name1 package_name2
 pacman -R package_name  # 卸载某个软件
+sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ```
 
 ## [pandoc](https://pandoc.org/)
