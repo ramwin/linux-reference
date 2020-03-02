@@ -30,6 +30,8 @@ awk '{print $1}' filename
     $ sync; dd if=/dev/zero of=tempfile bs=1M count=1024; sync  # 测试写入速度
     $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
     ```
+* dig  
+用drill
 * diff:
 ```
     -c:  把不同之处以及前3行和后3行显示出来。
@@ -41,6 +43,10 @@ awk '{print $1}' filename
     diff -Nur originalfile newfile > patchfile:把旧文件和新的文件进行比较，生成文件的差，一次作为升级包
     patch -p1 < patchfile：把升级包应用于文件夹
     patch originalfile patchfile：把升级包应用于单个文件
+```
+* [drill](https://wiki.archlinux.org/index.php/Domain_name_resolution#Lookup_utilities)
+```
+dril @dnsserver 
 ```
 * du
 ```
@@ -98,8 +104,8 @@ fallocate -l 8G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
-echo "/swapfile none swap sw 0 0" > /etc/fstab
-echo "vm.swappiness=10" > /etc/sysctl.conf
+echo "/swapfile none swap sw 0 0" >> /etc/fstab
+echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
