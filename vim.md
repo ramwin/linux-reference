@@ -3,6 +3,9 @@
 
 # 导航
 * [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
+```
+set t_vb=  # 防止屏幕闪烁
+```
 * [多窗口](#split)
 * 参考资料
     * [vim viki](http://vim.wikia.com/wiki/Main_Page)

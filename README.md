@@ -107,6 +107,11 @@ swapon /swapfile
 echo "/swapfile none swap sw 0 0" >> /etc/fstab
 echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
+* tar
+```
+tar -zcvf github.tar.gz github
+tar -c -f project.tar --exclude=".git*" project/
+```
 * tcpdump 监控网络数据 `tcpdump -l -i eth0 -w - src or dst port 3306 | strings`
 * [ ] tee  
 * tidy
@@ -192,6 +197,13 @@ call showTodoRest
 ## [git](./git.md)  
 一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
 
+## [language-pack-zh-hans](https://www.jianshu.com/p/2ae564a1f131)  
+安装中文支持
+```
+apt install language-pack-zh-hans
+LANG="zh_CN.UTF-8"
+```
+
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
 ## [mysql 数据库](./mysql.md)
@@ -239,6 +251,10 @@ pacman -S nnn
         ```
 
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
+
+## [prettier](https://prettier.io/docs/en/options.html)
+### 配置
+* trailingComma: "es5", 是否要在后面加分隔符逗号
 
 ## [proxychains](https://wiki.archlinux.org/index.php/Proxy_settings#Using_a_SOCKS_proxy)
 ```
@@ -312,18 +328,53 @@ pacman -S nnn
 
 ## [SQLite](./sqlite/README.md)
 
-## supervisord 守护进程
+## sshd
+[配置文档](https://linux.die.net/man/5/sshd_config)
+
+```
+vim /etc/ssh/sshd_config
+ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一个
+```
+
+## [supervisor](http://supervisord.org/index.html)
+守护进程设置
+* 运行supervisor
+    * supervisorctl
+    ```
+    supervisorctl stop <name>  停止一个进程
+    ```
+* [配置文件](http://supervisord.org/configuration.html#program-x-section-example)
+```
+[program:redis]
+user=dev
+directory = /var/www/project
+command=gunicorn project.wsgi -c deploy/gunicorn.conf.py
+autostart=true
+autorestart=true
+redirect_stderr=false
+stdout_logfile=/a/path
+stdout_logfile_maxbytes=1MB
+stdout_logfile_backups=10
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+stderr_logfile=/a/path
+stderr_logfile_maxbytes=1MB
+stderr_logfile_backups=10
+stderr_capture_maxbytes=1MB
+stderr_events_enabled=false
+```
+* [日志](http://supervisord.org/logging.html)
 
 ## tsocks 让应用启动的时候走代理
-    ```
-    # 配置tsocks
-    vim /etc/tsocks.conf
-    server = 127.0.0.1
-    server_port = 1080
-    server_type = 5
-    # 启动
-    tsocks firefox
-    ```
+```
+# 配置tsocks
+vim /etc/tsocks.conf
+server = 127.0.0.1
+server_port = 1080
+server_type = 5
+# 启动
+tsocks firefox
+```
 
 ## terminal终端
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
