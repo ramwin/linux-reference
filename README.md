@@ -216,6 +216,14 @@ LANG="zh_CN.UTF-8"
 pacman -S nnn
 ```
 
+## pacman
+```
+pacman -Syy  # 更新数据库
+pacman -Syu  # 安装最新软件
+pacman -S package_name1 package_name2
+pacman -R package_name  # 卸载某个软件
+```
+
 ## [pandoc](https://pandoc.org/)
 把各种markup格式的格式转化成其他各种文档格式
 
@@ -377,7 +385,7 @@ tsocks firefox
 ```
 
 ## terminal终端
-* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
+* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE) [快捷键参考2](https://www.cnblogs.com/zhouj-happy/p/11375658.html)
 * 删除快捷键:
     alt+d: 删除光标右边的单词
     ctrl+w: 删除当前光标左边的单词
