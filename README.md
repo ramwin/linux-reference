@@ -419,6 +419,18 @@ ufw allow from 172.16.15.66 to any port 6379
 * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
     `:MultipleCursorsFind <regrexmatch>`
 
+## vscode
+```
+.vscode/settings.json
+{
+  "files.exclude": {
+    "*.wxss": true,
+    "*/*.wxss": true
+  }
+}
+```
+
+
 ## other
 * alarm-clock-applet 闹钟
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
