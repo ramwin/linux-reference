@@ -335,6 +335,10 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
         ```
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
+## samba  
+用来安装共享文件夹，方便多台电脑共享文件
+[安装部署教程](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-samba-share-for-a-small-organization-on-ubuntu-16-04)
+
 ## [SQLite](./sqlite/README.md)
 
 ## sshd
