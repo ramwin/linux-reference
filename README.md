@@ -195,8 +195,15 @@ call showTodoRest
 ## [daemon 守护进程](./daemon/README.md)
 
 ## ffmpeg
+* 生成缩略图
 ```
 ffmpegthumbnailer -i from.png  -o target.png -s500 -q10
+```
+* 转化视频和音频文件
+```
+ffmpeg -i django本地部署文档.mp4  -i 同步后的音频.aac  -strict -2 result.mkv
+ffmpeg -i result.mkv  -vcodec copy -acodec copy -ss 00:01:02.7  ./result_cut.mkv  # 截取视频
+ffmpeg -ss 00:01:06.4 -i result.mkv  -vcodec copy -acodec copy  ./result_cut.mkv  # 这个截取会多一点视频，但是避免出现黑屏
 ```
 
 ## [git](./git.md)  
@@ -443,13 +450,6 @@ ufw allow from 172.16.15.66 to any port 6379
 ## other
 * alarm-clock-applet 闹钟
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* ffmpeg
-```
-转化视频和音频文件
-ffmpeg -i django本地部署文档.mp4  -i 同步后的音频.aac  -strict -2 result.mkv
-ffmpeg -i result.mkv  -vcodec copy -acodec copy -ss 00:01:02.7  ./result_cut.mkv  # 截取视频
-ffmpeg -ss 00:01:06.4 -i result.mkv  -vcodec copy -acodec copy  ./result_cut.mkv  # 这个截取会多一点视频，但是避免出现黑屏
-```
 * [gnome](./gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
