@@ -30,6 +30,8 @@ awk '{print $1}' filename
     $ sync; dd if=/dev/zero of=tempfile bs=1M count=1024; sync  # 测试写入速度
     $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
     ```
+* dig  
+用drill
 * diff:
 ```
     -c:  把不同之处以及前3行和后3行显示出来。
@@ -41,6 +43,10 @@ awk '{print $1}' filename
     diff -Nur originalfile newfile > patchfile:把旧文件和新的文件进行比较，生成文件的差，一次作为升级包
     patch -p1 < patchfile：把升级包应用于文件夹
     patch originalfile patchfile：把升级包应用于单个文件
+```
+* [drill](https://wiki.archlinux.org/index.php/Domain_name_resolution#Lookup_utilities)
+```
+dril @dnsserver 
 ```
 * du
 ```
@@ -98,8 +104,8 @@ fallocate -l 8G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
-echo "/swapfile none swap sw 0 0" > /etc/fstab
-echo "vm.swappiness=10" > /etc/sysctl.conf
+echo "/swapfile none swap sw 0 0" >> /etc/fstab
+echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
 * tar
 ```
@@ -188,6 +194,11 @@ call showTodoRest
 
 ## [daemon 守护进程](./daemon/README.md)
 
+## ffmpeg
+```
+ffmpegthumbnailer -i from.png  -o target.png -s500 -q10
+```
+
 ## [git](./git.md)  
 一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
 
@@ -208,6 +219,15 @@ LANG="zh_CN.UTF-8"
 文件管理
 ```
 pacman -S nnn
+```
+
+## pacman
+```
+pacman -Syy  # 更新数据库
+pacman -Syu  # 安装最新软件
+pacman -S package_name1 package_name2
+pacman -R package_name  # 卸载某个软件
+sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ```
 
 ## [pandoc](https://pandoc.org/)
@@ -320,6 +340,10 @@ pacman -S nnn
         ```
         * [多个地点ping服务器](http://ping.chinaz.com/)
 
+## samba  
+用来安装共享文件夹，方便多台电脑共享文件
+[安装部署教程](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-samba-share-for-a-small-organization-on-ubuntu-16-04)
+
 ## [SQLite](./sqlite/README.md)
 
 ## sshd
@@ -371,7 +395,7 @@ tsocks firefox
 ```
 
 ## terminal终端
-* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE)
+* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE) [快捷键参考2](https://www.cnblogs.com/zhouj-happy/p/11375658.html)
 * 删除快捷键:
     alt+d: 删除光标右边的单词
     ctrl+w: 删除当前光标左边的单词
@@ -403,6 +427,18 @@ ufw allow from 172.16.15.66 to any port 6379
 [交互式的tutorial教程](http://www.openvim.com/)
 * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
     `:MultipleCursorsFind <regrexmatch>`
+
+## vscode
+```
+.vscode/settings.json
+{
+  "files.exclude": {
+    "*.wxss": true,
+    "*/*.wxss": true
+  }
+}
+```
+
 
 ## other
 * alarm-clock-applet 闹钟

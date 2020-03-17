@@ -13,4 +13,5 @@
 * 添加组:
 ```
     sudo usermod -aG docker wang
+    sudo usermod -aG sudo wang  // 允许wang执行sudo命令
 ```

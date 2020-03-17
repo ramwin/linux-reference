@@ -375,3 +375,9 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
     2. ALTER TABLE table_name CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     3. ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     4. SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+* [`utf8mb4_unicode_ci`和`utf8mb4_general_ci`](http://wing.uoogre.com/mysql%E8%A6%81utf8mb4%E7%BC%96%E7%A0%81utf8mb4_unicode_ci%E4%B8%8Eutf8mb4_general_ci%E7%9A%84%E5%8C%BA%E5%88%AB/)
+尽量用前面的
+```
+`id` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+alter table group_groupapply convert to character set utf8mb4 collate utf8mb4_unicode_ci;
+```

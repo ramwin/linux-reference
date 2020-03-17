@@ -32,8 +32,10 @@ git show <ref>:<file>  # 查看某个版本的文件
     * %d %D ref的name, %D代表了不用括号括起来
 
 ### init
+* [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)
 ```
 git init <directory>  # 初始化仓库
+git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹的地方
 ```
 
 ### blame
