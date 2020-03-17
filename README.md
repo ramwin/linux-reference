@@ -194,6 +194,11 @@ call showTodoRest
 
 ## [daemon 守护进程](./daemon/README.md)
 
+## ffmpeg
+```
+ffmpegthumbnailer -i from.png  -o target.png -s500 -q10
+```
+
 ## [git](./git.md)  
 一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
 
