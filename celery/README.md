@@ -8,7 +8,7 @@
 terminal1: cd test && celery -A tasks worker --loglevel=info --concurrency=1
 terminal2: cd test && python3 test_tasks.py
 ```
-* [测试代码](./test/tasks.py) [测试脚本](./test/test_tasks.py)
+* [测试代码](./测试内存/tasks.py) [测试脚本](./测试内存/test_tasks.py)
 * 不需要启动多个celery, 因为celery本身就是多线程的. 并且里面的变量是共享的
 * 如果启动了多个celery, 一个请求过去只有一个celery的里面一个线程会收到任务
 * 默认启动了4个worker, 所以如果是4个以内的请求,耗时为一倍, 5个到8个耗时为2倍
@@ -31,3 +31,15 @@ celery|1|2|61172(+10744)|45084(+16096)|和celery_1_0相比
 celery|4|1|52904|37248|和celery_1_0相比
 celery|4|4|69228|53024|和celery_1_0相比
 
+
+### 起步
+#### Choose a broker
+不管你怎么设置，只要broker都是`amqp://guest@localhost//`, 那么他们在rabbitmq的queue都是celery。但是在celery启动的时候，会额外产生两个queue
+```
+Timeout: 60.0 seconds ...
+Listing queues for vhost / ...
+name    messages
+celery@manjaro.celery.pidbox    0
+celery  0
+celeryev.76bb7ea5-4b5e-4c4b-9c8f-8179984fa8b6   0
+```
