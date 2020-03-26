@@ -15,15 +15,21 @@ app.config_from_object('tasks_config')
 def hello(x=2):
     print("运行Hello")
     time.sleep(x)
-    print("运行完毕: {}".format(x))
+    print("hello运行完毕: {}".format(x))
     return 'hello world'
+
 
 @app.task
 def hello2(x=2):
-    print("运行Hello")
+    print("运行hello2")
+    print("先调用hello的两个异步")
+    hello.delay(x-1)
+    hello.delay(x+1)
+    print("然后执行hello2")
     time.sleep(x)
-    print("运行完毕: {}".format(x))
-    return 'hello world2'
+    print("执行hello2完毕")
+
 
 if __name__=='__main__':
-    print(hello2.delay(5).get())
+    # hello.delay(5)
+    hello2.delay(5)
