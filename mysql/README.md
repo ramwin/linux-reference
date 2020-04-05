@@ -26,19 +26,6 @@
     ```mysql
     INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
     ```
-* [JOIN](https://dev.mysql.com/doc/refman/5.7/en/multiple-tables.html)
-    * 案例
-    ```
-    SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
-    ```
-    * INNER JOIN: *把两个表格里面合并起来，只有on的条件满足了才会一起出现，否则就不显示*
-* LOAD [官方链接](https://dev.mysql.com/doc/refman/5.7/en/load-data.html)
-    * `\N`代表了空置`NULL`
-    * example:
-    ```mysql
-    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
-    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
-    ```
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
@@ -135,6 +122,58 @@
 ```
 mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 ```
+
+# Tutorial
+## Creating and Using a Database
+* [Loading Data into a Table](https://dev.mysql.com/doc/refman/8.0/en/loading-tables.html)
+见SQL Statements - Data Manipulation Statements - LOAD DATA Statement
+
+# SQL Statements
+## Data Manipulation Statements
+* [ ] [DELETE](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
+```
+DELETE FROM tbl_name 
+    WHERE where_condition
+    ORDER BY ...
+    LIMIT row_count
+```
+* [LOAD DATA Statement](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
+```
+LOAD DATA
+    INFILE 'file_name'
+    INTO TABLE tbl_name
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY """
+    IGNORE number {LINES | ROWS}
+```
+    * `\N`代表了空置`NULL`
+    * example:
+    ```mysql
+    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
+    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
+    ```
+### SELECT Statement
+* [JOIN](https://dev.mysql.com/doc/refman/8.0/en/join.html)
+    * LEFT JOIN
+    ```
+    SELECT * from pet LEFT JOIN event ON pet.name = event.name;
+    找出每个动物。存在事件就插进去。最多可能pet的行数 x event的行数
+    ```
+    * RIGHT JOIN
+    ```
+    SELECT * FROM pet RIGHT JOIN event ON pet.name = event.name;
+    找出所有的事件，如果有对应的动物，就插进去。如果对应多个，就插入多个。所以最多的行数等于pet的行数 x event的行数
+    ```
+    * INNER JOIN
+    ```
+    SELECT * FROM pet INNER JOIN event ON pet.name = event.name;
+    找出所有的匹配，然后只看里面pet.name == event.name. 如果没匹配上，就不显示。所以最多显示的数量是 pet的数量 × event的数量
+    ```
+    * 案例
+    ```
+    SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
+    ```
+    * INNER JOIN: *把两个表格里面合并起来，只有on的条件满足了才会一起出现，否则就不显示*
 
 # Security 安全机制
 ## General Security Issues 基本安全 [官网](https://dev.mysql.com/doc/refman/8.0/en/general-security-issues.html)
