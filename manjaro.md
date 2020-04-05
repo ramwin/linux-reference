@@ -31,3 +31,8 @@ sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 sudo systemctl enable mysqld
 sudo systemctl start mysqld
 ```
+
+### 蓝牙音频设置
+蓝牙设置|软件                 |后端      |源  |效果
+HSP     |SimpleScreenRecorder |PulseAudio| Monitor of Mi Bluetooth Headphones (karaoke)|不行
+HSP     |SimpleScreenRecorder |PulseAudio| Mi Bluetooth Headphones (karaoke)|有声音但是不清晰
