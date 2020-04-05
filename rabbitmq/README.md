@@ -24,6 +24,18 @@ rabbitmqctl set_permissions -p / rabbit ".*" ".*" ".*"  # allow access
 sudo rabbitmqctl  list_queues
 ```
 
+# 链接
+```
+credentials = pika.PlainCredentials('wangx', 'wangxiangno')
+connection = pika.BlockingConnection(pika.ConnectionParameters(credentials=credentials, virtual_host="qa1"))
+```
+# 发送消息
+```
+channel = connection.channel()
+channel.queue_declare(queue="hello")
+channel.basic_publish(exchange="", routing_key="hello", body=message)
+```
+
 # [01-Hello-World](https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
 ```
 python hello_world_send.py
@@ -87,3 +99,44 @@ channel.basic_consume(queue="task_queue", on_message_callback=callback)
 * [Monitoring](https://www.rabbitmq.com/monitoring.html)
 
 # [ ] [Publish Subscribe](https://www.rabbitmq.com/tutorials/tutorial-three-python.html)
+
+# Server Documentation
+## rabbitmqctl  
+[官网](https://www.rabbitmq.com/rabbitmqctl.8.html)
+
+## [ ] Replication
+
+### 用户管理 User Management
+* `add_user`
+```
+rabbitmqctl add_user <username> <passwd>
+```
+* [ ] `authenticate_user`
+
+### 权限管理 Access Control
+* `set_permissions`
+```
+rabbitmqctl set_permissions --vhost <hostname>  <username> ".*" ".*" ".*" 最后三个是conf write read
+```
+
+### 虚拟主机
+* `add_vhost`: 创建虚拟主机
+```
+rabbitmqctl add_vhost dynamic  # 不能用中文
+```
+
+### [ ] Configuration
+
+### 其他
+
+* `list_queues`  
+展示queues
+* `stop_app`
+* `start_app`
+* `reset`
+清空所有的队列
+```
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl start_app
+```

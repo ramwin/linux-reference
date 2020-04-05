@@ -381,3 +381,10 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
 `id` varchar(31) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
 alter table group_groupapply convert to character set utf8mb4 collate utf8mb4_unicode_ci;
 ```
+
+# 性能问题
+* [参考链接](https://zhuanlan.zhihu.com/p/113917726)
+    1. mysql使用B+树，是因为磁盘上一次读取的信息很多，只存一个节点有点亏。多以干脆多存几个，减少层级数
+    2. mysql的innodb是直接在叶子节点存了数据(聚集索引)，如果对其他的key做索引，会有回表再次查询的问题（为了节约空间）。所以每个表必须要有主键。但是mysql的叶子节点数据也有物理地址啊。给其他的字段创建索引时为什么不直接用物理地址呢？这个物理地址会变化吗
+        * 主键不要太长，因为其他的索引数据就太大了
+    3. myisam则是保存了物理地址。索引查到数据后直接能读取数据
