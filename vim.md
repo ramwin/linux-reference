@@ -144,3 +144,8 @@ set t_vb=  # 防止屏幕闪烁
 * 输入`a-z0-9`选择宏的命名
 * 持续性操作, 知道按`q`退出
 * 输入`@+命名`执行录制的宏
+
+# 插件
+```
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+```
