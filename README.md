@@ -336,6 +336,7 @@ ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一�
 
 ## [supervisor](http://supervisord.org/index.html)
 守护进程设置
+* [centos安装](https://www.php.cn/linux-413808.html)
 * 运行supervisor
     * supervisorctl
     ```
