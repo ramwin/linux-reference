@@ -1,0 +1,6 @@
+{
+    "workbench.colorTheme": "Solarized Light",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    }
+}
