@@ -138,14 +138,15 @@ DELETE FROM tbl_name
     LIMIT row_count
 ```
 * [LOAD DATA Statement](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
-```
-LOAD DATA
-    INFILE 'file_name'
-    INTO TABLE tbl_name
-    FIELDS TERMINATED BY ','
-    ENCLOSED BY """
-    IGNORE number {LINES | ROWS}
-```
+    * 例子
+    ```
+    LOAD DATA
+        INFILE 'file_name'
+        INTO TABLE tbl_name
+        FIELDS TERMINATED BY ','
+        ENCLOSED BY """
+        IGNORE number {LINES | ROWS}
+    ```
     * `\N`代表了空置`NULL`
     * example:
     ```mysql
@@ -232,30 +233,25 @@ mysql -u finley -ppassword db_name  # 不安全
 2. Adding User Accounts 添加用户
 
     * 创建管理帐号
-    ```
-    mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
-    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
-        ->     WITH GRANT OPTION;
-    mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
-    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
-        ->     WITH GRANT OPTION;
-    ```
+        * 案例
+        ```
+        mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
+        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
+            ->     WITH GRANT OPTION;
+        mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
+        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
+            ->     WITH GRANT OPTION;
+        ```
         * 在开启匿名登录的情况下, 必须存在 'finley'@'localhost' 用户. 因为如果没有这条语句, 当用户本地匿名登录, 使用了finley当作username的话, 因为存在localhost, 就会被当作匿名用户来处理了 finley@localhost 优先判断成 '%'@'localhost' 而不是 'finley'@'%'.
         * 'admin'@'localhost' 只能被本地的admin用户登录
         * dummp用户只能被本地访问
-
     * 查看用户权限  
-
-    ```
+    ```mysql
     mysql> SHOW GRANTS FOR 'admin'@'localhost';
-    +-----------------------------------------------------+
-    | Grants for admin@localhost                          |
-    +-----------------------------------------------------+
-    | GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost' |
-    +-----------------------------------------------------+
-
+    >> Grants for admin@localhost
+    >> GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
     mysql> SHOW CREATE USER 'admin'@'localhost'\G
-    *************************** 1. row ***************************
+    >> 1. row
     CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
     IDENTIFIED WITH 'mysql_native_password'
     AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'
