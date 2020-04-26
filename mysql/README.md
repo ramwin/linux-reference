@@ -1,6 +1,10 @@
 *Xiang Wang @ 2017-11-22 11:18:53*
 
 * [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+# 启动
+```
+docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
+```
 
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
@@ -23,9 +27,10 @@
         * COLLATE: 编码
 * `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
-    ```mysql
-    INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
-    ```
+```mysql
+INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
+```
+    * insert最后一个数据后面不能加逗号
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
@@ -129,6 +134,42 @@ mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 见SQL Statements - Data Manipulation Statements - LOAD DATA Statement
 
 # SQL Statements
+## Data Definition Statements
+### CREATE TABLE Statements
+#### [ ] [FOREIGN KEY Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
+* 示例
+```sql
+CREATE TABLE child (
+    id INT,
+    parent_id INT,
+    INDEX par_ind (parent_id),
+    FOREIGN KEY (parent_id)
+        REFERENCES parent(id)
+        ON DELETE CASCADE
+)
+```
+* reference的字段，必须需要index
+* 如果外键的字段有重复。只要里面一条数据被删除了，那么整个表里面的关联数据都会被删除。
+#### [ ] [CHECK Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html)
+```
+[CONSTRAINT [symbol]] CHECK (expr) [[NOT] ENFORCED]
+CREATE TABLE t1
+(
+  CHECK (c1 <> c2),
+  c1 INT CHECK (c1 > 10),
+  c2 INT CONSTRAINT c2_positive CHECK (c2 > 0),
+  c3 INT CHECK (c3 < 100),
+  CONSTRAINT c1_nonzero CHECK (c1 <> 0),
+  CHECK (c1 > c3)
+);
+CREATE TABLE people (
+  id int,
+  birth date,
+  death date,
+  CONSTRAINT mycheck CHECK(death > birth)
+);
+```
+
 ## Data Manipulation Statements
 * [ ] [DELETE](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```
