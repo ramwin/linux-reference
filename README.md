@@ -68,6 +68,7 @@ x,y,z代表了属性
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
     * `find -name '*.py' -not -path './EVN/*`
+    * `find . -iregex '.*.\(py\|html\)'`
 * grep
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度

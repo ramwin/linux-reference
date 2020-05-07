@@ -82,7 +82,7 @@
     * SHOW INDEX FROM pet;
     * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
     * `show full columns from group_group`; 查看所有的信息
-* ## UPDATE
+* ## [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html)
     ```mysql
     UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     ```
