@@ -4,6 +4,10 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
+```
+忽略某个文件
+git update-index --assume-unchanged config.php
+```
 ### 通用
 #### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
