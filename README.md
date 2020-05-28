@@ -162,6 +162,10 @@ showTodoRest -> {{
 }}
 call showTodoRest
 ```
+* 调试
+```
+-scheme:chrome-extension 关闭插件的network
+```
 
 ## [crontab](./crontab.md)
 定时任务脚本
