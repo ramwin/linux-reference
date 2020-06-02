@@ -186,8 +186,9 @@ git show ref:filepath > tmp
 git stash
 git stash list
 git stash pop = git stash apply; git stash drop
-git stash --all  # 把新建的文件也stash掉
+git stash --all  # 包含ignored和untracked
 git stash -- <file1> [<file2>]  # 指定部分文件stash
+git stash -u/--include-untracked 包含untracked文件
 ```
 
 
