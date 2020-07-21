@@ -3,6 +3,11 @@
 ## 安装
 * [下载](http://nginx.org/)
 * [编译](http://nginx.org/en/docs/configure.html)
+```
+./configure --prefix=/home/wangx/nginx/
+make
+make install
+```
 
 ## 为什么这么快
 为什么快，我觉得nginx可以什么都不处理啊。仅仅是一个路由器，能不快吗
@@ -18,5 +23,10 @@ location /ws {
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "Upgrade";
+}
+* 配置路径
+location /media_url/ {
+    # internal;  # 这个可以让这个url必须内部django返回才处理
+    alias /var/www/media/;
 }
 ```

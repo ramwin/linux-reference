@@ -1,6 +1,10 @@
 *Xiang Wang @ 2017-11-22 11:18:53*
 
 * [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+# 启动
+```
+docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
+```
 
 # tutorial 命令大全
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
@@ -35,9 +39,10 @@ _最后一行千万不要有逗号_
 
 * ## `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
-    ```mysql
-    INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
-    ```
+```mysql
+INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
+```
+    * insert最后一个数据后面不能加逗号
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
@@ -94,7 +99,7 @@ _最后一行千万不要有逗号_
     * SHOW INDEX FROM pet;
     * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
     * `show full columns from group_group`; 查看所有的信息
-* ## UPDATE
+* ## [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html)
     ```mysql
     UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     ```
@@ -141,6 +146,42 @@ mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 见SQL Statements - Data Manipulation Statements - LOAD DATA Statement
 
 # SQL Statements
+## Data Definition Statements
+### CREATE TABLE Statements
+#### [ ] [FOREIGN KEY Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
+* 示例
+```sql
+CREATE TABLE child (
+    id INT,
+    parent_id INT,
+    INDEX par_ind (parent_id),
+    FOREIGN KEY (parent_id)
+        REFERENCES parent(id)
+        ON DELETE CASCADE
+)
+```
+* reference的字段，必须需要index
+* 如果外键的字段有重复。只要里面一条数据被删除了，那么整个表里面的关联数据都会被删除。
+#### [ ] [CHECK Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html)
+```
+[CONSTRAINT [symbol]] CHECK (expr) [[NOT] ENFORCED]
+CREATE TABLE t1
+(
+  CHECK (c1 <> c2),
+  c1 INT CHECK (c1 > 10),
+  c2 INT CONSTRAINT c2_positive CHECK (c2 > 0),
+  c3 INT CHECK (c3 < 100),
+  CONSTRAINT c1_nonzero CHECK (c1 <> 0),
+  CHECK (c1 > c3)
+);
+CREATE TABLE people (
+  id int,
+  birth date,
+  death date,
+  CONSTRAINT mycheck CHECK(death > birth)
+);
+```
+
 ## Data Manipulation Statements
 * [ ] [DELETE](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```
@@ -150,14 +191,15 @@ DELETE FROM tbl_name
     LIMIT row_count
 ```
 * [LOAD DATA Statement](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
-```
-LOAD DATA
-    INFILE 'file_name'
-    INTO TABLE tbl_name
-    FIELDS TERMINATED BY ','
-    ENCLOSED BY """
-    IGNORE number {LINES | ROWS}
-```
+    * 例子
+    ```
+    LOAD DATA
+        INFILE 'file_name'
+        INTO TABLE tbl_name
+        FIELDS TERMINATED BY ','
+        ENCLOSED BY """
+        IGNORE number {LINES | ROWS}
+    ```
     * `\N`代表了空置`NULL`
     * example:
     ```mysql
@@ -244,30 +286,25 @@ mysql -u finley -ppassword db_name  # 不安全
 2. Adding User Accounts 添加用户
 
     * 创建管理帐号
-    ```
-    mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
-    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
-        ->     WITH GRANT OPTION;
-    mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
-    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
-        ->     WITH GRANT OPTION;
-    ```
+        * 案例
+        ```
+        mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
+        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
+            ->     WITH GRANT OPTION;
+        mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
+        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
+            ->     WITH GRANT OPTION;
+        ```
         * 在开启匿名登录的情况下, 必须存在 'finley'@'localhost' 用户. 因为如果没有这条语句, 当用户本地匿名登录, 使用了finley当作username的话, 因为存在localhost, 就会被当作匿名用户来处理了 finley@localhost 优先判断成 '%'@'localhost' 而不是 'finley'@'%'.
         * 'admin'@'localhost' 只能被本地的admin用户登录
         * dummp用户只能被本地访问
-
     * 查看用户权限  
-
-    ```
+    ```mysql
     mysql> SHOW GRANTS FOR 'admin'@'localhost';
-    +-----------------------------------------------------+
-    | Grants for admin@localhost                          |
-    +-----------------------------------------------------+
-    | GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost' |
-    +-----------------------------------------------------+
-
+    >> Grants for admin@localhost
+    >> GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
     mysql> SHOW CREATE USER 'admin'@'localhost'\G
-    *************************** 1. row ***************************
+    >> 1. row
     CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
     IDENTIFIED WITH 'mysql_native_password'
     AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'

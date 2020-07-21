@@ -68,6 +68,7 @@ x,y,z代表了属性
     * `find . -path "*/migrations/*.py"` *查找文件*
     * `find ./ -type f -name "*.py" | xargs grep "verify_ssl"`
     * `find -name '*.py' -not -path './EVN/*`
+    * `find . -iregex '.*.\(py\|html\)'`
 * grep
 `grep string <file>`: 从file中找到文字
 * hddtemp: 查看硬盘的温度
@@ -160,6 +161,10 @@ showTodoRest -> {{
   }
 }}
 call showTodoRest
+```
+* 调试
+```
+-scheme:chrome-extension 关闭插件的network
 ```
 
 ## [crontab](./crontab.md)
@@ -336,6 +341,7 @@ ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一�
 
 ## [supervisor](http://supervisord.org/index.html)
 守护进程设置
+* [centos安装](https://www.php.cn/linux-413808.html)
 * 运行supervisor
     * supervisorctl
     ```

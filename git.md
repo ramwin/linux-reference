@@ -4,6 +4,10 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
+```
+忽略某个文件
+git update-index --assume-unchanged config.php
+```
 ### 通用
 #### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
@@ -182,8 +186,9 @@ git show ref:filepath > tmp
 git stash
 git stash list
 git stash pop = git stash apply; git stash drop
-git stash --all  # 把新建的文件也stash掉
+git stash --all  # 包含ignored和untracked
 git stash -- <file1> [<file2>]  # 指定部分文件stash
+git stash -u/--include-untracked 包含untracked文件
 ```
 
 
