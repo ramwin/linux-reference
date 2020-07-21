@@ -6,10 +6,16 @@
 * `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
 
 * ## CREATE
+**表的名称绝对不能有引号**  
+_最后一行千万不要有逗号_  
     * 示例
     ```
-        CREATE DATABASE menagerie;
+        CREATE DATABASE menagerie character set utf8mb4;
         CREATE TABLE <tablename> (column, column);
+        create table user ( 
+            id SMALLINT unsigned not null auto_increment primary key,
+            name VARCHAR(50) comment '用户名',  -- comment来写注释
+            )
         CREATE TABLE shop (
             article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
             dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
@@ -21,7 +27,13 @@
         * DEFAULT: 默认值
         * NOT NULL: 不能为空
         * COLLATE: 编码
-* `DESCRIBE <table>;`
+## Drop
+```
+    drop table <table>; --表整个删除
+    delete from table;  -- 保留表的结构
+```
+
+* ## `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
     ```mysql
     INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
