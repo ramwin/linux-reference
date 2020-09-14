@@ -92,6 +92,12 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
     * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
     * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
     * `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
+* ## seq
+```
+seq 10  # 输入1到10
+seq 10 | xargs -i command  # 执行一个代码10次
+seq 10 | xargs -i echo "{}123"  # 执行一个代码10次
+```
 * sort:
     * 按照文件尺寸来排序: `sort -h`
     * 直接按照一行的文字来排序: `sort -n`
