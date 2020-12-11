@@ -339,7 +339,9 @@ mysql -u finley -ppassword db_name  # 不安全
     * 可用参数: `UNSIGNED, ZEROFILL, AUTO_INCREMENT`
     * `ALTER TABLE tb1 AUTO_INCREMENT = 100;`  # 不是自动加1,而是自动加100
     * YEAR(4)
-## [时间和日期]()
+
+## [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
+
 ## [字符串类型]()
 ## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/5.7/en/spatial-types.html)
 * [创建空间类型列](https://dev.mysql.com/doc/refman/5.7/en/creating-spatial-columns.html)
@@ -355,6 +357,19 @@ mysql -u finley -ppassword db_name  # 不安全
 ```
 * [...to be continued]()
 ## [...to be continued]()
+
+# [Functions and Operators](https://dev.mysql.com/doc/refman/8.0/en/functions.html)  
+通用的函数和操作
+## [Date and time](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)
+时间操作相关
+* [ ] CURTIME
+* DATE
+从datetime里面或者他的日期
+    ```
+    select DATE('2003-12-31 01:02:03');
+    -> '2003-12-31'
+    ```
+* [ ] `DATE_ADD`
 
 
 # 过滤
