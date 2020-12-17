@@ -170,7 +170,10 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 展示远程仓库的分支
 
 ### pull
-* 拉取远程分支 git pull origin <branch>:<local_branch>
+* 拉取远程分支 `git pull origin <branch>:<local_branch>`
+
+### push
+* 推送指定分支 `git push origin <local_branch>:<remote-branch>`
 
 ### show  
 查看某个文件的版本
