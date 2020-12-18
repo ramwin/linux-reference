@@ -13,6 +13,10 @@ git update-index --assume-unchanged config.php
 * creatordate
 
 ### 分支和合并 Branching and Merging
+
+#### [merge](https://git-scm.com/docs/git-merge)
+合并分支
+
 #### [tag](https://git-scm.com/docs/git-tag)
 * `--sort=<key>`
 > 这里的排序使用的是和`git for-each-ref`一致的key  
@@ -34,6 +38,13 @@ git show <ref>:<file>  # 查看某个版本的文件
     * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
     * %h %H 简短/完整的哈希字符串
     * %d %D ref的name, %D代表了不用括号括起来
+
+### Patching
+#### rebase
+```
+git rebase --onto <newbase> <branch>
+```
+
 
 ### init
 * [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)

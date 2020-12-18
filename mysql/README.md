@@ -207,6 +207,8 @@ DELETE FROM tbl_name
     LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
     ```
 ### SELECT Statement
+* [basic 基础](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+* [SELECT ... INTO STATEMENT 导出数据](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
 * [JOIN](https://dev.mysql.com/doc/refman/8.0/en/join.html)
     * LEFT JOIN
     ```
@@ -228,6 +230,7 @@ DELETE FROM tbl_name
     SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
     ```
     * INNER JOIN: *把两个表格里面合并起来，只有on的条件满足了才会一起出现，否则就不显示*
+* [ ] UNION Clause
 
 # Security 安全机制
 ## General Security Issues 基本安全 [官网](https://dev.mysql.com/doc/refman/8.0/en/general-security-issues.html)
