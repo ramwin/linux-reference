@@ -342,7 +342,8 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 
 ```
 vim /etc/ssh/sshd_config
-ClientAliveInterval: 如果超过多少时间没有消息，就主动发送一个
+ClientAliveInterval: 10 #如果超过多少时间没有消息，就主动发送一个
+ClientAliveCountMax 3
 ```
 
 ## [supervisor](http://supervisord.org/index.html)

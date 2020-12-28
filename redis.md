@@ -205,8 +205,21 @@ if expire is 0, the key is created without any expire
 >>> client.sadd(key, value1, value)
 2
 ```
-* [ ] SCARD
-* [ ] 
+* SCARD
+返回set里面的元素数量, key不存在就返回0
+
+* SDIFF key [key1, key2...]
+显示key中单独存在的元素
+
+* SDIFFSTORE destination key [key1, key2...]
+和SDIFF一样比较, 把比较的结果存入destination. 并返回结果的数量
+
+* SINTER key [key1, key2 ...]
+返回所有key都存在的元素
+
+* SINTERSTORE destination key [key1, key2 ...]
+和SINTER一样,但是把结果存入destination
+
 * SISMEMBER
     ```
     > sismember myset 3
@@ -223,13 +236,7 @@ if expire is 0, the key is created without any expire
     ```
 * SMOVE
     ```
-    > sinter tag:1:news tag:2:news tag:10:news tag:27:news  # find the same member in all keys 找到几个sets共有的元素
-    ... results here ...
     > sunionstore game:1:deck deck [otherdeck...]  # copy all the members in deck to game:1:deck 复制所有的元素到目标game:1:deck
-    > spop game:1:deck [count] # pop a member from sets
-    "C6"
-    > scard game:1:deck  # count the amounts of remaining members
-    (integer) 47
     ```
 * SPOP
     * 默认返回一个数据或者None, 有count就必定返回列表  
@@ -243,13 +250,31 @@ if expire is 0, the key is created without any expire
     a.spop(<key>, count=1)
     >>> []
     ```
-* [ ] SRANDMEMBER
+* SRANDMEMBER [count]
+随机选n个数字
+    * 如果有count, 返回一个列表. 最长不超过整体长度
+    * 如果没有, 返回一个元素
+
 * SREM: `SREM key member [member...]`
 删除set里面的一个或者多个member
 ```
 >>> client.srem('set', 'a', 'b')
 1  # 1表明删除了'set'里面的'a'或者'b'的一个元素
 ```
+
+* SSCAN
+循环一个set, 返回下一次循环的cursor以及本次循环的列表
+```
+client.sscan('set1', cursor=0)
+>>> (992, ['1', '2'])
+```
+
+* SUNION
+合并set, 返回set列表
+
+* SUNIONSTORE destination key [key ...]
+合并并且存储到另外的key. 返回合并的数字
+
 
 ## String
 * `SET key value [EX seconds] [PX milliseconds] [NX|XX]` [参考](https://redis.io/commands/set)
