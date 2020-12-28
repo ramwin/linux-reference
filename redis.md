@@ -59,7 +59,7 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
     > persist key
     ```
 
-## connections
+## connections 链接文档
 * [ ] auth
 * echo argument: return argument
 * [ping](https://redis.io/commands/ping)
