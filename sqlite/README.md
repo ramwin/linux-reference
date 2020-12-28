@@ -1,7 +1,25 @@
 **Xiang Wang @ 2019-12-31 10:18:41**
 
-### 基础
 [官网](http://www.sqlitetutorial.net/)
+
+### 9. 修改数据
+#### [insert 插入数据](https://www.sqlitetutorial.net/sqlite-insert/)
+* 语法
+> INSERT INTO table (column1,column2 ,..)  
+VALUES( value1,	value2 ,...);
+* 案例
+```
+insert into pets values (null, 'cat'); // 不指定id
+insert into pets values (1, 'cat');  // 指定id
+>>> Error: UNIQUE constraint failed: pets.id
+insert into pets values (null, 'cat'), (null, 'dog');  // 批量插入数据
+insert into pets (name) values ('cat'), ('dog');  // 指定表头顺序
+```
+
+#### Update
+#### Delete
+#### Replace
+
 * alter
 [官网](http://www.sqlitetutorial.net/sqlite-alter-table/)  
 sqlite不支持删除字段，只支持rename表和添加column. 所以如果你想删除某个字段，就先rename这个表，然后创建一个新表,然后再把数据复制过来
