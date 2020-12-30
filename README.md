@@ -256,6 +256,9 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
         ```
 
     * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
+### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
+* [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  
+`\dt`
 
 ## [prettier](https://prettier.io/docs/en/options.html)
 ### 配置
