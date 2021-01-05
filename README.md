@@ -340,6 +340,11 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 
 ## [SQLite](./sqlite/README.md)
 
+## ssh
+使用ssh开启代理  
+
+    ssh -D 1080 <remote>
+
 ## sshd
 [配置文档](https://linux.die.net/man/5/sshd_config)
 
