@@ -182,9 +182,9 @@ call showTodoRest
     * * * * * python3 test.py 1>/dev/null 2>&1
     // 都输出到logpath
     把日志输出到 logpath, 如果报错了(状态为2)有错误日志, 等同于输出到1. mail永远无数据
-    * * * * * python3 /home/wangx/test1.py > logpath 2>&1
+    * * * * * python3 /home/wangx/test1.py >>logpath 2>&1
     // 错误日志输出, 正确的日志还是默认用mail
-    * * * * * python3 ~/test2.py 2> logpath
+    * * * * * python3 ~/test2.py 2>>logpath
     ```
 
 ## [daemon 守护进程](./daemon/README.md)
