@@ -1,0 +1,56 @@
+class ModelNameViewSet(NoDeleteModelViewSet):
+    serializers = serializers
+    queryset = models.ModelName.objects.all()
+    filterset_class = filters.ModelNameFilterSet
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    filter_backends = (
+        OrderingFilter,
+        DjangoFilterBackend,
+        SearchFilter,
+    )
+    search_fields = [
+        "note",
+    ]
+
+
+class ModelNameBaseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.ModelName
+        fields = [
+            "id",
+            "update_datetime",
+            "create_datetime",
+        ]
+
+
+class ModelNamecreateSerializer(ModelNameBaseSerializer):
+
+    class Meta(ModelNameBaseSerializer.Meta):
+        fields = ModelNameBaseSerializer.fields + [
+        ]
+
+
+class ModelNamelistSerializer(ModelNameBaseSerializer):
+
+    class Meta(ModelNameBaseSerializer.Meta):
+        fields = ModelNameBaseSerializer.fields + [
+        ]
+
+
+class ModelNameupdateSerializer(ModelNameBaseSerializer):
+
+    class Meta(ModelNameBaseSerializer.Meta):
+        fields = ModelNameBaseSerializer.fields + [
+        ]
+
+
+ModelNamepartial_updateSerializer = ModelNameupdateSerializer
+
+
+class ModelNameFilterSet(django_filters.rest_framework.FilterSet):
+
+    q = django_filters.CharFilter(method="filter_q")
+
+    class Meta:
+        model = models.ModelName
