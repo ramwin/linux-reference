@@ -236,37 +236,58 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 把各种markup格式的格式转化成其他各种文档格式
 
 ## postgresql
-* 教程
-    1. [install and use postgresql ](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  [Getting Started](https://www.postgresql.org/docs/10/static/tutorial-start.html)
+[安装](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  
+
+### Tutorial
+1. [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
+```
+sudo apt install postgresql postgresql-contrib
+sudo -i -u postgres
+psql
+sudo -u postgres psql
+createuser --interactive
+createdb [<databasename>] default name is the username
+dropdb <databasename>
+psql <databasename>
+```
+
+2. The SQL Language
+    1. Introduction
     ```
-    sudo apt install postgresql postgresql-contrib
-    sudo -i -u postgres
-    psql
-    sudo -u postgres psql
-    createuser --interactive
-
-    createdb [<databasename>] default name is the username
-    dropdb <databasename>
-
-    psql <databasename>
+    cd ..../src/tutorial
+    make
+    cd ..../toturial
+    psql -s mydb
+    mydb=> \i basics.sql
     ```
-    2. The SQL Language
-        1. Introduction
-        ```
-        cd ..../src/tutorial
-        make
-        cd ..../toturial
-        psql -s mydb
-        mydb=> \i basics.sql
-        ```
-    3. Advanced Features
-        2. Views
-        ```
-        CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
-        SELECT * FROM myview;
-        ```
+    3. [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
+    ```
+    CREATE TABLE weather (
+        city    varchar(80),
+        temp_lo int,
+        temp_hi int,
+        prcp    real,
+        date    date
+    )
+    ```
+3. Advanced Features
+    2. Views
+    ```
+    CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
+    SELECT * FROM myview;
+    ```
 
-    * [current learning progress](https://www.postgresql.org/docs/10/static/tutorial.html)
+### The SQL Language
+#### 数据定义
+* 约束
+    * check约束
+    ```
+    create table weather ( temp_lo int CHECK (temp_lo > 0) );
+    ```
+#### 数据类型
+1. Numeric Types
+    1. Integer Types
+
 ### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  
 `\dt`
