@@ -12,75 +12,9 @@ git update-index --assume-unchanged config.php
 #### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
 
-### 分支和合并 Branching and Merging
+### 配置 Setup and Config
 
-#### [merge](https://git-scm.com/docs/git-merge)
-合并分支
-
-#### [tag](https://git-scm.com/docs/git-tag)
-* `--sort=<key>`
-> 这里的排序使用的是和`git for-each-ref`一致的key  
-> 使用`git config tag.sort`可以设置tag的默认排序  
-```
-git config tag.sort -creatordate
-git tag -n | head -n 10
-```
-
-
-### 查看和比较 Inspection and Comparison
-* [show](https://git-scm.com/docs/git-show)
-```
-git show <ref>  # 查看某个版本的修改
-git show <ref>:<file>  # 查看某个版本的文件
-```
-* [log](https://git-scm.com/docs/git-log)
-    * [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
-    * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
-    * %h %H 简短/完整的哈希字符串
-    * %d %D ref的name, %D代表了不用括号括起来
-
-### Patching
-#### rebase
-```
-git rebase --onto <newbase> <branch>
-```
-
-
-### init
-* [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)
-```
-git init <directory>  # 初始化仓库
-git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹的地方
-```
-
-### blame
-```
-git blame filepath  # 查看某个文件的修改记录
-```
-
-### checkout
-* 把文件还原到之前的某个版本
-```
-git checkout versin -- file1/to/restore file2/to/restore
-```
-* 把已经add的文件还原到没add的状态
-```
-git reset HEAD filename
-```
-
-### commit
-* add 后查看修改: `git diff --cached`
-
-* 多次提交很简单的代码 `git commit --amend  # 这样就能修改上次提交的信息，不创建新版本`
-
-* 提交了一次错误的版本 `git rever <commitid>  # 把那次commit之后的修改都reset掉，并生成一个新的commit`
-
-### branch
-```
-git branch [branchname] [startpoint]  # 指定从哪个版本里开出一个新的分支
-```
-
-### config
+#### config
 * 设置用户名邮箱:
 ```
 git config --global user.email "ramwin@qq.com"
@@ -164,13 +98,102 @@ uploadpack.allowReachableSHA1InWant=true
     git push origin2 master  # 耗时4分11秒
     objects/85/44441acexxxx3c21 5011352225字节
     ```
+### 获取或者创建项目 getting and creating projects
+#### init
+* [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)
+```
+git init <directory>  # 初始化仓库
+git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹的地方
+```
 
+### 快照 Snapshotting
+
+#### commit
+* add 后查看修改: `git diff --cached`
+
+* 多次提交很简单的代码 `git commit --amend  # 这样就能修改上次提交的信息，不创建新版本`
+
+* 提交了一次错误的版本 `git rever <commitid>  # 把那次commit之后的修改都reset掉，并生成一个新的commit`
 
 ### diff
 ```
 git diff --word-diff
 git diff HEAD HEAD^^ --stat  # only see the different name
 ```
+
+### 分支和合并 Branching and Merging
+
+#### branch
+```
+git branch [branchname] [startpoint]  # 指定从哪个版本里开出一个新的分支
+```
+
+#### checkout
+* 把文件还原到之前的某个版本
+```
+git checkout versin -- file1/to/restore file2/to/restore
+```
+* 把已经add的文件还原到没add的状态
+```
+git reset HEAD filename
+```
+
+#### [merge](https://git-scm.com/docs/git-merge)
+合并分支
+
+#### [tag](https://git-scm.com/docs/git-tag)
+* `--sort=<key>`
+> 这里的排序使用的是和`git for-each-ref`一致的key  
+> 使用`git config tag.sort`可以设置tag的默认排序  
+```
+git config tag.sort -creatordate
+git tag -n | head -n 10
+```
+
+
+### 查看和比较 Inspection and Comparison
+* [show](https://git-scm.com/docs/git-show)
+```
+git show <ref>  # 查看某个版本的修改
+git show <ref>:<file>  # 查看某个版本的文件
+```
+* [log](https://git-scm.com/docs/git-log)
+    * [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
+    * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
+    * %h %H 简短/完整的哈希字符串
+    * %d %D ref的name, %D代表了不用括号括起来
+
+### Patching
+#### rebase
+```
+git rebase --onto <newbase> <branch>
+```
+
+### 排查 Debugging
+#### blame
+```
+git blame filepath  # 查看某个文件的修改记录
+```
+
+
+### Administration
+#### [clean](https://git-scm.com/docs/git-clean)  
+清理untracked文件
+```
+-n dry run
+-i 交互模式,每个都问你
+-f 强制删除
+```
+
+### gc
+```
+git gc  # 优化仓库
+```
+
+### [ ] fsck
+
+## 其他文档
+
 
 ### fetch
 * 拉取指定的commit
@@ -270,10 +293,6 @@ git tag -l --format="%(tag) %(subject)"
     git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')"
 ```
 
-### gc
-```
-git gc  # 优化仓库
-```
 
 ### 服务器
     * build your git server
