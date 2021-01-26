@@ -49,6 +49,10 @@ server {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
 		try_files $uri $uri/ =404;
+        charset UTF-8;
+        charset_types *;
+        limit_rate 1m;
+        gzip_static on;
 	}
 
 	# pass PHP scripts to FastCGI server

@@ -31,7 +31,6 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
 # [Command 命令](https://redis.io/commands)
 ## String
 * tutorial
-
     ```
     > set mykey value nx|xx nx: key must not exist xx: exist
     > get mykey
@@ -89,6 +88,9 @@ GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHH
 Query very large areas with a very small COUNT option may be slow.
 * GEORADIUSBYMEMBER
 THis command is exactly like GEORADIUS except you should use a member to replace the longitude and latitude
+
+## [Hashes](https://redis.io/commands#hash)
+* hsetnx key field value
 
 ## Keys
 * DEL
