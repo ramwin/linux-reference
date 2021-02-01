@@ -169,9 +169,8 @@ showTodoRest -> {{
 call showTodoRest
 ```
 * 调试
-```
--scheme:chrome-extension 关闭插件的network
-```
+
+    -scheme:chrome-extension 关闭插件的network
 
 ## [crontab](./crontab.md)
 定时任务脚本, 默认路径就是~. 所以可以直接运行home下的文件, 也可以用`~`
@@ -235,62 +234,7 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ## [pandoc](https://pandoc.org/)
 把各种markup格式的格式转化成其他各种文档格式
 
-## postgresql
-[安装](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  
-
-### Tutorial
-1. [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
-```
-sudo apt install postgresql postgresql-contrib
-sudo -i -u postgres
-psql
-sudo -u postgres psql
-createuser --interactive
-createdb [<databasename>] default name is the username
-dropdb <databasename>
-psql <databasename>
-```
-
-2. The SQL Language
-    1. Introduction
-    ```
-    cd ..../src/tutorial
-    make
-    cd ..../toturial
-    psql -s mydb
-    mydb=> \i basics.sql
-    ```
-    3. [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
-    ```
-    CREATE TABLE weather (
-        city    varchar(80),
-        temp_lo int,
-        temp_hi int,
-        prcp    real,
-        date    date
-    )
-    ```
-3. Advanced Features
-    2. Views
-    ```
-    CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
-    SELECT * FROM myview;
-    ```
-
-### The SQL Language
-#### 数据定义
-* 约束
-    * check约束
-    ```
-    create table weather ( temp_lo int CHECK (temp_lo > 0) );
-    ```
-#### 数据类型
-1. Numeric Types
-    1. Integer Types
-
-### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
-* [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  
-`\dt`
+## [postgresql](./postgresql.md)
 
 ## [prettier](https://prettier.io/docs/en/options.html)
 ### 配置
