@@ -11,7 +11,7 @@ def callback(ch, method, properties, body):
     print(body)
 
 credentials = pika.PlainCredentials('read', 'read')
-credentials = pika.PlainCredentials('write', 'write')  # 这样就不行哟
+# credentials = pika.PlainCredentials('write', 'write')  # 这样就不行哟
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
         credentials=credentials, virtual_host="permission"
