@@ -11,19 +11,20 @@ app = Celery('tasks')
 app.config_from_object('tasks_config')
 
 
-@app.task
-def hello(x=2):
-    print("运行Hello")
-    time.sleep(x)
-    print("运行完毕: {}".format(x))
-    return 'hello world'
+class A():
+    def __init__(self):
+        self.name = "原来的名字"
+
 
 @app.task
-def hello2(x=2):
-    print("运行Hello")
-    time.sleep(x)
+def hello(a, delay):
+    print("开始运行")
+    time.sleep(delay)
+    a.name = "新名字"
     print("运行完毕: {}".format(x))
-    return 'hello world2'
+    return a
+
 
 if __name__=='__main__':
-    hello2.apply_async([2], countdown=10)
+    a = A()
+    print(hello.delay(a, 2).get())

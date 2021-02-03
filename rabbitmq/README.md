@@ -35,6 +35,10 @@ channel = connection.channel()
 channel.queue_declare(queue="hello")
 channel.basic_publish(exchange="", routing_key="hello", body=message)
 ```
+# 接收消息
+```
+channel.start_consuming()
+```
 
 # [01-Hello-World](https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
 ```
@@ -104,30 +108,31 @@ channel.basic_consume(queue="task_queue", on_message_callback=callback)
 ## rabbitmqctl  
 [官网](https://www.rabbitmq.com/rabbitmqctl.8.html)
 
-## [ ] Replication
+##  Replication
 
-### 用户管理 User Management
+## 用户管理 User Management
 * `add_user`
 ```
 rabbitmqctl add_user <username> <passwd>
 ```
 * [ ] `authenticate_user`
 
-### 权限管理 Access Control
+## Authorisation 权限管理 Access Control
+[测试代码](./permission/)
 * `set_permissions`
 ```
 rabbitmqctl set_permissions --vhost <hostname>  <username> ".*" ".*" ".*" 最后三个是conf write read
 ```
 
-### 虚拟主机
+## 虚拟主机
 * `add_vhost`: 创建虚拟主机
 ```
 rabbitmqctl add_vhost dynamic  # 不能用中文
 ```
 
-### [ ] Configuration
+## [ ] Configuration
 
-### 其他
+## 其他
 
 * `list_queues`  
 展示queues

@@ -36,3 +36,23 @@ server {
                 gzip_static on;
 	}
 }
+server {
+	listen 82 default_server ssl;
+	listen [::]:82 default_server ssl;
+
+	root /var/www/html;
+
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+        ssl_certificate /var/www/http.crt;
+        ssl_certificate_key /var/www/http.key;
+
+	location / {
+		try_files $uri $uri/ =404;
+                charset UTF-8;
+                charset_types *;
+                limit_rate 1m;
+                gzip_static on;
+	}
+}

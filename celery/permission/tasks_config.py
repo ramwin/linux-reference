@@ -4,9 +4,9 @@
 
 
 broker_url='amqp://guest@localhost//'
-broker_url='amqp://guest@localhost//'
+broker_url='amqp://delay-notify-client@localhost//'
 result_backend='redis://localhost'
-result_backend='rpc://guest@localhost//'
+result_backend='rpc://delay-notify-server@localhost//'
 timezone = 'Asia/Shanghai'
 worker_concurrency=1
 worker_redirect_stdouts_level="DEBUG"

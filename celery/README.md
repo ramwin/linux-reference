@@ -8,6 +8,7 @@
 terminal1: cd test && celery -A tasks worker --loglevel=info --concurrency=1
 terminal2: cd test && python3 test_tasks.py
 ```
+* 只能支持可序列化的参数,不支持自定义class
 * [测试代码](./测试内存/tasks.py) [测试脚本](./测试内存/test_tasks.py)
 * 不需要启动多个celery, 因为celery本身就是多线程的. 并且里面的变量是共享的
 * 如果启动了多个celery, 一个请求过去只有一个celery的里面一个线程会收到任务
