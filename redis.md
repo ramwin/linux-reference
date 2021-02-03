@@ -7,7 +7,7 @@
     docker run --restart=always --name redis -d -p 6379:6379 redis
     docker exec -it redis-server redis-cli
 ```
-* [compile install](https://redis.io/download)
+* [compile install](https://redis.io/download#installation)
 ```
     wget http://download.redis.io/releases/redis-3.2.8.tar.gz
     tar xzf redis-3.2.8.tar.gz
