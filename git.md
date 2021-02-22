@@ -198,10 +198,14 @@ git gc  # 优化仓库
 ### fetch
 * 拉取指定的commit
 `git fetch --depth=1 <remote> $SHA1`
+* 拉去指定的tag
+```
+git fetch origin refs/tags/1.0.0
+```
 
 
 ### ls-remote
-展示远程仓库的分支
+展示远程仓库的分支和tag
 
 ### pull
 * 拉取远程分支 `git pull origin <branch>:<local_branch>`
