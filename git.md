@@ -150,6 +150,20 @@ git config tag.sort -creatordate
 git tag -n | head -n 10
 ```
 
+### Sharing and Updating Projects
+
+
+#### fetch
+* 拉取指定的commit
+`git fetch --depth=1 <remote> $SHA1`
+* 拉去指定的tag
+```
+git fetch origin refs/tags/1.0.0
+```
+
+#### 子模块 submodule
+* [guide文档](https://git-scm.com/docs/gitsubmodules)
+* [命令参考](https://git-scm.com/docs/git-submodule)
 
 ### 查看和比较 Inspection and Comparison
 * [show](https://git-scm.com/docs/git-show)
@@ -192,16 +206,8 @@ git gc  # 优化仓库
 
 ### [ ] fsck
 
-## 其他文档
+### 其他文档
 
-
-### fetch
-* 拉取指定的commit
-`git fetch --depth=1 <remote> $SHA1`
-* 拉去指定的tag
-```
-git fetch origin refs/tags/1.0.0
-```
 
 
 ### ls-remote
