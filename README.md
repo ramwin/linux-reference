@@ -142,6 +142,10 @@ Tidy Advocacy Community Group.
 * zentify
     * `zenity --info --text '保护视力，休息一会'
 * zip 压缩文件 zip -r target.zip sourcedirectory/
+* zlib-flate 解压内容
+```
+cat .git/objects/c2/dc76d6e9ecfa41381f20813575f92c538448f4  | zlib-flate -uncompress
+```
 
 # software 软件
 ## celery  
