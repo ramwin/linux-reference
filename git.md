@@ -8,6 +8,27 @@
 忽略某个文件
 git update-index --assume-unchanged config.php
 ```
+### lfs
+处理大文件用
+* 初始化
+```
+git lfs install
+git lfs track "*.jpg" "*.png" "*.exe" "*.JPG" "*.iso"
+git add .
+git commit -m '初始化'
+```
+
+* 拉取特定文件
+```
+git lfs pull --include "windows软件/Git.exe"
+```
+
+* 克隆项目
+```
+git lfs clone <repository> --exclude "*"  # 所有的大文件都不拉
+```
+
+
 ### 通用
 #### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
