@@ -386,6 +386,10 @@ tsocks firefox
     * 移动一个单词: alt+b | alt+f
 * 快捷键:
     * 清屏: ctrl+l
+    * 上箭头: ctrl+P(reviou)
+    * 下箭头: ctrl+N(ext)
+    * 左箭头: ctrl+B(ack)
+    * 右箭头: ctrl+F(orward)
 
 ## ufw
 * 打开/关闭ufw
