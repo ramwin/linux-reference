@@ -197,6 +197,15 @@ git config tag.sort -creatordate
 git tag -n | head -n 10
 ```
 
+#### [worktree](https://git-scm.com/docs/git-worktree)
+用于突然要维护一个旧分支, 又不想影响当前的工作区
+```
+git worktree add hotfix <hash>  # 先用已有git checkout一次
+cd hotfix  # 进入分支目录修复bug
+...
+git worktree prune  # 修复后删除
+```
+
 ### Sharing and Updating Projects
 
 
