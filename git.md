@@ -12,6 +12,7 @@ git update-index --assume-unchanged config.php
 ### [lfs](https://git-lfs.github.com/)
 处理大文件用
 * 编辑.gitattributes
+
 ```
 .gitattributes filter= diff= merge= text
 * filter=lfs diff=lfs merge=lfs -text
@@ -43,6 +44,7 @@ git pull origin master
 
 
 ### 通用
+
 #### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
 
@@ -140,7 +142,7 @@ git init <directory>  # 初始化仓库
 git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹的地方
 ```
 
-### 快照 Snapshotting
+### 快照 Basic Snapshotting
 
 #### commit
 * add 后查看修改: `git diff --cached`
@@ -149,10 +151,21 @@ git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹�
 
 * 提交了一次错误的版本 `git rever <commitid>  # 把那次commit之后的修改都reset掉，并生成一个新的commit`
 
-### diff
+#### diff
 ```
 git diff --word-diff
 git diff HEAD HEAD^^ --stat  # only see the different name
+```
+
+#### [notes](https://git-scm.com/docs/git-notes)
+在原有的commit基础上添加备注，而不修改原有commit
+```
+git notes add -m "这个commit不可用"
+```
+* [服务器同步notes](https://stackoverflow.com/questions/18268986/git-how-to-push-messages-added-by-git-notes-to-the-central-git-server)
+```
+git push <remote> refs/notes/*
+git fetch origin refs/notes/*:refs/notes/*
 ```
 
 ### 分支和合并 Branching and Merging
@@ -198,6 +211,25 @@ git fetch origin refs/tags/1.0.0
 #### 子模块 submodule
 * [guide文档](https://git-scm.com/docs/gitsubmodules)
 * [命令参考](https://git-scm.com/docs/git-submodule)
+* add
+```
+git submodule add git@ramwin.com:~/small.git  # 这样会clone整个small
+```
+* clone
+```
+git clone <repository>  # submodule只会clone一个hash
+```
+* init
+```
+git submodule init <submodule>  # 初始化small仓库
+```
+* update
+```
+git submodule update small  # 初始化后，可以clone
+```
+* 手动添加一个仓库
+```
+```
 
 ### 查看和比较 Inspection and Comparison
 * [show](https://git-scm.com/docs/git-show)
