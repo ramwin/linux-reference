@@ -259,6 +259,17 @@ git rebase --onto <newbase> <branch>
 ```
 
 ### 排查 Debugging
+
+#### bisect
+通过二分法找到出现bug的版本
+```
+git bisect start  # 开始寻找
+git bisect bad  # 当前版本报错
+git bisect good 1.0.0  # 1.0.0版本不报错
+...
+git bisect reset  # 找到报错版本后，推出bisect
+```
+
 #### blame
 ```
 git blame filepath  # 查看某个文件的修改记录
