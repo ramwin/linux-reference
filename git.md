@@ -285,14 +285,22 @@ git blame filepath  # 查看某个文件的修改记录
 -f 强制删除
 ```
 
-### gc
+#### gc
 ```
 git gc  # 优化仓库
 ```
 
-### [ ] fsck
+#### [ ] fsck
 
-### 其他文档
+### 其他插件 Plumbing Commands
+* hash-object
+生成一个文件的hash
+```
+echo -e "blob 2\0A" > A_blob
+sha1sum A_blob  >> f70f10e4db19068f79bc43844b49f3eece45c4e8
+echo "A" > A
+git hash-object A >> f70f10e4db19068f79bc43844b49f3eece45c4e8
+```
 
 
 
