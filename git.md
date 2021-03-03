@@ -236,8 +236,10 @@ git submodule init <submodule>  # 初始化small仓库
 ```
 git submodule update small  # 初始化后，可以clone
 ```
-* 手动添加一个仓库
+* [手动添加一个仓库](https://stackoverflow.com/questions/34562333/is-there-a-way-to-git-submodule-add-a-repo-without-cloning-it)
 ```
+git update-index --add --cacheinfo 160000 d020b3a97f131ad11fb15bd8cce1774b0eb54c7b small
+git commit -m '先加上去再说'  # 此时.git/index文件里显示有个submodule, 但是呢，工作区显示small文件夹不存在
 ```
 
 ### 查看和比较 Inspection and Comparison
