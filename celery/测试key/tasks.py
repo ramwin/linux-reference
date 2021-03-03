@@ -15,11 +15,16 @@ log.addHandler(
         )
 
 
-app = Celery('tasks')
+app = Celery('customer-tasks')
 app.config_from_object('tasks_config')
+routing_key = "customer-task-keys"
+delivery_info={"routing_key": routing_key}
 
 
-@app.task
+@app.task(
+        name="self-named-task",
+        delivery_info={"routing_key": "customer-task-keys"},
+        routing_key="customer-task-keys")
 def hello(x=2):
     logging.info("运行Hello")
     time.sleep(x)
@@ -27,5 +32,5 @@ def hello(x=2):
     return 'hello world'
 
 if __name__=='__main__':
-    hello.apply_async([2], countdown=0)
-    hello.apply_async([2], countdown=3600*24*365)
+    hello.apply_async([2], countdown=0, delivery_info=delivery_info)
+    hello.apply_async([2], countdown=3600*24*365, routing_key=routing_key)

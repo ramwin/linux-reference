@@ -12,4 +12,4 @@ worker_concurrency=1
 worker_redirect_stdouts_level="DEBUG"
 worker_prefetch_multiplier=1
 enable_utc = False
-task_default_queue="tasks"
+task_default_queue="tasks-queue"

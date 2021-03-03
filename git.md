@@ -8,8 +8,15 @@
 忽略某个文件
 git update-index --assume-unchanged config.php
 ```
-### lfs
+
+### [lfs](https://git-lfs.github.com/)
 处理大文件用
+* 编辑.gitattributes
+```
+.gitattributes filter= diff= merge= text
+* filter=lfs diff=lfs merge=lfs -text
+```
+
 * 初始化
 ```
 git lfs install
@@ -26,6 +33,12 @@ git lfs pull --include "windows软件/Git.exe"
 * 克隆项目
 ```
 git lfs clone <repository> --exclude "*"  # 所有的大文件都不拉
+```
+
+* 拉去项目
+```
+git config lfs.fetchexclude "*"  # 只拉取文件hash, 不拉取整个文件
+git pull origin master
 ```
 
 
