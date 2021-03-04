@@ -47,6 +47,12 @@ git pull origin master
 git lfs migrate import  # 把git大对象变成lfs指针
 ```
 
+* 上传项目
+```
+git push origin master  # 上传git object和lfs对象
+git push origin master --no-verify  # 直接上传git object, 不上传lfs对象并且不校验, 因为我的服务器没有开启git-lfs https服务
+```
+
 
 ### 通用
 
