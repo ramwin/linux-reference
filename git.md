@@ -42,6 +42,11 @@ git config lfs.fetchexclude "*"  # 只拉取文件hash, 不拉取整个文件
 git pull origin master
 ```
 
+* 迁移项目
+```
+git lfs migrate import  # 把git大对象变成lfs指针
+```
+
 
 ### 通用
 
