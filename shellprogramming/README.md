@@ -66,7 +66,11 @@ greeting_1="hello, ${your_name} !"
 * 字符串长度: `${#string}`
 
 
-* [大小写](https://stackoverflow.com/questions/2264428/how-to-convert-a-string-to-lower-case-in-bash): `${tring,,} ${string^^}`
+* [大小写](https://stackoverflow.com/questions/2264428/how-to-convert-a-string-to-lower-case-in-bash)
+```
+`${tring,,} ${string^^}`
+```
+
 * 判断是否包含字符串
 ```
 if [[ ${version,,} == *"manjaro"* ]]; then
@@ -99,47 +103,46 @@ done
 # [judgement 判断](https://www.runoob.com/linux/linux-shell-process-control.html)
 [测试](./ifelse.sh)
 * 格式
-```
-if condition
-then
-    command1
-    command2
-else
-    command
-fi
-if [ "foo" = "foo" ]; then  # 中括号旁边必须有空格,等号前后也必须有空格, 而且只有一个等号
-else
-fi
-if [[ $HOME = "/home/wangx" ]]; then  # 如果有变量， 需要使用双括号，或者在变量两边加引号
-fi
-
--f 'filename' 判断文件是否存在
--d 'directory' 判断文件夹是否存在
-```
+    ```
+    if condition
+    then
+        command1
+        command2
+    else
+        command
+    fi
+    if [ "foo" = "foo" ]; then  # 中括号旁边必须有空格,等号前后也必须有空格, 而且只有一个等号
+    else
+    fi
+    if [[ $HOME = "/home/wangx" ]]; then  # 如果有变量， 需要使用双括号，或者在变量两边加引号
+    fi
+    -f 'filename' 判断文件是否存在
+    -d 'directory' 判断文件夹是否存在
+    ```
 * 判断一个软件是否安装了
-```
-# 使用command来判断
-for i in "cmatrix" "python2"; do
-    programname="$i"
-    result=`command -v $programname`
-    echo "result: $result"
-    if [ "$result" = "" ]; then
-        echo "$programname 没有安装"
-    else
-        echo "$programname 已经安装"
-    fi
-done
+    ```
+    # 使用command来判断
+    for i in "cmatrix" "python2"; do
+        programname="$i"
+        result=`command -v $programname`
+        echo "result: $result"
+        if [ "$result" = "" ]; then
+            echo "$programname 没有安装"
+        else
+            echo "$programname 已经安装"
+        fi
+    done
 
-for i in "nnn" "node"; do
-    pacman -Q $i
-    if [ $? = 0 ]; then
-        echo "已经安装"
-    else
-        echo "安装 $i"
-        pacman -S $i
-    fi
-done
-```
+    for i in "nnn" "node"; do
+        pacman -Q $i
+        if [ $? = 0 ]; then
+            echo "已经安装"
+        else
+            echo "安装 $i"
+            pacman -S $i
+        fi
+    done
+    ```
 
 # exceptions
 ```
