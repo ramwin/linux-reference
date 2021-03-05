@@ -29,34 +29,6 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
 
 
 # [Command 命令](https://redis.io/commands)
-## String
-* tutorial
-    ```
-    > set mykey value nx|xx nx: key must not exist xx: exist
-    > get mykey
-    > set counter 100
-    > incr counter
-    > incrby counter 50
-    > mset a 10 b 20 c 30
-    OK
-    > mget a b c
-    1) "10"
-    2) "20"
-    3) "30"
-    > exists mykey
-    (integer) 1
-    > del mykey
-    (integer) 1
-    > exists mykey
-    (integer) 0
-    > type mykey
-    > set key some-value
-    > expire key 5  # redis saves the date at which a key will expire, so even the server stops, the expire time will still run
-
-    > set key 100 ex 10
-    > ttl key
-    > persist key
-    ```
 
 ## connections 链接文档
 * [ ] auth
@@ -279,6 +251,34 @@ client.sscan('set1', cursor=0)
 
 
 ## String
+* tutorial
+    ```
+    > set mykey value nx|xx nx: key must not exist xx: exist
+    > get mykey
+    > set counter 100
+    > incr counter
+    > incrby counter 50
+    > mset a 10 b 20 c 30
+    OK
+    > mget a b c
+    1) "10"
+    2) "20"
+    3) "30"
+    > exists mykey
+    (integer) 1
+    > del mykey
+    (integer) 1
+    > exists mykey
+    (integer) 0
+    > type mykey
+    > set key some-value
+    > expire key 5  # redis saves the date at which a key will expire, so even the server stops, the expire time will still run
+
+    > set key 100 ex 10
+    > ttl key
+    > persist key
+    ```
+
 * `SET key value [EX seconds] [PX milliseconds] [NX|XX]` [参考](https://redis.io/commands/set)
     ```
     # SET key value [EX seconds] [PX milliseconds] [NX|XX]
@@ -287,6 +287,15 @@ client.sscan('set1', cursor=0)
     SET foo bar
     # 利用这个 NX 可以做成一个资源锁。当client申请资源的时候, set key value ex 3600 NX, 如果返回ok就操作，否则就申请失败
     ```
+* [SETBIT](https://redis.io/commands/setbit)
+设置比特数据，实际上还是存的string
+```
+@ = 01000000
+setbit key 1 1
+get key
+>>> a
+```
+
 * GET
     ```
     GET foo
