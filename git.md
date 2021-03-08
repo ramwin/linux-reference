@@ -299,6 +299,7 @@ git blame filepath  # 查看某个文件的修改记录
 
 
 ### Administration
+
 #### [clean](https://git-scm.com/docs/git-clean)  
 清理untracked文件
 ```
@@ -313,6 +314,12 @@ git gc  # 优化仓库
 ```
 
 #### [ ] fsck
+
+#### [bundle](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E6%89%93%E5%8C%85)
+```
+git bundle create <filename> master ^commit  # 把从commit到master的版本打包
+git fetch <filename> master:other-master  # 把bundle文件中的master分支复制到本地other-master分支
+```
 
 ### 其他插件 Plumbing Commands
 * hash-object
