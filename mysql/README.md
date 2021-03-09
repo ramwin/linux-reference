@@ -31,14 +31,16 @@ _最后一行千万不要有逗号_
         * DEFAULT: 默认值
         * NOT NULL: 不能为空
         * COLLATE: 编码
+
 ## Drop
 ```
     drop table <table>; --表整个删除
     delete from table;  -- 保留表的结构
 ```
 
-* ## `DESCRIBE <table>;`
-* INSERT [官方参考](https://dev.mysql.com/doc/refman/5.7/en/insert.html)
+## DESCRIBE
+`DESCRIBE <table>;`
+* INSERT [官方参考](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```mysql
 INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
 ```
@@ -46,7 +48,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL)
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
-* ## SELECT  
+## SELECT  
     * A条件 AND B条件 OR C条件, AND的优先级比较高，但是为了不弄混，还是加括号()比较好
     * DISTINCT是针对结果的。结果数据一致就算是一致
     * ORDER BY birth [DESC]; 对某个列进行排序
@@ -55,7 +57,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL)
         * ORDER BY name, birth DESC; 按照几个字段排序
     * NULL 的查询
         * SELECT name FROM pet WHERE death is null;
-    * ### [正则查询](https://dev.mysql.com/doc/refman/5.7/en/pattern-matching.html), 默认不区分大小写
+    * ### [正则查询](https://dev.mysql.com/doc/refman/8.0/en/pattern-matching.html), 默认不区分大小写
         * `SELECT name FROM pet WHERE name like 'b%'`: b开头
         * `SELECT name FROM pet WHERE name like '_____'`: 5个字母
         * `SELECT name FROM pet WHERE name REGEXP/RLIKE '^b'`: b开头
@@ -67,7 +69,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL)
         * `[abc]`: abc中任意一个
         * `*`: 任意数量
         * `{5}`: 指定5个
-        * [...to be continued](https://dev.mysql.com/doc/refman/5.7/en/regexp.html)
+        * [...to be continued](https://dev.mysql.com/doc/refman/8.0/en/regexp.html)
     * COUNT:  
         `COUNT(*)` 求和。 `COUNT(field)` 会排除field为null的数据
         如果 `SET sql_mode = 'ONLY_FULL_GROUP_BY'` 那COUNT后面必须有group by, 如果 `SET sql_mode = ''` 那COUNT后面可以没有group by
@@ -335,7 +337,7 @@ mysql -u finley -ppassword db_name  # 不安全
 ## Security Components and Plugins
 ## FIPS Support
 
-# [Data Types 数据类型](https://dev.mysql.com/doc/refman/5.7/en/data-types.html)
+# [Data Types 数据类型](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
 ## [Data Type Overview]()
 ## [数字类型]()
     * 基础: INT(2)
@@ -346,19 +348,29 @@ mysql -u finley -ppassword db_name  # 不安全
 ## [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
 
 ## [字符串类型]()
-## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/5.7/en/spatial-types.html)
-* [创建空间类型列](https://dev.mysql.com/doc/refman/5.7/en/creating-spatial-columns.html)
+## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/8.0/en/spatial-types.html)
+* [创建空间类型列](https://dev.mysql.com/doc/refman/8.0/en/creating-spatial-columns.html)
 ```mysql
     CREATE TABLE geom (g GEOMETRY);
 ```
-* [获取空间数据](https://dev.mysql.com/doc/refman/5.7/en/fetching-spatial-data.html)
+* [获取空间数据][fetching-Spatial-data]
 ```mysql
     SELECT ST_AsText(g) from geom;
     > | POINT(1 1) |
     SELECT ST_AsBinary(g) from geom;
     > | 010010000 |
 ```
-* [...to be continued]()
+## [JSON Data Type][json-type-url]
+* 插入数据
+```
+insert into testjson values (JSON_ARRAY(1,2,3));
+```
+* [过滤](https://dev.mysql.com/doc/refman/8.0/en/json.html#json-paths)
+```
+select *, JSON_EXTRACT(json, '$.key1') b from testjson where JSON_EXTRACT(json, '$.key1') is not null;
+```
+
+
 ## [...to be continued]()
 
 # [Functions and Operators](https://dev.mysql.com/doc/refman/8.0/en/functions.html)  
@@ -461,7 +473,7 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
     ALTER TABLE t2 ADD c INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (c);
     ```
     * Performance and Space Requirements
-    ALTER TABLE use one the the following algorithms (COPY, INPLACE(before 5.7), INSTANT(new in 8.0.12 default))
+    ALTER TABLE use one the the following algorithms (COPY, INPLACE(before 8.0), INSTANT(new in 8.0.12 default))
     ALTER 的时候，会复制原先的数据表，此时数据库处于只读状态，不能改写或插入(除非是把一个table移动到另外一个文件夹的RENAME TO操作)
 * [CREATE INDEX Syntax](https://dev.mysql.com/doc/refman/8.0/en/create-index.html)
     * 不能够加双引号，加了会导致报错
@@ -494,3 +506,7 @@ alter table group_groupapply convert to character set utf8mb4 collate utf8mb4_un
     2. mysql的innodb是直接在叶子节点存了数据(聚集索引)，如果对其他的key做索引，会有回表再次查询的问题（为了节约空间）。所以每个表必须要有主键。但是mysql的叶子节点数据也有物理地址啊。给其他的字段创建索引时为什么不直接用物理地址呢？这个物理地址会变化吗
         * 主键不要太长，因为其他的索引数据就太大了
     3. myisam则是保存了物理地址。索引查到数据后直接能读取数据
+
+
+[fetching-Spatial-data]: https://dev.mysql.com/doc/refman/8.0/en/fetching-spatial-data.html
+[json-type-url]: https://dev.mysql.com/doc/refman/8.0/en/json.html
