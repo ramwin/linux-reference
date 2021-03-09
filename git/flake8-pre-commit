@@ -1,0 +1,1 @@
+git status --porcelain | mawk '{print $2}' |  grep *.py | xargs flake8
