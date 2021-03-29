@@ -150,12 +150,21 @@ uploadpack.allowReachableSHA1InWant=true
     objects/85/44441acexxxx3c21 5011352225字节
     ```
 ### 获取或者创建项目 getting and creating projects
+
 #### init
 * [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)
 ```
 git init <directory>  # 初始化仓库
 git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹的地方
 ```
+
+* 创建自己的git服务器
+
+    ```
+    [root:~/] sudo adduser git
+    [git:~/] git init --bare repository.git
+    [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
+    ```
 
 ### 快照 Basic Snapshotting
 
@@ -208,13 +217,66 @@ git reset HEAD filename
 #### [merge](https://git-scm.com/docs/git-merge)
 合并分支
 
-#### [tag](https://git-scm.com/docs/git-tag)
+#### [tag](https://git-scm.com/docs/git-tag)  
+[文档](https://git-scm.com/book/en/v2/Git-Basics-Tagging)  
+
 * `--sort=<key>`
 > 这里的排序使用的是和`git for-each-ref`一致的key  
 > 使用`git config tag.sort`可以设置tag的默认排序  
 ```
 git config tag.sort -creatordate
 git tag -n | head -n 10
+```
+* Listing Your Tags
+```
+git tag [-l] or [-list]
+git tag -l "v1.8.5*"  这时候的-l就必须存在了。
+```
+* Creating tags
+git支持2种tag, *lightweight* 和 *annotated*
+
+* Creating Annotated Tags
+annotated tag会保留谁在什么时候提交的tag
+```
+git tag -a v1.4 -m "version 1.4"
+git show v1.4
+```
+
+* Creating Lightweight Tags
+这个lightweight tag仅仅是保存一个标签。就没有谁创建的tag这种信息了
+```
+git tag v1.4-lw
+```
+
+* Tagging Later
+```
+git tag -a v1.2 <checksum> 给指定的某个提交添加tag
+```
+
+* Sharing Tags
+默认情况下`git push`不会上传tag到服务器
+```
+git push origin v1.5
+git push origin --tags
+```
+
+* Deleting Tags
+```
+git tag -d v1.4-lw  # 默认不会删除服务器的tag
+git push origin :refs/tags/v1.4-lw
+git push origin --delete <tagname>
+```
+
+* Checkouting out tags
+```
+git checkout 2.0.0
+```
+
+* 其他
+```
+git tag -n
+git tag -m "新增公司信息存储功能" v2.0.0
+git tag -l --format="%(tag) %(subject)"
 ```
 
 #### [worktree](https://git-scm.com/docs/git-worktree)
@@ -262,6 +324,7 @@ git update-index --add --cacheinfo 160000 d020b3a97f131ad11fb15bd8cce1774b0eb54c
 git commit -m '先加上去再说'  # 此时.git/index文件里显示有个submodule, 但是呢，工作区显示small文件夹不存在
 ```
 
+
 ### 查看和比较 Inspection and Comparison
 * [show](https://git-scm.com/docs/git-show)
 ```
@@ -274,7 +337,16 @@ git show <ref>:<file>  # 查看某个版本的文件
     * %h %H 简短/完整的哈希字符串
     * %d %D ref的name, %D代表了不用括号括起来
 
+
 ### Patching
+
+#### [cherry-pick](https://git-scm.com/docs/git-cherry-pick)
+把某次提交的功能应用当前版本
+
+```
+git cherry-pick <commit>
+```
+
 #### rebase
 ```
 git rebase --onto <newbase> <branch>
@@ -296,7 +368,6 @@ git bisect reset  # 找到报错版本后，推出bisect
 ```
 git blame filepath  # 查看某个文件的修改记录
 ```
-
 
 ### Administration
 
@@ -361,61 +432,9 @@ git stash -- <file1> [<file2>]  # 指定部分文件stash
 git stash -u/--include-untracked 包含untracked文件
 ```
 
-
-### [tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
-* Listing Your Tags
-```
-git tag [-l] or [-list]
-git tag -l "v1.8.5*"  这时候的-l就必须存在了。
-```
-* Creating tags
-git支持2种tag, *lightweight* 和 *annotated*
-
-* Creating Annotated Tags
-annotated tag会保留谁在什么时候提交的tag
-```
-git tag -a v1.4 -m "version 1.4"
-git show v1.4
-```
-
-* Creating Lightweight Tags
-这个lightweight tag仅仅是保存一个标签。就没有谁创建的tag这种信息了
-```
-git tag v1.4-lw
-```
-
-* Tagging Later
-```
-git tag -a v1.2 <checksum> 给指定的某个提交添加tag
-```
-
-* Sharing Tags
-默认情况下`git push`不会上传tag到服务器
-```
-git push origin v1.5
-git push origin --tags
-```
-
-* Deleting Tags
-```
-git tag -d v1.4-lw  # 默认不会删除服务器的tag
-git push origin :refs/tags/v1.4-lw
-git push origin --delete <tagname>
-```
-
-* Checkouting out tags
-```
-git checkout 2.0.0
-```
-
-* 其他
-```
-git tag -n
-git tag -m "新增公司信息存储功能" v2.0.0
-git tag -l --format="%(tag) %(subject)"
-```
-
-### 文件处理
+### 其他
+* [ ] working with remotes
+* [ ] git aliases
 * 彻底删除某个文件
 ```
     git filter-branch --tree-filter 'rm -f <filename>' HEAD
@@ -425,16 +444,3 @@ git tag -l --format="%(tag) %(subject)"
 ```
     git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')"
 ```
-
-
-### 服务器
-    * build your git server
-    ```
-    [root:~/] sudo adduser git
-    [git:~/] git init --bare repository.git
-    [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
-    ```
-
-### 其他
-* [ ] working with remotes
-* [ ] git aliases

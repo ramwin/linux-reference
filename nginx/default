@@ -19,41 +19,41 @@
 # Default server configuration
 #
 server {
-	listen 81 default_server;
-	listen [::]:81 default_server;
+    listen 81 default_server;
+    listen [::]:81 default_server;
 
-	root /var/www/html;
+    root /var/www/html;
 
-	index index.html index.htm index.nginx-debian.html;
+    index index.html index.htm index.nginx-debian.html;
 
-	server_name _;
+    server_name _;
 
-	location / {
-		try_files $uri $uri/ =404;
-                charset UTF-8;
-                charset_types *;
-                limit_rate 1m;
-                gzip_static on;
-	}
+    location / {
+        try_files $uri $uri/ =404;
+        charset UTF-8;
+        charset_types *;
+        limit_rate 1m;
+        gzip_static on;
+    }
 }
 server {
-	listen 82 default_server ssl;
-	listen [::]:82 default_server ssl;
+    listen 82 default_server ssl;
+    listen [::]:82 default_server ssl;
 
-	root /var/www/html;
+    root /var/www/html;
 
-	index index.html index.htm index.nginx-debian.html;
+    index index.html index.htm index.nginx-debian.html;
 
-	server_name _;
-        ssl_certificate /var/www/http.crt;
-        ssl_certificate_key /var/www/http.key;
+    server_name _;
+    ssl_certificate /var/www/http.crt;
+    ssl_certificate_key /var/www/http.key;
 
-	location / {
-		try_files $uri $uri/ =404;
-autoindex on;
-                charset UTF-8;
-                charset_types *;
-                limit_rate 1m;
-                gzip_static on;
-	}
+    location / {
+        try_files $uri $uri/ =404;
+        autoindex on;
+        charset UTF-8;
+        charset_types *;
+        limit_rate 1m;
+        gzip_static on;
+    }
 }
