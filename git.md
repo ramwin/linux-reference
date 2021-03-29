@@ -348,8 +348,13 @@ git cherry-pick <commit>
 ```
 
 #### rebase
+* 基础
 ```
 git rebase --onto <newbase> <branch>
+```
+* 合并几个commit
+```
+git rebase -i HEAD^^^  # 然后只pick第一个，squash后面所有的
 ```
 
 #### revert
