@@ -352,6 +352,20 @@ git cherry-pick <commit>
 git rebase --onto <newbase> <branch>
 ```
 
+#### revert
+* 撤回上个版本
+```
+git revert HEAD
+```
+* 连续撤回前2个版本，生成2个commit
+```
+git revert HEAD^^...HEAD  # 注意前开后闭区间
+```
+* 撤回但是不自动生成commit, 方便你连续revert多个commit时，只希望生成个commit
+```
+git revert -n/--no-commit HEAD^^...HEAD
+```
+
 ### 排查 Debugging
 
 #### bisect
