@@ -7,5 +7,6 @@
 ```
     修改 /etc/mysql/mysql.conf.d/mysqld.cnf
     设置 bind-address = 0.0.0.0
-    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;  # 5.7
+    GRANT ALL ON *.* TO 'wangx'@'localhost' WITH GRANT OPTION;  # 8.0
 ```

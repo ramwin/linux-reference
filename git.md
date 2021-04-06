@@ -223,73 +223,70 @@ git reset HEAD filename
 * `--sort=<key>`
 > 这里的排序使用的是和`git for-each-ref`一致的key  
 > 使用`git config tag.sort`可以设置tag的默认排序  
-```
-git config tag.sort -creatordate
-git tag -n | head -n 10
-```
+
+    git config tag.sort -creatordate
+    git tag -n | head -n 10
+
 * Listing Your Tags
-```
-git tag [-l] or [-list]
-git tag -l "v1.8.5*"  这时候的-l就必须存在了。
-```
+
+    git tag [-l] or [-list]
+    git tag -l "v1.8.5*"  这时候的-l就必须存在了。
+
 * Creating tags
 git支持2种tag, *lightweight* 和 *annotated*
 
 * Creating Annotated Tags
 annotated tag会保留谁在什么时候提交的tag
-```
-git tag -a v1.4 -m "version 1.4"
-git show v1.4
-```
+
+    git tag -a v1.4 -m "version 1.4"
+    git show v1.4
 
 * Creating Lightweight Tags
 这个lightweight tag仅仅是保存一个标签。就没有谁创建的tag这种信息了
-```
-git tag v1.4-lw
-```
+
+    git tag v1.4-lw
+
 
 * Tagging Later
-```
-git tag -a v1.2 <checksum> 给指定的某个提交添加tag
-```
+
+    git tag -a v1.2 <checksum> 给指定的某个提交添加tag
+
 
 * Sharing Tags
 默认情况下`git push`不会上传tag到服务器
-```
-git push origin v1.5
-git push origin --tags
-```
+
+    git push origin v1.5
+    git push origin --tags
+
 
 * Deleting Tags
-```
-git tag -d v1.4-lw  # 默认不会删除服务器的tag
-git push origin :refs/tags/v1.4-lw
-git push origin --delete <tagname>
-```
+
+    git tag -d v1.4-lw  # 默认不会删除服务器的tag
+    git push origin :refs/tags/v1.4-lw
+    git push origin --delete <tagname>
+
 
 * Checkouting out tags
-```
-git checkout 2.0.0
-```
+
+    git checkout 2.0.0
+
 
 * 其他
-```
-git tag -n
-git tag -m "新增公司信息存储功能" v2.0.0
-git tag -l --format="%(tag) %(subject)"
-```
+
+    git tag -n
+    git tag -m "新增公司信息存储功能" v2.0.0
+    git tag -l --format="%(tag) %(subject)"
+
 
 #### [worktree](https://git-scm.com/docs/git-worktree)
 用于突然要维护一个旧分支, 又不想影响当前的工作区
-```
-git worktree add hotfix <hash>  # 先用已有git checkout一次
-cd hotfix  # 进入分支目录修复bug
-...
-git worktree prune  # 修复后删除
-```
+
+    git worktree add hotfix <hash>  # 先用已有git checkout一次
+    cd hotfix  # 进入分支目录修复bug
+    ...
+    git worktree prune  # 修复后删除
 
 ### Sharing and Updating Projects
-
 
 #### fetch
 * 拉取指定的commit
@@ -298,6 +295,10 @@ git worktree prune  # 修复后删除
 ```
 git fetch origin refs/tags/1.0.0
 ```
+
+#### push 推送
+
+* 推送指定分支 `git push origin <local_branch>:<remote-branch> <local_branch2>:<remote-branch2>`
 
 #### 子模块 submodule
 * [guide文档](https://git-scm.com/docs/gitsubmodules)
@@ -429,8 +430,6 @@ git hash-object A >> f70f10e4db19068f79bc43844b49f3eece45c4e8
 ### pull
 * 拉取远程分支 `git pull origin <branch>:<local_branch>`
 
-### push
-* 推送指定分支 `git push origin <local_branch>:<remote-branch>`
 
 ### show  
 查看某个文件的版本
