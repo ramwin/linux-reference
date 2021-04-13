@@ -1,6 +1,7 @@
 *Xiang Wang @ 2017-11-22 11:18:53*
 
-* [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+[官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
+
 # 启动
 ```
 docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
@@ -49,42 +50,48 @@ INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL)
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
 ## SELECT  
-    * A条件 AND B条件 OR C条件, AND的优先级比较高，但是为了不弄混，还是加括号()比较好
-    * DISTINCT是针对结果的。结果数据一致就算是一致
-    * ORDER BY birth [DESC]; 对某个列进行排序
-        * ORDER BY name 按照名字排序（不分大小写）
-        * ORDER BY BINARY name 按照名字排序（区分大小写）
-        * ORDER BY name, birth DESC; 按照几个字段排序
-    * NULL 的查询
-        * SELECT name FROM pet WHERE death is null;
-    * ### [正则查询](https://dev.mysql.com/doc/refman/8.0/en/pattern-matching.html), 默认不区分大小写
-        * `SELECT name FROM pet WHERE name like 'b%'`: b开头
-        * `SELECT name FROM pet WHERE name like '_____'`: 5个字母
-        * `SELECT name FROM pet WHERE name REGEXP/RLIKE '^b'`: b开头
-        * '%fy': fy结尾
-        * '%w%': 包含w
-        * '_': 一个任意字符
-        * 区分大小写: `SELECT name FROM pet WHERE name like binary '%w'`;
-        * `.`: 匹配任意单个字符串
-        * `[abc]`: abc中任意一个
-        * `*`: 任意数量
-        * `{5}`: 指定5个
-        * [...to be continued](https://dev.mysql.com/doc/refman/8.0/en/regexp.html)
-    * COUNT:  
-        `COUNT(*)` 求和。 `COUNT(field)` 会排除field为null的数据
-        如果 `SET sql_mode = 'ONLY_FULL_GROUP_BY'` 那COUNT后面必须有group by, 如果 `SET sql_mode = ''` 那COUNT后面可以没有group by
-    * 示例
-    ```mysql
+
+* A条件 AND B条件 OR C条件, AND的优先级比较高，但是为了不弄混，还是加括号()比较好
+* DISTINCT是针对结果的。结果数据一致就算是一致
+* ORDER BY birth [DESC]; 对某个列进行排序
+    * ORDER BY name 按照名字排序（不分大小写）
+    * ORDER BY BINARY name 按照名字排序（区分大小写）
+    * ORDER BY name, birth DESC; 按照几个字段排序
+* NULL 的查询
+    * SELECT name FROM pet WHERE death is null;
+### [正则查询](https://dev.mysql.com/doc/refman/8.0/en/pattern-matching.html), 默认不区分大小写
+* `SELECT name FROM pet WHERE name like 'b%'`: b开头
+* `SELECT name FROM pet WHERE name like '_____'`: 5个字母
+* `SELECT name FROM pet WHERE name REGEXP/RLIKE '^b'`: b开头
+* '%fy': fy结尾
+* '%w%': 包含w
+* '_': 一个任意字符
+* 区分大小写: `SELECT name FROM pet WHERE name like binary '%w'`;
+* `.`: 匹配任意单个字符串
+* `[abc]`: abc中任意一个
+* `*`: 任意数量
+* `{5}`: 指定5个
+* [...to be continued](https://dev.mysql.com/doc/refman/8.0/en/regexp.html)
+
+
+### COUNT:  
+`COUNT(*)` 求和。 `COUNT(field)` 会排除field为null的数据  
+如果 `SET sql_mode = 'ONLY_FULL_GROUP_BY'` 那COUNT后面必须有group by, 如果 `SET sql_mode = ''` 那COUNT后面可以没有group by  
+
+
     SELECT [DISTINCT] field FROM table WHERE conditions_to_satisfy ORDER BY column [DESC];
-    ```
-    * ### 用户自定义变量:
-    ```
-        select @min_price:=MIN(price) from shop;
-        select @min_price;
-        select * FROM shop WHERE price=@min_price;
-    ```
-    * ### 使用外键
-    ```
+
+
+### 用户自定义变量:
+
+
+    select @min_price:=MIN(price) from shop;
+    select @min_price;
+    select * FROM shop WHERE price=@min_price;
+
+### 使用外键
+
+
     CREATE TABLE shirt (
         id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
         style ENUM('t-shirt', 'polo', 'dress') NOT NULL,
@@ -92,25 +99,24 @@ INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL)
         owner SMALLINT UNSIGNED NOT NULL REFERENCES person(id),
         PRIMARY KEY (id)
     );
-    ```
 
-* ## SHOW
-    * SHOW DATABASES;
-    * SHOW TABLES;
-    * SHOW CREATE TABLE pet;
-    * SHOW INDEX FROM pet;
-    * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
-    * `show full columns from group_group`; 查看所有的信息
-* ## [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html)
-    ```mysql
-    UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
-    ```
-* ## USE <databasename>
-* ## batch
-    ```
+## SHOW
+* SHOW DATABASES;
+* SHOW TABLES;
+* SHOW CREATE TABLE pet;
+* SHOW INDEX FROM pet;
+* SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
+* `show full columns from group_group`; 查看所有的信息
+
+## [UPDATE 更新数据](https://dev.mysql.com/doc/refman/8.0/en/update.html)
+```mysql
+UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
+```
+## USE <databasename>
+## batch
+
+
     mysql < batch-file > outfile
-    ```
-
 
 # tutorial 函数大全
 * 普通函数
@@ -469,7 +475,7 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
     ALTER TABLE t1 RENAME COLUMN hometown_match TO hometown_match2;  -- 重命名
     ALTER TABLE t2 ADD d TIMESTAMP;
     ALTER TABLE t2 ADD INDEX (d), ADD UNIQUE (a);
-    ALTER TABLE t2 DROP COLUMN c;
+    ALTER TABLE t2 DROP COLUMN c;  删除列
     ALTER TABLE t2 ADD c INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (c);
     ```
     * Performance and Space Requirements
