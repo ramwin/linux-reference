@@ -224,7 +224,7 @@ LANG="zh_CN.UTF-8"
 ## [manjaro](./manjaro.md)
 ## [mongodb](./mongodb.md)
 ## [mysql 数据库](./mysql/README.md)
-* [Grant权限控制](./database/mysql_grant.md)
+* [Grant权限控制](./mysql/mysql_grant.md)
 * [mysqldump](./mysql/README.md)
 
 ## nnn

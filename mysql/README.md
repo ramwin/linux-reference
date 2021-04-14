@@ -158,6 +158,7 @@ mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 ### CREATE TABLE Statements
 #### [ ] [FOREIGN KEY Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
 * 示例
+
 ```sql
 CREATE TABLE child (
     id INT,
@@ -168,6 +169,7 @@ CREATE TABLE child (
         ON DELETE CASCADE
 )
 ```
+
 * reference的字段，必须需要index
 * 如果外键的字段有重复。只要里面一条数据被删除了，那么整个表里面的关联数据都会被删除。
 #### [ ] [CHECK Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html)
@@ -200,48 +202,64 @@ DELETE FROM tbl_name
 ```
 * [LOAD DATA Statement](https://dev.mysql.com/doc/refman/8.0/en/load-data.html)
     * 例子
-    ```
-    LOAD DATA
-        INFILE 'file_name'
-        INTO TABLE tbl_name
-        FIELDS TERMINATED BY ','
-        ENCLOSED BY """
-        IGNORE number {LINES | ROWS}
-    ```
+
+
+        LOAD DATA
+            INFILE 'file_name'
+            INTO TABLE tbl_name
+            FIELDS TERMINATED BY ','
+            ENCLOSED BY """
+            IGNORE number {LINES | ROWS}
+
     * `\N`代表了空置`NULL`
     * example:
-    ```mysql
-    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
-    LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
-    ```
+
+
+        LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
+        LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
+
 ### SELECT Statement
+
 * [basic 基础](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 * [SELECT ... INTO STATEMENT 导出数据](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
+
 * [JOIN](https://dev.mysql.com/doc/refman/8.0/en/join.html)
+
     * LEFT JOIN
-    ```
-    SELECT * from pet LEFT JOIN event ON pet.name = event.name;
-    找出每个动物。存在事件就插进去。最多可能pet的行数 x event的行数
-    ```
+
+
+        SELECT * from pet LEFT JOIN event ON pet.name = event.name;
+        找出每个动物。存在事件就插进去。最多可能pet的行数 x event的行数
+
+
     * RIGHT JOIN
-    ```
-    SELECT * FROM pet RIGHT JOIN event ON pet.name = event.name;
-    找出所有的事件，如果有对应的动物，就插进去。如果对应多个，就插入多个。所以最多的行数等于pet的行数 x event的行数
-    ```
+
+
+        SELECT * FROM pet RIGHT JOIN event ON pet.name = event.name;
+        找出所有的事件，如果有对应的动物，就插进去。如果对应多个，就插入多个。所以最多的行数等于pet的行数 x event的行数
+
+
     * INNER JOIN
-    ```
-    SELECT * FROM pet INNER JOIN event ON pet.name = event.name;
-    找出所有的匹配，然后只看里面pet.name == event.name. 如果没匹配上，就不显示。所以最多显示的数量是 pet的数量 × event的数量
-    ```
+
+
+        SELECT * FROM pet INNER JOIN event ON pet.name = event.name;
+        找出所有的匹配，然后只看里面pet.name == event.name. 如果没匹配上，就不显示。所以最多显示的数量是 pet的数量 × event的数量
+
     * 案例
-    ```
-    SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
-    ```
+
+
+        SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
+
     * INNER JOIN: *把两个表格里面合并起来，只有on的条件满足了才会一起出现，否则就不显示*
+
 * [ ] UNION Clause
 
+
 # Security 安全机制
+
 ## General Security Issues 基本安全 [官网](https://dev.mysql.com/doc/refman/8.0/en/general-security-issues.html)
+
+
 1. Security Guidelines
     * 不要给任何用户(除了root)拥有`user`表的权限
     * 学习 MySQL Access Privilege System, 使用 GRANT 和 REVODE来下发权限, 不要给更多的权限. 不要把权限给所有的hosts
@@ -284,60 +302,69 @@ DELETE FROM tbl_name
     * 限制用户的max user connections
     * 要防止plugin directory是writable
 
-## [ ] The MySQL Access Privilege System
-## MySQL User Account Management 用户管理
+## [Access Control](https://dev.mysql.com/doc/refman/8.0/en/access-control.html)
+
+### 用户管理
+
 用户名字, 密码问题. 如何添加删除用户. 如果使用角色概念. 如何修改密码. 安全引导.
-1. User Names and Passwords 用户名和密码的使用
-```
+
+### User Names and Passwords 用户名和密码的使用
+
+
+```sql
 mysql --user=finley --password db_name
 mysql -u finley -p db_name
 mysql -u finley -ppassword db_name  # 不安全
 ```
 
-2. Adding User Accounts 添加用户
+### Adding User Accounts 添加用户
 
-    * 创建管理帐号
-        * 案例
-        ```
-        mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
-        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
-            ->     WITH GRANT OPTION;
-        mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
-        mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
-            ->     WITH GRANT OPTION;
-        ```
-        * 在开启匿名登录的情况下, 必须存在 'finley'@'localhost' 用户. 因为如果没有这条语句, 当用户本地匿名登录, 使用了finley当作username的话, 因为存在localhost, 就会被当作匿名用户来处理了 finley@localhost 优先判断成 '%'@'localhost' 而不是 'finley'@'%'.
-        * 'admin'@'localhost' 只能被本地的admin用户登录
-        * dummp用户只能被本地访问
-    * 查看用户权限  
-    ```mysql
-    mysql> SHOW GRANTS FOR 'admin'@'localhost';
-    >> Grants for admin@localhost
-    >> GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
-    mysql> SHOW CREATE USER 'admin'@'localhost'\G
-    >> 1. row
-    CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
-    IDENTIFIED WITH 'mysql_native_password'
-    AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'
-    REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK
-    ```
-    * 创建普通帐号
-    ```
-    mysql> CREATE USER 'custom'@'localhost' IDENTIFIED BY 'password';
-    mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
-        ->     ON bankaccount.*
-        ->     TO 'custom'@'localhost';
-    mysql> CREATE USER 'custom'@'host47.example.com' IDENTIFIED BY 'password';
-    mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
-        ->     ON expenses.*
-        ->     TO 'custom'@'host47.example.com';
-    mysql> CREATE USER 'custom'@'%.example.com' IDENTIFIED BY 'password';
-    mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
-        ->     ON customer.*
-        ->     TO 'custom'@'%.example.com';
+* 创建管理帐号
+    * 案例
+
+
+    ```sql
+    mysql> CREATE USER 'finley'@'localhost' IDENTIFIED BY 'password';
+    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'localhost'
+        ->     WITH GRANT OPTION;
+    mysql> CREATE USER 'finley'@'%' IDENTIFIED BY 'password';
+    mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
+        ->     WITH GRANT OPTION;
     ```
 
-3. Removing User Accounts
+
+    * 在开启匿名登录的情况下, 必须存在 'finley'@'localhost' 用户. 因为如果没有这条语句, 当用户本地匿名登录, 使用了finley当作username的话, 因为存在localhost, 就会被当作匿名用户来处理了 finley@localhost 优先判断成 '%'@'localhost' 而不是 'finley'@'%'.
+    * 'admin'@'localhost' 只能被本地的admin用户登录
+    * dummp用户只能被本地访问
+* 查看用户权限  
+```mysql
+mysql> SHOW GRANTS FOR 'admin'@'localhost';
+>> Grants for admin@localhost
+>> GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
+mysql> SHOW CREATE USER 'admin'@'localhost'\G
+>> 1. row
+CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
+IDENTIFIED WITH 'mysql_native_password'
+AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'
+REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK
+```
+* 创建普通帐号
+```
+mysql> CREATE USER 'custom'@'localhost' IDENTIFIED BY 'password';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+    ->     ON bankaccount.*
+    ->     TO 'custom'@'localhost';
+mysql> CREATE USER 'custom'@'host47.example.com' IDENTIFIED BY 'password';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+    ->     ON expenses.*
+    ->     TO 'custom'@'host47.example.com';
+mysql> CREATE USER 'custom'@'%.example.com' IDENTIFIED BY 'password';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
+    ->     ON customer.*
+    ->     TO 'custom'@'%.example.com';
+```
+
+### Removing User Accounts
 
 ## Using Encrypted Connections
 ## Security Components and Plugins
