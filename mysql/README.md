@@ -370,7 +370,7 @@ mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
 ## Security Components and Plugins
 ## FIPS Support
 
-# [Data Types 数据类型](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
+# [数据类型 Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
 ## [Data Type Overview]()
 ## [数字类型]()
     * 基础: INT(2)
@@ -381,6 +381,20 @@ mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
 ## [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
 
 ## [字符串类型]()
+
+### [枚举类 ENUM TYPE](https://dev.mysql.com/doc/refman/8.0/en/enum.html)
+```sql
+CREATE TABLE shirts (
+    name VARCHAR(40),
+    size ENUM("x-small", "small", "medium", "large", "x-largs")
+)
+ALTER TABLE shirts MODIFY size ENUM("small", "big");
+ERROR 1265 (01000): Data truncated for column 'size' at row 2;  # 如果enum不存在就报错了
+```
+* 实际上数据库用1个字节来保存这个数据，所以速度会快很多
+* 注意排序，会根据ENUM的顺序来排序
+
+
 ## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/8.0/en/spatial-types.html)
 * [创建空间类型列](https://dev.mysql.com/doc/refman/8.0/en/creating-spatial-columns.html)
 ```mysql
@@ -402,9 +416,6 @@ insert into testjson values (JSON_ARRAY(1,2,3));
 ```
 select *, JSON_EXTRACT(json, '$.key1') b from testjson where JSON_EXTRACT(json, '$.key1') is not null;
 ```
-
-
-## [...to be continued]()
 
 # [Functions and Operators](https://dev.mysql.com/doc/refman/8.0/en/functions.html)  
 通用的函数和操作
