@@ -4,13 +4,28 @@
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
 
-```
+```shell
 忽略某个文件
 git update-index --assume-unchanged config.php
 ```
 
 ### [lfs](https://git-lfs.github.com/)
-处理大文件用
+处理大文件用. 
+
+#### 原理
+1. 每次add的时候，会计算文件的sha256sum, 保存到 `.git/lfs/objects/98/41/984132.....` 文件。`984132...`是sha256sum的结果
+2. 每次commit的时候，git都会文件当做一个指针文件保存到 `.git/objects`, 文件格式:. 所以指针文件126到140字节左右
+
+```
+version https://git-lfs.github.com/spec/v1
+oid sha256:982144ca336922b975109ac8a8f77576265668cd966885701d8ac75b9c867802
+size 6
+```
+
+3. 上传的时候，如果服务器的 `.git/lfs/objects/` 文件不存在，那就上传。
+4. 下载的时候，根据lfs.fetchinclude配置，来判断拉取文件还是仅仅把文件设置成指针
+
+#### 配置
 * 编辑.gitattributes
 
 ```
@@ -25,6 +40,8 @@ git lfs track "*.jpg" "*.png" "*.exe" "*.JPG" "*.iso"
 git add .
 git commit -m '初始化'
 ```
+
+#### 使用
 * 还原特定文件
 ```
 git lfs checkout <path>
@@ -407,15 +424,19 @@ git gc  # 优化仓库
 #### [ ] fsck
 
 #### [bundle](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E6%89%93%E5%8C%85)
-```
+但是不支持lfs
+
+```shell
 git bundle create <filename> master ^commit  # 把从commit到master的版本打包
+git bundle verify bundle  # 查看打包的文件
 git fetch <filename> master:other-master  # 把bundle文件中的master分支复制到本地other-master分支
 ```
 
 ### 其他插件 Plumbing Commands
 * hash-object
 生成一个文件的hash
-```
+
+```shell
 echo -e "blob 2\0A" > A_blob
 sha1sum A_blob  >> f70f10e4db19068f79bc43844b49f3eece45c4e8
 echo "A" > A
