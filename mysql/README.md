@@ -379,6 +379,14 @@ mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP
     * YEAR(4)
 
 ## [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
+* TIMESTAMP 时间戳类型
+插入的时候，会把时间变成时间戳保存，取出的时候，会自动根据链接的时区变成datetime
+
+
+    CREATE TABLE `test7` (
+      `n` int DEFAULT NULL,
+      `updateat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
 
 ## [字符串类型]()
 
