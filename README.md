@@ -9,9 +9,9 @@
 
 # command
 * [ ] awk
-```
-awk '{print $1}' filename
-```
+
+    awk '{print $1}' filename
+
 * chardet3 检测文件编码
 * cp:
 复制一个文件或者文件夹  
@@ -77,6 +77,12 @@ x,y,z代表了属性
     * `find . -iregex '.*.\(py\|html\)'`
 * grep
 `grep string <file>`: 从file中找到文字
+
+## htop
+
+    htop -u wangx  # 仅看某个用户的进程
+
+
 * hddtemp: 查看硬盘的温度
 * iconv: 转化文件编码 `iconv -f GBK -t utf-8//IGNORE originfile -o target`
 * iftop:
@@ -94,23 +100,27 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
     * `rename 's/group_public/group-public/g' *` *把当前目录下所有文件的group_public变成group-public*
     * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
     * `rename -v '20190415' '2019-04-15' *.json`
-* ## sed
-    * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
-    * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
-    * `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
-* ## seq
-```
-seq 10  # 输入1到10
-seq 10 | xargs -i command  # 执行一个代码10次
-seq 10 | xargs -i echo "{}123"  # 执行一个代码10次
-```
+
+## sed
+* `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
+* `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
+* `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
+
+## seq
+重复
+
+    seq 10  # 输入1到10
+    seq 10 | xargs -i command  # 执行一个代码10次
+    seq 10 | xargs -i echo "{}123"  # 执行一个代码10次
+
 * sort:
     * 按照文件尺寸来排序: `sort -h`
     * 直接按照一行的文字来排序: `sort -n`
-* su:
-```
+## su
+
 su -s /bin/bash www-data  # 使用www-data来执行bash命令
-```
+
+
 * swap
 ```
 fallocate -l 8G /swapfile
@@ -143,41 +153,92 @@ Tidy Advocacy Community Group.
 * unzip
     * `unzip -O gbk filename.zip`: 处理windows的zip文件
     * `unzip -O gbk -l filename.zip`: 只看看，不解压
-* wc
-    * 按照文件的行数来排序: `ls | xargs wc -l | sort -nr`
-* zentify
-    * `zenity --info --text '保护视力，休息一会'
-* zip 压缩文件 zip -r target.zip sourcedirectory/
-* zlib-flate 解压内容
-```
-cat .git/objects/c2/dc76d6e9ecfa41381f20813575f92c538448f4  | zlib-flate -uncompress
-```
+
+## wc
+* 按照文件的行数来排序: `ls | xargs wc -l | sort -nr`
+
+## zentify
+* `zenity --info --text '保护视力，休息一会'`
+
+## zip 压缩文件  
+`zip -r target.zip sourcedirectory/`
+
+
+## zlib-flate
+
+解压内容
+
+    cat .git/objects/c2/dc76d6e9ecfa41381f20813575f92c538448f4  | zlib-flate -uncompress
 
 # software 软件
+
+## airflow
+* 安装
+
+
+    sudo pip install airflow
+    airflow db init
+    airflow users create \
+        --username admin \
+        --firstname Peter \
+        --lastname Parker \
+        --role Admin \
+        --email spiderman@superhero.org
+    airflow webserver --port 8080
+    airflow scheduler
+
+### Dag
+执行时间: 04分的时候，执行的是00分的任务
+
+
+    from airflow import DAG
+    with DAG(
+    ) as dag:
+        t1 = PythonOperator()
+        t2 = PythonOperator()
+        t1 >> t2
+
+* 属性
+    * `schedule_interval=""`
+    可以输入timedelta或者直接输入contab的规则  
+    timedelta(seconds=60)  "*/6 * * * *"
+
+#### ExternalTaskSensor
+默认情况下，如果一个dag以来了其他的dag，会找`executiong_date`一致的dag，看他是否成功。
+
+    ExternalTaskSensor(
+        external_dag_id="run_python",
+        external_task_id="taask1",
+        timeout=160
+    )
+
+
 ## celery  
 [celery/README.md](./celery/README.md)
 
 ## chromium
 * 代理
-    ```
+
+
     chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
-    ```
+
 * cvim
 一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
-```
-let searchlimit = 4
-let blacklists = ["https://ecs.console.aliyun.com/*"]
-let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
-showTodoRest -> {{
-  var doms = document.getElementsByClassName("todo-rest")
-  for (var i=0; i<doms.length; i++) {
-    var dom = doms[i];
-    dom.setAttribute("tabindex", true);
 
-  }
-}}
-call showTodoRest
-```
+
+    let searchlimit = 4
+    let blacklists = ["https://ecs.console.aliyun.com/*"]
+    let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
+    showTodoRest -> {{
+      var doms = document.getElementsByClassName("todo-rest")
+      for (var i=0; i<doms.length; i++) {
+        var dom = doms[i];
+        dom.setAttribute("tabindex", true);
+
+      }
+    }}
+    call showTodoRest
+
 * 调试
 
     -scheme:chrome-extension 关闭插件的network
