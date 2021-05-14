@@ -107,3 +107,13 @@ INSERT INTO <表> SELECT * FROM <临时表名>
     INNER JOIN artists ON artists.artistid = albums.artistid
     WHERE
         artists.artistid = 10
+
+### Section 17
+#### [引入csv文件](https://www.sqlitetutorial.net/sqlite-import-csv/)
+
+
+    ```
+    create table <tablename>(field1, field2)
+    .mode csv
+    .import <filepath> <tablename>
+    ```
