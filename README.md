@@ -155,6 +155,13 @@ Tidy Advocacy Community Group.
     * `unzip -O gbk filename.zip`: 处理windows的zip文件
     * `unzip -O gbk -l filename.zip`: 只看看，不解压
 
+## wait
+等待任务完成  
+
+
+    python3 test_multi.py & python3 test_multi.py & wait
+
+
 ## wc
 * 按照文件的行数来排序: `ls | xargs wc -l | sort -nr`
 
