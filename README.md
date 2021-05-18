@@ -17,6 +17,7 @@
 复制一个文件或者文件夹  
     * 不会删除原有的文件
     * -i: 如果遇到重复的文件，就进行询问
+    * -n: 如果遇到重复的文件，就不复制
     * -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
     * -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
     * -v: 显示复制的过程
@@ -337,16 +338,20 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 * 简介
 有点: 快速(只上传改动部分, 压缩上传), 安全(ssh上传). 但是好像无法上传后加密
 
-* ### 参数 [官网](https://download.samba.org/pub/rsync/rsync.html)
-    * -u
-        * --update: 如果receiver的文件比较新,就跳过
-        * [ ] --inplace
-        * --append: 把数据添加到短的文件上面, 之前的数据不动. 只能加,不能改
-        * [ ] --append-verify
+### 参数 [官网](https://download.samba.org/pub/rsync/rsync.html)
+* -u
+    * --update: 如果receiver的文件比较新,就跳过
+    * [ ] --inplace
+    * --append: 把数据添加到短的文件上面, 之前的数据不动. 只能加,不能改
+    * [ ] --append-verify
+    * -n: 不操作，只看看
+    * -v: 显示所有日志
+    * --ignore-existing: 忽略存在的文件
 
-* ### 示例
-    * 把文件上传到服务器  
-    ```
+### 示例
+* 把文件上传到服务器  
+
+
     rsync --verbose  --progress --stats --compress --update --rsh=/bin/ssh \
           --recursive --times --perms --links \
           --exclude "*bak" --exclude "*~" \
@@ -356,9 +361,11 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
           --recursive --times --perms --links \
           --exclude "*bak" --exclude "*~" \
           /home/wangx/rsync_test2/ localhost:/home/wangx/rsync_server/
-    ```
-    * 把服务的文件下载下来
-    ```
+
+
+* 把服务的文件下载下来
+
+
     rsync --verbose  --progress --stats --compress --update --rsh=/bin/ssh \
           --recursive --times --perms --links \
           --exclude "*bak" --exclude "*~" \
@@ -368,7 +375,12 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
           --recursive --times --perms --links \
           --exclude "*bak" --exclude "*~" \
           /home/wangx/rsync_server/ localhost:/home/wangx/rsync_test2/
-    ```
+
+* 复制文件夹
+
+
+    rsync -vrn --ignore-existing from_directory/* to_directory  # 先看看
+  
 
 ## shadowsocks
     * 各个服务器的测速
