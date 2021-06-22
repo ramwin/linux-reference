@@ -147,24 +147,25 @@ if expire is 0, the key is created without any expire
 
 
 ## Lists
-    * blpop
-    * brpop
-    * brpoplpush: 和rpoplpush类似，但是会block
-    * lindex: 返回一个元素在List的位置
-    * `linsert key BEFORE|AFTER value1 new_value`: 插入新的数据
-    * llen: 长度
-    * `lpop`: `lpop(key)  如果没有数据了，返回None`
-    * lpush
-    * lpushx: only insert if the key exists
-    * rpoplpush
-    * lrange
-    * `lrem key count value`: 删除list里面的元素,count代表几次。0代表所有，count>0从head往tail删，count<0从tail往head删除
-    * lset key index value: 修改元素index的值
-    * ltrim key start stop: 只保留list中部分的数值
-    * rpop
-    * rpoplpush
-    * rpush
-    * rpushx: 必须有这个key，这个key是list才会push
+
+* blpop
+* brpop
+* brpoplpush: 和rpoplpush类似，但是会block
+* lindex: 返回一个元素在List的位置
+* `linsert key BEFORE|AFTER value1 new_value`: 插入新的数据
+* llen: 长度
+* `lpop`: `lpop(key)  如果没有数据了，返回None`
+* lpush
+* lpushx: only insert if the key exists
+* rpoplpush
+* lrange
+* `lrem key count value`: 删除list里面的元素,count代表几次。0代表所有，count>0从head往tail删，count<0从tail往head删除
+* lset key index value: 修改元素index的值
+* ltrim key start stop: 只保留list中部分的数值
+* rpop
+* rpoplpush
+* rpush
+* rpushx: 必须有这个key，这个key是list才会push
 
 ## [Pub/Sub 订阅消息](https://redis.io/commands#pubsub)
 * SUBSCRIBE: `SUBSCRIBE channel [channel]`

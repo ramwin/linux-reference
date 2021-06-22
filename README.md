@@ -28,7 +28,7 @@
 复制文件
     * [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
     ```
-    $ sync; dd if=/dev/zero of=tempfile bs=1M count=1024; sync  # 测试写入速度
+    dd if=/dev/zero of=tempfile conv=fdatasync bs=384k count=1k; 
     $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
     ```
 * dig  
@@ -93,7 +93,10 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
-* notify-send
+## mount
+* [挂载内存硬盘](https://www.linuxbabe.com/command-line/create-ramdisk-linux)
+
+## notify-send
     * `notify-send 保护视力，休息一会`
 * rar
     * `rar a -v1024k netease.rar netease`: 把netease创建成多个压缩文件，最大1024k
@@ -168,7 +171,7 @@ Tidy Advocacy Community Group.
 ## zentify
 * `zenity --info --text '保护视力，休息一会'`
 
-## zip 压缩文件  
+## [zip 压缩文件  ](./zip.md)
 `zip -r target.zip sourcedirectory/`
 
 
@@ -547,6 +550,7 @@ screen -list
 screen -S sjtupt    # 创建新的screen
 ctrl + A + D    # 关闭当前screen
 screen -r sjtupt    # 还原之前的screen
+ctrl + a 然后 esc 可以复制滚动 最后按esc退出
 ```
 * simplescreenrecorder *录屏软件*
 * smtp邮件服务器  **新版参考postfix**
