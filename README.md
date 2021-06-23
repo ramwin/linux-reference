@@ -342,11 +342,21 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 
 ## rsync
 用来同步数据的软件
+
     1. [官网](https://rsync.samba.org/documentation.html)
     2. [教程](https://everythinglinux.org/rsync/)
 
 * 简介
 有点: 快速(只上传改动部分, 压缩上传), 安全(ssh上传). 但是好像无法上传后加密
+
+### 基础用法
+
+
+    rsync -r --verbose <from_directory> <to_directory>/  # 这样会把from_directory 复制到 to_directory/from_directory
+    rsync -r --verbose <from_directory>/ <to_directory>/  # 这样会把from_directory下的内容复制到 to_directory
+    rsync -r --verbose version1/ version_latest/  # 先复制version1的
+    rsync -r --verbose version2/ version_latest/  # 后复制version2的, 这样就是最新的了
+
 
 ### 参数 [官网](https://download.samba.org/pub/rsync/rsync.html)
 * -u
