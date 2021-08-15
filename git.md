@@ -366,9 +366,11 @@ git cherry-pick <commit>
 ```
 
 #### rebase
+[官网](https://git-scm.com/docs/git-rebase)
 * 基础
 ```
 git rebase --onto <newbase> <branch>
+git rebase --onto <newbase> <hash1> <branch> # 把branch从hash1开始(不包含)到结束的commit应用到newbase上
 ```
 * 合并几个commit
 ```
