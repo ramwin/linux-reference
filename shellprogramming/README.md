@@ -114,7 +114,7 @@ done
     if [ "foo" = "foo" ]; then  # 中括号旁边必须有空格,等号前后也必须有空格, 而且只有一个等号
     else
     fi
-    if [[ $HOME = "/home/wangx" ]]; then  # 如果有变量， 需要使用双括号，或者在变量两边加引号
+    if [[ "$HOME" = "/home/wangx" ]]; then  # 如果有变量， **需要使用双括号，或者在变量两边加引号**. 不然bash会把这个变量的value先放进去，然后再解析
     fi
     -f 'filename' 判断文件是否存在
     -d 'directory' 判断文件夹是否存在
