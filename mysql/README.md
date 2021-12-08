@@ -44,6 +44,7 @@ _最后一行千万不要有逗号_
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```mysql
 INSERT INTO pet VALUES ('Puffball', 'Diane', 'hamster', 'f', '1999-03-30', NULL);
+INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新插入多个数据
 ```
     * insert最后一个数据后面不能加逗号
 * mysql --help
@@ -224,33 +225,35 @@ DELETE FROM tbl_name
 * [SELECT ... INTO STATEMENT 导出数据](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
 
 * [JOIN](https://dev.mysql.com/doc/refman/8.0/en/join.html)
-
     * LEFT JOIN
 
-
+        ```
         SELECT * from pet LEFT JOIN event ON pet.name = event.name;
-        找出每个动物。存在事件就插进去。最多可能pet的行数 x event的行数
-
+        找出每个动物。存在事件就插进去。最多可能pet的行数 x event的行数  
+        ```
 
     * RIGHT JOIN
 
-
+        ```
         SELECT * FROM pet RIGHT JOIN event ON pet.name = event.name;
         找出所有的事件，如果有对应的动物，就插进去。如果对应多个，就插入多个。所以最多的行数等于pet的行数 x event的行数
-
+        ```
 
     * INNER JOIN
 
-
+        ```
         SELECT * FROM pet INNER JOIN event ON pet.name = event.name;
         找出所有的匹配，然后只看里面pet.name == event.name. 如果没匹配上，就不显示。所以最多显示的数量是 pet的数量 × event的数量
+        ```
 
     * 案例
 
-
+        ```
         SELECT pet.name TIMESTAMPDIFF(YEAR, birth, date) AS age, remark FROM pet INNER JOIN event ON pet.name = event.name WHERE event.type = 'litter';
+        ```
 
     * INNER JOIN: *把两个表格里面合并起来，只有on的条件满足了才会一起出现，否则就不显示*
+
 
 * [ ] UNION Clause
 
