@@ -1,0 +1,14 @@
+*.pyc
+*~
+*.swp
+/log/*
+/.idea/*
+/__pycache__/*
+/temp/*
+temp
+*.db
+.DS_Store
+*/node_modules/*
+.vscode/*
+.proxyrc.js
+*.out
