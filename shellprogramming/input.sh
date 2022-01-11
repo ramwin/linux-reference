@@ -1,13 +1,10 @@
 #!/bin/bash
-# Xiang Wang @ 2016-03-27 19:51:52
+# Xiang Wang(ramwin@qq.com)
 
-PS3="Choose (1-5):"
-echo "Choose from the list below."
-select name in red green blue yellow magenta
-do
-    break
+while [ true ]; do
+    read text;
+    if [ $text = 'exit' ]; then
+        exit 0;
+    fi
+    echo "您输入了: " $text;
 done
-if [ "$name" = "" ]; then
-    echo "Error in entry."
-fi
-echo "You chose $name."

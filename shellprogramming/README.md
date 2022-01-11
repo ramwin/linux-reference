@@ -98,6 +98,12 @@ done
 for i in file1 file2 file3; do  # 循环给定的列表
     rm $i
 done
+
+COUNTER=0
+while [ $COUNTER -lt 10]; do
+    echo The counter is $COUNTER
+    let COUNTER=COUNTER+1
+done
 ```
 
 # [judgement 判断](https://www.runoob.com/linux/linux-shell-process-control.html)
@@ -149,3 +155,14 @@ done
 echo "error"
 exit 123
 ```
+
+# 输入输出
+* read
+
+    read text;
+    echo "您输入了: "$text
+
+* select
+
+    select name in red green blue yellow
+    echo "You chose $name."
