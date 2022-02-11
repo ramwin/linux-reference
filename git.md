@@ -324,6 +324,11 @@ git fetch origin refs/tags/1.0.0
 #### 子模块 submodule
 * [guide文档](https://git-scm.com/docs/gitsubmodules)
 * [命令参考](https://git-scm.com/docs/git-submodule)
+* 配置
+```
+git config submodule.recurse true  # 这样在外层git checkout会导致submodule也checkout
+```
+
 * add
 ```
 git submodule add git@ramwin.com:~/small.git  # 这样会clone整个small
@@ -336,6 +341,12 @@ git clone <repository>  # submodule只会clone一个hash
 ```
 git submodule init <submodule>  # 初始化small仓库
 ```
+* foreach
+循环对每个submodule执行
+```
+git submodule foreach git clean -df
+```
+
 * update
 ```
 git submodule update small  # 初始化后，可以clone
