@@ -205,7 +205,10 @@ git diff HEAD HEAD^^ --stat  # only see the different name
 
 #### difftool
 
-    git difftool HEAD^ HEAD  # 用vimdiff横向比较文件
+```
+git config diff.tool vimdiff
+git difftool HEAD^ HEAD  # 用vimdiff横向比较文件
+```
 
 #### [notes](https://git-scm.com/docs/git-notes)
 在原有的commit基础上添加备注，而不修改原有commit
