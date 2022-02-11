@@ -452,7 +452,12 @@ echo "A" > A
 git hash-object A >> f70f10e4db19068f79bc43844b49f3eece45c4e8
 ```
 
+* [merge-base](https://git-scm.com/docs/git-merge-base)
+找到多个节点的共同祖先
 
+```
+git merge-base commitA commitB
+```
 
 ### ls-remote
 展示远程仓库的分支和tag
