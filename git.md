@@ -42,6 +42,14 @@ git commit -m '初始化'
 ```
 
 #### 使用
+* 输出pointer
+```
+$ git lfs clean < 123.txt
+version https://git-lfs.github.com/spec/v1
+oid sha256:181210f8f9c779c26da1d9b2075bde0127302ee0e3fca38c9a83f5b1dd8e5d3b
+size 4
+```
+
 * 还原特定文件
 ```
 git lfs checkout <path>
