@@ -344,14 +344,20 @@ git config submodule.recurse true  # 这样在外层git checkout会导致submodu
 ```
 git submodule add git@ramwin.com:~/small.git  # 这样会clone整个small
 ```
+
 * clone
 ```
 git clone <repository>  # submodule只会clone一个hash
+git clone --recurse-submodules  # 每个submodule都会clone下来
+git pull origin master --recurse-submodules  # 每个submodule都pull
+git checkout <hash> --recurse-submodules  # 每个submodule都checkout
 ```
+
 * init
 ```
 git submodule init <submodule>  # 初始化small仓库
 ```
+
 * foreach
 循环对每个submodule执行
 ```
