@@ -223,7 +223,7 @@ git difftool HEAD^ HEAD  # 用vimdiff横向比较文件
 ```
 git notes add -m "这个commit不可用"
 ```
-* [服务器同步notes](https://stackoverflow.com/questions/18268986/git-how-to-push-messages-added-by-git-notes-to-the-central-git-server)
+* [服务器同步notes](https://stackoverflow.com/questions/18268986/git-how-to-push-messages-added-by-git-notes-to-the-central-git-server)  
 ```
 git push <remote> refs/notes/*
 git fetch origin refs/notes/*:refs/notes/*
@@ -244,6 +244,10 @@ git checkout versin -- file1/to/restore file2/to/restore
 * 把已经add的文件还原到没add的状态
 ```
 git reset HEAD filename
+```
+* 强制丢弃已经修改的内容
+```
+git checkout <ref> -f
 ```
 
 #### [merge](https://git-scm.com/docs/git-merge)
