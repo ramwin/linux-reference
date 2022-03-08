@@ -448,9 +448,13 @@ git blame filepath  # 查看某个文件的修改记录
 #### [clean](https://git-scm.com/docs/git-clean)  
 清理untracked文件
 ```
+git clean -dfxn
+git clean -dfx
 -n dry run
 -i 交互模式,每个都问你
--f 强制删除
+-f 强制删除(一般需要，clean.requireForce默认开了)
+-d 多余的文件夹也删除
+-x 包括ignore的文件也删除
 ```
 
 #### gc
