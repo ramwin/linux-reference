@@ -357,6 +357,11 @@ git pull origin master --recurse-submodules  # 每个submodule都pull
 git checkout <hash> --recurse-submodules  # 每个submodule都checkout
 ```
 
+* diff
+```
+git diff <hash> --submodule=diff  # 每个submodule都diff
+```
+
 * init
 ```
 git submodule init <submodule>  # 初始化small仓库
