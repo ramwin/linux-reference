@@ -434,6 +434,7 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ssh -D 1080 <remote>  # 本地1080端口访问remote
 ```
 * 使用ssh开启代理克隆github
+[参考链接](https://randyfay.com/content/git-over-ssh-tunnel-through-firewall-or-vpn)
 ```
 ssh -L3333:github.com:22 wangx@singapore.ramwin.com  # 把本地3333端口，通过singapore.ramwin.com去访问github.com
 git clone ssh://git@localhost:3333/ninja-build/ninja.git  # 通过本地3333端口，访问singapore.ramwin.com来克隆github的项目
