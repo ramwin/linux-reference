@@ -229,6 +229,12 @@ git push <remote> refs/notes/*
 git fetch origin refs/notes/*:refs/notes/*
 ```
 
+#### restore
+* 还原删除的文件
+```
+git restore :/
+```
+
 ### 分支和合并 Branching and Merging
 
 #### branch
