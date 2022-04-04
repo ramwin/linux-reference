@@ -259,6 +259,12 @@ git checkout <ref> -f
 #### [merge](https://git-scm.com/docs/git-merge)
 合并分支
 
+#### [mergetool](https://git-scm.com/docs/git-mergetool)
+用来修复冲突
+```
+git mergetool --tool=vimdiff
+```
+
 #### [tag](https://git-scm.com/docs/git-tag)  
 [文档](https://git-scm.com/book/en/v2/Git-Basics-Tagging)  
 
