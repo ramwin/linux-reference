@@ -142,6 +142,10 @@ UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     * `PI()`: 3.141592
     * `SIN`: sin三角函数
 
+## Creating and Using a Database
+### Retreving information from a Table
+#### [Using More Than one Table](http://ramwin.com:3307/tutorial.html#multiple-tables)
+
 # Installing and Upgrading MySQL
 ### Postinstallation Setup and Testing
 * Securing the Initial MySQL Account

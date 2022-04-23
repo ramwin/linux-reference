@@ -134,6 +134,7 @@ swapon /swapfile
 echo "/swapfile none swap sw 0 0" >> /etc/fstab
 echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
+
 * tar
 ```
 tar -zcvf github.tar.gz github
@@ -426,6 +427,12 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ## samba  
 用来安装共享文件夹，方便多台电脑共享文件
 [安装部署教程](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-samba-share-for-a-small-organization-on-ubuntu-16-04)
+
+## [syncthing](https://docs.syncthing.net/intro/getting-started.html)
+界面美观易用的同步软件
+```
+syncthing serve --gui-address=example.com:8384
+```
 
 ## [SQLite](./sqlite/README.md)
 
