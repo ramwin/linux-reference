@@ -7,6 +7,8 @@
 * [shell编程](./shellprogramming/README.md)
 * [linux命令搜索网站](https://wangchujiang.com/linux-command/)
 
+## [cache](./cache.md)
+
 # command
 * [ ] awk
 
