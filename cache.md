@@ -69,4 +69,43 @@ pseudo least recently used
 ### Least Frequently Used  
 思考: frequency只保留次数。会不会导致一个cache一直占用着呢
 
-[next](https://www.youtube.com/watch?v=QyQf9KvkQA4&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=28)
+
+
+# 缓存一致性问题及原则
+
+## Cache Coherency Protocols
+1. 术语: 通过保存每个cache line的状态
+    * Modified: 内容是否变化, 导致和主存不一致
+    * Shared: 保存了没有变化的数据,可以出现在其他核里
+    * Invalid: 数据不在可靠了,因为其他core改了数据
+
+    * Exclusive: 只有一个core有(如果其他核读了,就变成Shared)
+    * Owned: 只有一个core拥有, 其他core可以从这里读取
+    * Forward(Shared的特殊状态). 当数据变化是,Forward需要更改其他shared的cache line
+
+### Snooping-based Protocol/Bus-based Protocol
+所有的核都监控主存, 对应数据变化是操作cache line  
+所有的protocol可以和不同的写入策略组合
+* write update:
+变更时, 修改cache line
+    * write through
+    * write back
+
+* write invalidate:
+变更时,设置成invalid.  
+思考: 但是2个核同时变更怎么办
+    * write through
+    * write back
+
+### Directory-based Protocol
+到core多时snooping-base会导致bug很busy, 所以引入directory-based protocol. 多用于集群
+每个node, 记录每个cache-line被哪些node share. 更新的时候,直接通知各个node设置成invalid
+
+
+## Ram
+Random Access Memory
+
+ddr: double data rate时钟上升沿和下降沿都可以传递一次数据
+
+
+[next](https://www.youtube.com/watch?v=nlLxrMBzsMM&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=39)
