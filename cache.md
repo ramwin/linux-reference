@@ -1,5 +1,12 @@
 [Computer Organization and Architecture](https://www.youtube.com/playlist?list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q)
 
+# CPU架构
+## 冯诺依曼结构
+指令和data都放memory
+
+## 哈佛架构
+把指令和data的内存分开存放.
+
 # direct memory mapping
 会导致间断访问时，遇到conflict miss
 ![物理实现](./cache/direct-mapping-物理实现.png)
@@ -108,4 +115,9 @@ Random Access Memory
 ddr: double data rate时钟上升沿和下降沿都可以传递一次数据
 
 
-[next](https://www.youtube.com/watch?v=nlLxrMBzsMM&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=39)
+# Secondary Memory
+磁盘. 通过virtual memory mapping实现pages来和main memory交互
+
+
+
+[next](https://www.youtube.com/watch?v=nlLxrMBzsMM&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=4)
