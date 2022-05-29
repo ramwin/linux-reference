@@ -117,7 +117,3 @@ ddr: double data rate时钟上升沿和下降沿都可以传递一次数据
 
 # Secondary Memory
 磁盘. 通过virtual memory mapping实现pages来和main memory交互
-
-
-
-[next](https://www.youtube.com/watch?v=nlLxrMBzsMM&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=4)

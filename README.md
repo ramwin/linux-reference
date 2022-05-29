@@ -406,25 +406,25 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
   
 
 ## shadowsocks
-    * 各个服务器的测速
-        * [linode](https://www.linode.com/speedtest)
-        ```
-        wget http://speedtest.newark.linode.com/100MB-newark.bin 23kb/s(宿舍，长城宽带，凌晨1点)
-        wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
-        wget http://speedtest.dallas.linode.com/100MB-dallas.bin
-        wget http://speedtest.fremont.linode.com/100MB-fremont.bin
-        wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
-        wget http://speedtest.london.linode.com/100MB-london.bin
-        wget http://speedtest.singapore.linode.com/100MB-singapore.bin
-        wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin 330kb/s(宿舍，长城宽带，晚上11点)
-        ```
-        * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
-        * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
-        ```
-        wget https://raw.githubusercontent.com/oooldking/script/master/superspeed.sh
-        sh superspeed.sh
-        ```
-        * [多个地点ping服务器](http://ping.chinaz.com/)
+* 各个服务器的测速
+    * [linode](https://www.linode.com/speedtest)
+    ```
+    wget http://speedtest.newark.linode.com/100MB-newark.bin 23kb/s(宿舍，长城宽带，凌晨1点)
+    wget http://speedtest.atlanta.linode.com/100MB-atlanta.bin
+    wget http://speedtest.dallas.linode.com/100MB-dallas.bin
+    wget http://speedtest.fremont.linode.com/100MB-fremont.bin
+    wget http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin
+    wget http://speedtest.london.linode.com/100MB-london.bin
+    wget http://speedtest.singapore.linode.com/100MB-singapore.bin
+    wget http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin 330kb/s(宿舍，长城宽带，晚上11点)
+    ```
+    * [digitalocean](http://speedtest-sfo1.digitalocean.com/)
+    * [服务器上测试中国各地区的网址](https://github.com/oooldking/script)
+    ```
+    wget https://raw.githubusercontent.com/oooldking/script/master/superspeed.sh
+    sh superspeed.sh
+    ```
+    * [多个地点ping服务器](http://ping.chinaz.com/)
 
 ## samba  
 用来安装共享文件夹，方便多台电脑共享文件
@@ -513,6 +513,18 @@ tsocks firefox
     * 下箭头: ctrl+N(ext)
     * 左箭头: ctrl+B(ack)
     * 右箭头: ctrl+F(orward)
+
+## [tldr](https://github.com/tldr-pages/tldr)
+too long don't read, 解决用man查看文档过于冗长的情况.
+快速查看命令的文档
+```
+sudo pip3 install tldr
+# 临时使用
+tldr ls -s "http://tldr.ramwin.com/pages/"
+# 永久设置ramwin源
+export TLDR_PAGES_SOURCE_LOCATION="http://tldr.ramwin.com/pages/"
+tldr ls
+```
 
 ## ufw
 * 打开/关闭ufw
