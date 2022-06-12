@@ -9,30 +9,66 @@
 
 ## [cache](./cache.md)
 
+## 操作系统
+### 文件系统
+* 文件类型
+通过ls看文件时, 可以看到文件类型
+    * `-`: 普通文件
+    * d: 目录
+    * b: 块设备(支持seek读写)
+    * l: 链接
+    * s: socket链接
+    * p: 管道
+
+* stat
+查看某个文件的 inode 号, 状态
+
+* losetup
+把某个文件挂载到某个设备.但是wsl现在还不支持
+
+* chroot <directory>
+把某个文件夹当作根目录,并执行 <director>/bin/bash
+
+* lsof -p $$
+查看当前进程的文件描述符, 或者直接进入 `/proc/<processid>/fd` 查看
+
+* exec 8< <path>
+把<path>当作我的输入, 赋予8号
+
+
 # command
+各种命令
+
 * [ ] awk
 
     awk '{print $1}' filename
 
 * chardet3 检测文件编码
-* cp:
-复制一个文件或者文件夹  
-    * 不会删除原有的文件
-    * -i: 如果遇到重复的文件，就进行询问
-    * -n: 如果遇到重复的文件，就不复制
-    * -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
-    * -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
-    * -v: 显示复制的过程
-* curl
+
+## cp:
+复制一个文件或者文件夹.  
+* 赋值多个文件
+
+    cp /lib64/{a.so,b.so,c.so} /lib/
+
+* 不会删除原有的文件
+* -i: 如果遇到重复的文件，就进行询问
+* -n: 如果遇到重复的文件，就不复制
+* -r: 把文件夹内部的所有文件都复制出来。会覆盖掉重名文件
+* -u: 把文件夹内部的所有文件都复制出来，保留新的那个文件
+* -v: 显示复制的过程
+
+## curl
     * post请求: `curl -d 'name=value' <url>`
     * 发送文件: `curl -F 'data=@path/to/local/file' <url>`
-* dd:
+## dd:
 复制文件
-    * [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
-    ```
-    dd if=/dev/zero of=tempfile conv=fdatasync bs=384k count=1k; 
-    $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
-    ```
+* [测试磁盘速度](https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/)
+```
+dd if=/dev/zero of=tempfile conv=fdatasync bs=384k count=1k; 
+$ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
+```
+
 * dig  
 用drill
 * diff:
@@ -81,7 +117,7 @@ x,y,z代表了属性
 * grep
 `grep string <file>`: 从file中找到文字
 
-## htop
+* htop
 
     htop -u wangx  # 仅看某个用户的进程
 
@@ -95,6 +131,10 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
+
+## ldd
+查看某个可执行文件需要的动态链接库
+
 ## mount
 * [挂载内存硬盘](https://www.linuxbabe.com/command-line/create-ramdisk-linux)
 
@@ -170,6 +210,9 @@ Tidy Advocacy Community Group.
 
 ## wc
 * 按照文件的行数来排序: `ls | xargs wc -l | sort -nr`
+
+## whereis
+查看某个命令的地址
 
 ## zentify
 * `zenity --info --text '保护视力，休息一会'`
