@@ -95,8 +95,15 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
 * ip: 查看网卡端口 `ip link show`
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
+
 ## mount
 * [挂载内存硬盘](https://www.linuxbabe.com/command-line/create-ramdisk-linux)
+* 自动挂载
+```
+/etc/fstab
+UUID=B2A0348DA03459D5 /run/media/wangx/samsung ntfs umask=0077,gid=1001,uid=1000 0 0
+UUID=222E77452E771151 /run/media/wangx/E ntfs defaults,rw,user 0 0
+```
 
 ## notify-send
     * `notify-send 保护视力，休息一会`
@@ -154,6 +161,16 @@ Tidy Advocacy Community Group.
 * tr
     * [参考网站](http://www.linfo.org/tr.html)
     * `tr -d '{{input_characters}}'` *删除文件内指定的字符串*
+
+### umask
+查看当前默认的权限(一般是0022, 但是覆盖掉group和other的写入权限)
+```
+$ umask
+0022
+$ umask 0027  # 我习惯关闭其他所有用户的权限
+```
+
+
 * unrar
     `unrar x file.part01.rar` 解压文件，会自动把多个文件一起解压
     `unrar e netease.part01.rar  <director>`  解压文件到指定路径

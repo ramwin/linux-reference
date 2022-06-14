@@ -15,3 +15,11 @@
     sudo usermod -aG docker wang
     sudo usermod -aG sudo wang  // 允许wang执行sudo命令
 ```
+
+* 查看uid, gid
+```
+$ whoami
+wangx
+$ id wangx
+uid=1000(wangx) gid=1001(wangx) 组=1001(wangx),998(wheel),991(lp),3(sys),90(network),98(power),1000(autologin),965(docker)
+```
