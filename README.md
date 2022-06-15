@@ -153,6 +153,15 @@ UUID=222E77452E771151 /run/media/wangx/E ntfs defaults,rw,user 0 0
     * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
     * `rename -v '20190415' '2019-04-15' *.json`
 
+## read
+读取输入, 赋予给某个变量
+```
+read PATH p
+read PATH -p "输入你要处理的文件路劲: " p
+echo $p
+```
+
+
 ## sed
 * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
 * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
