@@ -35,6 +35,12 @@
 * exec 8< <path>
 把<path>当作我的输入, 赋予8号
 
+#### page cache
+修改`/etc/sysctl.confg`后运行 sysctl -p
+
+    vm.dirty_background_ratio  # 用了多少百分比内存后开始写入磁盘, 默认10(我觉得20不错)
+    vm.dirty_ratio  # 达到多少后,系统会阻塞IO, 默认20(我觉得80不错)
+    vm.dirty_expire_centisecs = 3000  # 30秒后, 脏页一定被写入磁盘
 
 # command
 各种命令
@@ -96,20 +102,23 @@ dril @dnsserver
 ```
 du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
 ```
-* echo: 输出文字
-```
-echo -e "\e[x;y;zm我要的文字\e[0m"
-x,y,z代表了属性
-颜色: 黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，洋红=35，青色=36，白色=37
-背景色: 黑色=40，红色=41，绿色=42，黄色=43，蓝色=44，洋红=45，青色=46，白色=47
-其他效果: 0 关闭所有属性、1 设置高亮度（加粗）、4 下划线、5 闪烁、7 反显、8 消隐
-```
-  * -n: 不要添加换行符
-  * -e: 对反斜杠`\`进行转义
-  ```
-  echo -e "\0100"
-  echo -e '\xe6\x88\x91'
-  ```
+
+## echo: 输出文字
+
+    echo $?  # 上一个命令的退出码
+    echo -e "\e[x;y;zm我要的文字\e[0m"
+    x,y,z代表了属性
+    颜色: 黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，洋红=35，青色=36，白色=37
+    背景色: 黑色=40，红色=41，绿色=42，黄色=43，蓝色=44，洋红=45，青色=46，白色=47
+    其他效果: 0 关闭所有属性、1 设置高亮度（加粗）、4 下划线、5 闪烁、7 反显、8 消隐
+
+* -n: 不要添加换行符
+* -e: 对反斜杠`\`进行转义
+
+
+    echo -e "\0100"
+    echo -e '\xe6\x88\x91'
+
 
 * exit: 退出
 * fdisk: 对磁盘进行分区
@@ -158,6 +167,12 @@ UUID=222E77452E771151 /run/media/wangx/E ntfs defaults,rw,user 0 0
     * `rename 's/(\d+).png/banner-\1.png/g' *` *替换目录下的所有banner*
     * `rename -v '20190415' '2019-04-15' *.json`
 
+## pstree
+
+    pstree -p <user> # 查看所有进程
+    pstree -p wangx  # 查看某个用户的进程
+
+
 ## read
 读取输入, 赋予给某个变量
 ```
@@ -187,7 +202,7 @@ echo $p
 su -s /bin/bash www-data  # 使用www-data来执行bash命令
 
 
-* swap
+## swap
 ```
 fallocate -l 8G /swapfile
 chmod 600 /swapfile
@@ -197,7 +212,13 @@ echo "/swapfile none swap sw 0 0" >> /etc/fstab
 echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
 
-* tar
+## sysctl
+
+    sysctl -a 查看所有的属性
+    sysctl -a | grep dirty
+    sysctl -p  # 更新系统配置
+
+## tar
 ```
 tar -zcvf github.tar.gz github
 tar -c -f project.tar --exclude=".git*" project/
