@@ -213,10 +213,14 @@ echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
 
 ## sysctl
+设定系统参数, 配置在`/etc/sysctl.conf`
 
     sysctl -a 查看所有的属性
     sysctl -a | grep dirty
     sysctl -p  # 更新系统配置
+
+* `fs.inotify.max_user_watches`
+允许用户监听的最大文件数
 
 ## tar
 ```
