@@ -158,6 +158,14 @@ UUID=B2A0348DA03459D5 /run/media/wangx/samsung ntfs umask=0077,gid=1001,uid=1000
 UUID=222E77452E771151 /run/media/wangx/E ntfs defaults,rw,user 0 0
 ```
 
+* 选项
+```
+rw 读写
+errors={panic|continue|remount-ro}
+umask=覆盖掉哪些权限(0077就是只保留用户权限)
+gid uid 挂载给哪个用户
+```
+
 ## notify-send
     * `notify-send 保护视力，休息一会`
 * rar
