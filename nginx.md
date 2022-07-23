@@ -51,3 +51,20 @@ server {
     }
 }
 ```
+* gzip压缩
+```
+server {
+    gzip on;
+    gzip_comp_level 6;
+    gzip_types text/markdown text/css text/plain text/javascript application/javascript;
+}
+```
+* 目录访问
+```
+server {
+    location / {
+        try_files $uri $uri/ =404;
+        autoindex on;
+    }
+}
+```
