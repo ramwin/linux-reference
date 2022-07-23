@@ -16,17 +16,38 @@ make install
 * 每个worker又都是异步的, IO 多路复用
 
 ## 配置
-```
 * 配置socket
+```
 location /ws {
     proxy_pass http://socket.ramwin.com/ws;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "Upgrade";
 }
+```
 * 配置路径
+```
 location /media_url/ {
     # internal;  # 这个可以让这个url必须内部django返回才处理
     alias /var/www/media/;
+}
+```
+* 使用变量
+```
+set ROOT=/home/web/djangoproject
+location /django_media {
+    alias ${ROOT}/django_media
+}
+```
+* 代理到socks
+```
+upstream site {
+    server unix:<file.sock>
+}
+server {
+    location /api {
+        proxy_pass http://site;
+        proxy_set_header Host $host;
+    }
 }
 ```
