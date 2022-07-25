@@ -554,6 +554,15 @@ ssh -D 1080 <remote>  # 本地1080端口访问remote
 ssh -L3333:github.com:22 wangx@singapore.ramwin.com  # 把本地3333端口，通过singapore.ramwin.com去访问github.com
 git clone ssh://git@localhost:3333/ninja-build/ninja.git  # 通过本地3333端口，访问singapore.ramwin.com来克隆github的项目
 ```
+* 测试密码登录是否关闭
+```shell
+ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no 
+```
+* SetEnv
+登录后修改环境变量，一般服务器sshd只会允许设置`LC_*`
+```shell
+ssh -o "SetEnv LC_A=2"  # 这样服务器的 LC_A就是2了。 
+```
 
 ## sshd
 [配置文档](https://linux.die.net/man/5/sshd_config)
