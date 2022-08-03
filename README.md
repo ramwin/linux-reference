@@ -292,54 +292,7 @@ $ umask 0027  # 我习惯关闭其他所有用户的权限
 
 # software 软件
 
-## airflow
-* 安装
-
-
-    sudo pip install airflow
-    airflow db init
-    airflow users create \
-        --username admin \
-        --firstname Peter \
-        --lastname Parker \
-        --role Admin \
-        --email spiderman@superhero.org
-    airflow webserver --port 8080
-    airflow scheduler
-
-### Dag
-执行时间: 04分的时候，执行的是00分的任务
-
-
-    from airflow import DAG
-    with DAG(
-    ) as dag:
-        t1 = PythonOperator()
-        t2 = PythonOperator()
-        t1 >> t2
-
-* 属性
-    * `start_date`
-    务必设置成一两天前，因为如果时now的话，airflow会不断地重新载入dag.py文件从而导致每次检查时发现start_date都是在以后
-
-    * `schedule_interval=""`
-    可以输入timedelta或者直接输入contab的规则  
-    timedelta(seconds=60)  "*/6 * * * *"  # 注意这个是按照utc时间来的  
-    执行任务的时候，execution_date是上一次crontab的时间. 比如今天执行，那么execution_date就是昨天  
-
-
-        * * * * * 会导致36分的时候，执行35分的任务
-        47 * * * * 会导致今天47分的时候执行 1小时前47分的任务
-        31 6 * * * 会导致今天14:31时执行昨天14:31的任务
-
-#### ExternalTaskSensor
-默认情况下，如果一个dag以来了其他的dag，会找`executiong_date`一致的dag，看他是否成功。
-
-    ExternalTaskSensor(
-        external_dag_id="run_python",
-        external_task_id="taask1",
-        timeout=160
-    )
+## [airflow](https://github.com/ramwin/airflowtest/)
 
 
 ## celery  
