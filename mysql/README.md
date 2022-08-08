@@ -8,30 +8,39 @@ docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
 ```
 
 # tutorial 命令大全
-* `GRANT ALL ON <databasename>.* TO '<username>'@'<host>';`
 
-* ## CREATE
+## CREATE
 **表的名称绝对不能有引号**  
 _最后一行千万不要有逗号_  
-    * 示例
-    ```
-        CREATE DATABASE menagerie character set utf8mb4;
-        CREATE TABLE <tablename> (column, column);
-        create table user ( 
-            id SMALLINT unsigned not null auto_increment primary key,
-            name VARCHAR(50) comment '用户名',  -- comment来写注释
-            )
-        CREATE TABLE shop (
-            article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
-            dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
-            price   DOUBLE(16,2)             DEFAULT '0.00' NOT NULL,
-            `title` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL
-        )
-    ```
-    * 参考
-        * DEFAULT: 默认值
-        * NOT NULL: 不能为空
-        * COLLATE: 编码
+
+* 示例
+```sql
+CREATE DATABASE menagerie character set utf8mb4;
+CREATE TABLE <tablename> (column, column);
+create table user ( 
+    id SMALLINT unsigned not null auto_increment primary key,
+    name VARCHAR(50) comment '用户名',  -- comment来写注释
+    )
+CREATE TABLE shop (
+    article INT(4) UNSIGNED ZEROFILL DEFAULT '0000' NOT NULL,
+    dealer  CHAR(20)                 DEFAULT ''     NOT NULL,
+    price   DOUBLE(16,2)             DEFAULT '0.00' NOT NULL,
+    `title` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL
+)
+```
+* 参考
+    * DEFAULT: 默认值
+    * NOT NULL: 不能为空
+    * COLLATE: 编码
+
+### column定义
+顺序不能错
+
+```sql
+col_name data_type [NOT NULL|NULL] [DEFAULT {literal|expr}] [AUTO_INCREMENT] [[PRIMARY] KEY]
+id int not null auto_increment primary key
+```
+
 
 ## Drop
 ```
