@@ -83,6 +83,15 @@ echo ${list[0]}  # 第0行
 echo ${list[*]}  # 所有行用@也可以。但是如果没有*和@就会变成输出第一个元素
 array=(red green blue yellow magenta)  # 通过括号和空格来区分
 ```
+* 获取数组长度
+```
+${#array[@]}
+```
+* 字符串切割变成数组
+```
+line=`cat input.txt`
+array=($line)  # 变成了列表
+```
 
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
 ```
