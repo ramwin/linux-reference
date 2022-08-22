@@ -81,6 +81,7 @@ if [[ ${version,,} == *"manjaro"* ]]; then
 list=($(cat test.txt))  # 读取文件，把所有单词变成一个数组, 注意不是所有行
 echo ${list[0]}  # 第0行
 echo ${list[*]}  # 所有行用@也可以。但是如果没有*和@就会变成输出第一个元素
+array=(red green blue yellow magenta)  # 通过括号和空格来区分
 ```
 
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
@@ -103,6 +104,11 @@ COUNTER=0
 while [ $COUNTER -lt 10]; do
     echo The counter is $COUNTER
     let COUNTER=COUNTER+1
+done
+
+while [ $i -lt $array ]; do  # while循环列表
+    echo "$i: ${array[$i]}"
+    let i++
 done
 ```
 
