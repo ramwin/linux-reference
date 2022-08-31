@@ -525,6 +525,7 @@ ssh -o "SetEnv LC_A=2"  # 这样服务器的 LC_A就是2了。
 vim /etc/ssh/sshd_config
 ClientAliveInterval: 60 #如果超过多少时间没有消息，就主动发送一个, 不要设置太小，不然ssh可能无法重启(因为发送频率太高了)
 ClientAliveCountMax 3
+PasswordAuthentication no  是否允许密码登录
 ```
 
 ## [supervisor](http://supervisord.org/index.html)
