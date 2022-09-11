@@ -181,3 +181,7 @@ exit 123
 
     select name in red green blue yellow
     echo "You chose $name."
+
+
+# built
+* 某些时候你的命令比如cd被alias了, 用`built in cd`可以执行原始的cd命令
