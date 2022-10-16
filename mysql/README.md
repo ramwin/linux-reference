@@ -354,12 +354,13 @@ select *, JSON_EXTRACT(json, '$.key1') b from testjson where JSON_EXTRACT(json, 
 
 # [backup and restore 备份与恢复](https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html)
 ## outfile
-    ```
-    SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
-    FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
-    FROM test_table;
-    ```
+
+```sql
+SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+FROM test_table;
+```
 
 ## [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 * 示例代码
