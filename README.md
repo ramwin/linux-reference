@@ -569,20 +569,7 @@ server_type = 5
 tsocks firefox
 ```
 
-## terminal终端
-* [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE) [快捷键参考2](https://www.cnblogs.com/zhouj-happy/p/11375658.html)
-* 删除快捷键:
-    alt+d: 删除光标右边的单词
-    ctrl+w: 删除当前光标左边的单词
-* 移动
-    * 移动: 左|下|上|右 ctrl+b | ctrl+n | ctrl+p | ctrl+f
-    * 移动一个单词: alt+b | alt+f
-* 快捷键:
-    * 清屏: ctrl+l
-    * 上箭头: ctrl+P(reviou)
-    * 下箭头: ctrl+N(ext)
-    * 左箭头: ctrl+B(ack)
-    * 右箭头: ctrl+F(orward)
+## [terminal终端](./terminal.md)
 
 ## [tldr](https://github.com/tldr-pages/tldr)
 too long don't read, 解决用man查看文档过于冗长的情况.
