@@ -72,7 +72,8 @@ set t_vb=  # 防止屏幕闪烁
     * [跨行搜索](http://vim.wikia.com/wiki/Search_across_multiple_lines)
 
 # 搜索
-使用`/`按键来进行搜索.搜索结束后输入`:noh`来[关闭高亮](https://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting)
+* 使用`/`按键来进行搜索.搜索结束后输入`:noh`来[关闭高亮](https://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting)
+* `:%s/pattern//ng` 来查看出现次数 n代表不替换
 
 # 替换
 * 位置的选择

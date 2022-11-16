@@ -54,5 +54,11 @@ psql <databasename>
     1. Integer Types
 
 ### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
-* [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  
-`\dt`
+* [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
+* 展示所有数据库 `\l`
+
+### 权限
+* 允许用户创建表
+```sql
+ALTER USER <username> CREATEDB
+```
