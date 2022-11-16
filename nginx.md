@@ -48,6 +48,9 @@ server {
     location /api {
         proxy_pass http://site;
         proxy_set_header Host $host;
+        proxy_set_header X_FORWARDED_PROTO $schema;
+        # 把 https 传给proxy 这样django可以通过设置
+        # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') 来知道是否用了https
     }
 }
 ```
