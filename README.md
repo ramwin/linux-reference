@@ -326,6 +326,14 @@ $ umask 0027  # 我习惯关闭其他所有用户的权限
 
     -scheme:chrome-extension 关闭插件的network
 
+## convert
+转化图片分辨率
+
+```bash
+sudo apt install imagemagick
+convert image.png -resize 50% image2.png
+```
+
 ## [crontab](./crontab.md)
 定时任务脚本, 默认路径就是~. 所以可以直接运行home下的文件, 也可以用`~`
 * 日志重定向
