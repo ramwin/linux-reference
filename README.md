@@ -308,19 +308,19 @@ $ umask 0027  # 我习惯关闭其他所有用户的权限
 * cvim
 一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
 
-
-    let searchlimit = 4
-    let blacklists = ["https://ecs.console.aliyun.com/*"]
-    let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
-    showTodoRest -> {{
-      var doms = document.getElementsByClassName("todo-rest")
-      for (var i=0; i<doms.length; i++) {
-        var dom = doms[i];
-        dom.setAttribute("tabindex", true);
-
-      }
-    }}
-    call showTodoRest
+```
+let searchlimit = 4
+let blacklists = ["https://ecs.console.aliyun.com/*"]
+let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
+showTodoRest -> {{
+  var doms = document.getElementsByClassName("todo-rest")
+  for (var i=0; i<doms.length; i++) {
+    var dom = doms[i];
+    dom.setAttribute("tabindex", true);
+  }
+}}
+call showTodoRest
+```
 
 * 调试
 
