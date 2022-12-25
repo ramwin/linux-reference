@@ -1,3 +1,6 @@
+export HTTPS_PROXY="http://localhost:1080"
+export HTTP_PROXY="http://localhost:1080"
+
 # 用来在windows目录下用windows的git
 cd() {
     builtin cd "$1"
