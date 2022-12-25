@@ -38,9 +38,20 @@
 #### page cache
 修改`/etc/sysctl.confg`后运行 sysctl -p
 
-    vm.dirty_background_ratio  # 用了多少百分比内存后开始写入磁盘, 默认10(我觉得20不错)
-    vm.dirty_ratio  # 达到多少后,系统会阻塞IO, 默认20(我觉得80不错)
-    vm.dirty_expire_centisecs = 3000  # 30秒后, 脏页一定被写入磁盘
+```
+vm.dirty_background_ratio  # 用了多少百分比内存后开始写入磁盘, 默认10(我觉得20不错)
+vm.dirty_ratio  # 达到多少后,系统会阻塞IO, 默认20(我觉得80不错)
+vm.dirty_expire_centisecs = 3000  # 30秒后, 脏页一定被写入磁盘
+```
+
+#### 文件架构 hier
+```
+man hier
+```
+* `/usr/`  
+usr目录一般是从其他地方挂载的. shareable, read-only. 多个机器可以公用一个usr
+* `/usr/local/lib`
+个人理解, local就是从本地挂载了. 
 
 # command
 各种命令
