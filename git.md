@@ -344,9 +344,14 @@ annotated tag会保留谁在什么时候提交的tag
 git fetch origin refs/tags/1.0.0
 ```
 
-#### push 推送
+#### [push 推送](https://git-scm.com/docs/git-push)
 
-* 推送指定分支 `git push origin <local_branch>:<remote-branch> <local_branch2>:<remote-branch2>`
+* 推送指定分支
+
+```bash
+git push origin <local_branch>:<remote-branch> <local_branch2>:<remote-branch2>
+git push origin 1.0.0:master
+```
 
 #### 子模块 submodule
 * [guide文档](https://git-scm.com/docs/gitsubmodules)
