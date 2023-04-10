@@ -500,7 +500,20 @@ git fetch <filename> master:other-master  # 把bundle文件中的master分支复
 ```
 
 ### 其他插件 Plumbing Commands
-* hash-object
+
+#### cat-file
+查看文件类型, 如果是commit可以看到对应的tree. 如果是文件, 可以直接看到内容
+```
+git cat-file -p <hash>  # hash文件用zlib直接打开可以看到内容
+commit 227tree d47ac169be14144d8b80807645bf9d00497cb907
+parent ef8d12680f2a5eec968320d7868985a1f9574f36
+author Xiang Wang <ramwin@qq.com> 1680442265 +0800
+committer Xiang Wang <ramwin@qq.com> 1680442265 +0800
+
+terminal连续执行命令
+```
+
+#### hash-object
 生成一个文件的hash
 
 ```shell
@@ -515,6 +528,12 @@ git hash-object A >> f70f10e4db19068f79bc43844b49f3eece45c4e8
 
 ```
 git merge-base commitA commitB
+```
+
+### ls-tree
+查看一个tree的文件内容(包含文件夹下的子文件夹的treenode和文件的node, 只有一层)
+```
+git ls-tree <hash>
 ```
 
 ### ls-remote
