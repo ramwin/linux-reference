@@ -207,6 +207,7 @@ echo $p
 
 
 ## sed
+* `echo '.\foo\bar.xml' | sed 's/\\/\//g'`  * 把复制的windows路径转化成linux路径, 注意[务必是单引号](https://stackoverflow.com/questions/6852951/use-sed-to-replace-all-backslashes-with-forward-slashes)
 * `sed -i 's/pattern/replace/g' <filename>` *把文件内满足pattern的替换成replace*
 * `sed -i 's/\r$//g' <filename>` *删除文件的`\r`*  
 * `sed -r 's/useless([0-2]{2,})replace/\1/' test.txt` *替换某段字符并提取出里面的信息*
