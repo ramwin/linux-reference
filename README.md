@@ -148,8 +148,13 @@ echo $?  # 查看上次命令的状态码
 `grep string <file>`: 从file中找到文字
 
 * htop
-
-    htop -u wangx  # 仅看某个用户的进程
+[各种内存的概念](https://www.orchome.com/298)
+virt: 虚拟内存(可能你申请了很大， 但是实际上映射到物理内存数量很小)
+res: 驻留内存(包含了程序自身占用的物理内存和占用的共享内存)
+shr: 共享内存(动态链接库会只保留一份)
+```
+htop -u wangx  # 仅看某个用户的进程
+```
 
 
 * hddtemp: 查看硬盘的温度
