@@ -1,5 +1,4 @@
-**Xiang Wang @ 2017-06-21 10:59:41**
-
+### git
 [git官网](https://git-scm.com/doc)  
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
@@ -107,21 +106,25 @@ git config --global push.default matching
 * 设置忽略文件权限修改: `git config core.filemode false`
 
 * 全局设定
+
 ```
-设置 .gitconfig
-    [core]
-        excludesfile = ~/.gitignore_global
-        bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
-编辑 `.gitignore_global`
+~/.gitconfig
+[core]
+    excludesfile = ~/.gitignore_global
+    bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
+
+~/.gitignore_global`
+cat gitignore_global >> ~/.gitignore_global
 ```
 
 * 服务器允许pull指定的commit
 uploadpack.allowReachableSHA1InWant=true
 
 * core.compression 和 core.looseCompression
-只要设置了core.compression, 得到的pack就是一样的, 但是md5和原始文件不同
-    * test 文件夹, 默认, 一个windows10安装包 4.7G(5,010,587,648), 联想的普通机械硬盘, origin是同一个文件夹下面的另外一个文件夹
-    ```
+只要设置了core.compression, 得到的pack就是一样的, 但是md5和原始文件不同  
+    * test 文件夹, 默认, 一个windows10安装包 4.7G(5,010,587,648), 联想的普通机械硬盘, origin是同一个文件夹下面的另外一个文件夹  
+
+    ```bash
     git add .  # 耗时3分20秒
     git commit -m "" # 立马结束
     objects/pack-c36dxxx76f5.pack 4.6G 4953058178字节
@@ -141,7 +144,8 @@ uploadpack.allowReachableSHA1InWant=true
     ```
 
     * test1 文件夹, 都设置成0
-    ```
+
+    ```bash
     git add .  # 耗时1分25秒
     git commit -m "" # 立马结束
     pack-5854xxx2d65.pack 4.7G 5011352247字节
@@ -174,6 +178,13 @@ uploadpack.allowReachableSHA1InWant=true
     git push origin2 master  # 耗时4分11秒
     objects/85/44441acexxxx3c21 5011352225字节
     ```
+
+#### Core
+* sshCommand
+```
+git config core.sshCommand "ssh -i <自定义密钥>"
+```
+
 ### 获取或者创建项目 getting and creating projects
 
 #### init
