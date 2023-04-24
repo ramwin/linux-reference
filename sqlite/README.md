@@ -1,6 +1,16 @@
 **Xiang Wang @ 2019-12-31 10:18:41**
 
 [官网](http://www.sqlitetutorial.net/)
+* [如果命令写错了怎么办](https://unix.stackexchange.com/questions/291083/sqlite3-command-line-how-do-you-cancel-a-command)  
+用3个***故意写个错误的语法
+```
+sqlite> select * from todos'
+   ...> '
+   ...> *** I made a mistake
+   ...> ;
+Error: near "*": syntax error
+sqlite>
+```
 
 ### 9. 修改数据
 #### [insert 插入数据](https://www.sqlitetutorial.net/sqlite-insert/)

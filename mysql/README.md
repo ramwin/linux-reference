@@ -167,6 +167,12 @@ mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 * [Loading Data into a Table](https://dev.mysql.com/doc/refman/8.0/en/loading-tables.html)
 见SQL Statements - Data Manipulation Statements - LOAD DATA Statement
 
+# MySQL Programs::Client Programs::[mysql Client Commands](https://dev.mysql.com/doc/refman/8.0/en/mysql-commands.html)
+```
+mysql> help
+\c 取消当前的输入
+```
+
 # SQL Statements
 ## Data Definition Statements
 ### CREATE TABLE Statements
