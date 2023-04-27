@@ -12,6 +12,16 @@ Error: near "*": syntax error
 sqlite>
 ```
 
+* [比较所有表的尺寸](https://stackoverflow.com/questions/27572387/query-that-returns-the-size-of-a-table-in-a-sqlite-database)
+```sql
+SELECT name ,SUM(pgsize)/1024 table_size  FROM "dbstat" GROUP BY name ORDER BY table_size desc;
+```
+
+* 查看所有表
+```sql
+select * from sqlite_master;
+```
+
 ### 9. 修改数据
 #### [insert 插入数据](https://www.sqlitetutorial.net/sqlite-insert/)
 * 语法
