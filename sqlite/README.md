@@ -1,6 +1,6 @@
-**Xiang Wang @ 2019-12-31 10:18:41**
+[sqlite tutorial 官网](http://www.sqlitetutorial.net/)  
+[sqlite org](https://sqlite.org/index.html)  
 
-[官网](http://www.sqlitetutorial.net/)
 * [如果命令写错了怎么办](https://unix.stackexchange.com/questions/291083/sqlite3-command-line-how-do-you-cancel-a-command)  
 用3个***故意写个错误的语法
 ```
@@ -15,16 +15,20 @@ sqlite>
 ### 9. 修改数据
 #### [insert 插入数据](https://www.sqlitetutorial.net/sqlite-insert/)
 * 语法
+```sql
 > INSERT INTO table (column1,column2 ,..)  
 VALUES( value1,	value2 ,...);
+```
+
 * 案例
 
-
-    insert into pets values (null, 'cat'); // 不指定id
-    insert into pets values (1, 'cat');  // 指定id
-    >>> Error: UNIQUE constraint failed: pets.id
-    insert into pets values (null, 'cat'), (null, 'dog');  // 批量插入数据
-    insert into pets (name) values ('cat'), ('dog');  // 指定表头顺序
+```sql
+insert into pets values (null, 'cat'); // 不指定id
+insert into pets values (1, 'cat');  // 指定id
+>>> Error: UNIQUE constraint failed: pets.id
+insert into pets values (null, 'cat'), (null, 'dog');  // 批量插入数据
+insert into pets (name) values ('cat'), ('dog');  // 指定表头顺序
+```
 
 #### Update
 #### Delete
@@ -55,21 +59,6 @@ attach "filename" as <dbname>;
     "channel" varchar(32) NOT NULL);  
 
 * [ ] drop
-* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
-```
-.output backup.sql
-.dump
-.exit
-或者
-.output test.txt
-select * from table;
-```
-* read 还原数据库
-```
-sqlite3 test.db
-.read <filename>
-.import 文件名 表名
-```
 * rename
 ```
 ALTER TABLE <表> RENAME TO <临时表名>
@@ -121,9 +110,27 @@ INSERT INTO <表> SELECT * FROM <临时表名>
 ### Section 17
 #### [引入csv文件](https://www.sqlitetutorial.net/sqlite-import-csv/)
 
+```sql
+create table <tablename>(field1, field2)
+.mode csv
+.import <filepath> <tablename>
+```
 
-    ```
-    create table <tablename>(field1, field2)
-    .mode csv
-    .import <filepath> <tablename>
-    ```
+#### 导出和备份数据
+* [dump 备份数据库](http://www.sqlitetutorial.net/sqlite-dump/)
+```
+.output backup.sql
+.dump
+.exit
+或者
+.output test.txt
+select * from table;
+```
+
+* read 还原数据库  
+如果你是从mysqldump出来的数据, 可以用[工具](https://github.com/dumblob/mysql2sqlite)进行转化
+```
+sqlite3 test.db
+.read <filename>
+.import 文件名 表名
+```
