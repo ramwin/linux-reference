@@ -463,6 +463,18 @@ git revert HEAD^^...HEAD  # 注意前开后闭区间
 git revert -n/--no-commit HEAD^^...HEAD
 ```
 
+* rebase的时候保留之前修复冲突的情况
+```
+rebase_base - rebase_a - rebase_final(76187ed)
+            \          /
+              rebase_b 
+
+
+[rebase_final] $ git rebase rebase_a
+修复冲突时保留了rebase_b的版本
+rebase_base - rebase_a - rebase_b 但是中间的C没改
+```
+
 ### 排查 Debugging
 
 #### bisect
