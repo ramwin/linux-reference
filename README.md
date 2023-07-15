@@ -618,6 +618,10 @@ ufw status numbered
 ```
 ufw allow from 172.16.15.66 to any port 6379
 ```
+* 批量开启
+```
+ufw allow 19000:19999/tcp commment "批量开启测试端口"
+```
 
 ## [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
