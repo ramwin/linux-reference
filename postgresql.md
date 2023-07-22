@@ -3,7 +3,7 @@
 
 ### [Tutorial](https://www.postgresql.org/docs/current/tutorial.html)
 1. [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
-```
+```shell
 sudo apt install postgresql postgresql-contrib
 sudo -i -u postgres
 psql
@@ -41,21 +41,44 @@ psql <databasename>
     ```
 
 ### The SQL Language
-#### 数据定义
+#### 数据定义 Data 
 * 约束
     * check约束
     ```
     create table weather ( temp_lo int CHECK (temp_lo > 0) );
     ```
+
+#### [5.7 Privileges 权限](https://www.postgresql.org/docs/current/ddl-priv.html)
+* 更改表的权限
+```sql
+ALTER TABLE <table_name> OWNER TO <role_name>;  // 变更表，数据库的owner
+GRANT SELECT ON <table_name> TO <role_name>;  // 允许某个用户查询某个表
+REVOKE ALL ON role2_s_table FROM wangx;  // 不允许wangx操作role2_s_table
+```
+* 查看表的权限
+```
+\dp role2_s_table;
+```
+
 #### 数据类型
 1. Numeric Types
     1. Integer Types
+
+### Sever Administration 服务器管理
+
+#### Database Roles
+
+```sql
+CREATE ROLE <name>;
+DROP ROLE <name>;
+SELECT rolname FROM pg_roles;
+```
 
 ### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
 * 展示所有数据库 `\l`
 
-### 权限
+#### 权限
 * 允许用户创建表
 ```sql
 ALTER USER <username> CREATEDB
