@@ -54,10 +54,20 @@ psql <databasename>
 ALTER TABLE <table_name> OWNER TO <role_name>;  // 变更表，数据库的owner
 GRANT SELECT ON <table_name> TO <role_name>;  // 允许某个用户查询某个表
 REVOKE ALL ON role2_s_table FROM wangx;  // 不允许wangx操作role2_s_table
+REVOKE DELETE ON <table_name> TO <role_name>;  // 删除用户的DELETE权限
 ```
 * 查看表的权限
+r是select权限
+a是insert权限
+w是update权限
+d是delete权限
 ```
 \dp role2_s_table;
+wangx=# \dp role2_s_table;
+                                   存取权限 架构模式 |     名称      |  类型  |         存取权限          | 列特权 | 策略
+----------+---------------+--------+---------------------------+--------+------
+ public   | role2_s_table | 数据表 | postgres=arwdDxt/postgres+|        |
+          |               |        | noper=r/postgres          |        |
 ```
 
 #### 数据类型
