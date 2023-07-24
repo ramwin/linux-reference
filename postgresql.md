@@ -2,7 +2,7 @@
 [安装](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  
 
 ### [Tutorial](https://www.postgresql.org/docs/current/tutorial.html)
-1. [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
+#### [1. Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
 ```shell
 sudo apt install postgresql postgresql-contrib
 sudo -i -u postgres
@@ -14,26 +14,47 @@ dropdb <databasename>
 psql <databasename>
 ```
 
-2. The SQL Language
-    1. Introduction
-    ```
-    cd ..../src/tutorial
-    make
-    cd ..../toturial
-    psql -s mydb
-    mydb=> \i basics.sql
-    ```
-    3. [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
-    ```
-    CREATE TABLE weather (
-        city    varchar(80),
-        temp_lo int,
-        temp_hi int,
-        prcp    real,
-        date    date
-    )
-    ```
-3. Advanced Features
+##### 内置函数
+* version
+```sql
+SELECT version(), current_date, 2+2;
+```
+
+#### 2. The SQL Language
+1. Introduction
+```
+cd ..../src/tutorial
+make
+cd ..../toturial
+psql -s mydb
+mydb=> \i basics.sql
+```
+#### 2.3 [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
+```
+CREATE TABLE weather (
+    city    varchar(80),
+    temp_lo int,  -- 后面是注释
+    temp_hi int,
+    prcp    real,
+    date    date
+)
+```
+
+#### 2.4 插入数据
+```sql
+INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');
+INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
+    VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
+
+COPY weather FROM '/home/user/weather.txt';
+```
+
+#### 2.5 查询表
+```
+SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
+```
+
+#### 3. Advanced Features
     2. Views
     ```
     CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
@@ -74,6 +95,16 @@ wangx=# \dp role2_s_table;
 1. Numeric Types
     1. Integer Types
 
+* point 位置坐标
+```
+CREATE TABLE cities (
+    name            varchar(80),
+    location        point
+);
+INSERT INTO cities VALUES (
+    'San Francisco', '(-194.0, 53.0)');
+```
+
 ### Sever Administration 服务器管理
 
 #### Database Roles
@@ -106,3 +137,10 @@ insert into students values (default, '1');  # 1
 insert into students values (2, '1');
 insert into students values (default, '1');  # 报错, 因为2存在了
 ```
+
+#### PostgreSQL Client Applications - PSQL命令工具
+[官网](https://www.postgresql.org/docs/current/app-psql.html)
+* `\h`查看帮助
+* `\q`退出
+* `\dt` 查看所有的数据表
+* `\dS+ <tablename>` 查看某个数据表
