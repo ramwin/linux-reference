@@ -375,8 +375,10 @@ mysqldump -u root -p test --extended-insert=FALSE > test.sql  # windows下不正
 mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 ```
 * 选项
+    * `--result-file`: 保存路径
     * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
+    * `--net-buffer-length`: 32K比较不错.既不会太慢,也不会卡顿
 * Performance and Scalability Considerations 性能和企业数据要考虑
 > It's recommended to use mysqlbackup command of MySQL Enterprise Backup product, 因为mysqldump要考虑索引，io，处理大型数据会很慢
 
