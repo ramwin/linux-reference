@@ -7,6 +7,12 @@
 docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
 ```
 
+# mariadb
+```
+初始化数据库
+sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+```
+
 # tutorial 命令大全
 
 ## CREATE
@@ -373,6 +379,13 @@ FROM test_table;
 ```
 mysqldump -u root -p test --extended-insert=FALSE > test.sql  # windows下不正确，因为windows用了UTF-16
 mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
+# 我的习惯
+mysqldump   \
+    -u <username> \
+    --result-file result.sql \
+    --lock-tables=False \
+    --net-buffer-length=32k \
+    <database> <table>
 ```
 * 选项
     * `--result-file`: 保存路径
@@ -380,15 +393,16 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
     * `--net-buffer-length`: 32K比较不错.既不会太慢,也不会卡顿
 * Performance and Scalability Considerations 性能和企业数据要考虑
-> It's recommended to use mysqlbackup command of MySQL Enterprise Backup product, 因为mysqldump要考虑索引，io，处理大型数据会很慢
+> It's recommended to use mysqlbackup command of MySQL Enterprise Backup product,   
+因为mysqldump要考虑索引，io，处理大型数据会很慢
 
 ## 恢复
-    ```
-    mysql -h localhost -u root -p < ./test.sql  # 处理dump出来的
-    mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结果
-      -> FIELDS TERMINATED BY ':'
-      -> LINES TERMINATED BY '\r\n';
-    ```
+```shell
+mysql -h localhost -u root -p < ./test.sql  # 处理dump出来的
+mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结果
+  -> FIELDS TERMINATED BY ':'
+  -> LINES TERMINATED BY '\r\n';
+```
 
 # [Optimization 性能优化](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
 ## [Optimization and Indexes 索引](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
