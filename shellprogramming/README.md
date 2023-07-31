@@ -185,3 +185,28 @@ exit 123
 
 # built
 * 某些时候你的命令比如cd被alias了, 用`built in cd`可以执行原始的cd命令
+
+# 函数
+注意，里面的CD会影响进程内部的PWD,但是不会影响执行后的PWD  
+里面的变量定义后， 其他地方一般都能用。他是dynamic scope的
+```
+pre_step()
+{
+    echo "运行前"
+    PWD
+    cd ../
+}
+run()
+{
+    echo "run"
+    PWD
+}
+post_step()
+{
+    echo "运行后"
+    PWD
+}
+pre_step
+run
+post_step
+```
