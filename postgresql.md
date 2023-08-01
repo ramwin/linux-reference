@@ -42,7 +42,7 @@ CREATE TABLE weather (
 
 #### 2.4 插入数据
 ```sql
-INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');
+INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');  # 一定要用单引号
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
     VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
 
@@ -50,16 +50,41 @@ COPY weather FROM '/home/user/weather.txt';
 ```
 
 #### 2.5 查询表
-```
+```SQL
 SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
 ```
 
-#### 3. Advanced Features
-    2. Views
-    ```
-    CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
-    SELECT * FROM myview;
-    ```
+#### 2.7 Aggregate Functions 聚合数据
+```SQL
+SELECT max(temp_lo) FROM weather;
+SELECT city FROM weather WHERE temp_lo = max(temp_lo);     WRONG, where里面不能用聚合属性
+SELECT city FROM weather
+    WHERE temp_lo = (SELECT max(temp_lo) FROM weather);
+```
+
+#### 2.8 更新表
+```SQL
+UPDATE weather
+  SET temp_hi = temp_hi - 2, temp_lo = temp_lo - 2
+  WHERE date>'1994-11-28';
+```
+
+#### 3.2 Advanced Features -- Views
+```SQL
+CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
+SELECT * FROM myview;
+```
+
+#### 3.3 外键
+```
+CREATE TABLE cities (
+    name varchar(80) primary key,
+    location point
+);
+CREATE TABLE weather (
+    city varchar(80) reference cities(name),
+);
+```
 
 ### The SQL Language
 #### 数据定义 Data 
