@@ -71,3 +71,14 @@ server {
     }
 }
 ```
+
+* [代理http到https](https://serversforhackers.com/c/redirect-http-to-https-nginx)
+```
+server {
+    listen 80 default_server;
+
+    server_name ramwin.com;
+
+    return 301 https://$host$request_uri;
+}
+```
