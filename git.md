@@ -90,6 +90,10 @@ git push origin master --no-verify  # 直接上传git object, 不上传lfs对象
 ### 配置 Setup and Config
 
 #### config
+* alias
+```
+git config alias.lg 'log --graph --pretty=format:"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d" --date=format:"%Y-%m-%d %H:%M"'
+```
 * 设置用户名邮箱:
 ```
 git config --global user.email "ramwin@qq.com"
@@ -98,7 +102,7 @@ git config --global user.name "Xiang Wang"
 * 设置默认的 pull 和 push
 ```
 git branch --set-upstream-to=origin/origin master
-git config --global push.default matching
+git config --global push.default matching | current  # 默认推送当前分支
 ```
 
 * git中文不显示utf8编码而显示中文: `git config --global core.quotepath false`
@@ -587,7 +591,6 @@ git stash -u/--include-untracked 包含untracked文件
 
 ### 其他
 * [ ] working with remotes
-* [ ] git aliases
 * 彻底删除某个文件
 ```
     git filter-branch --tree-filter 'rm -f <filename>' HEAD
