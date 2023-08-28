@@ -255,7 +255,13 @@ git restore :/
 #### branch
 ```
 git branch [branchname] [startpoint]  # 指定从哪个版本里开出一个新的分支
+git branch --merged --no-contains master  # 获取合入了master的分支的列表
 ```
+
+* `--no-contains <ref>` 排除某个ref
+* `--merged <ref>`
+只展示能够从 ref (往前)走到的分支
+
 
 #### checkout
 * 把文件还原到之前的某个版本
