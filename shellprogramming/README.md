@@ -168,11 +168,17 @@ done
 
 ## 判断一个仓库是否更新了
 ```shell
+// ../script/判断仓库是否更新了.sh
 directoryname=`basename $(pwd)`
-current=`git log -l 1 --format="%H"`
+current=`git log -1 --format="%H"`
 cache_file=/tmp/$directoryname
-last=`cat $cache_file`
-if [ $current == $last ];
+if [ -f $cache_file ];
+then
+    last=`cat $cache_file`
+else
+    last=""
+fi
+if [[ $current = $last ]];
 then
     echo "一样的"
 else
