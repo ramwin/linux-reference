@@ -432,6 +432,9 @@ git show <ref>:<file>  # 查看某个版本的文件
 git log HEAD^ 是按照第一个parent依次往前找的，而不是按照时间顺序找的
 git log 是按照时间顺序往前找的
 
+* `-<number>, --max-count=<number>`: 最多显示多少个commit
+* `--skip=<number>`: 不显示最前面的多少个commit
+* [ ] --since
 * [参考链接](http://blog.sina.com.cn/s/blog_601f224a01012wat.html)
 * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
 * %h %H 简短/完整的哈希字符串
