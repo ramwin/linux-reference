@@ -4,8 +4,9 @@
 [core]
 	excludesfile = ~/.gitignore
 	quotepath = false
+	filemode = false
 [alias]
-	log = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
+	lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
 [push]
 	default = current
 [pull]
