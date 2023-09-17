@@ -80,7 +80,9 @@ function wxj(){
 PYENV_ROOT="$HOME/.pyenv"
 PATH=$PATH\
 :$PYENV_ROOT/shims\
+:/home/wangx/bin/\
 :/home/wangx/github/python-reference/\
+:/home/wangx/node_modules/bin/\
 :/home/wangx/github/secret/\
 :/usr/local/java/bin/\
 :/usr/local/eclipse/\
