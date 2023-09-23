@@ -309,6 +309,11 @@ $ umask 0027  # 我习惯关闭其他所有用户的权限
 ## whereis
 查看某个命令的地址
 
+## xargs
+```
+seq -i 100 | xargs -I {} <command>
+```
+
 ## zentify
 * `zenity --info --text '保护视力，休息一会'`
 
