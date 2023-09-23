@@ -1,5 +1,5 @@
-export HTTPS_PROXY="http://localhost:1080"
-export HTTP_PROXY="http://localhost:1080"
+# export HTTPS_PROXY="http://localhost:1080"
+# export HTTP_PROXY="http://localhost:1080"
 
 # 用来在windows目录下用windows的git
 cd() {
@@ -78,7 +78,7 @@ function wxj(){
 # export CLICOLOR=1
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
-PATH=$PATH\
+PATH=/home/wangx/node/bin/\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
 :/home/wangx/github/python-reference/\
@@ -90,7 +90,8 @@ PATH=$PATH\
 :/usr/local/go/bin/\
 :/usr/node/bin/\
 :/home/wangx/.pyenv/bin/\
-:/home/wangx/gh/bin/
+:/home/wangx/gh/bin/\
+:$PATH
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
