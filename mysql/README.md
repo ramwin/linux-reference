@@ -382,6 +382,8 @@ mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
 # 我的习惯
 mysqldump   \
     -u <username> \
+    --set-gtid-purged=OFF \
+    --column-statistics=0 \
     --result-file result.sql \
     --lock-tables=False \
     --net-buffer-length=32k \
