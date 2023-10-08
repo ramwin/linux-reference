@@ -386,10 +386,12 @@ mysqldump   \
     --column-statistics=0 \
     --result-file result.sql \
     --lock-tables=False \
+    --skip-add-locks \
     --net-buffer-length=32k \
     <database> <table>
 ```
 * 选项
+    * `--add-locks, --skip-add-locks`: dump出来的sql语句, 是否有LOCK TABLES `<table>` WRITE;
     * `--result-file`: 保存路径
     * `--extended-insert`: 是否把所有数据的insert写成一句，默认True
     * `--complete-insert`: insert语句里面是否带上columns的参数，默认False
