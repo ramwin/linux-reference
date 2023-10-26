@@ -81,7 +81,7 @@ PYENV_ROOT="$HOME/.pyenv"
 PATH=/home/wangx/node/bin/\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
-:/home/wangx/github/python-reference/\
+:/home/wangx/github/python-reference/script/\
 :/home/wangx/node_modules/bin/\
 :/home/wangx/github/secret/\
 :/usr/local/java/bin/\
