@@ -63,6 +63,11 @@ THis command is exactly like GEORADIUS except you should use a member to replace
 
 ## [Hashes](https://redis.io/commands#hash)
 * hsetnx key field value
+```python
+client.hset("user_1", "id", 1)
+client.hget("user_1", "id")  // b"1"
+client.hgetall("user_1")  // {b"id": b"1", b"name": b"ramwin"}
+```
 
 ## Keys
 * DEL
