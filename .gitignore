@@ -4,3 +4,4 @@ test.txt
 test.sh
 .*
 *.db
+tmp
