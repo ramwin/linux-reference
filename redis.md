@@ -67,6 +67,7 @@ THis command is exactly like GEORADIUS except you should use a member to replace
 client.hset("user_1", "id", 1)
 client.hget("user_1", "id")  // b"1"
 client.hgetall("user_1")  // {b"id": b"1", b"name": b"ramwin"}
+client.hset("user1", mappting={"id": 1, "name": "ramwin"})  // return 0 表示没有field新增
 ```
 
 ## Keys
