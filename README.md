@@ -310,8 +310,19 @@ $ umask 0027  # 我习惯关闭其他所有用户的权限
 查看某个命令的地址
 
 ## xargs
+* --max-args/-n: num 所有的参数每n个传入后续命令
 ```
-seq -i 100 | xargs -I {} <command>
+$ seq 3 | xargs echo "no: {}"
+no: {} 1 2 3
+
+$ seq 3 | xargs -I {} echo "no: {}"
+no: 1
+no: 2
+no: 3
+
+$ seq -i 3 | xargs --max-args 2 echo "no: "
+no: 1 2
+no: 3
 ```
 
 ## zentify
