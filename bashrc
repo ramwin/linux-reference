@@ -78,7 +78,9 @@ function wxj(){
 # export CLICOLOR=1
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
-PATH=/home/wangx/node/bin/\
+PATH=\
+:/home/wangx/node_modules/bin\
+:/home/wangx/node/bin\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
 :/home/wangx/github/python-reference/script/\

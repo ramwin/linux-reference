@@ -577,8 +577,11 @@ PasswordAuthentication no  是否允许密码登录
 * [centos安装](https://www.php.cn/linux-413808.html)
 * 运行supervisor
     * supervisorctl
-    ```
-    supervisorctl stop <name>  停止一个进程
+    ```shell
+    默认stop和restart会发送signal.SIGTERM:15的信号
+    supervisorctl stop <name>|all  停止一个进程
+    supervisorctl [re]start <name>|all 停止一个|所有进程
+    supervisorctl reread
     ```
 * [配置文件](http://supervisord.org/configuration.html#program-x-section-example)
 ```

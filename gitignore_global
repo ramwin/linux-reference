@@ -161,6 +161,9 @@ cython_debug/
 
 
 *~
-.vscode/*
+**/.vscode/*
+frontend/.vscode/
 *.swp
+package-lock.json
+time.md
 time.csv
