@@ -12,7 +12,6 @@ cd() {
         alias git="git"
     fi
 }
-export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
 
 export TLDR_CACHE_ENABLED=1
 export TLDR_CACHE_MAX_AGE=24
@@ -79,7 +78,6 @@ function wxj(){
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
 PATH=\
-:/home/wangx/node_modules/bin\
 :/home/wangx/node/bin\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
@@ -136,3 +134,5 @@ parse_git_branch() {
 }
 PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\[\e[37m\]] $ "
 
+export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/tldr/pages/"
+export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
