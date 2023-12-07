@@ -202,19 +202,22 @@ if expire is 0, the key is created without any expire
 和SINTER一样,但是把结果存入destination
 
 * SISMEMBER
-    ```
-    > sismember myset 3
-    (integer) 1
-    > sismember myset 30
-    (integer) 0
-    ```
+python返回的是0,1不是布尔值
+```
+> sismember myset 3
+(integer) 1
+> sismember myset 30
+(integer) 0
+```
+
 * SMEMBERS
-    ```
-    > smembers myset
-    1) "1"
-    2) "2"
-    3) "3"
-    ```
+```
+> smembers myset
+1) "1"
+2) "2"
+3) "3"
+```
+
 * SMOVE
     ```
     > sunionstore game:1:deck deck [otherdeck...]  # copy all the members in deck to game:1:deck 复制所有的元素到目标game:1:deck
@@ -308,28 +311,33 @@ get key
     GET foo
     ```
 
-## [Sorted Sets](https://redis.io/commands#sorted_set)
+## [Sorted Sets][sorted set]
+* BZPOPMIN(str|List[str], timeout)
+如果timeout了，返回None, 否则返回(rediskey: str, value_key, score: float)
+
 * tutorial
-    ```
-    > zadd hackers 1940 "Allan Kay"
-    (integer) 1
-    > zadd hackers 1957 "Sophie Wilson"
-    (integer) 1
 
-    > zrange hackers 0 -1
-    > zrevrange hackers 0 -1
-    > zrange hackers 0 -1 withscores
-    > zrangebyscore hackers -inf 1950
-    > zremrangebyscore hackers 1940 1960
-    > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
+```
+> zadd hackers 1940 "Allan Kay"
+(integer) 1
+> zadd hackers 1957 "Sophie Wilson"
+(integer) 1
 
-    # Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
-    > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
-        "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
-        0 "Linus Torvalds" 0 "Alan Turing"
-    > zrange hackers 0 -1
-    > zrangebylex hackers [B [P
-    ```
+> zrange hackers 0 -1
+> zrevrange hackers 0 -1
+> zrange hackers 0 -1 withscores
+> zrangebyscore hackers -inf 1950
+> zremrangebyscore hackers 1940 1960
+> zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
+
+# Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
+> zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
+    "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
+    0 "Linus Torvalds" 0 "Alan Turing"
+> zrange hackers 0 -1
+> zrangebylex hackers [B [P
+```
+
 * [ZADD](https://redis.io/commands/zadd)
     * `ZADD key <score> member`
     * python: `redis.zadd(key, mapping)`
@@ -411,3 +419,5 @@ redis有2种保存方式
 ## To be continued
 * [ ] Replication
 * [ ] Redis Administration
+
+[sorted set]: https://redis.io/commands/?group=sorted-set
