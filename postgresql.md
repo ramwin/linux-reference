@@ -132,8 +132,12 @@ INSERT INTO cities VALUES (
 
 ### Sever Administration 服务器管理
 
-#### Database Roles
+* 修改用户密码
+```sql
+ALTER USER user_name WITH PASSWORD 'new_password';
+```
 
+#### Database Roles
 ```sql
 CREATE ROLE <name>;
 DROP ROLE <name>;

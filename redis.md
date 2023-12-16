@@ -215,6 +215,7 @@ r.blrange(key, 0, -1)  # must have the start and end index
 和SINTER一样,但是把结果存入destination
 
 * SISMEMBER
+每1000次查询耗时0.14秒, 比直接python的set对比慢1000倍
 python返回的是0,1不是布尔值
 ```
 > sismember myset 3
