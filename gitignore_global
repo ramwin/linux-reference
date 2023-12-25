@@ -167,3 +167,4 @@ frontend/.vscode/
 package-lock.json
 time.md
 time.csv
+*.orig
