@@ -586,6 +586,12 @@ git ls-tree <hash>
 git show ref:filepath > tmp
 ```
 
+### [sparse checkout](https://git-scm.com/docs/git-sparse-checkout)
+```
+git sparse-checkout init
+git sparse-checkout add
+```
+
 ### status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
 
