@@ -136,3 +136,6 @@ PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m
 
 export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/tldr/pages/"
 export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
+
+# -F 允许超过一屏幕时才成less
+export LESS="-R-F"
