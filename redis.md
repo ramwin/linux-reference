@@ -403,6 +403,8 @@ client.zrem(key, 'member', 'member2')
 ```
 
 * [ ] ZREMRANGEBYLEX
+* ZREMRANGEBYSCORE
+根据分数来删除
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
 # Administration
