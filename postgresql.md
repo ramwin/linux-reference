@@ -140,6 +140,13 @@ DROP ROLE <name>;
 SELECT rolname FROM pg_roles;
 ```
 
+#### Back Up and Restore
+
+##### 数据库导出
+```
+pg_dump <dbname> > <filename>.sql
+```
+
 ### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
 * 展示所有数据库 `\l`
