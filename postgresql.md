@@ -158,6 +158,12 @@ ALTER USER <username> CREATEDB
 ```
 
 ### Reference
+
+#### [ALTER USER](https://www.postgresql.org/docs/current/sql-alteruser.html)
+```sql
+ALTER USER <username> WITH PASSWORD '新密码';
+```
+
 #### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
 * 添加自增主键
 ```sql
