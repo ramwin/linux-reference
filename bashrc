@@ -139,3 +139,4 @@ export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
 
 # -F 允许超过一屏幕时才成less
 export LESS="-R-F"
+export AIRFLOWHOME=/home/wangx/github/airflowtest/
