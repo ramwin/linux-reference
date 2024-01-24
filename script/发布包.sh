@@ -3,7 +3,7 @@
 
 rm -rf dist/*
 hatch build
-hatch publish
+# hatch publish
 
 # python3 setup.py sdist bdist_wheel
-# twine upload dist/*
+twine upload dist/*
