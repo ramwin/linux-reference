@@ -148,7 +148,16 @@ SELECT rolname FROM pg_roles;
 
 ##### 数据库导出
 ```
-pg_dump <dbname> > <filename>.sql
+pg_dump \
+    --host localhost \
+    --no-owner \
+    --if-exists \
+    --no-acl \
+    --schema-only \
+    --table some \
+    --exclude-schema=\
+    -f <outputfie>.sql
+    <dbname>
 ```
 
 ### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
