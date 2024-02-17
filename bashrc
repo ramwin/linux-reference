@@ -78,6 +78,7 @@ function wxj(){
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
 PATH=\
+:/home/wangx/venv/bin\
 :/home/wangx/node/bin\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
@@ -118,7 +119,6 @@ export CLICOLOR=1
 # settitle coding
 export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
-alias python='ipython'
 # alias tldr='tldr -s http://ramwin.com:9999/tldr/pages'
 export PYTHONBREAKPOINT=ipdb.set_trace
 alias pypi_deploy="rm dist/* && python3 setup.py sdist bdist_wheel && twine upload dist/*"
