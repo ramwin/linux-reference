@@ -340,7 +340,7 @@ no: 3
 
 # software 软件
 
-## [airflow](https://github.com/ramwin/airflowtest/)
+## [airflow](../airflowtest/README.md)
 
 ## bat
 和cat一样，但是输出会有格式化
