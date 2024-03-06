@@ -191,7 +191,10 @@ insert into students values (default, '1');  # 报错, 因为2存在了
 
 #### PostgreSQL Client Applications - PSQL命令工具
 [官网](https://www.postgresql.org/docs/current/app-psql.html)
-* `\h`查看帮助
+* `\h`查看SQL帮助
+* `\?`查看命令相关帮助
 * `\q`退出
 * `\dt` 查看所有的数据表
 * `\dS+ <tablename>` 查看某个数据表
+* `\timing` 显示语句执行时间
+* `\r` 重置输入的内容
