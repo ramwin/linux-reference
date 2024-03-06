@@ -445,6 +445,7 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 ```
 
 ## [redis](./redis.md)
+[集群搭建参考](./redis-cluster/README.md)
 ## rinetd: 用来端口转发
 
 ## rsync
