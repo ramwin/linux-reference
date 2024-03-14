@@ -81,6 +81,13 @@ git push origin master  # 上传git object和lfs对象
 git push origin master --no-verify  # 直接上传git object, 不上传lfs对象并且不校验, 因为我的服务器没有开启git-lfs https服务
 ```
 
+* 还原文件
+```
+git lfs untrack <filename>
+git add --renormalize --all/<filename>
+```
+
+[Files are still (not) in GIT LFS after changing .gitattributes](https://stackoverflow.com/questions/45350174/files-are-still-not-in-git-lfs-after-changing-gitattributes)
 
 ### 通用
 
@@ -207,6 +214,11 @@ git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹�
     ```
 
 ### 快照 Basic Snapshotting
+
+#### [add](https://git-scm.com/docs/git-add)
+把文件变更添加进index
+* --renormalize
+强制性得重新读取文件信息，不然git会根据文件的更新时间来决定，导致lfs或者`\r\n`配置的变更无法还原
 
 #### commit
 * add 后查看修改: `git diff --cached`
