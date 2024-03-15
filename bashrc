@@ -139,5 +139,7 @@ export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
 
 # -F 允许超过一屏幕时才成less
 export LESS="-R-F"
+export AIRFLOW_HOME=~/airflow
+
 export AIRFLOW_HOME=/home/wangx/github/airflowtest
 export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow_user:airflow_pass@localhost/airflow_db
