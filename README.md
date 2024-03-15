@@ -53,6 +53,10 @@ usr目录一般是从其他地方挂载的. shareable, read-only. 多个机器�
 * `/usr/local/lib`
 个人理解, local就是从本地挂载了. 
 
+## websocket
+[孙同学的文章](https://sunyunqiang.com/blog/websocket_protocol_rfc6455/)  
+[rfc6455](https://datatracker.ietf.org/doc/html/rfc6455)  
+
 # command
 各种命令
 
