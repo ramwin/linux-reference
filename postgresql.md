@@ -137,6 +137,13 @@ INSERT INTO cities VALUES (
 ALTER USER user_name WITH PASSWORD 'new_password';
 ```
 
+* 允许用户查询某个数据表
+```sql
+GRANT CONNECT ON DATABASE <db> TO <role>;
+GRANT USAGE ON SCHEMA public TO <role>;
+GRANT SELECT ON ALL TABLES IN SCHEMA public to <role>;
+```
+
 #### Database Roles
 ```sql
 CREATE ROLE <name>;
@@ -198,3 +205,18 @@ insert into students values (default, '1');  # 报错, 因为2存在了
 * `\dS+ <tablename>` 查看某个数据表
 * `\timing` 显示语句执行时间
 * `\r` 重置输入的内容
+
+### 配置
+* 允许远程登录
+1. 编辑postgresq.conf
+```
+listen_addresses = '*'  # 或者改成IP地址
+```
+2. 编辑pg_hba.conf
+```
+host    <数据库>     <用户>             <fromIP>/32                 scram-sha-256
+```
+3. 刷新登录权限
+```sql
+select pg_reload_conf();  // 执行这个语句更新登录权限
+```
