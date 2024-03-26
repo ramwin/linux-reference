@@ -477,10 +477,11 @@ ool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 .hdel('dict', 'key')  # 存在就返回1, 否则返回0
 ``
 
-## Lock
+## [Lock](https://redis.readthedocs.io/en/stable/lock.html)
 ```
 try:
     with client.lock(key, blocking_timeout=5) as lock:  # 最多等你5秒
+    # 不等的话可以设置 blocking=False
         do something expensive  # 保证同时只有一个线程跑这个
 except redis.exceptions.LockError:
     # the lock wasn't acquired
