@@ -4,3 +4,6 @@ test.txt
 test.sh
 *.db
 tmp
+__pycache__
+.vscode
+.env

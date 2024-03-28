@@ -149,6 +149,7 @@ where table_schema = 'public'
 order by 3 desc;
 ```
 
+#### basic
 * 修改用户密码
 ```sql
 ALTER USER user_name WITH PASSWORD 'new_password';
@@ -186,7 +187,16 @@ pg_dump \
 
 ## [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
+* 展示单个表
+```sql
+\d+ users
+```
+
 * 展示所有数据库 `\l`
+* 执行sql语句
+```
+\i lesson1.sql
+```
 
 ### 权限
 * 允许用户创建表
@@ -198,6 +208,7 @@ ALTER USER <username> CREATEDB
 
 ### [ALTER USER](https://www.postgresql.org/docs/current/sql-alteruser.html)
 ```sql
+CREATE USER <username> WITH PASSWORD '密码';
 ALTER USER <username> WITH PASSWORD '新密码';
 ```
 
@@ -207,6 +218,10 @@ ALTER TABLE students ALTER age integer;
 ALTER TABLE students DROP age;
 ```
 
+### CREATE DATABASE
+```
+CREATE DATABASE people WITH OWERN 'pg4e';
+```
 
 ### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
 * 添加自增主键
