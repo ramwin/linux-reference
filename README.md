@@ -1,6 +1,5 @@
 **Xiang Wang @ 2015-11-18**  
 
-# menu
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)
@@ -448,7 +447,10 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
     proxychains <program>
 ```
 
-## [redis](./redis.md)
+## redis
+```{toctree}
+./redis.md
+```
 [集群搭建参考](./redis-cluster/README.md)
 ## rinetd: 用来端口转发
 

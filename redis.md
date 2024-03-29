@@ -1,6 +1,3 @@
-**Xiang Wang @ 2018-06-29 11:48:44**
-
-
 # Install
 * docker
 ```
@@ -356,10 +353,13 @@ get key
 > zrangebylex hackers [B [P
 ```
 
-* [ZADD](https://redis.io/commands/zadd)
-    * `ZADD key <score> member`
-    * python: `redis.zadd(key, mapping)`
-    * `redis.zadd('my-key', 1.1, 'name1', 2.2, 'name2', name3=3.3, name4=4.4)`
+* ZADD
+[官网](https://redis.io/commands/zadd)
+```
+ZADD key <score> member  # shell
+redis.zadd(key, mapping)  # python
+```
+
 * [ZCARD](https://redis.io/commands/zcard)
 返回一个sorted sets的长度, 如果key不存在，就返回0
 * ZCOUNT
