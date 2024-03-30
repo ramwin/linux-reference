@@ -404,6 +404,11 @@ client.zrem(key, 'member', 'member2')
 ```
 
 * [ ] ZREMRANGEBYLEX
+* ZREMRANGEBYRANK
+删除数据。注意是闭区间
+```
+redis.zremrangebyrank(key, 0, delete_cnt - 1)
+```
 * ZREMRANGEBYSCORE
 根据分数来删除
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
