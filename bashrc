@@ -144,3 +144,5 @@ export AIRFLOW_HOME=~/airflow
 export AIRFLOW_HOME=/home/wangx/github/airflowtest
 export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow_user:airflow_pass@localhost/airflow_db
 export MYPYPATH=~/github/python-reference/stubs
+
+export HATCH_INDEX_USER="__token__"
