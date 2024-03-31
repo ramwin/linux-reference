@@ -1,0 +1,3 @@
+*.rdb
+nodes.conf
+*.aof
