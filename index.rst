@@ -7,7 +7,7 @@ Welcome to linux reference's documentation!
 ===========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    ./README.md

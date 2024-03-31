@@ -219,6 +219,7 @@ python返回的是0,1不是布尔值
 (integer) 1
 > sismember myset 30
 (integer) 0
+def sismember(str, str) -> Literal[0, 1]
 ```
 
 * SMEMBERS
