@@ -326,7 +326,12 @@ get key
     GET foo
     ```
 
-## [Sorted Sets][sorted set]
+## Sorted Sets
+
+[官网][sorted set]
+
+sorted sets 保存的是字符串: float
+
 * BZPOPMIN(str|List[str], timeout)
 如果timeout了，返回None, 否则返回(rediskey: str, value_key, score: float)
 
