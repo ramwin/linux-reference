@@ -5,6 +5,14 @@ wikipedia参考_
 
 .. _wikipedia参考: https://zh.m.wikipedia.org/zh-sg/ReStructuredText
 
+source_
+
+.. _source: https://docutils.sourceforge.io/rst.html
+
+sphinx_
+
+.. _sphinx: https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html
+
 标题用=
 -------
 
