@@ -390,7 +390,10 @@ increment可以是小数，整数，负数, 返回当前的value
 
 * [ZRANGE](https://redis.io/commands/zrange)
 ```
-zrange('mykey', 0, -1)
+zrange('mykey', -1, -1, withscores=True)  # 找到最大的
+[('foo', 23.0)]
+zrange('mykey', -1, -1)  # 找到最大的
+['foo']
 ```
     1. > 从0开始, -1是最后一个， -2是倒数第二个
     2. > 前后都是闭区间
