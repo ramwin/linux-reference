@@ -16,6 +16,7 @@ author = 'Xiang Wang'
 extensions = [
         "myst_parser",
         "sphinx_design",
+        "sphinx.ext.todo",
         ]
 
 templates_path = ['_templates']
@@ -38,3 +39,4 @@ suppress_warnings = ["myst.header", "myst.xref_missing"]
 html_css_files = [
         "custom.css"
         ]
+todo_include_todos = True
