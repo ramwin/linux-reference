@@ -10,6 +10,7 @@ Welcome to linux reference's documentation!
    :maxdepth: 3
    :caption: Contents:
 
+   ./database.md
    ./README.md
 
 
