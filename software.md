@@ -1,10 +1,33 @@
 # SOFTWARE软件
 
+## 开发工具类
 ```{toctree}
-./nginx.md
+./git.md
+```
+### [git](./git.md)
+
+一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
+
+### [vim](./vim.md)
+[交互式的tutorial教程](http://www.openvim.com/)
+* [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
+    `:MultipleCursorsFind <regrexmatch>`
+
+### vscode
+```
+.vscode/settings.json
+{
+  "files.exclude": {
+    "*.wxss": true,
+    "*/*.wxss": true
+  }
+}
 ```
 
 ## 网络类
+```{toctree}
+./nginx.md
+```
 
 ### ufw
 * 打开/关闭ufw
@@ -86,9 +109,6 @@ ffmpeg -i video.avi -i audio.mp3 -codec copy -shortest output.avi  # 用这个�
 ffmpeg -i result.mkv  -vcodec copy -acodec copy -ss 00:01:02.7  ./result_cut.mkv  # 截取视频
 ffmpeg -ss 00:01:06.4 -i result.mkv  -vcodec copy -acodec copy  ./result_cut.mkv  # 这个截取会多一点视频，但是避免出现黑屏
 ```
-
-## [git](./git.md)  
-一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
 
 ## [language-pack-zh-hans](https://www.jianshu.com/p/2ae564a1f131)  
 安装中文支持
@@ -278,23 +298,6 @@ tldr ls -s "http://tldr.ramwin.com/pages/"
 # 永久设置ramwin源
 export TLDR_PAGES_SOURCE_LOCATION="http://tldr.ramwin.com/pages/"
 tldr ls
-```
-
-
-## [vim](./vim.md)
-[交互式的tutorial教程](http://www.openvim.com/)
-* [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
-    `:MultipleCursorsFind <regrexmatch>`
-
-## vscode
-```
-.vscode/settings.json
-{
-  "files.exclude": {
-    "*.wxss": true,
-    "*/*.wxss": true
-  }
-}
 ```
 
 

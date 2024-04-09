@@ -1,4 +1,5 @@
-### git
+# git
+
 [git官网](https://git-scm.com/doc)  
 [git reference](https://git-scm.com/docs)  
 [git book](https://git-scm.com/book/en/v2)
@@ -8,10 +9,12 @@
 git update-index --assume-unchanged config.php
 ```
 
-### [lfs](https://git-lfs.github.com/)
+## [lfs](https://git-lfs.github.com/)
+
 处理大文件用. 
 
-#### 原理
+### 原理
+
 1. 每次add的时候，会计算文件的sha256sum, 保存到 `.git/lfs/objects/98/41/984132.....` 文件。`984132...`是sha256sum的结果
 2. 每次commit的时候，git都会文件当做一个指针文件保存到 `.git/objects`, 文件格式:. 所以指针文件126到140字节左右
 
@@ -24,7 +27,7 @@ size 6
 3. 上传的时候，如果服务器的 `.git/lfs/objects/` 文件不存在，那就上传。
 4. 下载的时候，根据lfs.fetchinclude配置，来判断拉取文件还是仅仅把文件设置成指针
 
-#### 配置
+### 配置
 * 编辑.gitattributes
 
 ```
@@ -40,7 +43,7 @@ git add .
 git commit -m '初始化'
 ```
 
-#### 使用
+### 使用
 * 输出pointer
 ```
 $ git lfs clean < 123.txt
@@ -89,14 +92,14 @@ git add --renormalize --all/<filename>
 
 [Files are still (not) in GIT LFS after changing .gitattributes](https://stackoverflow.com/questions/45350174/files-are-still-not-in-git-lfs-after-changing-gitattributes)
 
-### 通用
+## 通用
 
-#### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
+### [field names](https://git-scm.com/docs/git-for-each-ref#_field_names)
 * creatordate
 
-### 配置 Setup and Config
+## 配置 Setup and Config
 
-#### config
+### config
 * alias
 ```
 git config alias.lg 'log --graph --pretty=format:"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d" --date=format:"%Y-%m-%d %H:%M"'
@@ -190,15 +193,15 @@ uploadpack.allowReachableSHA1InWant=true
     objects/85/44441acexxxx3c21 5011352225字节
     ```
 
-#### Core
+### Core
 * sshCommand
 ```
 git config core.sshCommand "ssh -i <自定义密钥>"
 ```
 
-### 获取或者创建项目 getting and creating projects
+## 获取或者创建项目 getting and creating projects
 
-#### init
+### init
 * [如何更改.git文件夹位置](https://stackoverflow.com/questions/40561234/can-you-change-git-folder-location)
 ```
 git init <directory>  # 初始化仓库
@@ -213,14 +216,14 @@ git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹�
     [root:~/] vim /etc/passwd  # change git line to 'git:x:1001:1001:,,,:/home/git:/bin/bash'
     ```
 
-### 快照 Basic Snapshotting
+## 快照 Basic Snapshotting
 
-#### [add](https://git-scm.com/docs/git-add)
+### [add](https://git-scm.com/docs/git-add)
 把文件变更添加进index
 * --renormalize
 强制性得重新读取文件信息，不然git会根据文件的更新时间来决定，导致lfs或者`\r\n`配置的变更无法还原
 
-#### commit
+### commit
 * add 后查看修改: `git diff --cached`
 
 * 多次提交很简单的代码 `git commit --amend  # 这样就能修改上次提交的信息，不创建新版本`
@@ -232,20 +235,20 @@ git init --separate-git-dir=/path/to/dot-git-directory .  # 设置.git文件夹�
 (printf "commit %s\0" $(git cat-file commit HEAD | wc -c); git cat-file commit HEAD) | sha1sum
 ```
 
-#### diff
+### diff
 ```
 git diff --word-diff
 git diff HEAD HEAD^^ --stat  # only see the different name
 ```
 
-#### difftool
+### difftool
 
 ```
 git config diff.tool vimdiff
 git difftool HEAD^ HEAD  # 用vimdiff横向比较文件
 ```
 
-#### [notes](https://git-scm.com/docs/git-notes)
+### [notes](https://git-scm.com/docs/git-notes)
 在原有的commit基础上添加备注，而不修改原有commit
 ```
 git notes add -m "这个commit不可用"
@@ -256,15 +259,15 @@ git push <remote> refs/notes/*
 git fetch origin refs/notes/*:refs/notes/*
 ```
 
-#### restore
+### restore
 * 还原删除的文件
 ```
 git restore :/
 ```
 
-### 分支和合并 Branching and Merging
+## 分支和合并 Branching and Merging
 
-#### branch
+### branch
 ```
 git branch [branchname] [startpoint]  # 指定从哪个版本里开出一个新的分支
 git branch --merged --no-contains master  # 获取合入了master的分支的列表
@@ -275,7 +278,7 @@ git branch --merged --no-contains master  # 获取合入了master的分支的列
 只展示能够从 ref (往前)走到的分支
 
 
-#### checkout
+### checkout
 * 把文件还原到之前的某个版本
 ```
 git checkout versin -- file1/to/restore file2/to/restore
@@ -289,16 +292,16 @@ git reset HEAD filename
 git checkout <ref> -f
 ```
 
-#### [merge](https://git-scm.com/docs/git-merge)
+### [merge](https://git-scm.com/docs/git-merge)
 合并分支
 
-#### [mergetool](https://git-scm.com/docs/git-mergetool)
+### [mergetool](https://git-scm.com/docs/git-mergetool)
 用来修复冲突
 ```
 git mergetool --tool=vimdiff
 ```
 
-#### [tag](https://git-scm.com/docs/git-tag)  
+### [tag](https://git-scm.com/docs/git-tag)  
 [文档](https://git-scm.com/book/en/v2/Git-Basics-Tagging)  
 
 * `--sort=<key>`
@@ -359,7 +362,7 @@ annotated tag会保留谁在什么时候提交的tag
     git tag -l --format="%(tag) %(subject)"
 
 
-#### [worktree](https://git-scm.com/docs/git-worktree)
+### [worktree](https://git-scm.com/docs/git-worktree)
 用于突然要维护一个旧分支, 又不想影响当前的工作区
 
     git worktree add hotfix <hash>  # 先用已有git checkout一次
@@ -367,9 +370,9 @@ annotated tag会保留谁在什么时候提交的tag
     ...
     git worktree prune  # 修复后删除
 
-### Sharing and Updating Projects
+## Sharing and Updating Projects
 
-#### fetch
+### fetch
 * 拉取指定的commit
 `git fetch --depth=1 <remote> $SHA1`
 * 拉去指定的tag
@@ -377,7 +380,7 @@ annotated tag会保留谁在什么时候提交的tag
 git fetch origin refs/tags/1.0.0
 ```
 
-#### [push 推送](https://git-scm.com/docs/git-push)
+### [push 推送](https://git-scm.com/docs/git-push)
 
 * 推送指定分支
 
@@ -386,7 +389,7 @@ git push origin <local_branch>:<remote-branch> <local_branch2>:<remote-branch2>
 git push origin 1.0.0:master
 ```
 
-#### 子模块 submodule
+### 子模块 submodule
 * [guide文档](https://git-scm.com/docs/gitsubmodules)
 * [命令参考](https://git-scm.com/docs/git-submodule)
 * 配置
@@ -434,13 +437,13 @@ git commit -m '先加上去再说'  # 此时.git/index文件里显示有个submo
 ```
 
 
-### 查看和比较 Inspection and Comparison
+## 查看和比较 Inspection and Comparison
 * [show](https://git-scm.com/docs/git-show)
 ```
 git show <ref>  # 查看某个版本的修改
 git show <ref>:<file>  # 查看某个版本的文件
 ```
-#### [log](https://git-scm.com/docs/git-log)
+### [log](https://git-scm.com/docs/git-log)
 git log HEAD^ 是按照第一个parent依次往前找的，而不是按照时间顺序找的
 git log 是按照时间顺序往前找的
 
@@ -448,23 +451,23 @@ git log 是按照时间顺序往前找的
 * `--skip=<number>`: 不显示最前面的多少个commit
 * [ ] --since
 
-##### [格式化 PRETTY FORMATS](https://git-scm.com/docs/git-log#_pretty_formats)
+#### [格式化 PRETTY FORMATS](https://git-scm.com/docs/git-log#_pretty_formats)
 * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
 * %h %H 简短/完整的哈希字符串
 * %d %D ref的name, %D代表了不用括号括起来
 * %an author name 作者名字
 
 
-### Patching
+## Patching
 
-#### [cherry-pick](https://git-scm.com/docs/git-cherry-pick)
+### [cherry-pick](https://git-scm.com/docs/git-cherry-pick)
 把某次提交的功能应用当前版本
 
 ```
 git cherry-pick <commit>
 ```
 
-#### rebase
+### rebase
 [官网](https://git-scm.com/docs/git-rebase)
 * 基础
 ```
@@ -476,7 +479,7 @@ git rebase --onto <newbase> <hash1> <branch> # 把branch从hash1开始(不包含
 git rebase -i HEAD^^^  # 然后只pick第一个，squash后面所有的
 ```
 
-#### revert
+### revert
 * 撤回上个版本
 ```
 git revert HEAD
@@ -502,9 +505,9 @@ rebase_base - rebase_a - rebase_final(76187ed)
 rebase_base - rebase_a - rebase_b 但是中间的C没改
 ```
 
-### 排查 Debugging
+## 排查 Debugging
 
-#### bisect
+### bisect
 通过二分法找到出现bug的版本
 ```
 git bisect start  # 开始寻找
@@ -514,14 +517,14 @@ git bisect good 1.0.0  # 1.0.0版本不报错
 git bisect reset  # 找到报错版本后，推出bisect
 ```
 
-#### blame
+### blame
 ```
 git blame filepath  # 查看某个文件的修改记录
 ```
 
-### Administration
+## Administration
 
-#### [clean](https://git-scm.com/docs/git-clean)  
+### [clean](https://git-scm.com/docs/git-clean)  
 清理untracked文件
 ```
 git clean -dfxn
@@ -533,14 +536,14 @@ git clean -dfx
 -x 包括ignore的文件也删除
 ```
 
-#### gc
+### gc
 ```
 git gc  # 优化仓库
 ```
 
-#### [ ] fsck
+### [ ] fsck
 
-#### [bundle](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E6%89%93%E5%8C%85)
+### [bundle](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E6%89%93%E5%8C%85)
 但是不支持lfs
 
 ```shell
@@ -549,9 +552,9 @@ git bundle verify bundle  # 查看打包的文件
 git fetch <filename> master:other-master  # 把bundle文件中的master分支复制到本地other-master分支
 ```
 
-### 其他插件 Plumbing Commands
+## 其他插件 Plumbing Commands
 
-#### cat-file
+### cat-file
 查看文件类型, 如果是commit可以看到对应的tree. 如果是文件, 可以直接看到内容
 ```
 git cat-file -p <hash>  # hash文件用zlib直接打开可以看到内容
@@ -563,7 +566,7 @@ committer Xiang Wang <ramwin@qq.com> 1680442265 +0800
 terminal连续执行命令
 ```
 
-#### hash-object
+### hash-object
 生成一个文件的hash
 
 ```shell
@@ -580,35 +583,35 @@ git hash-object A >> f70f10e4db19068f79bc43844b49f3eece45c4e8
 git merge-base commitA commitB
 ```
 
-### ls-tree
+## ls-tree
 查看一个tree的文件内容(包含文件夹下的子文件夹的treenode和文件的node, 只有一层)
 ```
 git ls-tree <hash>
 ```
 
-### ls-remote
+## ls-remote
 展示远程仓库的分支和tag
 
-### pull
+## pull
 * 拉取远程分支 `git pull origin <branch>:<local_branch>`
 
 
-### show  
+## show  
 查看某个文件的版本
 ```
 git show ref:filepath > tmp
 ```
 
-### [sparse checkout](https://git-scm.com/docs/git-sparse-checkout)
+## [sparse checkout](https://git-scm.com/docs/git-sparse-checkout)
 ```
 git sparse-checkout init
 git sparse-checkout add
 ```
 
-### status
+## status
 * `git status -s, --short` *只显示文件名，而不显示其他多余的信息*
 
-### [stash](https://git-scm.com/docs/git-stash)
+## [stash](https://git-scm.com/docs/git-stash)
 ```
 git stash
 git stash list
@@ -618,7 +621,7 @@ git stash -- <file1> [<file2>]  # 指定部分文件stash
 git stash -u/--include-untracked 包含untracked文件
 ```
 
-### 其他
+## 其他
 * [ ] working with remotes
 * 彻底删除某个文件
 ```
