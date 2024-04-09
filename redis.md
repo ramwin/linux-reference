@@ -492,6 +492,7 @@ ool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 ``
 
 ## [Lock](https://redis.readthedocs.io/en/stable/lock.html)
+* 基础锁用法
 ```
 try:
     with client.lock(key, blocking_timeout=5) as lock:  # 最多等你5秒
@@ -499,4 +500,11 @@ try:
         do something expensive  # 保证同时只有一个线程跑这个
 except redis.exceptions.LockError:
     # the lock wasn't acquired
+```
+
+* 当作限流的用法
+```python
+task_key = f"task_{instance.id}"
+if client.lock(task_key, timeout=10, blocking=False).acquire():
+    pass
 ```
