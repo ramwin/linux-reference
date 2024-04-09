@@ -340,11 +340,6 @@ no: 3
     cat .git/objects/c2/dc76d6e9ecfa41381f20813575f92c538448f4  | zlib-flate -uncompress
 
 
-# software
-```{toctree}
-./software.md
-```
-
 # hardware 硬件
 * 重新挂载系统 `mount -o remount rw /   # 解决 read-only filesystem 问题`
 * split 分割文件

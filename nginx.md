@@ -1,4 +1,42 @@
-*Xiang Wang @ 2017-03-14 14:10:44*
+# nginx
+
+* [download](http://nginx.org/)
+* [tutorial in didital ocean](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
+* [compile and configure](http://nginx.org/en/docs/configure.html)
+
+## 设置账号密码
+[参考](https://medium.com/@terawattled/protecting-ethereum-json-rpc-api-with-password-887f3591d221)
+
+```
+server
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    server_name demo.example.com;
+
+
+    # Geth proxy that password protects the public Internet endpoint
+    location /eth
+        auth_basic "Restricted access to this site";
+        auth_basic_user_file /etc/nginx/protected.htpasswd;
+
+        # Proxy to geth note that is bind to localhost port
+        proxy_pass http://localhost:8545;
+
+
+    # Server DApp static files
+    location /
+        root /usr/share/nginx/html;
+        index index.html
+
+        auth_basic "Restricted access to this site";
+        auth_basic_user_file /etc/nginx/protected.htpasswd;
+```
+
+生成密码
+
+```
+sudo htpasswd -c /etc/nginx/protected.htpasswd demo
+```
 
 ## 安装
 * [下载](http://nginx.org/)

@@ -1,9 +1,31 @@
-## database
-数据库
+# SOFTWARE软件
 
 ```{toctree}
-:maxdepth: 2
-./database.md
+./nginx.md
+```
+
+## 网络类
+
+### ufw
+* 打开/关闭ufw
+```
+ufw enable/disable
+```
+* 开放某个端口
+```
+ufw allow 22 comment "允许ssh登录"
+```
+* 查看当前状态
+```
+ufw status numbered
+```
+* 允许某个host通过某个端口
+```
+ufw allow from 172.16.15.66 to any port 6379
+```
+* 批量开启
+```
+ufw allow 19000:19999/tcp commment "批量开启测试端口"
 ```
 
 ## [airflow](../airflowtest/README.md)
@@ -258,27 +280,6 @@ export TLDR_PAGES_SOURCE_LOCATION="http://tldr.ramwin.com/pages/"
 tldr ls
 ```
 
-## ufw
-* 打开/关闭ufw
-```
-ufw enable/disable
-```
-* 开放某个端口
-```
-ufw allow 22 comment "允许ssh登录"
-```
-* 查看当前状态
-```
-ufw status numbered
-```
-* 允许某个host通过某个端口
-```
-ufw allow from 172.16.15.66 to any port 6379
-```
-* 批量开启
-```
-ufw allow 19000:19999/tcp commment "批量开启测试端口"
-```
 
 ## [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
@@ -308,14 +309,10 @@ ufw allow 19000:19999/tcp commment "批量开启测试端口"
 * iotop: `查看磁盘当前读写速度`
 * kazam 录屏软件
 此外还有 greenrecorder, vokoscreen, simplescreenrecorder(manjaro上好用)
-* [nginx](./nginx.md)
-    * [Download](http://nginx.org/)
-    * [Tutorial in Didital Ocean](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
-    * [Compile and Configure](http://nginx.org/en/docs/configure.html)
 
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
 * [postfix](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-18-04)
-* [rabbitmq](./rabbitmq/README.md)
+* [rabbitmq](./rabbitmq/readme.md)
 
 * [screen](./screen.md) *用来开启后台shell*
 ```
