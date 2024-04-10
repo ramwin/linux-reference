@@ -2,7 +2,8 @@
 
 [git官网](https://git-scm.com/doc)  
 [git reference](https://git-scm.com/docs)  
-[git book](https://git-scm.com/book/en/v2)
+[git book](https://git-scm.com/book/en/v2)  
+一款优秀的版本管理工具, 不仅是代码管理, 更是版本管理. 我觉得不仅写代码的人要学会用这个, 所有的办公人员都应该学会
 
 ```shell
 忽略某个文件
