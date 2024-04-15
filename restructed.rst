@@ -1,6 +1,14 @@
 restructured
 ============
 
+链接
+----
+
+如果你都是中文，前后无法有空格, 就要用转义符. 比如\ 百度_\ 的网址
+
+.. _百度: https://www.baidu.com
+
+
 wikipedia参考_
 
 .. _wikipedia参考: https://zh.m.wikipedia.org/zh-sg/ReStructuredText
@@ -51,7 +59,7 @@ sphinx_
 10) 设置自增ID
 
 代办事项
-~~~~~~~~
+--------
 
 .. todo::
    
