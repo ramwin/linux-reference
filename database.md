@@ -1,4 +1,7 @@
 # 数据库
+```{toctree}
+./postgresql.md
+```
 
 ## redis
 ```{toctree}
@@ -6,8 +9,6 @@
 ```
 
 [集群搭建参考](./redis-cluster/README.md)
-
-## [postgresql](./postgresql.md)
 
 ## [mongodb](./mongodb.md)
 

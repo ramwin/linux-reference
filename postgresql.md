@@ -1,8 +1,9 @@
-### 基础
+# postgresql
+## 基础
 [安装](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)  
 
-### [Tutorial](https://www.postgresql.org/docs/current/tutorial.html)
-#### [1. Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
+## [Tutorial](https://www.postgresql.org/docs/current/tutorial.html)
+### [1. Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html)
 ```shell
 sudo apt install postgresql postgresql-contrib
 sudo -i -u postgres
@@ -14,13 +15,13 @@ dropdb <databasename>
 psql <databasename>
 ```
 
-##### 内置函数
+#### 内置函数
 * version
 ```sql
 SELECT version(), current_date, 2+2;
 ```
 
-#### 2. The SQL Language
+### 2. The SQL Language
 1. Introduction
 ```
 cd ..../src/tutorial
@@ -29,7 +30,7 @@ cd ..../toturial
 psql -s mydb
 mydb=> \i basics.sql
 ```
-#### 2.3 [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
+### 2.3 [创建表](https://www.postgresql.org/docs/current/tutorial-table.html)
 ```
 CREATE TABLE weather (
     city    varchar(80),
@@ -40,7 +41,7 @@ CREATE TABLE weather (
 )
 ```
 
-#### 2.4 插入数据
+### 2.4 插入数据
 ```sql
 INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');  # 一定要用单引号
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
@@ -49,12 +50,12 @@ INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
 COPY weather FROM '/home/user/weather.txt';
 ```
 
-#### 2.5 查询表
+### 2.5 查询表
 ```SQL
 SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
 ```
 
-#### 2.7 Aggregate Functions 聚合数据
+### 2.7 Aggregate Functions 聚合数据
 ```SQL
 SELECT max(temp_lo) FROM weather;
 SELECT city FROM weather WHERE temp_lo = max(temp_lo);     WRONG, where里面不能用聚合属性
@@ -62,20 +63,20 @@ SELECT city FROM weather
     WHERE temp_lo = (SELECT max(temp_lo) FROM weather);
 ```
 
-#### 2.8 更新表
+### 2.8 更新表
 ```SQL
 UPDATE weather
   SET temp_hi = temp_hi - 2, temp_lo = temp_lo - 2
   WHERE date>'1994-11-28';
 ```
 
-#### 3.2 Advanced Features -- Views
+### 3.2 Advanced Features -- Views
 ```SQL
 CREATE VIEW myview AS SELECT city, temp_lo, temp_hi, location FROM weather, cities WHERE city = name;
 SELECT * FROM myview;
 ```
 
-#### 3.3 外键
+### 3.3 外键
 ```
 CREATE TABLE cities (
     name varchar(80) primary key,
@@ -86,15 +87,15 @@ CREATE TABLE weather (
 );
 ```
 
-### The SQL Language
-#### 数据定义 Data 
+## The SQL Language
+### 数据定义 Data 
 * 约束
     * check约束
     ```
     create table weather ( temp_lo int CHECK (temp_lo > 0) );
     ```
 
-#### [5.7 Privileges 权限](https://www.postgresql.org/docs/current/ddl-priv.html)
+### [5.7 Privileges 权限](https://www.postgresql.org/docs/current/ddl-priv.html)
 * 更改表的权限
 ```sql
 ALTER TABLE <table_name> OWNER TO <role_name>;  // 变更表，数据库的owner
@@ -116,7 +117,7 @@ wangx=# \dp role2_s_table;
           |               |        | noper=r/postgres          |        |
 ```
 
-#### 数据类型
+### 数据类型
 1. Numeric Types
     1. Integer Types
 
@@ -130,7 +131,12 @@ INSERT INTO cities VALUES (
     'San Francisco', '(-194.0, 53.0)');
 ```
 
-### Sever Administration 服务器管理
+## Sever Administration 服务器管理
+
+* [查看当前连接数](https://stackoverflow.com/questions/27435839/how-to-list-active-connections-on-postgresql):
+```
+select datname from pg_stat_activity;
+```
 
 * 修改用户密码
 ```sql
@@ -144,16 +150,16 @@ GRANT USAGE ON SCHEMA public TO <role>;
 GRANT SELECT ON ALL TABLES IN SCHEMA public to <role>;
 ```
 
-#### Database Roles
+### Database Roles
 ```sql
 CREATE ROLE <name>;
 DROP ROLE <name>;
 SELECT rolname FROM pg_roles;
 ```
 
-#### Back Up and Restore
+### Back Up and Restore
 
-##### 数据库导出
+#### 数据库导出
 ```
 pg_dump \
     --host localhost \
@@ -167,24 +173,24 @@ pg_dump \
     <dbname>
 ```
 
-### [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
+## [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
 * 展示所有数据库 `\l`
 
-#### 权限
+### 权限
 * 允许用户创建表
 ```sql
 ALTER USER <username> CREATEDB
 ```
 
-### Reference
+## Reference
 
-#### [ALTER USER](https://www.postgresql.org/docs/current/sql-alteruser.html)
+### [ALTER USER](https://www.postgresql.org/docs/current/sql-alteruser.html)
 ```sql
 ALTER USER <username> WITH PASSWORD '新密码';
 ```
 
-#### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
+### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
 * 添加自增主键
 ```sql
 create table students (
@@ -196,7 +202,7 @@ insert into students values (2, '1');
 insert into students values (default, '1');  # 报错, 因为2存在了
 ```
 
-#### PostgreSQL Client Applications - PSQL命令工具
+### PostgreSQL Client Applications - PSQL命令工具
 [官网](https://www.postgresql.org/docs/current/app-psql.html)
 * `\h`查看SQL帮助
 * `\?`查看命令相关帮助
@@ -206,7 +212,7 @@ insert into students values (default, '1');  # 报错, 因为2存在了
 * `\timing` 显示语句执行时间
 * `\r` 重置输入的内容
 
-### 配置
+## 配置
 * 允许远程登录
 1. 编辑postgresq.conf
 ```
