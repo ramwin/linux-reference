@@ -1,8 +1,14 @@
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)
-* [shell编程](./shellprogramming/README.md)
 * [linux命令搜索网站](https://wangchujiang.com/linux-command/)
+
+## shell编程
+
+```{toctree}
+:maxdepth: 2
+./shellprogramming/README.md
+```
 
 ## [cache](./cache.md)
 

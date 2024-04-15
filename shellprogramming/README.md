@@ -1,11 +1,12 @@
-**Xiang Wang @ 2018-05-04 19:52:09**
-
 # menu 目录
 * [runoob 菜鸟网站](https://www.runoob.com/linux/linux-shell.html)
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
     * 传递参数
 * [ ] [learning website](https://www.shellscript.sh/)
 * [ ] [tutorials point](https://www.tutorialspoint.com/unix/unix-loop-control.htm)
+
+* `set -ex`
+报错的时候不再执行， 并且每次执行前输出执行的命令。 注意，这个无法获取到使用`&&`执行的报错
 
 # [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
 * 赋值变量

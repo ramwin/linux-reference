@@ -16,7 +16,6 @@ Welcome to linux reference's documentation!
    ./README.md
 
 
-
 Indices and tables
 ==================
 
