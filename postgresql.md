@@ -138,6 +138,17 @@ INSERT INTO cities VALUES (
 select datname from pg_stat_activity;
 ```
 
+* [查看各个表的尺寸](https://stackoverflow.com/questions/21738408/postgresql-list-and-order-tables-by-size)
+```
+select
+  table_name,
+  pg_size_pretty(pg_total_relation_size(quote_ident(table_name))),
+  pg_total_relation_size(quote_ident(table_name))
+from information_schema.tables
+where table_schema = 'public'
+order by 3 desc;
+```
+
 * 修改用户密码
 ```sql
 ALTER USER user_name WITH PASSWORD 'new_password';
