@@ -1,9 +1,52 @@
 # SOFTWARE软件
 
+## 服务类
+```{toctree}
+:maxdepth: 2
+./celery/README.md
+./rabbitmq/README.md
+```
+
+### [airflow](../airflowtest/README.md)
+
 ## 开发工具类
 ```{toctree}
 ./git.md
 ```
+
+### chromium
+* 代理
+
+```
+chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
+```
+
+* cvim
+一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
+
+```
+let searchlimit = 4
+let blacklists = ["https://ecs.console.aliyun.com/*"]
+let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
+showTodoRest -> {{
+  var doms = document.getElementsByClassName("todo-rest")
+  for (var i=0; i<doms.length; i++) {
+    var dom = doms[i];
+    dom.setAttribute("tabindex", true);
+  }
+}}
+call showTodoRest
+```
+
+* 调试
+
+```
+-scheme:chrome-extension 关闭插件的network
+```
+
+### bat
+和cat一样，但是输出会有格式化
+
 
 ### [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
@@ -47,40 +90,6 @@ ufw allow from 172.16.15.66 to any port 6379
 ```
 ufw allow 19000:19999/tcp commment "批量开启测试端口"
 ```
-
-## [airflow](../airflowtest/README.md)
-
-## bat
-和cat一样，但是输出会有格式化
-
-## [celery](./celery/README.md)
-
-## chromium
-* 代理
-
-
-    chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
-
-* cvim
-一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
-
-```
-let searchlimit = 4
-let blacklists = ["https://ecs.console.aliyun.com/*"]
-let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
-showTodoRest -> {{
-  var doms = document.getElementsByClassName("todo-rest")
-  for (var i=0; i<doms.length; i++) {
-    var dom = doms[i];
-    dom.setAttribute("tabindex", true);
-  }
-}}
-call showTodoRest
-```
-
-* 调试
-
-    -scheme:chrome-extension 关闭插件的network
 
 ## convert
 转化图片分辨率
@@ -312,7 +321,6 @@ tldr ls
 
 * [php](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-in-ubuntu-16-04)
 * [postfix](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-18-04)
-* [rabbitmq](./rabbitmq/readme.md)
 
 * [screen](./screen.md) *用来开启后台shell*
 ```
