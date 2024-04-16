@@ -1,7 +1,6 @@
-**Xiang Wang @ 2020-03-23 08:55:36**
+# celery
 
-
-## celery
+## 基础
 [官网](https://docs.celeryproject.org/en/stable/getting-started/introduction.html)
 
 ```
@@ -33,8 +32,8 @@ celery|4|1|52904|37248|和celery_1_0相比
 celery|4|4|69228|53024|和celery_1_0相比
 
 
-### 起步
-#### Choose a broker
+## 起步
+### Choose a broker
 不管你怎么设置，只要broker都是`amqp://guest@localhost//`, 那么他们在rabbitmq的queue都是celery。但是在celery启动的时候，会额外产生两个queue
 ```
 Timeout: 60.0 seconds ...
@@ -44,3 +43,9 @@ celery@manjaro.celery.pidbox    0
 celery  0
 celeryev.76bb7ea5-4b5e-4c4b-9c8f-8179984fa8b6   0
 ```
+
+## Config
+
+* [logging](https://docs.celeryq.dev/en/stable/userguide/configuration.html#logging)
+
+    * celery会关闭root的logger, 所以不能设置
