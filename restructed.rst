@@ -1,8 +1,24 @@
 restructured
 ============
 
+text style
+----------
+
+*斜体*: ``*``
+
+**加粗**: ``**``
+
+``block``: ``````
+
+
 链接
 ----
+
+`内部链接 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#hyperlinks>`_
+
+.. code::
+
+    `内部链接 <https://www.sphinx-doc.org/>`_
 
 如果你都是中文，前后无法有空格, 就要用转义符. 比如\ 百度_\ 的网址
 
