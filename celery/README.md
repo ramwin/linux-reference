@@ -1,6 +1,8 @@
 # celery
 
 ## 基础
+* celery报错的时候，worker无法报错，但是在外面用`get()`的时候会报错
+
 [官网](https://docs.celeryproject.org/en/stable/getting-started/introduction.html)
 
 ```
