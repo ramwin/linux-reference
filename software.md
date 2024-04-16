@@ -14,6 +14,9 @@
 ./git.md
 ```
 
+### bat
+和cat一样，但是输出会有格式化
+
 ### chromium
 * 代理
 
@@ -44,9 +47,16 @@ call showTodoRest
 -scheme:chrome-extension 关闭插件的network
 ```
 
-### bat
-和cat一样，但是输出会有格式化
+### htpasswd
+* 添加用户
+```
+htpasswd <filename> <username>
+```
 
+* 验证用户
+```
+htpasswd -v <filename> <username>
+```
 
 ### [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
