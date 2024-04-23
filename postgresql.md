@@ -235,5 +235,5 @@ host    <数据库>     <用户>             <fromIP>/32                 scram-s
 ```
 3. 刷新登录权限
 ```sql
-select pg_reload_conf();  // 执行这个语句更新登录权限
+select pg_reload_conf();  /* 执行这个语句更新登录权限 */
 ```

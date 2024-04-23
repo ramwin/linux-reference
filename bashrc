@@ -1,6 +1,3 @@
-# export HTTPS_PROXY="http://localhost:1080"
-# export HTTP_PROXY="http://localhost:1080"
-
 # 用来在windows目录下用windows的git
 cd() {
     builtin cd "$1"
@@ -16,22 +13,7 @@ cd() {
 export TLDR_CACHE_ENABLED=1
 export TLDR_CACHE_MAX_AGE=24
 
-alias gitlog='git log --graph --pretty=format:"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d" --date=format:"%Y-%m-%d %H:%M"'
-
-# django 快捷键
-alias mshell='./manage.py shell'
-alias mshell3='python3 manage.py shell'
-alias mrun='./manage.py runserver'
-alias collectstatic='python manage.py collectstatic'
-
-# Docker 的快捷键
-alias dockerrm='docker rm `sudo docker ps -a -q`'
-alias dockerimg='docker images'
-
 # 翻墙用
-alias ramwinproxy='sslocal -s www.ramwin.com -k JinmK29U -m aes-256-cfb'
-alias ramwinproxy2='sslocal -p 12288 -s band.ramwin.com -k Ramwin234 -m aes-256-cfb'
-# alias ramwinchrom='chromium-browser --proxy-server="socks5://127.0.0.1:1080" --proxy-bypass-list="*.baidu.com;*.163.com;127.0.0.1:8080" &'
 alias ramwinchrom='chromium-browser --proxy-server="socks5://127.0.0.1:1080" --proxy-pac-url="file:///home/wangx/github/Public/proxy_gfw.pac"&'
 
 # 快捷操作
@@ -123,7 +105,6 @@ export VISUAL="vim"
 export PYTHONBREAKPOINT=ipdb.set_trace
 alias pypi_deploy="rm dist/* && python3 setup.py sdist bdist_wheel && twine upload dist/*"
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
-# export HTTPS_PROXY=singapore.ramwin.com:5979
 
 PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
 # \[\e[37m\] 白色
