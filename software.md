@@ -133,8 +133,6 @@ apt install language-pack-zh-hans
 LANG="zh_CN.UTF-8"
 ```
 
-## [manjaro](./manjaro.md)
-
 ## nnn
 文件管理
 ```

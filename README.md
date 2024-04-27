@@ -13,6 +13,10 @@
 ## [cache](./cache.md)
 
 ## 操作系统
+```{toctree}
+./manjaro.md
+```
+
 ### 文件系统
 * 文件类型
 通过ls看文件时, 可以看到文件类型
@@ -335,8 +339,13 @@ no: 3
 ## zentify
 * `zenity --info --text '保护视力，休息一会'`
 
-## [zip 压缩文件  ](./zip.md)
+## zip 压缩文件
+
 `zip -r target.zip sourcedirectory/`
+
+```{toctree}
+./zip.md
+```
 
 
 ## zlib-flate
