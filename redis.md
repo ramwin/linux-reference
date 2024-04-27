@@ -491,7 +491,7 @@ ool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 .hdel('dict', 'key')  # 存在就返回1, 否则返回0
 ``
 
-## [Lock](https://redis.readthedocs.io/en/stable/lock.html)
+# [Lock](https://redis.readthedocs.io/en/stable/lock.html)
 * 基础锁用法
 ```
 try:
