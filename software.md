@@ -12,6 +12,7 @@
 ## 开发工具类
 ```{toctree}
 ./git.md
+./vim.md
 ```
 
 ### bat
@@ -58,7 +59,6 @@ htpasswd <filename> <username>
 htpasswd -v <filename> <username>
 ```
 
-### [vim](./vim.md)
 [交互式的tutorial教程](http://www.openvim.com/)
 * [multiple-cursor](https://github.com/terryma/vim-multiple-cursors#quick-start)
     `:MultipleCursorsFind <regrexmatch>`

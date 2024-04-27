@@ -15,6 +15,7 @@
 ## 操作系统
 ```{toctree}
 ./manjaro.md
+./windows.md
 ```
 
 ### 文件系统
