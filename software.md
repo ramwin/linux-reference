@@ -13,6 +13,7 @@
 ```{toctree}
 ./git.md
 ./vim.md
+./terminal.md
 ```
 
 ### bat
