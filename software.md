@@ -81,6 +81,15 @@ htpasswd -v <filename> <username>
 ./nginx.md
 ```
 
+```shell
+ip link show
+```
+
+### ifstat 查看网速
+```
+ifstat -a
+```
+
 ### socat
 端口转发
 

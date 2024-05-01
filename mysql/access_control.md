@@ -30,17 +30,17 @@ mysql> GRANT ALL PRIVILEGES ON *.* TO 'finley'@'%'
 
 * 查看用户权限  
 
-    ```sql
-    mysql> SHOW GRANTS FOR 'admin'@'localhost';
-         > Grants for admin@localhost
-         > GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
-    mysql> SHOW CREATE USER 'admin'@'localhost'\G
-    >> 1. row
-    CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
-    IDENTIFIED WITH 'mysql_native_password'
-    AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'
-    REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK
-    ```
+```
+mysql> SHOW GRANTS FOR 'admin'@'localhost';
+     > Grants for admin@localhost
+     > GRANT RELOAD, PROCESS ON *.* TO 'admin'@'localhost'
+mysql> SHOW CREATE USER 'admin'@'localhost'\G
+>> 1. row
+CREATE USER for admin@localhost: CREATE USER 'admin'@'localhost'
+IDENTIFIED WITH 'mysql_native_password'
+AS '*67ACDEBDAB923990001F0FFB017EB8ED41861105'
+REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK
+```
 
 * 创建普通帐号
 
