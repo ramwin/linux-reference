@@ -3,6 +3,7 @@
 ## 服务类
 ```{toctree}
 :maxdepth: 2
+./software/supervisor.md
 ./celery/README.md
 ./rabbitmq/README.md
 ```
@@ -79,6 +80,9 @@ htpasswd -v <filename> <username>
 ```{toctree}
 ./nginx.md
 ```
+
+### socat
+端口转发
 
 ### ufw
 * 打开/关闭ufw
@@ -287,8 +291,6 @@ ClientAliveInterval: 60 #如果超过多少时间没有消息，就主动发送�
 ClientAliveCountMax 3
 PasswordAuthentication no  是否允许密码登录
 ```
-
-## [supervisor](./software/supervisor.md)
 
 ## tsocks 让应用启动的时候走代理
 ```

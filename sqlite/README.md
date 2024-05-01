@@ -33,11 +33,11 @@ VALUES( value1,	value2 ,...);
 * 案例
 
 ```sql
-insert into pets values (null, 'cat'); // 不指定id
-insert into pets values (1, 'cat');  // 指定id
->>> Error: UNIQUE constraint failed: pets.id
-insert into pets values (null, 'cat'), (null, 'dog');  // 批量插入数据
-insert into pets (name) values ('cat'), ('dog');  // 指定表头顺序
+insert into pets values (null, 'cat'); /* 不指定id */
+insert into pets values (1, 'cat');  /* 指定id */
+/* >>> Error: UNIQUE constraint failed: pets.id */
+insert into pets values (null, 'cat'), (null, 'dog');  /* 批量插入数据 */
+insert into pets (name) values ('cat'), ('dog');  /* 指定表头顺序 */
 ```
 
 #### Update
