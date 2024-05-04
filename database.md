@@ -1,10 +1,6 @@
 # 数据库
 ```{toctree}
 ./postgresql.md
-```
-
-## redis
-```{toctree}
 ./redis.md
 ```
 

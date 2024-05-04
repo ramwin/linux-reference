@@ -1,4 +1,11 @@
-# Install
+# redis
+## string
+```python
+r.set("foo", 3, ex=3600)
+r.get("foo")  # 不存在default
+```
+
+## Install
 * docker
 ```
     docker run --restart=always --name redis -d -p 6379:6379 redis
@@ -13,21 +20,21 @@
     src/redis-server
 ```
 
-# Progamming with Redis
-## [Redis as an LRU cache](https://redis.io/topics/lru-cache)
+## Progamming with Redis
+### [Redis as an LRU cache](https://redis.io/topics/lru-cache)
 * maxmemory 最大允许使用的内存 如果是用10M代表了10000000字节，如果是10MB代表了 10MiB
 * maxmemory-policy 占用内存过多时的操作
 * maxmemory-samples 5 控制的精准度 (从几个sample里面找到不需要的key去删除)
 
-## Redis as an LFU mode
+### Redis as an LFU mode
 Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
 * lfu-decay-time 1: 每过多少时间，key的counter会减少
 * lfu-log-factor 10: 需要次命中后，counter达到最大。我们系统里匹配一个人大概匹配几千次。所以匹配1000次后认为最大，暂时不删除, factor设置成0, decay-time要坚持数据保存一天，255次需要6分钟才允许删除一次。一共需要减少16次，所以设置成10吧
 
 
-# [Command 命令](https://redis.io/commands)
+## [Command 命令](https://redis.io/commands)
 
-## connections 链接文档
+### connections 链接文档
 * [ ] auth
 * echo argument: return argument
 * [ping](https://redis.io/commands/ping)
@@ -39,7 +46,7 @@ use this command to test if a connection is still alive
 * select: select index switch to different database
 * swapdb index index: swap two redis databases, the clients connected with database 1 will see the data that was formerly of database 0
 
-## [Geo](https://redis.io/commands#geo)
+### [Geo](https://redis.io/commands#geo)
 * GEOADD `GEOADD key longitude latitude member [longitude latitude member ... ]`
 * GEODIST `GEODIST key member1 member2 unit`
 * GEORADIUS `GEORADIUS key 15 37 100 km`
@@ -58,7 +65,7 @@ Query very large areas with a very small COUNT option may be slow.
 * GEORADIUSBYMEMBER
 THis command is exactly like GEORADIUS except you should use a member to replace the longitude and latitude
 
-## [Hashes](https://redis.io/commands#hash)
+### [Hashes](https://redis.io/commands#hash)
 * hsetnx key field value
 ```python
 client.hset("user_1", "id", 1)
@@ -67,7 +74,7 @@ client.hgetall("user_1")  // {b"id": b"1", b"name": b"ramwin"}
 client.hset("user1", mappting={"id": 1, "name": "ramwin"})  // return 0 表示没有field新增
 ```
 
-## Keys
+### Keys
 * DEL
 ```
 DEL key1 [key2 [key3]]
@@ -147,7 +154,7 @@ if expire is 0, the key is created without any expire
     * -2, key不存在
 
 
-## STR
+### STR
 * set
 ```
 >>> r.set('key', 'bar', nx=True)
@@ -156,7 +163,7 @@ True
 None
 ```
 
-## Lists
+### Lists
 ```
 r.rpush(key, *args)  # 把args里面的数据按照顺序放入key
 r.lpop(key)  # 把key里面的数据pop出来，如果没有就是None
@@ -183,11 +190,11 @@ r.blrange(key, 0, -1)  # must have the start and end index
 * rpush
 * rpushx: 必须有这个key，这个key是list才会push
 
-## [Pub/Sub 订阅消息](https://redis.io/commands#pubsub)
+### [Pub/Sub 订阅消息](https://redis.io/commands#pubsub)
 * SUBSCRIBE: `SUBSCRIBE channel [channel]`
 * PUBLISH: `PUBLISH channel message` return the number of clients that received the message
 
-## [Sets](https://redis.io/commands#set)
+### [Sets](https://redis.io/commands#set)
 * SADD: `SADD key member [member ...]`
 返回新增的元素数量
 ```
@@ -276,7 +283,7 @@ client.sscan('set1', cursor=0)
 合并并且存储到另外的key. 返回合并的数字
 
 
-## String
+### String
 * tutorial
     ```
     > set mykey value nx|xx nx: key must not exist xx: exist
@@ -327,7 +334,7 @@ get key
     GET foo
     ```
 
-## Sorted Sets
+### Sorted Sets
 
 [官网][sorted set]
 
@@ -351,7 +358,7 @@ sorted sets 保存的是字符串: float
 > zremrangebyscore hackers 1940 1960
 > zrange hackers "Anita Borg"  # return the rank (from 0) or (nil)
 
-# Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
+## Lexicographical scores  # It should only be used in sets where all the members have the same score. 只能用于所有元素分数一致的情况，不然过滤会出现意想不到的结果
 > zadd hackers 0 "Alan Kay" 0 "Sophie Wilson" 0 "Richard Stallman" 0
     "Anita Borg" 0 "Yukihiro Matsumoto" 0 "Hedy Lamarr" 0 "Claude Shannon"
     0 "Linus Torvalds" 0 "Alan Turing"
@@ -422,8 +429,8 @@ redis.zremrangebyrank(key, 0, delete_cnt - 1)
 根据分数来删除
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
-# Administration
-## Config 配置
+## Administration
+### Config 配置
 * maxmemory 100mb
     * string 72b 
     * list 168b
@@ -435,37 +442,37 @@ redis.zremrangebyrank(key, 0, delete_cnt - 1)
 * requirepass `<longpassword>`: password，longer than 32
 * daemonize no: if it is yes, redis will create `/var/run/redis.pid`
 
-## Persistence
+### Persistence
 redis有2种保存方式
 * RDB保存直接保存当前的快照
 * AOF保存所有的操作
 
-### RDB的优势
+#### RDB的优势
 * 仅仅生成一个文件，方便备份
 * 方便恢复
 * 性能高，会生成一个子进程来备份
 * 恢复时启动块
 
-### RDB缺点
+#### RDB缺点
 * 不是及时的，2次备份间隔期间的数据会因为下次备份没生成而丢失
 * 数据很大，cpu不高会卡顿
 
-## To be continued
+### To be continued
 * [ ] Replication
 * [ ] Redis Administration
 
 [sorted set]: https://redis.io/commands/?group=sorted-set
 
-# python教程
+## python教程
 [github 文档](https://github.com/andymccurdy/redis-py)  
 
-## Basic
+### Basic
 * Quick usage
 ```
 import redis
 ```
 
-# 单独链接
+## 单独链接
 r = redis.StrictRedis(host="localhost", port=6379, db=0, password=None)
 > 如果服务器中断了或者无法链接 redis.exceptions.ConnectionError 连接池一样会报错。二者redis可以连接时会恢复
 
@@ -476,9 +483,9 @@ r = redis.StrictRedis(host="localhost", port=6379, db=0, password=None)
  = redis.StrictRedis(db=0)
 ``
 
-# 连接池
+## 连接池
 
-``
+```
 ool = redis.ConnectionPool(host='localhost', port=6379, db=0)
  = redis.StrictRedis(connection_pool=pool, decode_responses=True)
 
@@ -489,9 +496,9 @@ ool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 
 .hset('dict', 'key', 'value')
 .hdel('dict', 'key')  # 存在就返回1, 否则返回0
-``
+```
 
-# [Lock](https://redis.readthedocs.io/en/stable/lock.html)
+## [Lock](https://redis.readthedocs.io/en/stable/lock.html)
 * 基础锁用法
 ```
 try:
