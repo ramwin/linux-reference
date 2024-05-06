@@ -95,6 +95,15 @@ array=($line)  # 变成了列表
 ```
 
 # [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
+* 用`\``可以执行命令
+```shell
+for i in `ls test`
+do
+    echo $i
+    mv test/$i test/$i.jpg
+done
+```
+
 ```
 for i in $( ls ); do  # 循环命令的结果列表
     if [ -d $i ]; then
