@@ -42,7 +42,7 @@ CREATE TABLE shop (
 ### column定义
 顺序不能错
 
-```sql
+```
 col_name data_type [NOT NULL|NULL] [DEFAULT {literal|expr}] [AUTO_INCREMENT] [[PRIMARY] KEY]
 id int not null auto_increment primary key
 ```
@@ -318,7 +318,7 @@ CREATE TABLE shirts (
     size ENUM("x-small", "small", "medium", "large", "x-largs")
 )
 ALTER TABLE shirts MODIFY size ENUM("small", "big");
-ERROR 1265 (01000): Data truncated for column 'size' at row 2;  # 如果enum不存在就报错了
+ERROR 1265 (01000): Data truncated for column 'size' at row 2;  /* 如果enum不存在就报错了 */
 ```
 * 实际上数据库用1个字节来保存这个数据，所以速度会快很多
 * 注意排序，会根据ENUM的顺序来排序
@@ -450,11 +450,12 @@ mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结
 * [ALTER TABLE Syntax](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
 ALTER TABLE score smallint unsigned not null; this will set the **default value** 0
     * [案例](https://dev.mysql.com/doc/refman/8.0/en/alter-table-examples.html)
-    ```sql
+    ```
     alter table <table> add <column> <data-type> [after <column>]
+    wer123
     ALTER TABLE t1 RENAME t2;
     ALTER TABLE t2 MODIFY a TYNYINT NOT NULL, CHANGE b c CHAR(20);
-    ALTER TABLE t1 RENAME COLUMN hometown_match TO hometown_match2;  -- 重命名
+    ALTER TABLE t1 RENAME COLUMN hometown_match TO hometown_match2;  /* 重命名 */
     ALTER TABLE t2 ADD d TIMESTAMP;
     ALTER TABLE t2 ADD INDEX (d), ADD UNIQUE (a);
     ALTER TABLE t2 DROP COLUMN c;  删除列
