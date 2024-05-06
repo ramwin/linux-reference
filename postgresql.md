@@ -201,6 +201,13 @@ ALTER USER <username> CREATEDB
 ALTER USER <username> WITH PASSWORD '新密码';
 ```
 
+### [ALTER TABLE](https://www.postgresql.org/docs/current/sql-altertable.html)
+```sql
+ALTER TABLE students ALTER age integer;
+ALTER TABLE students DROP age;
+```
+
+
 ### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
 * 添加自增主键
 ```sql
