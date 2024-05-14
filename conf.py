@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'linux reference'
+project = 'Linux Reference'
 copyright = '2024, Xiang Wang'
 author = 'Xiang Wang'
 
