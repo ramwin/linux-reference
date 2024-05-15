@@ -16,11 +16,6 @@ export TLDR_CACHE_MAX_AGE=24
 # 翻墙用
 alias ramwinchrom='chromium-browser --proxy-server="socks5://127.0.0.1:1080" --proxy-pac-url="file:///home/wangx/github/Public/proxy_gfw.pac"&'
 
-# 快捷操作
-alias l='ls'
-alias ll='ls -al'
-alias mytree="tree -L 2 -d -I 'node_modules'"
-
 # 自动打包 servlet 项目
 function wxm(){
     rm -rf target
@@ -82,6 +77,12 @@ fi
 
 export NODE_PATH="/usr/node/lib/node_modules"
 
+# 快捷操作
+alias l='ls'
+alias ll='ls -al'
+alias mytree="tree -L 2 -d -I 'node_modules'"
+alias py="ipython"
+
 # 目录快捷方式
 alias github='cd ~/github'
 alias work='cd ~/github/duishang'
@@ -101,7 +102,6 @@ export CLICOLOR=1
 # settitle coding
 export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
-# alias tldr='tldr -s http://ramwin.com:9999/tldr/pages'
 export PYTHONBREAKPOINT=ipdb.set_trace
 alias pypi_deploy="rm dist/* && python3 setup.py sdist bdist_wheel && twine upload dist/*"
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
