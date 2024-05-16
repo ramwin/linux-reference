@@ -242,6 +242,8 @@ git diff --word-diff
 git diff HEAD HEAD^^ --stat  # only see the different name
 ```
 
+* `-w`, `--ignore-all-spaces`: 执行的时候忽略空格变化
+
 ### difftool
 
 ```
