@@ -40,10 +40,23 @@ sphinx_
 标题用=
 -------
 
+三级标题
+^^^^^^^^
+
+四级标题
+~~~~~~~~
+
+五级标题
+""""""""
+
 .. code::
 
     标题用=
     =======
+    二级标题
+    --------
+    后面是 ^^^^^ ~~~~~~ """"""
+
 
 代码用'.. code::'
     
@@ -81,3 +94,18 @@ sphinx_
    
    代办事项todo  
    wer
+
+include
+-------
+
+include会直接复制过来
+但是超过了级别不行
+
+.. include:: ./same_include.rst
+.. include:: ./include.rst
+
+toctree会当作上面的最后一个标题的子元素
+
+.. toctree::
+
+   ./new_chapter.rst

@@ -1,4 +1,5 @@
-# menu 目录
+# shell
+## menu 目录
 * [runoob 菜鸟网站](https://www.runoob.com/linux/linux-shell.html)
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
     * 传递参数
@@ -8,14 +9,14 @@
 * `set -ex`
 报错的时候不再执行， 并且每次执行前输出执行的命令。 注意，这个无法获取到使用`&&`执行的报错
 
-# [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
+## [variables 变量](https://www.runoob.com/linux/linux-shell-variable.html)
 * 赋值变量
 ```
 STR="Hello World!"  # 等号两端不能有空格
 echo $STR
 OF=/var/my-backup-$(date +%Y%m%d).tgz
 tar -cZf $OF /home/me/
-# 把语句赋值给变量的两种方式
+## 把语句赋值给变量的两种方式
 version=`lsb_release -d`
 version = $(lsb_release -d)
 echo $version
@@ -43,14 +44,14 @@ hello
 echo $HELLO
 ```
 
-# parameter 参数
+## parameter 参数
 ```
 echo "当前脚本的文件名: $0"
 echo "第一个参数 $1"
 echo "一共 $#个参数"  # 不算如文件名
 ```
 
-# String 字符串
+## String 字符串
 ```
 $'Hello\nWorld'  # 使用$可以把里面的字符转移，注意必须用单引号
 your_name='runoob'  # 单引号里面不能用变量和转义字符
@@ -77,7 +78,7 @@ greeting_1="hello, ${your_name} !"
 if [[ ${version,,} == *"manjaro"* ]]; then
 ```
 
-# [数组](https://www.runoob.com/linux/linux-shell-array.html)
+## [数组](https://www.runoob.com/linux/linux-shell-array.html)
 ```
 list=($(cat test.txt))  # 读取文件，把所有单词变成一个数组, 注意不是所有行
 echo ${list[0]}  # 第0行
@@ -94,7 +95,7 @@ line=`cat input.txt`
 array=($line)  # 变成了列表
 ```
 
-# [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
+## [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
 * 用`\``可以执行命令
 ```shell
 for i in `ls test`
@@ -131,9 +132,11 @@ while [ $i -lt $array ]; do  # while循环列表
 done
 ```
 
-# [judgement 判断](https://www.runoob.com/linux/linux-shell-process-control.html)
-[测试](./ifelse.sh)
-## 格式
+## judgement 判断
+[runoob教程](https://www.runoob.com/linux/linux-shell-process-control.html)  
+[测试](./ifelse.sh)  
+
+### 格式
 ```shell
 if condition
 then
@@ -151,9 +154,9 @@ fi
 -d 'directory' 判断文件夹是否存在
 ```
 
-## 判断一个软件是否安装了
+### 判断一个软件是否安装了
 ```shell
-# 使用command来判断
+## 使用command来判断
 for i in "cmatrix" "python2"; do
     programname="$i"
     result=`command -v $programname`
@@ -176,7 +179,7 @@ for i in "nnn" "node"; do
 done
 ```
 
-## 判断一个仓库是否更新了
+### 判断一个仓库是否更新了
 ```shell
 // ../script/判断仓库是否更新了.sh
 function update()
@@ -200,13 +203,21 @@ function update()
 }
 ```
 
-# exceptions
+### 判断目录是否存在
+```shell
+if [ -d test_directory ]
+then
+    echo "test_directory存在"
+fi
+```
+
+## exceptions
 ```
 echo "error"
 exit 123
 ```
 
-# 输入输出
+## 输入输出
 * read
 
     read text;
@@ -218,10 +229,10 @@ exit 123
     echo "You chose $name."
 
 
-# built
+## built
 * 某些时候你的命令比如cd被alias了, 用`built in cd`可以执行原始的cd命令
 
-# 函数
+## 函数
 注意，里面的CD会影响进程内部的PWD,但是不会影响执行后的PWD  
 里面的变量定义后， 其他地方一般都能用。他是dynamic scope的
 ```
