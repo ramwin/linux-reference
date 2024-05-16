@@ -12,7 +12,7 @@ Welcome to linux reference's documentation!
 
    ./software.md
    ./database.md
-   ./restructed.rst
+   ./restructed/restructed语法.rst
    ./README.md
 
 

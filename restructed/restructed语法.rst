@@ -51,11 +51,15 @@ sphinx_
 
 .. code::
 
-    标题用=
+    https://devguide.python.org/documentation/markup/#sections
+    标题用= sections
     =======
-    二级标题
+    二级标题 subsections
     --------
-    后面是 ^^^^^ ~~~~~~ """"""
+    后面是
+    ^^^^^ subsubsections
+    ~~~~~~ 这个波浪号不再python规范里， 但是有用
+    """""" paragraph
 
 
 代码用'.. code::'
@@ -109,3 +113,10 @@ toctree会当作上面的最后一个标题的子元素
 .. toctree::
 
    ./new_chapter.rst
+
+- 我想toctree但是当作大标题
+
+.. toctree::
+   :caption: 2
+
+   ./new_chapter2.rst
