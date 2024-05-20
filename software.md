@@ -79,6 +79,7 @@ htpasswd -v <filename> <username>
 ## 网络类
 ```{toctree}
 ./nginx.md
+./shadowsocks/shadowsocks的用法.md
 ```
 
 ```shell

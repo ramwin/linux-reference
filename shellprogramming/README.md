@@ -1,4 +1,8 @@
 # shell
+```{toctree}
+./file_directory.md
+```
+
 ## menu 目录
 * [runoob 菜鸟网站](https://www.runoob.com/linux/linux-shell.html)
     * [ ] Shell 变量, 后面的字符串操作，数组，注释还没看
