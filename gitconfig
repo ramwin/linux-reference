@@ -1,33 +1,33 @@
 [alias]
     co = checkout
-	lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
+    lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
     mt = mergetool
     rb = "rebase --continue"
 [branch "master"]
-	remote = origin
-	merge = refs/heads/master
+    remote = origin
+    merge = refs/heads/master
 [core]
-	bigFileThreshold = 1M
-	excludesfile = ~/.gitignore
-	quotepath = false
+    bigFileThreshold = 1M
+    excludesfile = ~/.gitignore
+    quotepath = false
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [merge]
-	tool = vimdiff
+    tool = vimdiff
 [pack]
-	windowMemory = 1g
+    windowMemory = 1g
 [user]
-	email = ramwin@qq.com
-	name = Xiang Wang
+    email = ramwin@qq.com
+    name = Xiang Wang
 [pull]
-	rebase = true
-	default = current
+    rebase = true
+    default = current
 [push]
-	default = current
+    default = current
 [safe]
-	directory = /run/media/wangx/samsung/github/coin
+    directory = /run/media/wangx/samsung/github/coin
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+    insteadOf = https://github.com/
