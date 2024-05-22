@@ -75,7 +75,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-export NODE_PATH="/usr/node/lib/node_modules"
+export NODE_PATH="${HOME}/node/lib/node_modules"
 
 # 快捷操作
 alias l='ls'

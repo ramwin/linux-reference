@@ -1,6 +1,6 @@
 [alias]
     co = checkout
-    lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
+    lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%an %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
     mt = mergetool
     rb = "rebase --continue"
 [branch "master"]
