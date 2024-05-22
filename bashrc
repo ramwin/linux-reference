@@ -103,7 +103,6 @@ export CLICOLOR=1
 export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
 export PYTHONBREAKPOINT=ipdb.set_trace
-alias pypi_deploy="rm dist/* && python3 setup.py sdist bdist_wheel && twine upload dist/*"
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
 
 PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
