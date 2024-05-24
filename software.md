@@ -1,11 +1,18 @@
 # SOFTWARE软件
 
+## Mac
+```{toctree}
+./mac/shortcut.md
+./mac/software软件安装卸载brew.md
+```
+
 ## 服务类
 ```{toctree}
 :maxdepth: 2
 ./software/supervisor.md
 ./celery/README.md
 ./rabbitmq/README.md
+./nfs.md
 ```
 
 ### [airflow](../airflowtest/README.md)
@@ -15,6 +22,7 @@
 ./git.md
 ./vim.md
 ./terminal.md
+./markdown.md
 ```
 
 ### bat
@@ -80,6 +88,7 @@ htpasswd -v <filename> <username>
 ```{toctree}
 ./nginx.md
 ./shadowsocks/shadowsocks的用法.md
+./net网络.md
 ```
 
 ```shell

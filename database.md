@@ -2,6 +2,8 @@
 ```{toctree}
 ./postgresql.md
 ./redis.md
+./mysql/README.md
+./mongodb.md
 ```
 
 [集群搭建参考](./redis-cluster/README.md)
@@ -15,10 +17,6 @@ data 基础操作
 ./database/data.md
 ```
 
-## [mysql 数据库](./mysql/README.md)
-
-* [Grant权限控制](./mysql/mysql_grant.md)
-* [mysqldump](./mysql/README.md)
 
 ## sqlite
 ```{toctree}

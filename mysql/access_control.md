@@ -1,8 +1,8 @@
-## [Access Control](https://dev.mysql.com/doc/refman/8.0/en/access-control.html)
-### 用户管理
+# [Access Control](https://dev.mysql.com/doc/refman/8.0/en/access-control.html)
+## 用户管理
 用户名字, 密码问题. 如何添加删除用户. 如果使用角色概念. 如何修改密码. 安全引导.
 
-### User Names and Passwords 用户名和密码的使用
+## User Names and Passwords 用户名和密码的使用
 
 ```bash
 mysql --user=finley --password db_name
@@ -10,7 +10,7 @@ mysql -u finley -p db_name
 mysql -u finley -ppassword db_name  # 不安全
 ```
 
-### Adding User Accounts 添加用户
+## Adding User Accounts 添加用户
 * 创建管理帐号
     * 案例
 
@@ -59,7 +59,7 @@ REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK
         ->     TO 'custom'@'%.example.com';
     ```
 
-### [删除用户](https://dev.mysql.com/doc/refman/8.0/en/drop-user.html)
+## [删除用户](https://dev.mysql.com/doc/refman/8.0/en/drop-user.html)
 Removing User Accounts
 
     DROP USER 'jeffrey'@'localhost';

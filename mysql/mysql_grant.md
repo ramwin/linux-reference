@@ -1,4 +1,4 @@
-**Xiang Wang @ 2017-06-23 09:29:22**
+# grant
 
 * [官方参考](https://dev.mysql.com/doc/refman/8.0/en/)
 

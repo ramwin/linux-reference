@@ -1,8 +1,8 @@
-#### Xiang Wang @ 2016-06-30 15:01:00
+# NFS
 
 [参考链接](https://help.ubuntu.com/lts/serverguide/network-file-system.html)
 
-# 安装
+## 安装
 ## 前提
 * 访问[链接](https://m.do.co/c/4c025e859876)注册用户并购买两台服务器
     * www.ramwin.com(client)    # 如果没有域名可以改成IP地址

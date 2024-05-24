@@ -1,21 +1,25 @@
-*Xiang Wang @ 2017-11-22 11:18:53*
+# mysql
+```{toctree}
+./security.md
+./mysql_grant.md
+```
 
 [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
 
-# 启动
+## 启动
 ```
 docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
 ```
 
-# mariadb
+## mariadb
 ```
 初始化数据库
 sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 ```
 
-# tutorial 命令大全
+## tutorial 命令大全
 
-## CREATE
+### CREATE
 **表的名称绝对不能有引号**  
 _最后一行千万不要有逗号_  
 
@@ -39,7 +43,7 @@ CREATE TABLE shop (
     * NOT NULL: 不能为空
     * COLLATE: 编码
 
-### column定义
+#### column定义
 顺序不能错
 
 ```
@@ -48,13 +52,13 @@ id int not null auto_increment primary key
 ```
 
 
-## Drop
+### Drop
 ```
     drop table <table>; --表整个删除
     delete from table;  -- 保留表的结构
 ```
 
-## DESCRIBE
+### DESCRIBE
 `DESCRIBE <table>;`
 * INSERT [官方参考](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```mysql
@@ -65,7 +69,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
 * mysql --help
 * `mysql -h host -u user -p[passwoed] [<databasename>]`
 
-## SELECT  
+### SELECT  
 
 * A条件 AND B条件 OR C条件, AND的优先级比较高，但是为了不弄混，还是加括号()比较好
 * DISTINCT是针对结果的。结果数据一致就算是一致
@@ -75,7 +79,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
     * ORDER BY name, birth DESC; 按照几个字段排序
 * NULL 的查询
     * SELECT name FROM pet WHERE death is null;
-### [正则查询](https://dev.mysql.com/doc/refman/8.0/en/pattern-matching.html), 默认不区分大小写
+#### [正则查询](https://dev.mysql.com/doc/refman/8.0/en/pattern-matching.html), 默认不区分大小写
 * `SELECT name FROM pet WHERE name like 'b%'`: b开头
 * `SELECT name FROM pet WHERE name like '_____'`: 5个字母
 * `SELECT name FROM pet WHERE name REGEXP/RLIKE '^b'`: b开头
@@ -90,7 +94,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
 * [...to be continued](https://dev.mysql.com/doc/refman/8.0/en/regexp.html)
 
 
-### COUNT:  
+#### COUNT:  
 `COUNT(*)` 求和。 `COUNT(field)` 会排除field为null的数据  
 如果 `SET sql_mode = 'ONLY_FULL_GROUP_BY'` 那COUNT后面必须有group by, 如果 `SET sql_mode = ''` 那COUNT后面可以没有group by  
 
@@ -98,14 +102,14 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
     SELECT [DISTINCT] field FROM table WHERE conditions_to_satisfy ORDER BY column [DESC];
 
 
-### 用户自定义变量:
+#### 用户自定义变量:
 
 
     select @min_price:=MIN(price) from shop;
     select @min_price;
     select * FROM shop WHERE price=@min_price;
 
-### 使用外键
+#### 使用外键
 
 
     CREATE TABLE shirt (
@@ -116,7 +120,7 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
         PRIMARY KEY (id)
     );
 
-## SHOW
+### SHOW
 * SHOW DATABASES;
 * SHOW TABLES;
 * SHOW CREATE TABLE pet;
@@ -124,17 +128,17 @@ INSERT INTO pet VALUES ('Puffball', 'Diane'), ('Puffball', 'Diane')  # 一次新
 * SHOW CREATE TABLE pet\G;  # \G 可以让代码变整洁，具体意思以后再看
 * `show full columns from group_group`; 查看所有的信息
 
-## [UPDATE 更新数据](https://dev.mysql.com/doc/refman/8.0/en/update.html)
+### [UPDATE 更新数据](https://dev.mysql.com/doc/refman/8.0/en/update.html)
 ```mysql
 UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
 ```
-## USE <databasename>
-## batch
+### USE <databasename>
+### batch
 
 
     mysql < batch-file > outfile
 
-# tutorial 函数大全
+## tutorial 函数大全
 * 普通函数
     * `CURDATE`: 当前日期
     * `CURRENT_DATE`: 当前日期
@@ -157,32 +161,32 @@ UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';
     * `PI()`: 3.141592
     * `SIN`: sin三角函数
 
-## Creating and Using a Database
-### Retreving information from a Table
-#### [Using More Than one Table](http://ramwin.com:3307/tutorial.html#multiple-tables)
+### Creating and Using a Database
+#### Retreving information from a Table
+##### [Using More Than one Table](http://ramwin.com:3307/tutorial.html#multiple-tables)
 
-# Installing and Upgrading MySQL
-### Postinstallation Setup and Testing
+## Installing and Upgrading MySQL
+#### Postinstallation Setup and Testing
 * Securing the Initial MySQL Account
 ```
 mysql> ALTER USER 'root@localhost' IDENTIFIED BY 'new_password';
 ```
 
-# Tutorial
-## Creating and Using a Database
+## Tutorial
+### Creating and Using a Database
 * [Loading Data into a Table](https://dev.mysql.com/doc/refman/8.0/en/loading-tables.html)
 见SQL Statements - Data Manipulation Statements - LOAD DATA Statement
 
-# MySQL Programs::Client Programs::[mysql Client Commands](https://dev.mysql.com/doc/refman/8.0/en/mysql-commands.html)
+## MySQL Programs::Client Programs::[mysql Client Commands](https://dev.mysql.com/doc/refman/8.0/en/mysql-commands.html)
 ```
 mysql> help
 \c 取消当前的输入
 ```
 
-# SQL Statements
-## Data Definition Statements
-### CREATE TABLE Statements
-#### [ ] [FOREIGN KEY Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
+## SQL Statements
+### Data Definition Statements
+#### CREATE TABLE Statements
+##### [ ] [FOREIGN KEY Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html)
 * 示例
 
 ```sql
@@ -198,7 +202,7 @@ CREATE TABLE child (
 
 * reference的字段，必须需要index
 * 如果外键的字段有重复。只要里面一条数据被删除了，那么整个表里面的关联数据都会被删除。
-#### [ ] [CHECK Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html)
+##### [ ] [CHECK Constraints](https://dev.mysql.com/doc/refman/8.0/en/create-table-check-constraints.html)
 ```
 [CONSTRAINT [symbol]] CHECK (expr) [[NOT] ENFORCED]
 CREATE TABLE t1
@@ -218,7 +222,7 @@ CREATE TABLE people (
 );
 ```
 
-## Data Manipulation Statements
+### Data Manipulation Statements
 * [ ] [DELETE](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```
 DELETE FROM tbl_name 
@@ -244,7 +248,7 @@ DELETE FROM tbl_name
         LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet;
         LOAD DATA LOCAL INFILE '/path/pet.txt' INTO TABLE pet LINES TERMINATED BY '\r\n';
 
-### SELECT Statement
+#### SELECT Statement
 
 * [basic 基础](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 * [SELECT ... INTO STATEMENT 导出数据](https://dev.mysql.com/doc/refman/8.0/en/select-into.html)
@@ -282,24 +286,25 @@ DELETE FROM tbl_name
 
 * [ ] UNION Clause
 
-# [Security 安全机制](./security.md)
+## [Security 安全机制](./security.md)
 
-## [Access Control](./access_control.md)
-用户管理，增加用户，删除用户
+```{toctree}
+./access_control.md
+```
 
-## Using Encrypted Connections
-## Security Components and Plugins
-## FIPS Support
+### Using Encrypted Connections
+### Security Components and Plugins
+### FIPS Support
 
-# [数据类型 Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
-## [Data Type Overview]()
-## [数字类型]()
+## [数据类型 Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
+### [Data Type Overview]()
+### [数字类型]()
     * 基础: INT(2)
     * 可用参数: `UNSIGNED, ZEROFILL, AUTO_INCREMENT`
     * `ALTER TABLE tb1 AUTO_INCREMENT = 100;`  # 不是自动加1,而是自动加100
     * YEAR(4)
 
-## [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
+### [时间和日期](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
 * TIMESTAMP 时间戳类型
 插入的时候，会把时间变成时间戳保存，取出的时候，会自动根据链接的时区变成datetime
 
@@ -309,9 +314,9 @@ DELETE FROM tbl_name
       `updateat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )
 
-## [字符串类型]()
+### [字符串类型]()
 
-### [枚举类 ENUM TYPE](https://dev.mysql.com/doc/refman/8.0/en/enum.html)
+#### [枚举类 ENUM TYPE](https://dev.mysql.com/doc/refman/8.0/en/enum.html)
 ```sql
 CREATE TABLE shirts (
     name VARCHAR(40),
@@ -324,7 +329,7 @@ ERROR 1265 (01000): Data truncated for column 'size' at row 2;  /* 如果enum不
 * 注意排序，会根据ENUM的顺序来排序
 
 
-## [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/8.0/en/spatial-types.html)
+### [Spatial Data Types空间类型](https://dev.mysql.com/doc/refman/8.0/en/spatial-types.html)
 * [创建空间类型列](https://dev.mysql.com/doc/refman/8.0/en/creating-spatial-columns.html)
 ```mysql
     CREATE TABLE geom (g GEOMETRY);
@@ -336,7 +341,7 @@ ERROR 1265 (01000): Data truncated for column 'size' at row 2;  /* 如果enum不
     SELECT ST_AsBinary(g) from geom;
     > | 010010000 |
 ```
-## [JSON Data Type][json-type-url]
+### [JSON Data Type][json-type-url]
 * 插入数据
 ```
 insert into testjson values (JSON_ARRAY(1,2,3));
@@ -346,9 +351,9 @@ insert into testjson values (JSON_ARRAY(1,2,3));
 select *, JSON_EXTRACT(json, '$.key1') b from testjson where JSON_EXTRACT(json, '$.key1') is not null;
 ```
 
-# [Functions and Operators](https://dev.mysql.com/doc/refman/8.0/en/functions.html)  
+## [Functions and Operators](https://dev.mysql.com/doc/refman/8.0/en/functions.html)  
 通用的函数和操作
-## [Date and time](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)
+### [Date and time](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)
 时间操作相关
 * [ ] CURTIME
 * DATE
@@ -360,12 +365,12 @@ select *, JSON_EXTRACT(json, '$.key1') b from testjson where JSON_EXTRACT(json, 
 * [ ] `DATE_ADD`
 
 
-# 过滤
+## 过滤
 * 基础: `WHERE species = 'dog'`
 * `IN`: `SELECT * FROM pet WHERE species IN ('dog', 'cat');`
 
-# [backup and restore 备份与恢复](https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html)
-## outfile
+## [backup and restore 备份与恢复](https://dev.mysql.com/doc/refman/8.0/en/backup-and-recovery.html)
+### outfile
 
 ```sql
 SELECT a,b,a+b INTO OUTFILE '/tmp/result.text'
@@ -374,12 +379,12 @@ LINES TERMINATED BY '\n'
 FROM test_table;
 ```
 
-## [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
+### [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
 * 示例代码
 ```
 mysqldump -u root -p test --extended-insert=FALSE > test.sql  # windows下不正确，因为windows用了UTF-16
 mysqldump -u root -p test --extended-insert=FALSE --result-file=test.sql
-# 我的习惯
+## 我的习惯
 mysqldump   \
     -u <username> \
     --set-gtid-purged=OFF \
@@ -400,7 +405,7 @@ mysqldump   \
 > It's recommended to use mysqlbackup command of MySQL Enterprise Backup product,   
 因为mysqldump要考虑索引，io，处理大型数据会很慢
 
-## 恢复
+### 恢复
 ```shell
 mysql -h localhost -u root -p < ./test.sql  # 处理dump出来的
 mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结果
@@ -408,8 +413,8 @@ mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结
   -> LINES TERMINATED BY '\r\n';
 ```
 
-# [Optimization 性能优化](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
-## [Optimization and Indexes 索引](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
+## [Optimization 性能优化](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
+### [Optimization and Indexes 索引](https://dev.mysql.com/doc/refman/8.0/en/optimization-indexes.html)
 1. [How MySQL Uses Indexes](https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html)
     * If there is a choice between multiple indexes, MySQL normally uses the index that find the smallest number of rows(most selective index)
     * multiple-column index can be used by the leftmost prefix of the index, (col1, col2, col3) 的联合索引可以用于 (col1), (col1, col2), (col1, col2, col3)
@@ -430,7 +435,7 @@ mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结
 12. [ ] Invisible Indexes
 13. [ ] Descending Indexes
 
-## to be continued
+### to be continued
 * [ ] Optimization Overview
 * [ ] Optimizing SQL Statements
 * [ ] Database Structure
@@ -445,8 +450,8 @@ mysql> LOAD DATA LOCAL INFILE 'dump.txt' INTO TABLE mytbl  # 处理outfile的结
 * [ ] Measuring Performance
 * [ ] Examining Thread Information
 
-# SQL Statement Syntax
-## Data Definition Statements
+## SQL Statement Syntax
+### Data Definition Statements
 * [ALTER TABLE Syntax](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
 ALTER TABLE score smallint unsigned not null; this will set the **default value** 0
     * [案例](https://dev.mysql.com/doc/refman/8.0/en/alter-table-examples.html)
@@ -472,11 +477,11 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
     DROP INDEX index_name on tbl_name
     ```
 
-# 有待整理
+## 有待整理
 * [data 基础操作](./database/data.md)
 * [和数据库, 表有关的操作](./database/table表和数据库.md)
 
-# 配置
+## 配置
 * [utf8与utf8mb4的问题](https://mathiasbynens.be/notes/mysql-utf8mb4)
     1. ALTER DATABASE database_name CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
     2. ALTER TABLE table_name CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -489,7 +494,7 @@ ALTER TABLE score smallint unsigned not null; this will set the **default value*
 alter table group_groupapply convert to character set utf8mb4 collate utf8mb4_unicode_ci;
 ```
 
-# 性能问题
+## 性能问题
 * [参考链接](https://zhuanlan.zhihu.com/p/113917726)
     1. mysql使用B+树，是因为磁盘上一次读取的信息很多，只存一个节点有点亏。多以干脆多存几个，减少层级数
     2. mysql的innodb是直接在叶子节点存了数据(聚集索引)，如果对其他的key做索引，会有回表再次查询的问题（为了节约空间）。所以每个表必须要有主键。但是mysql的叶子节点数据也有物理地址啊。给其他的字段创建索引时为什么不直接用物理地址呢？这个物理地址会变化吗
