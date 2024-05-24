@@ -1,3 +1,4 @@
+# 用户权限
 * sudo免密码:
 ```
     echo "wangx ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/wangx

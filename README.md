@@ -14,8 +14,10 @@
 
 ## 操作系统
 ```{toctree}
+./linux/system.md
 ./manjaro.md
 ./windows.md
+./linux/user_group.md
 ```
 
 ### 文件系统
@@ -66,13 +68,26 @@ usr目录一般是从其他地方挂载的. shareable, read-only. 多个机器�
 [rfc6455](https://datatracker.ietf.org/doc/html/rfc6455)  
 
 # command
-各种命令
+```{toctree}
+./http.md
+```
 
-* [ ] awk
+## apt
+```
+sudo apt-get install <software>
+* -y 默认yes
+* -q 输出到日志
+* -qq 不输出信息，错误除外
+apt-cache search <software>  # 搜索
+```
 
-    awk '{print $1}' filename
+## [ ] awk
 
-* chardet3 检测文件编码
+```
+awk '{print $1}' filename
+```
+
+## chardet3 检测文件编码
 
 ## clip.exe
 ```
@@ -121,9 +136,12 @@ $ dd if=tempfile of=/dev/null bs=1M count=1024  # 测试读取速度
 ```
 dril @dnsserver 
 ```
-* du
+
+## du
 ```
 du -h -d 1 | sort -h  # 输出文件夹大小并按照尺寸排序
+du -sh * | sort -h
+du -h -d 1 | sort -h
 ```
 
 ## echo: 输出文字
@@ -191,6 +209,15 @@ iftop -i ens3 -P 查看某个网卡的网络进出情况
 
 ## ldd
 查看某个可执行文件需要的动态链接库
+
+## ls
+* -a   显示所有文件(包括 `.` 开头的文件)
+* -A    --almo
+
+## 排序方式
+* -S    按照文件大小排列
+* -t    按照时间顺序排列
+* -r    逆序排列
 
 ## mount
 * [挂载内存硬盘](https://www.linuxbabe.com/command-line/create-ramdisk-linux)

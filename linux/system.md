@@ -1,4 +1,4 @@
-**Xiang Wang @ 2017-06-22 13:53:03**
+# 系统
 
 * shell
     * 设置显示中文 `apt install language-pack-zh-hans`
@@ -23,3 +23,8 @@ echo "/swapfile none swap defaults 0 0" > /etc/fstab
 sudo sysctl vm.swappiness=10
 echo "vm.swappiness=10" >> /etc/sysctl.conf
 ```
+
+## 主机信息
+### 主机名
+查看: `hostname`
+修改: 编辑 `/etc/hostname` 文件
