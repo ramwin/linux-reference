@@ -1,4 +1,5 @@
-# 举例 [参考](http://blog.csdn.net/jemmy858585/article/details/4724029)
+# 举例
+[参考](http://blog.csdn.net/jemmy858585/article/details/4724029)
 * manjaro
 ```
 /dev/nvme0n1p6 /run/media/wangx/d ntfs defaults,rw,user 0,0

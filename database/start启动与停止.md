@@ -1,4 +1,4 @@
-# MySQL
+# MySQL启动停止
     /etc/init.d/mysql start|stop
 
 # MySQL docker

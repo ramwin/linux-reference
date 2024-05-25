@@ -7,6 +7,10 @@
 [官方文档](https://dev.mysql.com/doc/refman/8.0/en/)
 
 ## 启动
+```{toctree}
+../database/start启动与停止.md
+```
+
 ```
 docker run -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -ti mysql
 ```

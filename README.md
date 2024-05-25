@@ -14,8 +14,10 @@
 
 ## 操作系统
 ```{toctree}
+./fstab.md
 ./linux/system.md
 ./manjaro.md
+./gnome.md
 ./windows.md
 ./linux/user_group.md
 ```
@@ -382,35 +384,6 @@ no: 3
 
     cat .git/objects/c2/dc76d6e9ecfa41381f20813575f92c538448f4  | zlib-flate -uncompress
 
-
-# hardware 硬件
-* 重新挂载系统 `mount -o remount rw /   # 解决 read-only filesystem 问题`
-* split 分割文件
-    ```
-    split -b 1900 test result   将文件分割成1900字节
-    split -C 500 test result    将文件分割成每个最多500字节
-    split -l 100 test result    将文件分割成每个100行
-    split -d -l 10000 test result/block_    -d 用数字进行编号
-    ```
-* 移除硬件
-    ```
-    fdisk /dev/sdb 分区操作
-    sudo apt-get install udisks
-    udisks --umount /dev/sdb1
-    udisks --detach /dev/sdb
-    udiskctl power-off -b /dev/sdb
-    ```
-* 文件系统
-    ```
-    truncate -s 100KB <filepath>
-    sudo mkfs.xfs <filepath>
-    ```
-* 修改卷标
-    ```
-    e2label /dev/sdb1/ UDISK
-    ntfslabel /dev/sdb3/ LENOVO
-    fatlabel /dev/sdb1 MI
-    ```
 
 # regular expression
 * [在线学习](https://regexone.com)
