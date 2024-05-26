@@ -1,0 +1,13 @@
+MenuBar=Disabled
+
+[Desktop Entry]
+DefaultProfile=ramwin_konsole_profile.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+ToolBarsMovable=Disabled
+
+[UiSettings]
+ColorScheme=

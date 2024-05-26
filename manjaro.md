@@ -4,6 +4,7 @@
 sudo pacman -S fcitx-im
 echo "export GTK_IM_MODULE=fcitx" >> ~/.xprofile
 ```
+
 * [manjaro下安装输入法](https://www.jianshu.com/p/d7c8f29be182)  
 
 ```
