@@ -11,8 +11,11 @@ linux69通过`uname -a`判断的
 7. 迁移github
 
 ## 我的配置
-* [konsole终端配置](./konsolerc)
-* [主题设置](./ramwin_konsole_profile.profile)
+* .config
+    * konsolerc [konsole终端配置](./konsolerc)
+    * kioslaverc 网络配置
+* .local/share/knosole
+    * [ramwin_konsole_profile.profile 主题设置](./ramwin_konsole_profile.profile)
 
 ## 输入法配置
 * 最新安装输入法
