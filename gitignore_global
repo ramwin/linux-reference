@@ -175,3 +175,4 @@ time.md
 time.csv
 *.orig
 _build
+*.db
