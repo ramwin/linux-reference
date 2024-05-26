@@ -4,8 +4,11 @@
 1. 安装显卡驱动: linux69-nvidia-470xx
 linux69通过`uname -a`判断的
 470xx通过[nvidia](https://www.nvidia.cn/drivers/unix/)判断的
-
 2. 安装输入法
+3. 安装常用软件 `vim chromium redis postgresql supervisor`
+4. vim配置
+5. 密钥配置
+7. 迁移github
 
 ## 我的配置
 * [konsole终端配置](./konsolerc)
