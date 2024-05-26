@@ -15,6 +15,9 @@ linux69通过`uname -a`判断的
     * konsolerc [konsole终端配置](./konsolerc)
     * kioslaverc 网络配置
     * kwinrc  [虚拟桌面配置](./kwinrc)
+    * fcitx5
+        * config [输入法配置](./fcitx_config)
+
 * .local/share/knosole
     * [ramwin_konsole_profile.profile 主题设置](./ramwin_konsole_profile.profile)
 
