@@ -28,36 +28,6 @@
 ### bat
 和cat一样，但是输出会有格式化
 
-### chromium
-* 代理
-
-```
-chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
-```
-
-* cvim
-一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
-
-```
-let searchlimit = 4
-let blacklists = ["https://ecs.console.aliyun.com/*"]
-let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
-showTodoRest -> {{
-  var doms = document.getElementsByClassName("todo-rest")
-  for (var i=0; i<doms.length; i++) {
-    var dom = doms[i];
-    dom.setAttribute("tabindex", true);
-  }
-}}
-call showTodoRest
-```
-
-* 调试
-
-```
--scheme:chrome-extension 关闭插件的network
-```
-
 ### htpasswd
 * 添加用户
 ```
@@ -90,7 +60,43 @@ htpasswd -v <filename> <username>
 ./shadowsocks/shadowsocks的用法.md
 ./net网络.md
 ```
+### chromium
+* 代理
 
+```
+chromium-browser --proxy-server="socks5://127.0.0.1:1080" --host-resolver-rules="MAP * 0.0.0.0 , EXCLUDE localhost" &
+```
+
+* 调试
+
+```
+-scheme:chrome-extension 关闭插件的network
+```
+
+### chromium插件
+#### cvim
+[github: 1995eaton/chromium-vim](https://github.com/1995eaton/chromium-vim)  
+一款优秀的vim插件, 为了兼容tower的网站，需要加以下配置
+
+```
+let searchlimit = 4
+let blacklists = ["https://ecs.console.aliyun.com/*"]
+let hintcharacters = "abcdefghijklmnpqrstuvwxyz"
+showTodoRest -> {{
+  var doms = document.getElementsByClassName("todo-rest")
+  for (var i=0; i<doms.length; i++) {
+    var dom = doms[i];
+    dom.setAttribute("tabindex", true);
+  }
+}}
+call showTodoRest
+```
+
+#### markdown viewer
+[谷歌商店](https://chromewebstore.google.com/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk)  
+用来在线查看
+
+### ip
 ```shell
 ip link show
 ```

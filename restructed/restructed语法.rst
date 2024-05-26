@@ -1,6 +1,10 @@
 restructured
 ============
 
+.. toctree::
+
+    ./markdown.md
+
 text style
 ----------
 

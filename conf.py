@@ -35,9 +35,9 @@ source_suffix = {
     '.md': 'markdown',
 }
 myst_heading_anchors = 4
-myst_enable_extensions = ["colon_fence"]
 suppress_warnings = ["myst.header", "myst.xref_missing"]
 html_css_files = [
         "custom.css"
         ]
 todo_include_todos = True
+myst_enable_extensions = ["colon_fence"]
