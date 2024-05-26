@@ -16,7 +16,7 @@
 ```{toctree}
 ./fstab.md
 ./linux/system.md
-./manjaro.md
+./manjaro/manjaro.md
 ./gnome.md
 ./windows.md
 ./linux/user_group.md
