@@ -251,6 +251,12 @@ git config diff.tool vimdiff
 git difftool HEAD^ HEAD  # 用vimdiff横向比较文件
 ```
 
+* 对比一个文件在不同版本的数据
+```
+git config --global diff.toll vimdiff
+git difftool -y master:README.md "HEAD^:README.md"
+```
+
 ### [notes](https://git-scm.com/docs/git-notes)
 在原有的commit基础上添加备注，而不修改原有commit
 ```

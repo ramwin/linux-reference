@@ -31,3 +31,5 @@
     directory = /run/media/wangx/samsung/github/coin
 [url "git@github.com:"]
     insteadOf = https://github.com/
+[diff]
+	toll = vimdiff
