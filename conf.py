@@ -18,6 +18,7 @@ extensions = [
         "sphinx_design",
         "sphinx.ext.todo",
         "sphinx.ext.autodoc",
+        "sphinxmermaid",
         ]
 
 templates_path = ['_templates']

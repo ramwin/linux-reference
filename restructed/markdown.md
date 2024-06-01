@@ -32,3 +32,10 @@ TODO
 ```{note}
 TODO
 ```
+
+## 图表
+end是group里的end,不能随便用
+```{mermaid}
+graph LR;
+    Start --> process --> End
+```
