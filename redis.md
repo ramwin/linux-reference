@@ -117,6 +117,12 @@ redis.zremrangebyrank(key, 0, delete_cnt - 1)
 根据分数来删除
 * [ZREVRANGE](https://redis.io/commands/zrevrange): 类似ZRANGE但是是逆序的
 
+## pipeline
+```{note}
+6.x版本使用pipeline的时候，key的过期状态不会变化，但是time时间会变化。
+7.x版本以后，time的时间也锁定了
+```
+
 ## Progamming with Redis
 ### [Redis as an LRU cache](https://redis.io/topics/lru-cache)
 * maxmemory 最大允许使用的内存 如果是用10M代表了10000000字节，如果是10MB代表了 10MiB
