@@ -33,3 +33,5 @@
     insteadOf = https://github.com/
 [diff]
 	toll = vimdiff
+[checkout]
+    workers = 15

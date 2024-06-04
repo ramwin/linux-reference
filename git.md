@@ -100,7 +100,7 @@ git add --renormalize --all/<filename>
 
 ## 配置 Setup and Config
 
-### config
+### [config](https://git-scm.com/docs/git-config)
 * alias
 ```
 git config alias.lg 'log --graph --pretty=format:"%Cgreen%h %Cred%s %Creset----%C(yellow)%cn %Creset@ %ad %C(green)%d" --date=format:"%Y-%m-%d %H:%M"'
