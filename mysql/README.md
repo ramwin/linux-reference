@@ -506,5 +506,15 @@ alter table group_groupapply convert to character set utf8mb4 collate utf8mb4_un
     3. myisam则是保存了物理地址。索引查到数据后直接能读取数据
 
 
+## administrator
+* 查看占用空间比较大的表
+```sql
+SELECT table_schema, table_name, ROUND((data_length+index_length)/POWER(1024,2),2)
+AS tablesize_mb
+FROM information_schema.tables
+ORDER BY tablesize_mb
+DESC LIMIT 20;
+```
+
 [fetching-Spatial-data]: https://dev.mysql.com/doc/refman/8.0/en/fetching-spatial-data.html
 [json-type-url]: https://dev.mysql.com/doc/refman/8.0/en/json.html
