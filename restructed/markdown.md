@@ -35,7 +35,19 @@ TODO
 
 ## 图表
 end是group里的end,不能随便用
+
+### [流程图](https://mermaid.js.org/syntax/flowchart.html)
+通过`:::`可以设置类， `(){},<>,>/,可以设置框外观`  
+通过subgraph可以添加组
 ```{mermaid}
-graph LR;
-    Start --> process --> End
+flowchart TB;
+    Start --> check{校验是\n否橙色} --> |是| orange:::orange
+    check --> |否| red:::red
+    red & orange --> group --> End
+    subgraph group "tooltip"
+        a --> b
+        b --> c
+    end
+    classDef orange fill:#f96
+    classDef red color: #f00
 ```
