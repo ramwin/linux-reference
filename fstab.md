@@ -3,6 +3,7 @@
 * manjaro
 ```
 /dev/nvme0n1p6 /run/media/wangx/d ntfs defaults,rw,user 0,0
+/dev/nvme0n1p2 /run/media/wangx/samsung ntfs3 rw,nosuid,nodev,relatime,uid=1000,gid=1000,iocharset=utf8,uhelper=udisks2 0 0
 ```
 
 * 文档

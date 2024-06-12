@@ -10,6 +10,11 @@
 git update-index --assume-unchanged config.php
 ```
 
+## 版本选择
+[官网](https://git-scm.com/docs/gitrevisions)
+* 直接用sha1, 或者sha1前缀
+* 
+
 ## [lfs](https://git-lfs.github.com/)
 
 处理大文件用. 

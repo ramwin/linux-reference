@@ -45,4 +45,3 @@ html_css_files = [
         "custom.css"
         ]
 todo_include_todos = True
-
