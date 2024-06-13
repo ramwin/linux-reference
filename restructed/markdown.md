@@ -42,6 +42,7 @@ end是group里的end,不能随便用
 ```{mermaid}
 flowchart TB;
     Start --> check{校验是\n否橙色}
+    Start ~~~ 隐藏的线
     check --> |是| orange:::orange
     check --> |否| red:::red
     red & orange --> tooltip --> End
