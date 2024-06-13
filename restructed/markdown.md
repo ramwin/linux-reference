@@ -41,10 +41,11 @@ end是group里的end,不能随便用
 通过subgraph可以添加组
 ```{mermaid}
 flowchart TB;
-    Start --> check{校验是\n否橙色} --> |是| orange:::orange
+    Start --> check{校验是\n否橙色}
+    check --> |是| orange:::orange
     check --> |否| red:::red
-    red & orange --> group --> End
-    subgraph group "tooltip"
+    red & orange --> tooltip --> End
+    subgraph "tooltip"
         a --> b
         b --> c
     end
