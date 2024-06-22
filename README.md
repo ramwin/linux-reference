@@ -83,12 +83,6 @@ sudo apt-get install <software>
 apt-cache search <software>  # 搜索
 ```
 
-## [ ] awk
-
-```
-awk '{print $1}' filename
-```
-
 ## chardet3 检测文件编码
 
 ## clip.exe

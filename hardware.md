@@ -10,13 +10,6 @@
 ## 查看硬盘ID 
     blkid
 * 重新挂载系统 `mount -o remount rw /   # 解决 read-only filesystem 问题`
-* split 分割文件
-    ```
-    split -b 1900 test result   将文件分割成1900字节
-    split -C 500 test result    将文件分割成每个最多500字节
-    split -l 100 test result    将文件分割成每个100行
-    split -d -l 10000 test result/block_    -d 用数字进行编号
-    ```
 * 移除硬件
     ```
     fdisk /dev/sdb 分区操作

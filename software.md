@@ -1,5 +1,12 @@
 # SOFTWARE软件
 
+## 字符处理
+###  awk
+```bash
+awk '{print $1}' filename
+```
+
+
 ## Mac
 ```{toctree}
 ./mac/shortcut.md
@@ -14,6 +21,13 @@
 ./rabbitmq/README.md
 ./nfs.md
 ```
+
+### [syncthing](https://docs.syncthing.net/intro/getting-started.html)
+界面美观易用的同步软件
+```bash
+syncthing serve --gui-address=example.com:8384
+```
+
 
 ### [airflow](../airflowtest/README.md)
 
@@ -279,10 +293,13 @@ sudo pacman -Rns $(pacman -Qtdq)  # 卸载不需要的包
 用来安装共享文件夹，方便多台电脑共享文件
 [安装部署教程](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-samba-share-for-a-small-organization-on-ubuntu-16-04)
 
-## [syncthing](https://docs.syncthing.net/intro/getting-started.html)
-界面美观易用的同步软件
-```
-syncthing serve --gui-address=example.com:8384
+## split
+分割文件
+```bash
+split -b 1900 test result #  将文件分割成1900字节
+split -C 500 test result #  将文件分割成每个最多500字节
+split -l 100 test result #  将文件分割成每个100行
+split -d -l 10000 test result/block_  #   -d 用数字进行编号
 ```
 
 ## [SQLite](./sqlite/README.md)
