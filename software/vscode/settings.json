@@ -2,5 +2,6 @@
     "security.workspace.trust.untrustedFiles": "open",
     "editor.fontSize": 12,
     "debug.console.fontSize": 24,
-    "window.zoomLevel": 3
+    "window.zoomLevel": 3,
+    "editor.detectIndentation": false
 }
