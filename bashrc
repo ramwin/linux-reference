@@ -128,3 +128,5 @@ export MYPYPATH=~/github/python-reference/stubs
 export HATCH_INDEX_USER="__token__"
 export CMAKE_CXX_COMPILER=clang++
 export CMAKE_C_COMPILER=clang
+
+export PYTHONPATH="/home/wangx/venv/lib/python3.12/site-packages"
