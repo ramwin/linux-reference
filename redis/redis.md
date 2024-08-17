@@ -25,7 +25,16 @@ cd redis-table
 make
 echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf  # 要用管理员权限
 sudo sysctl vm.overcommit_memory=1
-src/redis-server
+```
+* 修改redis.conf
+```
+daemonize yes
+pidfile ./redis_6380.pid
+logfile "./log.log"
+```
+* 启动
+```
+src/redis-server ./redis.conf
 ```
 
 ## Sorted Sets
