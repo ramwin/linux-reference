@@ -37,6 +37,17 @@ ln -s /home/wangx/github/secret/config/kioslaverc ./
 @reboot /home/wangx/github/secret/shadowsocks/run_sslocal.sh
 ```
 
+* postgresq
+```
+sudo su postgres
+sudo mkdir /run/postgresql
+sudo chown postgres:postgres /run/postgresql
+cd ~
+
+mkdir log
+pg_ctl -D /var/lib/postgres/data/ -l log/pg_ctl.log start
+```
+
 ## 输入法配置
 * 最新安装输入法
 直接安装`manjaro-asian-input-support`即可
