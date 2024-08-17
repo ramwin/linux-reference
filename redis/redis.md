@@ -18,6 +18,8 @@ wget https://download.redis.io/redis-stable.tar.gz
 tar xzf redis-table.tar.gz
 cd redis-table
 make
+echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf  # 要用管理员权限
+sudo sysctl vm.overcommit_memory=1
 src/redis-server
 ```
 
