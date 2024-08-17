@@ -12,12 +12,13 @@ r.get("foo")  # 不存在default
     docker exec -it redis-server redis-cli
 ```
 * [compile install](https://redis.io/download#installation)
-```
-    wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-    tar xzf redis-3.2.8.tar.gz
-    cd redis-3.2.8
-    make
-    src/redis-server
+```bash
+cd ~
+wget https://download.redis.io/redis-stable.tar.gz
+tar xzf redis-table.tar.gz
+cd redis-table
+make
+src/redis-server
 ```
 
 ## Sorted Sets

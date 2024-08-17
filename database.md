@@ -1,7 +1,7 @@
 # 数据库
 ```{toctree}
 ./postgresql.md
-./redis.md
+./redis/redis.md
 ./mysql/README.md
 ./mongodb.md
 ```
