@@ -5,7 +5,8 @@
 linux69通过`uname -a`判断的
 470xx通过[nvidia](https://www.nvidia.cn/drivers/unix/)判断的
 2. 安装输入法
-3. 安装常用软件 `vim chromium redis postgresql supervisor nodejs npm`
+3. 安装常用软件
+> sudo pacman --sync vim chromium redis postgresql supervisor nodejs npm gcc clang
 4. vim配置
 5. 密钥配置
 7. 迁移github
@@ -15,10 +16,10 @@ linux69通过`uname -a`判断的
 ### 系统配置.config
 * konsolerc [konsole终端配置](./konsolerc)
 * kioslaverc 网络配置
-```
-cd ~/.config
+
+> cd ~/.config  
 ln -s /home/wangx/github/secret/config/kioslaverc ./
-```
+
 * kwinrc  [虚拟桌面配置](./kwinrc)
 * fcitx5
     * config [输入法配置](./fcitx_config)
