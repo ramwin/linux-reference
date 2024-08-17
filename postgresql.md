@@ -188,7 +188,7 @@ pg_dump \
 ## [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
 * [展示所有table](https://www.postgresqltutorial.com/postgresql-show-tables/)  `\dt`
 * 展示单个表
-```sql
+```shell
 \d+ users
 ```
 

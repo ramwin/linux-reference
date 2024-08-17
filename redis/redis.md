@@ -1,4 +1,9 @@
 # redis
+## 集群搭建
+```{toctree}
+./redis-cluster/README.md
+```
+
 ## string
 ```python
 r.set("foo", 3, ex=3600)
