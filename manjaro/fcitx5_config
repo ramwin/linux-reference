@@ -1,6 +1,6 @@
 [Hotkey]
 # 反复按切换键时进行轮换
-EnumerateWithTriggerKeys=False
+EnumerateWithTriggerKeys=True
 # 临时在当前和第一个输入法之间切换
 AltTriggerKeys=
 # 向前切换输入法
@@ -12,6 +12,9 @@ EnumerateSkipFirst=False
 
 [Hotkey/TriggerKeys]
 0=Shift+Shift_L
+
+[Hotkey/AltTriggerKeys]
+0=Shift_L
 
 [Hotkey/EnumerateGroupForwardKeys]
 0=Super+space
@@ -58,7 +61,7 @@ CompactInputMethodInformation=True
 # 显示第一个输入法的信息
 ShowFirstInputMethodInformation=True
 # 默认页大小
-DefaultPageSize=1
+DefaultPageSize=5
 # 覆盖 Xkb 选项
 OverrideXkbOption=False
 # 自定义 Xkb 选项

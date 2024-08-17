@@ -11,15 +11,30 @@ linux69通过`uname -a`判断的
 7. 迁移github
 
 ## 我的配置
-* .config
-    * konsolerc [konsole终端配置](./konsolerc)
-    * kioslaverc 网络配置
-    * kwinrc  [虚拟桌面配置](./kwinrc)
-    * fcitx5
-        * config [输入法配置](./fcitx_config)
+
+### 系统配置.config
+* konsolerc [konsole终端配置](./konsolerc)
+* kioslaverc 网络配置
+```
+cd ~/.config
+ln -s /home/wangx/github/secret/config/kioslaverc ./
+```
+* kwinrc  [虚拟桌面配置](./kwinrc)
+* fcitx5
+    * config [输入法配置](./fcitx_config)
+    ```
+    cd ~/.config/fcitx5
+    ln -s ~/github/linux-reference/manjaro/fcitx5_config ./config
+    ```
 
 * .local/share/knosole
     * [ramwin_konsole_profile.profile 主题设置](./ramwin_konsole_profile.profile)
+
+### 服务配置
+* crontab
+```
+@reboot /home/wangx/github/secret/shadowsocks/run_sslocal.sh
+```
 
 ## 输入法配置
 * 最新安装输入法
