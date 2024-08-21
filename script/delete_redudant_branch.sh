@@ -22,5 +22,5 @@ git checkout $masterbranch
 # export masterbranch="main"
 for branch_name in $( git branch --format="%(refname:short)" --merged | grep -v $masterbranch ); do
     echo "处理分支:" $branch_name
-    # git branch -d $branch_name
+    git branch -d $branch_name
 done
