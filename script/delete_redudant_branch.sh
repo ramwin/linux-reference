@@ -4,9 +4,22 @@
 set -e
 
 rebase_to_master.sh
-git checkout master
+set_masterbranch()
+{
+    for branchname in $( git branch --format="%(refname:short)" );
+    do
+        if [ "$branchname" = "master" ]
+        then
+            export masterbranch="master"
+        elif [ "$branchname" = "main" ]
+        then
+            export masterbranch="main"
+        fi
+    done
+}
 
-for branch_name in $( git branch --format="%(refname:short)" --merged | grep -v 'master' ); do
+git checkout $masterbranch
+for branch_name in $( git branch --format="%(refname:short)" --merged | grep -v '$masterbranch' ); do
     echo "处理分支:" $branch_name
     git branch -d $branch_name
 done
