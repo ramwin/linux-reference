@@ -1,7 +1,7 @@
 #!/bin/bash
 # Xiang Wang(ramwin@qq.com)
 
-set -e
+set -ex
 
 rebase_to_master.sh
 set_masterbranch()
@@ -19,7 +19,8 @@ set_masterbranch()
 }
 
 git checkout $masterbranch
-for branch_name in $( git branch --format="%(refname:short)" --merged | grep -v '$masterbranch' ); do
+# export masterbranch="main"
+for branch_name in $( git branch --format="%(refname:short)" --merged | grep -v $masterbranch ); do
     echo "处理分支:" $branch_name
-    git branch -d $branch_name
+    # git branch -d $branch_name
 done
