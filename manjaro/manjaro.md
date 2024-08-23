@@ -33,8 +33,7 @@ ln -s /home/wangx/github/secret/config/kioslaverc ./
 
 ### 服务配置
 * crontab
-```
-@reboot /home/wangx/github/secret/shadowsocks/run_sslocal.sh
+```{literalinclude} ../crontab.sh
 ```
 
 * postgresq
