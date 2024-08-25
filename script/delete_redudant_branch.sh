@@ -17,6 +17,7 @@ set_masterbranch()
         fi
     done
 }
+set_masterbranch
 
 git checkout $masterbranch
 # export masterbranch="main"
