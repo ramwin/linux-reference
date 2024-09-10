@@ -1,7 +1,10 @@
 #!/bin/bash
 # Xiang Wang(ramwin@qq.com)
 
-rm -r _build
+if [ -d _build ]
+then
+    rm -r _build
+fi
 
 sphinx-autobuild \
     -j auto \
