@@ -1,7 +1,7 @@
 # 用户权限
 * sudo免密码:
 ```
-    echo "wangx ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/wangx
+    echo "$USER ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/wangx
 ```
 
 * 增加用户:   
