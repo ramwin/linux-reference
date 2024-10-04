@@ -1,7 +1,7 @@
 # 用户权限
 * sudo免密码:
 ```
-    echo "$USER ALL = (root) NOPASSWD:ALL" > /etc/sudoers.d/$USER
+    echo "$USER ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$USER
 ```
 
 * 增加用户:   
