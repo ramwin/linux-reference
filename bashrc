@@ -126,3 +126,5 @@ export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow_user:ai
 export MYPYPATH=~/github/python-reference/stubs
 
 export HATCH_INDEX_USER="__token__"
+export CMAKE_CXX_COMPILER=clang++
+export CMAKE_C_COMPILER=clang

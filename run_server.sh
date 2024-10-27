@@ -7,9 +7,12 @@ then
 fi
 
 sphinx-autobuild \
+    --host 0.0.0.0 \
     -j auto \
     --port 18002 \
     . _build/html/ \
     --re-ignore "\.mypy_cache" \
     --re-ignore "\.git"    \
-    --re-ignore "\.*\.swp"
+    --re-ignore "\.*\.swp" \
+    --re-ignore "\.*\.log" \
+
