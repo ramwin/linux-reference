@@ -176,3 +176,4 @@ time.csv
 *.orig
 _build
 *.db
+.npmrc
