@@ -33,6 +33,6 @@
     insteadOf = https://github.com/
 [diff]
 	toll = vimdiff
-	wordRegex = [^[:space:],]+
+	wordRegex = "[^[:space:],;=]+"
 [checkout]
     workers = 15
