@@ -36,3 +36,5 @@
 	wordRegex = "[^[:space:],;=]+"
 [checkout]
     workers = 15
+[color]
+	status = always
