@@ -97,6 +97,9 @@ function settitle() {
     echo -ne "\033]0;${1}\007" 
 }
 
+# django
+alias dshell="python manage.py shell"
+
 # mac 的设置
 export CLICOLOR=1
 # settitle coding

@@ -29,6 +29,7 @@
     default = current
 [safe]
     directory = /run/media/wangx/samsung/github/coin
+	directory = /run/media/wangx/samsung/github/
 [url "git@github.com:"]
     insteadOf = https://github.com/
 [diff]
