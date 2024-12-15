@@ -259,3 +259,12 @@ host    <数据库>     <用户>             <fromIP>/32                 scram-s
 ```sql
 select pg_reload_conf();  /* 执行这个语句更新登录权限 */
 ```
+
+## 多数据库管理
+### TableSpaces
+```sql
+-- 利用额外的硬盘创建tablespace空间
+CREATE TABLESPACE table_03 LOCATION '/ssd1/postgresql/data';
+-- create database table
+create database db_02 TABLESPACE=tablespace_02;
+```
