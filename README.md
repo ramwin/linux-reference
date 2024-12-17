@@ -163,6 +163,11 @@ export PATH=$PATH:<追加PATH>
 * less `<filename>`: 打开文件（一点点看）,用于查看大文件
 * `lshw -c disk`: "显示硬盘信息"
 
+## flock
+```
+flock path/to/lock.lock --nonblock --command "command"
+```
+
 ## ldd
 查看某个可执行文件需要的动态链接库
 
