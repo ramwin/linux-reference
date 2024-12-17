@@ -198,6 +198,12 @@ pg_dump \
 \i lesson1.sql
 ```
 
+* 展示所有连接
+```
+select usename, client_addr from pg_stat_activity;
+SHOW max_connections;
+```
+
 ### 权限
 * 允许用户创建表
 ```sql
