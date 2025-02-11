@@ -133,3 +133,6 @@ export CMAKE_CXX_COMPILER=clang++
 export CMAKE_C_COMPILER=clang
 
 export PYTHONPATH="/home/wangx/venv/lib/python3.12/site-packages"
+
+tail () { command tail -n 20 "$@"; }
+head () { command head -n 20 "$@"; }
