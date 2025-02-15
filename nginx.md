@@ -54,11 +54,14 @@ make install
 * 每个worker又都是异步的, IO 多路复用
 
 ## 配置
-### http配置
-```
-client_max_body_size 1G;
-```
 ### server配置
+* 常用配置
+```
+server {
+    client_max_body_size 1G; // 最大上传尺寸
+}
+```
+
 * 配置socket
 ```
 location /ws {
