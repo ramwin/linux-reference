@@ -35,6 +35,7 @@
 [diff]
 	toll = vimdiff
 	wordRegex = "[^[:space:],;=]+"
+	tool = vimdiff
 [checkout]
     workers = 15
 [color]
