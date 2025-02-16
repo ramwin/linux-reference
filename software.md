@@ -12,6 +12,13 @@ shr: 共享内存(动态链接库会只保留一份)
 ```
 htop -u wangx  # 仅看某个用户的进程
 ```
+
+* 排除掉某个进程的性能
+
+```bash
+htop -p "$(pgrep -vfd, 'java|python')"
+```
+
 ### iftop:
 ```
 iftop -i ens3 -P 查看某个网卡的网络进出情况
