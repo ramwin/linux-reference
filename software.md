@@ -16,6 +16,7 @@ htop -u wangx  # 仅看某个用户的进程
 * 排除掉某个进程的性能
 
 ```bash
+htop -p "$(pgrep -vfd, 'agava')"
 htop -p "$(pgrep -vfd, 'java|python')"
 ```
 
