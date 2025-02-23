@@ -39,7 +39,22 @@ logfile "./log.log"
 src/redis-server ./redis.conf
 ```
 
+## Set
+```
+REDIS.sadd('set', '1', '2')  # 2  新加入的数量
+REDIS.sadd('set', '1')  # 0  1已经加过了
+```
+
 ## Sorted Sets
+* 获取任务
+```
+# 死循环快速处理任务
+while True:
+    info = redis.bzpopmin('key', timeout=30)
+    if info is None:
+        continue
+    _, taskid, score = info
+```
 
 [官网][sorted set]
 
