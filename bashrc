@@ -1,7 +1,7 @@
 # 用来在windows目录下用windows的git
 cd() {
     builtin cd "$1"
-    current_path=`realpath .`
+    current_path=`pwd`
     if [[ $current_path == /mnt/d/* ]]
     then
         alias 'git="git.exe"'
@@ -59,7 +59,7 @@ PATH=\
 :/home/wangx/node/bin\
 :$PYENV_ROOT/shims\
 :/home/wangx/bin/\
-:/home/wangx/github/python-reference/script/\
+:/home/wangx/github/python/python-reference/script/\
 :/home/wangx/github/linux-reference/script/\
 :/home/wangx/node_modules/bin/\
 :/home/wangx/github/secret/\
@@ -107,6 +107,7 @@ export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
 export PYTHONBREAKPOINT=ipdb.set_trace
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
+alias bat="batcat"
 
 PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
 # \[\e[37m\] 白色
