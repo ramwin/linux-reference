@@ -107,7 +107,7 @@ export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
 export PYTHONBREAKPOINT=ipdb.set_trace
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
-alias bat="batcat"
+# alias bat="batcat"
 
 PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
 # \[\e[37m\] 白色
