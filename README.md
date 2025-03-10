@@ -249,7 +249,9 @@ chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
 echo "/swapfile none swap sw 0 0" >> /etc/fstab
+# 0尽量不使用swap交换空间, 100积极得使用交换空间 0会OOM(out of memory). 10代表内存仅剩10%时,开始使用交换分区
 echo "vm.swappiness=10" >> /etc/sysctl.conf
+sudo sysctl -p
 ```
 
 ## sysctl
