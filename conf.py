@@ -35,11 +35,11 @@ source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
-myst_heading_anchors = 4
+myst_heading_anchors = 7
 myst_enable_extensions = [
         "colon_fence",
-        "tasklist",
         "strikethrough",
+        "tasklist",
 ]
 suppress_warnings = ["myst.header", "myst.xref_missing"]
 html_css_files = [
