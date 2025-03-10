@@ -39,6 +39,7 @@ myst_heading_anchors = 4
 myst_enable_extensions = [
         "colon_fence",
         "tasklist",
+        "strikethrough",
 ]
 suppress_warnings = ["myst.header", "myst.xref_missing"]
 html_css_files = [
