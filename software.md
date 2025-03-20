@@ -212,6 +212,14 @@ apt install language-pack-zh-hans
 LANG="zh_CN.UTF-8"
 ```
 
+## lz4
+* 支持解压合并操作
+```
+tar cvf - directory | lz4 - target.tar.lz4
+lz4 -dc target_1.tar.lz4 | tar -xv  # 支持多次压缩
+lz4 -dc target_1.tar.lz4 | tar -xv
+```
+
 ## nnn
 文件管理
 ```

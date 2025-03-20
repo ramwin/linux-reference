@@ -102,3 +102,8 @@ sudo mdadm /dev/md55 -f /dev/loop52
 sudo mdadm --grow /dev/md55 -z max
 sudo resize2fs /dev/md55 # 现在有了12G
 ```
+
+## 重新挂载
+```
+sudo mdadm -A /dev/md55 --run  /dev/loop57 /dev/loop58 /dev/loop59 /dev/loop60 /dev/loop61 /dev/loop62
+```
