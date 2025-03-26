@@ -56,6 +56,7 @@ REDIS.sadd('set', '1')  # 0  1已经加过了
 ```
 
 ## Progamming with Redis
+
 ### [Redis as an LRU cache](https://redis.io/topics/lru-cache)
 * maxmemory 最大允许使用的内存 如果是用10M代表了10000000字节，如果是10MB代表了 10MiB
 * maxmemory-policy 占用内存过多时的操作
@@ -67,7 +68,8 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
 * lfu-log-factor 10: 需要次命中后，counter达到最大。我们系统里匹配一个人大概匹配几千次。所以匹配1000次后认为最大，暂时不删除, factor设置成0, decay-time要坚持数据保存一天，255次需要6分钟才允许删除一次。一共需要减少16次，所以设置成10吧
 
 
-## [Command 命令](https://redis.io/commands)
+## Command
+[docs](https://redis.io/commands)
 
 ### connections 链接文档
 * [ ] auth
