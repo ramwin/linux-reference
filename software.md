@@ -1,6 +1,10 @@
 # SOFTWARE软件
 
 ## 运维工具
+```{toctree}
+./使用mdadm创建raid.md
+```
+
 ### nmon
 查看各个磁盘的读写速度
 
