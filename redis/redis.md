@@ -112,6 +112,12 @@ client.hset("user1", mappting={"id": 1, "name": "ramwin"})  // return 0 表示�
 ```
 
 ### Keys
+* scan_iter 遍历所有的key
+```
+for key in REDIS.scan_iter():
+    print(key)
+```
+
 * DEL
 ```
 DEL key1 [key2 [key3]]
