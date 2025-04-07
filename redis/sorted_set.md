@@ -97,7 +97,8 @@ client.zrem(key, 'member', 'member2')
 * ZREMRANGEBYRANK
 删除数据。注意是闭区间
 ```
-redis.zremrangebyrank(key, 0, delete_cnt - 1)
+redis.zremrangebyrank(key, 0, delete_cnt - 1)  # 删除delete_cnt
+redis.zremrangebyrank(key, -10086, -101)  # 只保留最大的前100个数据
 ```
 * ZREMRANGEBYSCORE
 根据分数来删除
