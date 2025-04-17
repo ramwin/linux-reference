@@ -467,6 +467,7 @@ git log 是按照时间顺序往前找的
 
 #### [格式化 PRETTY FORMATS](https://git-scm.com/docs/git-log#_pretty_formats)
 * `git log --graph --pretty=format:"%Cblue%h %Cred%s %Creset----%cn @ %ad" --date=format:'%Y-%m-%d %H:%M' %d`
+* `--format="%H"`: 格式方法
 * %h %H 简短/完整的哈希字符串
 * %d %D ref的name, %D代表了不用括号括起来
 * %an author name 作者名字

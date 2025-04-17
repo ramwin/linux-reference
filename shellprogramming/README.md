@@ -215,7 +215,19 @@ then
 fi
 ```
 
+### 判断当前机器
+```
+a=`hostname`
+if [ $a = 'windowsamd' ]
+then
+    echo '本地'
+else
+    echo '不是本地'
+fi
+```
+
 ## exceptions
+
 ```
 echo "error"
 exit 123
