@@ -1,4 +1,18 @@
 # markdown
+```{contents}
+```
+
+## 图片
+当前目录下可以直接用`![](./fish.png)`
+
+![](./fish.png){w=890px}  
+![](../test.png)[width=30]  
+![](../test.png){width=10}
+
+## 文字格式
+```{note}
+我是笔记
+```
 
 * 测试引用  
 我是引用  
