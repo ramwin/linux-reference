@@ -1,7 +1,10 @@
+websockets
+requests
+colorlog
 sphinx
 sphinx-autobuild
 sphinx-design
 myst-parser
-sphinx-rtd-theme
 sphinxcontrib-jquery
 sphinx-mermaid
+sphinx-rtd-theme
