@@ -46,3 +46,11 @@ html_css_files = [
         "custom.css"
         ]
 todo_include_todos = True
+latex_use_xindy = True
+smartquotes = True
+sphinxmermaid_mermaid_init = {
+  'theme': 'base',
+  'themeVariables': {
+    'fontSize': '40px',
+  }
+}

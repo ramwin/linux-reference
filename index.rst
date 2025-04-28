@@ -17,6 +17,7 @@ Welcome to linux reference's documentation!
    ./restructed/restructed语法.rst
    ./README.md
    ./hardware.md
+   ./linux/signal.md
 
 
 Indices and tables

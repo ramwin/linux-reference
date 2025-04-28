@@ -189,3 +189,6 @@ wangx.sh
 ~$*
 time.csv
 .vite
+node_modules
+run_test.sh
+test.sh

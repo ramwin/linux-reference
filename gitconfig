@@ -10,6 +10,8 @@
     bigFileThreshold = 1M
     excludesfile = ~/.gitignore_global
     quotepath = false
+[diff]
+    toll = vimdiff
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f

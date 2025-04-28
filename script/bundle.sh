@@ -4,5 +4,6 @@
 set -ex
 current_directory=`basename $(pwd)`
 target=~/Desktop/$current_directory.bundle 
-git bundle create $target origin/master...HEAD
+current_branch=`git branch --show-current`
+git bundle create $target origin/$current_branch...HEAD
 git bundle verify $target
