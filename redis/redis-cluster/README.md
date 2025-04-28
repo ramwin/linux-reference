@@ -1,4 +1,14 @@
-# 搭建文档
+# rediscluster
+## 常用命令
+* [reshard and rebalance](https://severalnines.com/blog/hash-slot-resharding-and-rebalancing-redis-cluster/)
+```
+redis-cli --cluster check  localhost:7002
+redis-cli --cluster add-node localhost:7004 localhost:7000
+redis-cli --cluster rebalance localhost:7002
+redis-cli --cluster reshard localhost:7000 (把某个节点删除干净)
+redis-cli --cluster del-node localhost:7000 abcd
+```
+## 搭建文档
 https://redis.io/docs/management/scaling/#create-and-use-a-redis-cluster
 
 1. 进入每个cluster-test/700* 目录，执行
