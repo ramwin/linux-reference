@@ -6,7 +6,9 @@ import redis
 import string
 
 
-r = redis.RedisCluster(host="localhost", port=7000)
+r = redis.RedisCluster(host="localhost", port=7001, decode_responses=True)
 
-for i in string.ascii_letters:
-    print(r.get(i))
+print("".join([
+    r.get(i) or "无"
+    for i in string.ascii_letters
+]))
