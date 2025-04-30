@@ -22,3 +22,6 @@
     mkdir /remote_dir
     mount dns.ramwin.com:/remote_dir /remote_dir
     cat /remote_dir/test
+
+    # 或者编辑 /etc/fstab
+    ip:/nfsexport /mnt/nfs nfs defaults 0 0

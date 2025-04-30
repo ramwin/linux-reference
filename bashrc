@@ -55,6 +55,7 @@ function wxj(){
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
 PATH=\
+:/home/wangx/redis/src/\
 :/home/wangx/github/other/llvm-project/build/bin/\
 :/home/wangx/venv/bin\
 :/home/wangx/sbt/bin\
