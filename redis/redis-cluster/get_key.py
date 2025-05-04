@@ -5,8 +5,13 @@
 import redis
 import string
 
+from redis.cluster import ClusterNode, RedisCluster
 
-r = redis.RedisCluster(host="localhost", port=7001, decode_responses=True)
+
+r = redis.RedisCluster(startup_nodes=[
+    ClusterNode('localhost', 7001),
+    ClusterNode('localhost', 7002),
+    ], decode_responses=True)
 
 print("".join([
     r.get(i) or "无"
