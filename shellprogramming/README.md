@@ -227,7 +227,6 @@ fi
 ```
 
 ## exceptions
-
 ```
 echo "error"
 exit 123
