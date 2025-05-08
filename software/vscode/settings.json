@@ -6,5 +6,6 @@
     "editor.detectIndentation": false,
     "python.defaultInterpreterPath": "/home/wangx/venv/bin/python",
     "files.insertFinalNewline": true,
-    "explorer.confirmDelete": false
+    "explorer.confirmDelete": false,
+    "git.openRepositoryInParentFolders": "never"
 }
