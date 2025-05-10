@@ -10,7 +10,7 @@ DIRECTORY="/home/wangx/github/linux-reference/redis/redis-cluster/cluster-test"
 
 template = Template(
     "[program:redis_cluster_{{port}}]\n"
-    "command=redis-server redis_cluster.conf\n"
+    "command=redis-server redis.conf\n"
     "directory={{DIRECTORY}}/{{port}}\n"
     "stdout_logfile_maxbytes=4MB\n"
     "stdout_logfile_backups=20\n"
