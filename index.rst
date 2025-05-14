@@ -11,7 +11,6 @@ Welcome to linux reference's documentation!
    :caption: Contents:
 
    ./计算机组成原理.md
-   ./shellprogramming/README.md
    ./software.md
    ./database.md
    ./restructed/restructed语法.rst

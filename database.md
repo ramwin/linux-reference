@@ -6,8 +6,6 @@
 ./mongodb.md
 ```
 
-[集群搭建参考](./redis-cluster/README.md)
-
 ## [mongodb](./mongodb.md)
 
 ## SQL

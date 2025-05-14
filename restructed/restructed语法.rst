@@ -3,7 +3,10 @@ restructured
 
 .. toctree::
 
-    ./markdown.md
+   ./toctree.rst
+   ./markdown.md
+   ./sub_menu.rst
+   ./sub_include.rst
 
 text style
 ----------
@@ -111,16 +114,4 @@ include会直接复制过来
 
 .. include:: ./same_include.rst
 .. include:: ./include.rst
-
-toctree会当作上面的最后一个标题的子元素
-
-.. toctree::
-
-   ./new_chapter.rst
-
-- 我想toctree但是当作大标题, 不行
-
-.. toctree::
-   :caption: 2
-
-   ./new_chapter2.rst
+.. include:: ./sub_include.rst

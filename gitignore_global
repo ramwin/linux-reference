@@ -192,3 +192,4 @@ time.csv
 node_modules
 run_test.sh
 test.sh
+log

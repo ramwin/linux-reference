@@ -22,7 +22,9 @@ extensions = [
         ]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.git',
+                    "software/lz4/abc/directory/*.md",
+                    ]
 
 language = 'zh_CN'
 

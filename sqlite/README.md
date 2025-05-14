@@ -1,3 +1,4 @@
+# sqlite
 [sqlite tutorial 官网](http://www.sqlitetutorial.net/)  
 [sqlite org](https://sqlite.org/index.html)  
 
@@ -144,3 +145,9 @@ sqlite3 test.db
 .read <filename>
 .import 文件名 表名
 ```
+
+## 命令设置
+* .show   # 查看基础设置
+* .header on
+* .mode column
+* .timer on

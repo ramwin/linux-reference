@@ -3,7 +3,21 @@
 ```
 
 ## include
+
+1. include代码
+使用
+```
+`` `
+{literalinclude} ./be_include.py
+`` `
+```
+可以把代码展示出来
+
 ```{literalinclude} ./be_include.py
+```
+
+2. include markdown文件, 这样会导致层级比较大,注意被include的文件要比较小哦
+```{include} ./be_include.md
 ```
 
 ## 图片
@@ -59,6 +73,7 @@ end是group里的end,不能随便用
 通过subgraph可以添加组
 ```{mermaid}
 flowchart TB;
+%%{init: {'flowchart' : {'curve' : "basis"}}}%%
     Start --> check{校验是\n否橙色}
     Start ~~~ 隐藏的线
     check --> |是| orange:::orange
