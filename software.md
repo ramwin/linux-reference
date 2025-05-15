@@ -45,13 +45,6 @@ sudo ncdu -x /  # -x用来只看当前的磁盘
 awk '{print $1}' filename
 ```
 
-
-## Mac
-```{toctree}
-./mac/shortcut.md
-./mac/software软件安装卸载brew.md
-```
-
 ## 服务类
 ```{toctree}
 :maxdepth: 2

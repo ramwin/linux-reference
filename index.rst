@@ -17,6 +17,7 @@ Welcome to linux reference's documentation!
    ./README.md
    ./hardware.md
    ./linux/signal.md
+   ./mac.md
 
 
 Indices and tables
