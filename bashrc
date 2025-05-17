@@ -50,9 +50,9 @@ function wxj(){
     echo '---------------------输出完成----------------------'
 }
 
-# export TERM="xterm-color"
-# export CLICOLOR=1
-# export LSCOLORS=GxFxCxDxBxegedabagaced
+export TERM="xterm-color"
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
 PATH=\
 :/home/wangx/redis/src/\
@@ -112,14 +112,14 @@ export PYTHONBREAKPOINT=ipdb.set_trace
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
 # alias bat="batcat"
 
-PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
+# PS1='[\[\e[37m\]#\##\[\e[01;32m\]\u@\[\e[00;31m\]$HOSTNAME:\W]\$\[\e[m\]'
 # \[\e[37m\] 白色
-PS1='[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\e[34m\]\W\[\e[37m\]] \[\e[m\]'
+# PS1='[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\e[34m\]\W\[\e[37m\]] \[\e[m\]'
 # 添加git分支显示
 parse_git_branch() {
      git branch 2> /dev/null | grep -v '* master' | grep -v '* main' | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\[\e[37m\]] $ "
+# PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\[\e[37m\]] $ "
 
 export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
 export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/other/tldr/pages/"
