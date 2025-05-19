@@ -1,7 +1,14 @@
 # mongodb
 ## 启动与退出
-    docker pull mongo
-    docker run --name some-mogo -d -p 27017:27017 -p 28017:28017 mongo:tag 
+```
+docker pull mongo
+docker run --name some-mogo -d -p 27017:27017 -p 28017:28017 mongo:tag 
+docker run --name mongoserver -p 27017:27017 -d mongo
+```
+* 链接使用
+```
+    docker run -ti --link mongoserver:mongo --rm mongo sh -c 'exec mongo "$MONGO_PORT_27017_TCP_ADDR:$MONGO_PORT_27017_TCP_PORT/test"'
+```
 
 ## python相关
 [pymongo](https://docs.mongodb.org/getting-started/python/client/)

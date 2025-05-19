@@ -518,3 +518,7 @@ DESC LIMIT 20;
 
 [fetching-Spatial-data]: https://dev.mysql.com/doc/refman/8.0/en/fetching-spatial-data.html
 [json-type-url]: https://dev.mysql.com/doc/refman/8.0/en/json.html
+
+## 问题定位
+* ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+    1. 重启mysql服务，这是因为/var/run/mysql/mysqld.sock文件被删除了，重启mysql的话会重新创建这个文件

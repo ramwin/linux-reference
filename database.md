@@ -3,7 +3,7 @@
 ./postgresql.md
 ./redis/redis.md
 ./mysql/README.md
-./mongodb.md
+./database/mongodb.md
 ```
 
 ## [mongodb](./mongodb.md)
