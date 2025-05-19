@@ -1,0 +1,38 @@
+# 这里zshrc bashrc都支持的特性
+# 快捷操作
+alias l='ls'
+alias ll='ls -al'
+alias ls="ls --color=auto"
+alias mytree="tree -L 2 -d -I 'node_modules'"
+alias py="ipython"
+
+
+function settitle() {
+    echo -ne "\033]0;${1}\007" 
+}
+
+export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
+export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/other/tldr/pages/"
+
+export PATH=\
+:$HOME/redis/src/\
+:$HOME/github/other/llvm-project/build/bin/\
+:$HOME/.local/bin/\
+:$HOME/venv/bin\
+:$HOME/sbt/bin\
+:$HOME/node/bin\
+:$HOME/shims\
+:$HOME/.local/bin/\
+:$HOME/bin/\
+:$HOME/github/python/python-reference/script/\
+:$HOME/github/linux-reference/script/\
+:$HOME/node_modules/bin/\
+:$HOME/github/secret/\
+:/usr/local/java/bin/\
+:/usr/local/eclipse/\
+:/usr/local/go/bin/\
+:/usr/local/go/bin/\
+:/usr/node/bin/\
+:/home/wangx/.pyenv/bin/\
+:/home/wangx/gh/bin/\
+:$PATH
