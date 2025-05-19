@@ -15,6 +15,7 @@ export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
 export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/other/tldr/pages/"
 
 export PATH=\
+/Library/PostgreSQL/17/bin/\
 :$HOME/redis/src/\
 :$HOME/github/other/llvm-project/build/bin/\
 :$HOME/.local/bin/\
