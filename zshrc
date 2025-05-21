@@ -35,4 +35,6 @@ export PROMPT='${COLOR_USR}%n ${COLOR_DIR}%~ ${COLOR_GIT}$(show_branch.py)${COLO
 export https_proxy=http://localhost:1087
 export HTTP_PROXY=http://localhost:1087
 export HTTPS_PROXY=http://localhost:1087
+export no_http_proxy="ramwin.com;*.cn"
+export no_https_proxy="ramwin.com;*.cn"
 alias pip="pip3.12"

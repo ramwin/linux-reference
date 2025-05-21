@@ -12,7 +12,7 @@ function settitle() {
 }
 
 export TLDR_PAGES_SOURCE_LOCATION=http://tldr.ramwin.com/pages/
-export TLDR_PAGES_SOURCE_LOCATION="file:///home/wangx/github/other/tldr/pages/"
+export TLDR_PAGES_SOURCE_LOCATION="file://"$HOME"/github/other/tldr/pages/"
 
 export PATH=\
 /Library/PostgreSQL/17/bin/\
