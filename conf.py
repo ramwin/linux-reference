@@ -43,6 +43,7 @@ source_suffix = {
 }
 myst_heading_anchors = 7
 myst_enable_extensions = [
+        "attrs_inline",
         "colon_fence",
         "strikethrough",
         "tasklist",
