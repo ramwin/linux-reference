@@ -28,6 +28,6 @@ template = Template(
 )
 
 with open(Path("supervisor_redis_cluster.ini"), "w") as f:
-    for port in [7000, 7001, 7002]:
+    for port in range(7000, 7009):
         f.write(template.render({"port": port, "DIRECTORY": DIRECTORY}))
 
