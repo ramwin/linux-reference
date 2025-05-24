@@ -4,6 +4,7 @@
     mt = mergetool
     rb = "rebase --continue"
     last = log -1 HEAD
+    cp = cherry-pick
     release = "!sh -c \"git commit -m 'release $1'\""
 [branch "master"]
     remote = origin

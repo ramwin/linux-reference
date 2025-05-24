@@ -1,6 +1,12 @@
 {
-    "workbench.colorTheme": "Solarized Light",
-    "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    }
+    "_comment": "/home/wangx/.config/Code - OSS/User/settings.json",
+    "workbench.colorTheme": "Default Light Modern",
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
+    "git.openRepositoryInParentFolders": "always",
+    "editor.fontSize": 36,
+    "explorer.confirmDragAndDrop": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "window.zoomLevel": 1
 }
