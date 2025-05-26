@@ -22,7 +22,7 @@ template = Template(
     "startsecs=20\n"
     "redirect_stderr=false\n"
     "user=wangx\n"
-    'environment=PATH="/Users/wangx/venv/bin/:/Users/wangx/.local/bin:/Users/wangx/node/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"\n'
+    'environment=PATH="/opt/homebrew/bin:/Users/wangx/venv/bin/:/Users/wangx/.local/bin:/Users/wangx/node/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"\n'
     "stdout_logfile={{DIRECTORY}}/stdout.log\n"
     "stderr_logfile={{DIRECTORY}}/stderr.log\n\n\n"
 )
