@@ -91,7 +91,7 @@ parse_git_branch() {
     # git branch --show-current 2>/dev/null
     # git branch 2> /dev/null | grep -v '* master' | grep -v '* main' | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-# PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\[\e[37m\]] $ "
+PS1="[\[\e[37m\]#\[\e[00;33m\]\#\[\e[37m\]#\[\e[01;32m\]\u\[\e[36m\]@\[\e[00;31m\]$HOSTNAME:\[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\]\[\e[37m\]] $ "
 
 
 # -F 允许超过一屏幕时才成less
