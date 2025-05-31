@@ -5,7 +5,7 @@
         "editor.defaultFormatter": "Vue.volar"
     },
     "git.openRepositoryInParentFolders": "always",
-    "editor.fontSize": 36,
+    "editor.fontSize": 24,
     "explorer.confirmDragAndDrop": false,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "window.zoomLevel": 1
