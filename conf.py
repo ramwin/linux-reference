@@ -18,7 +18,7 @@ extensions = [
         "sphinx_design",
         "sphinx.ext.todo",
         "sphinx.ext.autodoc",
-        "sphinxmermaid",
+        "sphinxcontrib.mermaid",
         ]
 
 templates_path = ['_templates']
@@ -61,3 +61,7 @@ sphinxmermaid_mermaid_init = {
     'fontSize': '40px',
   }
 }
+mermaid_version = "11.2.0"
+mermaid_use_local = "node_modules/mermaid/dist/mermaid.min.js"
+mermaid_elk_use_local = "node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs"
+d3_use_local = "node_modules/d3/dist/d3.min.js"
