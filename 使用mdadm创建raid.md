@@ -107,3 +107,10 @@ sudo resize2fs /dev/md55 # 现在有了12G
 ```
 sudo mdadm -A /dev/md55 --run  /dev/loop57 /dev/loop58 /dev/loop59 /dev/loop60 /dev/loop61 /dev/loop62
 ```
+
+## [自动挂载](https://www.digitalocean.com/community/tutorials/how-to-create-raid-arrays-with-mdadm-on-ubuntu#creating-a-raid-0-array)
+```
+sudo mdadm --detail --scan | sudo tee -a /etc/mdadm/mdadm.conf
+sudo update-initramfs -u
+echo '/dev/md0 /mnt/md0 ext4 defaults,nofail,discard 0 0' | sudo tee -a /etc/fstab
+```
