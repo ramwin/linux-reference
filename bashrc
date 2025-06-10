@@ -1,16 +1,16 @@
 source $HOME/github/linux-reference/baserc
 
 # 用来在windows目录下用windows的git
-cd() {
-    builtin cd "$1"
-    current_path=`pwd`
-    if [[ $current_path == /mnt/d/* ]]
-    then
-        alias 'git="git.exe"'
-    else
-        alias git="git"
-    fi
-}
+# cd() {
+#     builtin cd "$1"
+#     current_path=`pwd`
+#     if [[ $current_path == /mnt/d/* ]]
+#     then
+#         alias 'git="git.exe"'
+#     else
+#         alias git="git"
+#     fi
+# }
 
 export TLDR_CACHE_ENABLED=1
 export TLDR_CACHE_MAX_AGE=24
