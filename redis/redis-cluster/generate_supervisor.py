@@ -6,7 +6,9 @@ from pathlib import Path
 from jinja2 import Template
 
 
-DIRECTORY="/home/wangx/github/linux-reference/redis/redis-cluster/cluster-test"
+HOME = Path.home()
+
+DIRECTORY=f"{HOME}/github/linux-reference/redis/redis-cluster/cluster-test"
 
 template = Template(
     "[program:redis_cluster_{{port}}]\n"
@@ -22,7 +24,7 @@ template = Template(
     "startsecs=20\n"
     "redirect_stderr=false\n"
     "user=wangx\n"
-    'environment=PATH="/home/wangx/venv/bin/:/home/wangx/.local/bin:/home/wangx/node/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"\n'
+    f'environment=PATH="/opt/homebrew/bin:{HOME}/venv/bin/:{HOME}/.local/bin:{HOME}/node/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"\n'
     "stdout_logfile={{DIRECTORY}}/stdout.log\n"
     "stderr_logfile={{DIRECTORY}}/stderr.log\n\n\n"
 )
