@@ -4,7 +4,7 @@ alias l='ls --color=auto'
 alias ll='ls -al --color=auto'
 alias ls="ls --color=auto"
 alias mytree="tree -L 2 -d -I 'node_modules'"
-alias py="ipython"
+alias py="ipython3"
 
 
 function settitle() {
