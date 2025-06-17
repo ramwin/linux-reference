@@ -38,17 +38,16 @@ language = 'zh_CN'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 source_suffix = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown',
+    ".rst": "restructuredtext",
+    ".md": "markdown",
 }
-myst_heading_anchors = 7
 myst_enable_extensions = [
         "attrs_inline",
         "colon_fence",
         "strikethrough",
         "tasklist",
 ]
-suppress_warnings = ["myst.header", "myst.xref_missing"]
+myst_heading_anchors = 7
 html_css_files = [
         "custom.css"
         ]
@@ -61,7 +60,13 @@ sphinxmermaid_mermaid_init = {
     'fontSize': '40px',
   }
 }
+suppress_warnings = [
+    "myst.header",
+    "myst.xref_missing",
+    "myst.not_included",
+    "toc.not_included",
+]
 mermaid_version = "11.2.0"
-mermaid_use_local = "node_modules/mermaid/dist/mermaid.min.js"
-mermaid_elk_use_local = "node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs"
-d3_use_local = "node_modules/d3/dist/d3.min.js"
+mermaid_use_local = "/_static/node_modules/mermaid/dist/mermaid.esm.min.mjs"
+mermaid_elk_use_local = "/_static/node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs"
+d3_use_local = "/_static/node_modules/d3/dist/d3.min.js"

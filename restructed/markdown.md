@@ -2,6 +2,10 @@
 ```{contents}
 ```
 
+```{toctree}
+./mermaid.md
+```
+
 ## include
 
 1. include代码

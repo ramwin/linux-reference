@@ -1,4 +1,13 @@
 # vim
+## 安装
+```
+git clone https://github.com/vim/vim.git github/other/vim
+cd github/other/vim
+./configure --with-features=huge --enable-python3interp
+make -j  # use multi process
+sudo make install
+```
+
 ## 导航
 * [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
 ```
