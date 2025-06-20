@@ -54,6 +54,22 @@ make install
 * 每个worker又都是异步的, IO 多路复用
 
 ## 配置
+### [多个服务代理](https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/#choosing-a-load-balancing-method)
+```
+http {
+    upstream backend {
+        server backend1.example.com;
+        server backend2.example.com;
+        server 192.0.0.1 backup;
+    }
+
+    server {
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+}
+```
 ### server配置
 * 常用配置
 ```
