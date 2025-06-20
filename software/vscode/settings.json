@@ -7,5 +7,6 @@
     "python.defaultInterpreterPath": "/home/wangx/venv/bin/python",
     "files.insertFinalNewline": true,
     "explorer.confirmDelete": false,
-    "git.openRepositoryInParentFolders": "never"
+    "git.openRepositoryInParentFolders": "never",
+    "git.autofetch": true
 }
