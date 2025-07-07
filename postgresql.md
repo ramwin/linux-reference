@@ -149,6 +149,18 @@ where table_schema = 'public'
 order by 3 desc;
 ```
 
+* 查看各个索引的尺寸
+```sql
+SELECT
+   tablename, indexname,
+   pg_size_pretty(pg_relation_size(indexname::regclass)) as index_size,
+   pg_size_pretty(pg_total_relation_size(tablename::regclass)) as total_total_size,
+   pg_size_pretty(pg_relation_size(tablename::regclass)) as table_data_size
+FROM pg_indexes
+ORDER by index_size
+DESC limit 10;
+```
+
 #### basic
 * 修改用户密码
 ```sql
