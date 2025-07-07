@@ -157,7 +157,7 @@ SELECT
    pg_size_pretty(pg_total_relation_size(tablename::regclass)) as total_total_size,
    pg_size_pretty(pg_relation_size(tablename::regclass)) as table_data_size
 FROM pg_indexes
-ORDER by index_size
+ORDER by pg_relation_size(indexname::regclass)
 DESC limit 10;
 ```
 
