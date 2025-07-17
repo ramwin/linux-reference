@@ -1,5 +1,6 @@
 # 这里zshrc bashrc都支持的特性
 # 快捷操作
+export PYTHONBREAKPOINT=ipdb.set_trace
 alias l='ls --color=auto'
 alias ll='ls -al --color=auto'
 alias ls="ls --color=auto"

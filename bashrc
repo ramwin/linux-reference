@@ -78,7 +78,6 @@ export CLICOLOR=1
 # settitle coding
 export LANGUAGE='en_US.UTF-8 git'
 export VISUAL="vim"
-export PYTHONBREAKPOINT=ipdb.set_trace
 alias myfind="find . -not -path '*/site-packages/*' -not -path '*/node_modules/*'"
 # alias bat="batcat"
 

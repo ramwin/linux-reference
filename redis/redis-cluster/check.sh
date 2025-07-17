@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-redis-cli --cluster check localhost:7000
+redis-cli --cluster check localhost:700$1

@@ -70,30 +70,10 @@ TODO
 ```
 
 ## 图表
-end是group里的end,不能随便用
-
-### [流程图](https://mermaid.js.org/syntax/flowchart.html)
-通过`:::`可以设置类， `(){},<>,>/,可以设置框外观`  
-通过subgraph可以添加组
-```{mermaid}
-flowchart TB;
-%%{init: {'flowchart' : {'curve' : "basis"}}}%%
-    Start --> check{校验是\n否橙色}
-    Start ~~~ 隐藏的线
-    check --> |是| orange:::orange
-    check --> |否| red:::red
-    red & orange --> tooltip --> End
-    tooltip --> bigblock4:::big
-    subgraph "tooltip"
-        a --> b
-        b --> c
-        c --> d@{ shape: tag-rect, label: "Tagged process"}
-    end
-    classDef orange fill:#f96
-    classDef big fontsize:100
-    classDef red color: #f00
-    classDef orange,big,red font-size:12pt;
+```{toctree}
+./mermaid.md
 ```
+end是group里的end,不能随便用
 
 
 ## 列表待办列表

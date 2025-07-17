@@ -38,3 +38,8 @@ export PROMPT='${COLOR_USR}%n ${COLOR_DIR}%~ ${COLOR_GIT}$(show_branch.py)${COLO
 # export no_http_proxy="localhost;ramwin.com;*.cn"
 # export no_https_proxy="localhost;ramwin.com;*.cn"
 alias pip="pip3.12"
+
+HISTFILE=~/.zhistory
+HISTSIZE=10000
+SAVEHIST=50000
+setopt inc_append_history

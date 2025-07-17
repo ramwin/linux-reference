@@ -193,3 +193,6 @@ node_modules
 run_test.sh
 test.sh
 log
+tmp
+stdout.log.*
+stderr.log.*
