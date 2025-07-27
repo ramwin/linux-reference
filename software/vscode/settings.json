@@ -1,12 +1,23 @@
 {
-    "security.workspace.trust.untrustedFiles": "open",
-    "editor.fontSize": 12,
+    "_comment": "/home/wangx/.config/Code - OSS/User/settings.json",
+    "原始文件": "~/.config/Code - OSS/User/settings.json",
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
     "debug.console.fontSize": 24,
-    "window.zoomLevel": 3,
     "editor.detectIndentation": false,
-    "python.defaultInterpreterPath": "/home/wangx/venv/bin/python",
-    "files.insertFinalNewline": true,
+    "editor.fontSize": 12,
+    "editor.renderFinalNewline": "off",
     "explorer.confirmDelete": false,
-    "git.openRepositoryInParentFolders": "never",
-    "git.autofetch": true
+    "explorer.confirmDragAndDrop": false,
+    "files.autoSave": "onFocusChange",
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
+    "python.defaultInterpreterPath": "/home/wangx/venv/bin/python",
+    "security.workspace.trust.untrustedFiles": "open",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "Default Light Modern"
 }

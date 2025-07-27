@@ -1,7 +1,0 @@
-{
-    "editor.renderFinalNewline": "off",
-    "files.eol": "\n",
-    "files.insertFinalNewline": true,
-    "files.autoSave": "onFocusChange",
-    "原始文件": "~/.config/Code - OSS/User/settings.json"
-}
