@@ -9,13 +9,13 @@
 
 # direct memory mapping
 会导致间断访问时，遇到conflict miss
-![物理实现](./cache/direct-mapping-物理实现.png)
+![物理实现](./cache/direct-mapping.png)
 
 # [associative mapping](https://www.youtube.com/watch?v=uwnsMaH-iV0&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=14)
 P.A.bits只分成了tag和line offset. 每个block都会被分配到任意的cache line.
 * 优点: 不会有conflict miss
 * 缺点: 查看数据的时候需要遍历所有的cache line
-![物理实现](./cache/associative-maaping-物理实现.png)
+![物理实现](./cache/associative-maaping.png)
 
 # [set associative mapping](https://www.youtube.com/watch?v=KhAh6thw_TI&list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q&index=17)
 物理实现

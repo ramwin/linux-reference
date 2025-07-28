@@ -13,8 +13,7 @@
             "keys": "ctrl+c"
         },
         {
-            "command": "paste",
-            "keys": "ctrl+v"
+            "command": "paste"
         },
         {
             "command": "find",
@@ -28,6 +27,10 @@
                 "splitMode": "duplicate"
             },
             "keys": "alt+shift+d"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+v"
         }
     ],
     "copyFormatting": "none",
@@ -79,6 +82,7 @@
                 "source": "Windows.Terminal.Wsl"
             },
             {
+                "bellStyle": "none",
                 "colorScheme": "Ubuntu",
                 "font": 
                 {

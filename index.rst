@@ -19,7 +19,6 @@ Welcome to linux reference's documentation!
    ./linux/signal.md
    ./mac.md
    ./articles.md
-   ./mermaid.rst
 
 
 Indices and tables

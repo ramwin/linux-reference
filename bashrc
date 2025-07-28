@@ -52,7 +52,7 @@ function wxj(){
     echo '---------------------输出完成----------------------'
 }
 
-export TERM="xterm-color"
+# export TERM="xterm-256color"  # 不然wsl下visidata会没有颜色
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"

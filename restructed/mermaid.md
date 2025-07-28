@@ -9,6 +9,27 @@ sequenceDiagram
     A-)John: See you later!
 ```
 
+```{mermaid}
+sequenceDiagram
+  participant Alice
+  participant Bob
+  Alice ->>+ John: Hello John, how are you?
+  John ->>- Alice: OK?
+  loop Healthcheck
+      John->John: Fight against hypochondria
+  end
+  Note right of John: Rational thoughts <br/>prevail...
+  John -->>+Alice: Great!
+  John ->>+Bob: How about you?
+  activate John
+  John -->> Bob: How about you2?
+  activate John
+  Bob --> John: Jolly good!
+  deactivate John
+  deactivate John
+  Alice -->>-John: great!
+```
+
 ## 流程图
 通过`:::`可以设置类， `(){},<>,>/,可以设置框外观`  
 通过subgraph可以添加组
@@ -71,4 +92,25 @@ gantt
     Add gantt diagram to demo page      :20h
     Add another diagram to demo page    :48h
 
+```
+
+## 思维导图
+```{mermaid}
+mindmap
+  root((mindmap))
+    Origins
+      Long history
+      ::icon(fa fa-book)
+      Popularisation
+        British popular psychology author Tony Buzan
+    Research
+      On effectiveness<br/>and features
+      On Automatic creation
+        Uses
+            Creative techniques
+            Strategic planning
+            Argument mapping
+    Tools
+      Pen and paper
+      Mermaid
 ```

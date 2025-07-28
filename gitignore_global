@@ -194,5 +194,5 @@ run_test.sh
 test.sh
 log
 tmp
-stdout.log.*
-stderr.log.*
+stdout.log\.[0-9]*
+stderr.log\.[0-9]*
