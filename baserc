@@ -38,3 +38,5 @@ export PATH=\
 :/home/wangx/.pyenv/bin/\
 :/home/wangx/gh/bin/\
 :$PATH
+
+set -o history  # 记录报错的命令

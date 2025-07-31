@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\excel]
+@="URL:Excel Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\excel\shell]
+
+[HKEY_CLASSES_ROOT\excel\shell\open]
+
+[HKEY_CLASSES_ROOT\excel\shell\open\command]
+@="\"C:\\Users\\ramw\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"D:\\tmp\\open_excel.py\" \"%1\""

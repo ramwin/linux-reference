@@ -196,3 +196,4 @@ log
 tmp
 stdout.log\.[0-9]*
 stderr.log\.[0-9]*
+.DS_Store
