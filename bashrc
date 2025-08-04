@@ -108,3 +108,5 @@ export CMAKE_C_COMPILER=clang
 
 tail () { command tail -n 20 "$@"; }
 head () { command head -n 20 "$@"; }
+
+set -o history  # 记录报错的命令
