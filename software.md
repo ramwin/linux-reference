@@ -45,6 +45,13 @@ sudo ncdu -x /  # -x用来只看当前的磁盘
 awk '{print $1}' filename
 ```
 
+### grep
+* 查看服务器日志, 报错时显示上下文
+```
+tail -f error.log | grep --context|--before-context|--after-context 3 Exception
+```
+
+
 ## 服务类
 ```{toctree}
 :maxdepth: 2
