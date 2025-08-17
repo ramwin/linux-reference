@@ -1,6 +1,7 @@
 # javascript
 node_modules
 package-lock.json
+pnpm-lock.yaml
 
 .vscode/*
 !.vscode/extensions.json
