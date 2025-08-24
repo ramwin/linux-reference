@@ -31,7 +31,7 @@
     name = Xiang Wang
 [pull]
     rebase = true
-    default = current
+	default = current
 [push]
     default = current
 [safe]
