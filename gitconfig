@@ -1,3 +1,6 @@
+# 每个机器上include公开配置后再自定义配置
+# [include]
+#     path = ~/github/linux-reference/gitconfig
 [alias]
     co = checkout
     lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%an %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
