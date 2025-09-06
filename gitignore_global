@@ -200,3 +200,5 @@ stderr.log\.[0-9]*
 stdout_[0-9]*.log\.[0-9]*
 stderr_[0-9]*.log\.[0-9]*
 .DS_Store
+
+\#recycle
