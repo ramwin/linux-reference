@@ -2,7 +2,11 @@
 ```{contents}
 ```
 
+```{include} ./echarts.html
+```
+
 ```{toctree}
+./table.md
 ./mermaid.md
 ```
 

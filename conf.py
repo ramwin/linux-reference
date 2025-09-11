@@ -19,6 +19,7 @@ extensions = [
         "sphinx.ext.todo",
         "sphinx.ext.autodoc",
         "sphinxcontrib.mermaid",
+        "sphinx.ext.mathjax",
         ]
 
 templates_path = ['_templates']
@@ -31,7 +32,7 @@ exclude_patterns = [
         "software/lz4/abc/directory/*.md",
         ]
 
-language = 'zh_CN'
+language = 'zh-cn'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -43,8 +44,12 @@ source_suffix = {
     ".md": "markdown",
 }
 myst_enable_extensions = [
+        "amsmath",
         "attrs_inline",
         "colon_fence",
+        "deflist",
+        "dollarmath",
+        "fieldlist",
         "strikethrough",
         "tasklist",
 ]
@@ -71,3 +76,4 @@ mermaid_version = "11.9.0"
 mermaid_use_local = "/_static/node_modules/mermaid/dist/mermaid.esm.min.mjs"
 mermaid_elk_use_local = "/_static/node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs"
 d3_use_local = "/_static/node_modules/d3/dist/d3.min.js"
+mathjax_path = "/_static/node_modules/mathjax/unpacked/MathJax.js"
