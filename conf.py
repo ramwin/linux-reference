@@ -28,7 +28,6 @@ exclude_patterns = [
         '.DS_Store',
         '.git',
         'Thumbs.db',
-        "node_modules",
         "software/lz4/abc/directory/*.md",
         ]
 
