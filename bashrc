@@ -111,5 +111,6 @@ head () { command head -n 20 "$@"; }
 
 if [[ $HOST != 'redmibook.ramwin.com' ]]
 then
+    echo "记录报错的命令"
     set -o history  # 记录报错的命令
 fi

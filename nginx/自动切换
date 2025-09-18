@@ -1,0 +1,25 @@
+upstream backend {
+    server localhost:8001 max_fails=1 fail_timeout=27s;
+    server localhost:8002 max_fails=1 fail_timeout=27s;
+    server localhost:8003 max_fails=1 fail_timeout=27s;
+}
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+    location /api {
+        proxy_pass http://backend/;
+        proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
+        proxy_connect_timeout 2s;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
