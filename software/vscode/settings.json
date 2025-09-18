@@ -1,23 +1,45 @@
 {
     "_comment": "/home/wangx/.config/Code - OSS/User/settings.json",
     "原始文件": "~/.config/Code - OSS/User/settings.json",
+    "[python]": {
+        "editor.formatOnType": true
+    },
     "[vue]": {
         "editor.defaultFormatter": "Vue.volar"
     },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
     "debug.console.fontSize": 24,
+    "editor.cursorStyle": "block",
     "editor.detectIndentation": false,
-    "editor.fontSize": 12,
+    "editor.fontSize": 24,
+    "editor.lineNumbers": "relative",
+    "editor.minimap.maxColumn": 80,
     "editor.renderFinalNewline": "off",
+    "editor.renderWhitespace": "trailing",
+    "editor.tabSize": 4,
+    "editor.wordWrap": "on",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
     "files.autoSave": "onFocusChange",
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/_build": true,
+        ".mypy_cache": true
+    },
     "files.insertFinalNewline": true,
     "files.eol": "\n",
     "git.autofetch": true,
     "git.openRepositoryInParentFolders": "always",
     "python.defaultInterpreterPath": "/home/wangx/venv/bin/python",
+    "python.analysis.typeCheckingMode": "strict",
     "security.workspace.trust.untrustedFiles": "open",
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "window.zoomLevel": 1,
-    "workbench.colorTheme": "Default Light Modern"
+    "update.showReleaseNotes": false,
+    "window.zoomLevel": 2,
+    "workbench.colorTheme": "Default Light Modern",
+    "xml.format.maxLineWidth": 20000,
+    "xml.format.preservedNewlines": 0
 }
