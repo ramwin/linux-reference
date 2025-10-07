@@ -75,6 +75,15 @@ http {
 ```
 server {
     client_max_body_size 1G; // 最大上传尺寸
+    location = /info/ {
+        default_type text/plain;
+        return 200
+"remote_addr: $remote_addr
+server_addr: $server_addr
+http_host:   $http_host
+custom:      Hello-from-ramwin.com
+";
+    }
 }
 ```
 
