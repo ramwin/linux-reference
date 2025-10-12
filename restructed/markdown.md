@@ -26,6 +26,7 @@
 
 2. include markdown文件, 这样会导致层级比较大,注意被include的文件要比较小哦
 ```{include} ./be_include.md
+:heading-offset: 1
 ```
 
 ## 图片

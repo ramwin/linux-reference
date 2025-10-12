@@ -22,7 +22,7 @@ ln -s /home/wangx/github/secret/config/kioslaverc ./
 
 * kwinrc  [虚拟桌面配置](./kwinrc)
 * fcitx5
-    * config [输入法配置](./fcitx_config)
+    * config [输入法配置](./fcitx5_config)
     ```
     cd ~/.config/fcitx5
     ln -s ~/github/linux-reference/manjaro/fcitx5_config ./config

@@ -7,6 +7,7 @@ restructured
    ./markdown.md
    ./sub_menu.rst
    ./sub_include.rst
+   ./markmap.md
 
 text style
 ----------

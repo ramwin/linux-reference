@@ -3,6 +3,7 @@
 ## 运维工具
 ```{toctree}
 ./使用mdadm创建raid.md
+./bind9.md
 ```
 
 ### nmon
@@ -59,6 +60,8 @@ tail -f error.log | grep --context|--before-context|--after-context 3 Exception
 ./celery/README.md
 ./rabbitmq/README.md
 ./nfs.md
+./crontab.md
+./daemon/README.md
 ```
 
 ### [syncthing](https://docs.syncthing.net/intro/getting-started.html)
@@ -111,6 +114,7 @@ htpasswd -v <filename> <username>
 ```{toctree}
 ./nginx.md
 ./shadowsocks/shadowsocks的用法.md
+./mac/shadowsocks.md
 ./net网络.md
 ```
 ### chromium

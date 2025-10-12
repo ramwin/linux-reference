@@ -301,7 +301,7 @@ DELETE FROM tbl_name
 ### FIPS Support
 
 ## [数据类型 Data Types](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
-### [Data Type Overview]()
+### Data Type Overview
 ### [数字类型]()
     * 基础: INT(2)
     * 可用参数: `UNSIGNED, ZEROFILL, AUTO_INCREMENT`

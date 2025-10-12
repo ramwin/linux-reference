@@ -4,9 +4,9 @@
 ./redis/redis.md
 ./mysql/README.md
 ./database/mongodb.md
+./database/auth用户权限.md
+./database/datatype数据类型.md
 ```
-
-## [mongodb](./mongodb.md)
 
 ## SQL
 data 基础操作

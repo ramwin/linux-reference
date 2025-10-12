@@ -3,6 +3,17 @@
 * [user & group 用户和组](./linux/user_group.md)
 * [linux命令搜索网站](https://wangchujiang.com/linux-command/)
 
+```{toctree}
+./TODO.md
+./bash.md
+./bbr.md
+```
+
+## 文章
+```{toctree}
+./XOR.md
+```
+
 ## shell编程
 
 ```{toctree}
