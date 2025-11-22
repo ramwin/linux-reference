@@ -8,7 +8,7 @@
     merge = refs/heads/master
 [core]
     bigFileThreshold = 1M
-    excludesfile = ~/.gitignore_global
+    excludesfile = /home/wangx/github/linux-reference/gitignore_global
     quotepath = false
 [filter "lfs"]
     clean = git-lfs clean -- %f
