@@ -1,3 +1,4 @@
 *.rdb
 nodes.conf
 *.aof
+*.pid
