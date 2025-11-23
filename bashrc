@@ -98,7 +98,8 @@ function settitle() {
 }
 
 # django
-alias dshell="python manage.py shell"
+alias mshell="python manage.py shell"
+alias mrun="python manage.py runserver"
 
 # mac 的设置
 export CLICOLOR=1
