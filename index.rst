@@ -10,6 +10,7 @@ Welcome to linux reference's documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   ./知识类.md
    ./software.md
    ./database.md
    ./restructed/restructed语法.rst
