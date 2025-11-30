@@ -44,7 +44,7 @@ source_suffix = {
 }
 myst_heading_anchors = 4
 myst_enable_extensions = [
-        "attrs_ineline",  # 给元素添加属性,比如图片宽度
+        "attrs_inline",  # 给元素添加属性,比如图片宽度
         "colon_fence",
         "strikethrough",
         "tasklist",
