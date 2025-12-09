@@ -1,7 +1,15 @@
+# linux基础知识
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)
 * [linux命令搜索网站](https://wangchujiang.com/linux-command/)
+
+## mac
+* homebrew
+```
+brew services stop|start redis
+```
+
 
 ## shell编程
 
