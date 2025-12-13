@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
+
+"""
+根据一个输入节点,查看有多少个node, 并判断是否所有的slots都覆盖
+"""
+
+import re
 import redis, click, logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Set, List, Tuple
+from logging_ext import setup_handler
 
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+
+setup_handler()
+LOGGER = logging.getLogger(__name__)
 
 
 def cluster_nodes_raw(rc) -> str:
@@ -31,7 +40,7 @@ def parse_slots(raw: str) -> Tuple[Set[int], List[str]]:
                 else:
                     start = end = int(seg)
                 covered.update(range(start, end + 1))
-                logging.info(f"master {host_port}  slots [{start}-{end}]")
+                LOGGER.info(f"master {host_port}  slots [{start}-{end}]")
         if "fail" in flags or "noflags" in flags:
             warns.append(f"节点 {host_port} 状态异常: {flags}")
 
@@ -39,7 +48,7 @@ def parse_slots(raw: str) -> Tuple[Set[int], List[str]]:
 
 
 @click.command()
-@click.argument("seed", type=str)  # host:port
+@click.argument("seed", type=str, default="localhost:7000")  # host:port
 @click.option("-t", "--timeout", default=2, help="socket timeout (s)")
 def main(seed: str, timeout: int):
     host, port = seed.rsplit(":", 1)
@@ -47,11 +56,18 @@ def main(seed: str, timeout: int):
 
     # 1. 原始节点列表
     raw_nodes = cluster_nodes_raw(rc)
-    nodes: List[Tuple[str, int]] = [
-        (ep.split(":")[0], int(ep.split(":")[1]))
-        for line in raw_nodes.splitlines()
-        if (ep := line.split()[1].split("@")[0])
-    ]
+    LOGGER.debug("原始节点列表:\n%s\n", raw_nodes)
+    nodes: List[Tuple[str, int]] = []
+    for line in raw_nodes.splitlines():
+        """
+        9f93...84cc 127.0.0.1:7003@17003 slave 61c3...c79f 0 <timestamp> 1 connected
+        """
+        info = re.match(r"(\w*) (?P<ip>.*):(?P<port>\d+)@\d+", line)
+        if info is None:
+            raise ValueError(line)
+        info = info.groupdict()
+        nodes.append((info["ip"], info["port"]))
+    LOGGER.info("当前的节点列表: %s", nodes)
 
     # 2. 并行 PING
     def ping(addr: Tuple[str, int]) -> bool:
@@ -65,13 +81,13 @@ def main(seed: str, timeout: int):
         click.echo(f"{h}:{p}  {'OK' if (h, p) not in down else 'DOWN'}")
 
     if down:
-        logging.error(f"不可达节点: {down}")
+        LOGGER.error(f"不可达节点: {down}")
         raise click.Abort
 
     # 3. 槽位覆盖
     covered, warns = parse_slots(raw_nodes)
     for w in warns:
-        logging.warning(w)
+        LOGGER.warning(w)
 
     if len(covered) != 16384:
         missing = 16384 - len(covered)
@@ -85,10 +101,10 @@ def main(seed: str, timeout: int):
             if s + 1 not in all_slots - covered:
                 missing_ranges.append(f"{start}-{s}" if start != s else f"{s}")
                 start = None
-        logging.error(f"[ERR] 缺失 {missing} 个槽，区间: {','.join(missing_ranges)}")
+        LOGGER.error(f"[ERR] 缺失 {missing} 个槽，区间: {','.join(missing_ranges)}")
         raise click.Abort
 
-    logging.info("[OK] 所有节点可达且 16384 槽位全覆盖")
+    LOGGER.info("[OK] 所有节点可达且 16384 槽位全覆盖")
 
 
 if __name__ == "__main__":
