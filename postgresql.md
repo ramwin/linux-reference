@@ -133,6 +133,19 @@ INSERT INTO cities VALUES (
 
 ## Sever Administration 服务器管理
 
+* 查看数据库
+```
+SELECT
+    d.datname AS 数据库名,
+    pg_get_userbyid(d.datdba) AS 数据库拥有者,
+    t.spcname AS tablespace名称,
+    pg_tablespace_location(t.oid) AS tablespace路径
+FROM pg_database d
+LEFT JOIN pg_tablespace t ON d.dattablespace = t.oid
+ORDER BY d.datname;
+```
+
+
 * [查看当前连接数](https://stackoverflow.com/questions/27435839/how-to-list-active-connections-on-postgresql):
 ```
 select datname from pg_stat_activity;
