@@ -100,7 +100,11 @@ array=($line)  # 变成了列表
 ```
 
 ## [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
-* 用`\``可以执行命令
+* 循环数字
+```{literalinclude} ./for.sh
+```
+
+* 用\`可以执行命令
 ```shell
 for i in `ls test`
 do
