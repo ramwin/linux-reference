@@ -54,24 +54,7 @@ function wxj(){
 # export CLICOLOR=1
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
-PATH=\
-:/Users/wangx/venv/bin\
-:/home/wangx/venv/bin\
-:/home/wangx/node/bin\
-:$PYENV_ROOT/shims\
-:/home/wangx/bin/\
-:/home/wangx/github/python-reference/script/\
-:/home/wangx/github/linux-reference/script/\
-:/home/wangx/node_modules/bin/\
-:/home/wangx/github/secret/\
-:/usr/local/java/bin/\
-:/usr/local/eclipse/\
-:/usr/local/go/bin/\
-:/usr/local/go/bin/\
-:/usr/node/bin/\
-:/home/wangx/.pyenv/bin/\
-:/home/wangx/gh/bin/\
-:$PATH
+source ~/github/linux-reference/baserc
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi

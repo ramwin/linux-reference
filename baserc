@@ -1,0 +1,20 @@
+# 这里保存服务器通用的
+
+PATH=\
+:/Users/wangx/venv/bin\
+:/home/wangx/venv/bin\
+:/home/wangx/node/bin\
+:$PYENV_ROOT/shims\
+:~/bin/\
+:~/github/python/python-reference/script/\
+:~/github/linux-reference/script/\
+:~/node_modules/bin/\
+:~/github/secret/\
+:/usr/local/java/bin/\
+:/usr/local/eclipse/\
+:/usr/local/go/bin/\
+:/usr/local/go/bin/\
+:/usr/node/bin/\
+:/home/wangx/.pyenv/bin/\
+:/home/wangx/gh/bin/\
+:$PATH
