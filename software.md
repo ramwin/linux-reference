@@ -1,6 +1,10 @@
 # SOFTWARE软件
 
 ## 运维工具
+```{toc}
+./software/mdadm.md
+```
+
 ### nmon
 查看各个磁盘的读写速度
 
