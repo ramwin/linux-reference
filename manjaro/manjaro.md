@@ -71,6 +71,9 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=”@im=fcitx”
 ```
 
+* 新的推荐:
+https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#KDE_Plasma
+
 
 * [manjaro自动补全](https://forum.manjaro.org/t/git-missing-bash-completion/5939)
 安装 bash-completion
