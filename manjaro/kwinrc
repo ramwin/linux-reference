@@ -1,7 +1,7 @@
 [Desktops]
-Id_1=9d47b327-c07a-4762-9d86-4ccb03d28ecf
-Id_2=7589441c-96df-44b1-9a08-b80688b8ffd8
-Id_3=d92a839b-6211-49b2-aa14-c980ed90645a
+Id_1=56b88c4a-1ec5-47dd-8c9a-2f1f4f593b8d
+Id_2=bd27fd19-3996-47e1-9da3-9cb6db5416ce
+Id_3=7ba77524-c928-4847-8691-f8accae762b2
 Name_1=开发
 Name_2=学习
 Name_3=后台
@@ -11,11 +11,35 @@ Rows=1
 [Tiling]
 padding=4
 
-[Tiling][2c95023d-574c-5bae-8921-442fbf2c7817]
+[Tiling][21c17997-a061-57f8-a64e-de778523180c]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
-[Tiling][3978dc8b-9542-5d4b-90a2-34014408f2cd]
+[Tiling][56b88c4a-1ec5-47dd-8c9a-2f1f4f593b8d][]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
-[Tiling][7fef6a0b-461e-56ff-98db-d08eabc80348]
+[Tiling][56b88c4a-1ec5-47dd-8c9a-2f1f4f593b8d][a76ccf42-a92d-436f-af13-228400307fdb]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][58ca410b-ce44-58d6-82b9-fefe44aba0e3]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][7ba77524-c928-4847-8691-f8accae762b2][]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][7ba77524-c928-4847-8691-f8accae762b2][a76ccf42-a92d-436f-af13-228400307fdb]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][aba99a9d-9a2f-5ccb-9073-16a5efa2616b]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][bd27fd19-3996-47e1-9da3-9cb6db5416ce][]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][bd27fd19-3996-47e1-9da3-9cb6db5416ce][a76ccf42-a92d-436f-af13-228400307fdb]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Wayland]
+InputMethod[$e]=/usr/share/applications/org.fcitx.Fcitx5.desktop
+
+[Xwayland]
+Scale=1
