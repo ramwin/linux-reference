@@ -1,0 +1,8 @@
+# /home/wangx/.xprofile
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=”@im=fcitx”
+
+# ramwin
+export XIM="fcitx"
+export XIM_PROGRAM="fcitx"
