@@ -1,3 +1,4 @@
+# /etc/profile.d/input-support.sh
 # https://wiki.archlinux.org/index.php/Fcitx
 # https://wiki.archlinux.org/index.php/Fcitx5
 
