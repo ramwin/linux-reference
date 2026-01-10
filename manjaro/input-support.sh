@@ -23,8 +23,8 @@ function set_im_env_kde_wayland {
     export INPUT_METHOD=$im
     export SDL_IM_MODULE=$im
     # change from waylandui to classicui.
-    export QT_IM_MODULE=$im
-    export GTK_IM_MODULE=$im
+    # export QT_IM_MODULE=$im
+    # export GTK_IM_MODULE=$im
 }
 
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
