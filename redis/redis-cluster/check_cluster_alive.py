@@ -106,6 +106,11 @@ def main(seed: str, timeout: int):
 
     LOGGER.info("[OK] 所有节点可达且 16384 槽位全覆盖")
 
+    redis_cluster = redis.RedisCluster.from_url(f"redis://{seed}")
+    for i in range(16384):
+        redis_cluster.set(i, i)
+    LOGGER.info("0~16383的key都可以访问")
+
 
 if __name__ == "__main__":
     main()

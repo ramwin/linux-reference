@@ -1,4 +1,7 @@
 # redis
+```{contents}
+```
+
 ## 集群搭建
 ```{toctree}
 ./redis-cluster/README.md
@@ -154,7 +157,8 @@ Starting with Redis 4.0, a new Least Frequently Used eviction mode is available.
 * lfu-log-factor 10: 需要次命中后，counter达到最大。我们系统里匹配一个人大概匹配几千次。所以匹配1000次后认为最大，暂时不删除, factor设置成0, decay-time要坚持数据保存一天，255次需要6分钟才允许删除一次。一共需要减少16次，所以设置成10吧
 
 
-## [Command 命令](https://redis.io/commands)
+## Command 命令  
+[官网](https://redis.io/commands)  
 
 ### connections 链接文档
 * [ ] auth
@@ -274,6 +278,14 @@ if expire is 0, the key is created without any expire
     * >=0, 剩余时间
     * -1, 这个key不存在expire time
     * -2, key不存在
+
+
+### SCAN_ITER
+
+```python
+for key in REDIS_CLUSTER.scan_iter("old_pattern:*"):
+    ...
+```
 
 
 ### STR
