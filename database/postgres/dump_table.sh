@@ -10,6 +10,7 @@ pg_dump \
     --file=school_student.sql \
     --table school_student \
     --dbname schoolproject
+    --where='id BETWEEN 1 AND 1000000'
 
 # 
 #    --no-owner 不要所属
