@@ -8,7 +8,7 @@ from typing import Optional, List, Tuple, Union
 
 
 class PostgreSQLBatchExporter:
-    """PostgreSQL 分批导出工具类（支持任意主键类型 & 稀疏表）"""
+    """PostgreSQL 分批导出工具类（无 OFFSET 累积，支持任意主键）"""
 
     def __init__(
         self,
@@ -44,8 +44,8 @@ class PostgreSQLBatchExporter:
         # 1. 结构
         self._export_schema(table_name)
 
-        # 2. 数据
-        batch_files = self._export_data_batches(table_name, batch_size, primary_key)
+        # 2. 数据（无 OFFSET 累积）
+        batch_files = self._export_data_batches_fast(table_name, batch_size, primary_key)
 
         # 3. 导入脚本
         self._generate_import_script(table_name, batch_files)
@@ -61,7 +61,7 @@ class PostgreSQLBatchExporter:
         )
         self._run_command(cmd, f"  ✓ 表结构: {schema_file.name}")
 
-    def _export_data_batches(
+    def _export_data_batches_fast(
         self,
         table_name: str,
         batch_size: int,
@@ -79,32 +79,36 @@ class PostgreSQLBatchExporter:
         print(f"  📊 总行数: {total_rows:,}, 每批约 {batch_size:,} 条")
 
         batch_files: List[str] = []
-        offset = 0
         batch_num = 1
+        lower_key = self._get_min_key(table_name, pk)  # 从最小值开始
 
-        while offset < total_rows:
-            # 取当前批次「边界主键」
-            lower_key, upper_key = self._get_key_boundary(
-                table_name, pk, offset, batch_size
-            )
-            if lower_key is None:  # 最后一批可能不足 batch_size
-                break
+        while lower_key is not None:
+            # 取「当前起点 + batch_size 偏移」那一行的主键值（仅一次索引扫描）
+            upper_key = self._get_nth_key(table_name, pk, lower_key, batch_size)
+            if upper_key is None:  # 已到表尾
+                upper_key = "NULL"  # 用 NULL 表示无穷大
 
             file_name = f"{batch_num:03d}_{table_name}_data.sql"
             batch_file = self.output_dir / file_name
 
-            where = f'"{pk}" >= {self._quote_if_str(lower_key)} AND "{pk}" < {self._quote_if_str(upper_key)}'
+            where = f'"{pk}" >= {self._quote_if_str(lower_key)}'
+            if upper_key != "NULL":
+                where += f' AND "{pk}" < {self._quote_if_str(upper_key)}'
+
             cmd = self._build_pg_dump_cmd(
                 table_name,
                 extra_args=["--data-only", "--where", where, "-f", str(batch_file)],
             )
             self._run_command(
                 cmd,
-                f"    第{batch_num:3d}批: {lower_key} ≤ {pk} < {upper_key}",
+                f"    第{batch_num:3d}批: {lower_key} ≤ {pk} < {upper_key if upper_key != 'NULL' else '∞'}",
             )
             batch_files.append(file_name)
 
-            offset += batch_size
+            # 下一批起点就是上一批终点
+            if upper_key == "NULL":
+                break
+            lower_key = upper_key
             batch_num += 1
 
         return batch_files
@@ -130,33 +134,27 @@ class PostgreSQLBatchExporter:
         (cnt,) = self._execute_sql_one_row(sql)
         return cnt
 
-    def _get_key_boundary(
-        self, table: str, pk: str, offset: int, limit: int
-    ) -> Tuple[Optional[Union[str, int]], Optional[Union[str, int]]]:
-        """
-        返回 (offset 处主键值, offset+limit 处主键值)
-        用于构造 ≥ lower 且 < upper 的区间
-        """
-        # 下限
-        sql_lo = f"""
-        SELECT "{pk}" FROM {table}
-        ORDER BY "{pk}" ASC
-        LIMIT 1 OFFSET {offset};
-        """
-        lo = self._execute_sql_one_row_optional(sql_lo)
-        if lo is None:  # 已经到表尾
-            return (None, None)
+    def _get_min_key(self, table: str, pk: str) -> Optional[Union[str, int]]:
+        sql = f'SELECT "{pk}" FROM {table} ORDER BY "{pk}" ASC LIMIT 1'
+        row = self._execute_sql_one_row_optional(sql)
+        return row[0] if row else None
 
-        # 上限
-        sql_hi = f"""
-        SELECT "{pk}" FROM {table}
-        ORDER BY "{pk}" ASC
-        LIMIT 1 OFFSET {offset + limit};
+    def _get_nth_key(
+        self, table: str, pk: str, start_key: Union[str, int], n: int
+    ) -> Optional[Union[str, int]]:
         """
-        hi = self._execute_sql_one_row_optional(sql_hi)
-        # 如果已到末尾，用「无穷大」符号：NULL 可理解为 > 任意值
-        upper = hi[0] if hi else "NULL"
-        return (lo[0], upper)
+        从 start_key（含）开始，向后跳 n 行，取那一行的主键值。
+        仅一次索引范围扫描，无累积 OFFSET。
+        """
+        sql = f"""
+        SELECT "{pk}"
+        FROM {table}
+        WHERE "{pk}" >= {self._quote_if_str(start_key)}
+        ORDER BY "{pk}" ASC
+        LIMIT 1 OFFSET {n};
+        """
+        row = self._execute_sql_one_row_optional(sql)
+        return row[0] if row else None
 
     # ---------- SQL 执行 ----------
     def _execute_sql_one_row(self, sql: str) -> Tuple[Union[str, int], ...]:
