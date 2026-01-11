@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-
-"""
-点击链接查看和 Kimi 的对话 https://www.kimi.com/share/19bad297-da52-8468-8000-000095724847
-"""
-
-
 import subprocess
 import os
 from pathlib import Path
@@ -14,8 +7,13 @@ from datetime import datetime
 from typing import Optional, List, Tuple, Union
 
 
+"""
+点击链接查看和 Kimi 的对话 https://www.kimi.com/share/19bad297-da52-8468-8000-000095724847
+"""
+
+
 class PostgreSQLBatchExporter:
-    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，无字符串哨兵）"""
+    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，COPY 导出数据）"""
 
     def __init__(
         self,
@@ -48,11 +46,11 @@ class PostgreSQLBatchExporter:
 
         print(f"📦 开始导出表 `{table_name}` 到 {self.output_dir}")
 
-        # 1. 结构
+        # 1. 结构（pg_dump）
         self._export_schema(table_name)
 
-        # 2. 数据（无 OFFSET 累积）
-        batch_files = self._export_data_batches_fast(table_name, batch_size, primary_key)
+        # 2. 数据（COPY + psql）
+        batch_files = self._export_data_batches_copy(table_name, batch_size, primary_key)
 
         # 3. 导入脚本
         self._generate_import_script(table_name, batch_files)
@@ -63,12 +61,21 @@ class PostgreSQLBatchExporter:
     # -------------------- 内部实现 --------------------
     def _export_schema(self, table_name: str) -> None:
         schema_file = self.output_dir / f"00_{table_name}_schema.sql"
-        cmd = self._build_pg_dump_cmd(
-            table_name, extra_args=["--schema-only", "-f", str(schema_file)]
-        )
+        cmd = [
+            "pg_dump",
+            "--host", self.host,
+            "--port", str(self.port),
+            "--username", self.user,
+            "--dbname", self.dbname,
+            "--table", table_name,
+            "--schema-only",
+            "--no-owner",
+            "--no-acl",
+            "-f", str(schema_file),
+        ]
         self._run_command(cmd, f"  ✓ 表结构: {schema_file.name}")
 
-    def _export_data_batches_fast(
+    def _export_data_batches_copy(
         self,
         table_name: str,
         batch_size: int,
@@ -83,36 +90,26 @@ class PostgreSQLBatchExporter:
             print("  ⚠️  表中没有数据\n")
             return []
 
-        print(f"  📊 总行数: {total_rows:,}, 每批约 {batch_size:,} 条")
+        print(f"  📊 总行数: {total_rows}, 每批约 {batch_size} 条")
 
         batch_files: List[str] = []
         batch_num = 1
-        lower_key = self._get_min_key(table_name, pk)  # 从最小值开始
+        lower_key = self._get_min_key(table_name, pk)
 
         while lower_key is not None:
-            # 取「当前起点 + batch_size 偏移」那一行的主键值（仅一次索引扫描）
             upper_key = self._get_nth_key(table_name, pk, lower_key, batch_size)
-            if upper_key is None:  # 已到表尾
-                upper_key = None  # Python None 哨兵，SQL 里用 IS NULL
-
-            file_name = f"{batch_num:03d}_{table_name}_data.sql"
-            batch_file = self.output_dir / file_name
-
             where = f'"{pk}" >= {self._quote_if_str(lower_key)}'
             if upper_key is not None:
                 where += f' AND "{pk}" < {self._quote_if_str(upper_key)}'
 
-            cmd = self._build_pg_dump_cmd(
-                table_name,
-                extra_args=["--data-only", "--where", where, "-f", str(batch_file)],
-            )
-            self._run_command(
-                cmd,
-                f"    第{batch_num:3d}批: {lower_key} ≤ {pk} < {upper_key if upper_key is not None else '∞'}",
-            )
+            file_name = f"{batch_num:03d}_{table_name}_data.sql"
+            batch_file = self.output_dir / file_name
+
+            # 使用 COPY + psql 导出数据
+            copy_sql = f"COPY (SELECT * FROM {table_name} WHERE {where}) TO STDOUT WITH (FORMAT text, HEADER false)"
+            self._copy_to_file(copy_sql, batch_file)
             batch_files.append(file_name)
 
-            # 下一批起点就是上一批终点
             if upper_key is None:
                 break
             lower_key = upper_key
@@ -139,7 +136,7 @@ class PostgreSQLBatchExporter:
     def _get_total_rows(self, table: str) -> int:
         sql = f"SELECT COUNT(*) FROM {table}"
         (cnt,) = self._execute_sql_one_row(sql)
-        return int(cnt)
+        return cnt
 
     def _get_min_key(self, table: str, pk: str) -> Optional[Union[str, int]]:
         sql = f'SELECT "{pk}" FROM {table} ORDER BY "{pk}" ASC LIMIT 1'
@@ -148,11 +145,7 @@ class PostgreSQLBatchExporter:
 
     def _get_nth_key(
         self, table: str, pk: str, start_key: Union[str, int], n: int
-    ) -> Optional[Union[str, int]]:  # 修正：允许 int 也返回
-        """
-        从 start_key（含）开始，向后跳 n 行，取那一行的主键值。
-        仅一次索引范围扫描，无累积 OFFSET。
-        """
+    ) -> Optional[Union[str, int]]:
         sql = f"""
         SELECT "{pk}"
         FROM {table}
@@ -170,80 +163,49 @@ class PostgreSQLBatchExporter:
             env["PGPASSWORD"] = self.password
         cmd = [
             "psql",
-            "-h",
-            self.host,
-            "-p",
-            str(self.port),
-            "-U",
-            self.user,
-            "-d",
-            self.dbname,
-            "-t",
-            "-A",
-            "-c",
-            sql,
+            "-h", self.host,
+            "-p", str(self.port),
+            "-U", self.user,
+            "-d", self.dbname,
+            "-t", "-A", "-c", sql,
         ]
         result = subprocess.run(cmd, env=env, check=True, capture_output=True, text=True)
         return tuple(result.stdout.strip().split("|"))
 
     def _execute_sql_one_row_optional(
         self, sql: str
-    ) -> Optional[Tuple[Union[str], ...]]:  # 修正：允许 Union[str, int] 或 None
+    ) -> Optional[Tuple[Union[str, int], ...]]:
         env = os.environ.copy()
         if self.password:
             env["PGPASSWORD"] = self.password
         cmd = [
             "psql",
-            "-h",
-            self.host,
-            "-p",
-            str(self.port),
-            "-U",
-            self.user,
-            "-d",
-            self.dbname,
-            "-t",
-            "-A",
-            "-c",
-            sql,
+            "-h", self.host,
+            "-p", str(self.port),
+            "-U", self.user,
+            "-d", self.dbname,
+            "-t", "-A", "-c", sql,
         ]
         result = subprocess.run(cmd, env=env, capture_output=True, text=True)
         if result.returncode != 0 or result.stdout.strip() == "":
             return None
         return tuple(result.stdout.strip().split("|"))
 
-    # ---------- pg_dump 命令 ----------
-    def _build_pg_dump_cmd(self, table: str, extra_args: List[str]) -> List[str]:
-        base = [
-            "pg_dump",
-            "--host",
-            self.host,
-            "--port",
-            str(self.port),
-            "--username",
-            self.user,
-            "--dbname",
-            self.dbname,
-            "--table",
-            table,
-            "--no-owner",
-            "--no-acl",
-            "--rows-per-insert",
-            "1000",
-        ]
-        base.extend(extra_args)
-        return base
-
-    def _run_command(self, cmd: List[str], success_msg: str) -> None:
+    # ---------- COPY 导出 ----------
+    def _copy_to_file(self, copy_sql: str, file: Path) -> None:
         env = os.environ.copy()
         if self.password:
             env["PGPASSWORD"] = self.password
-        try:
-            subprocess.run(cmd, env=env, check=True, capture_output=True, text=True)
-            print(success_msg)
-        except subprocess.CalledProcessError as e:
-            print(f"\n❌ 命令执行失败:\n   命令: {' '.join(cmd)}\n   错误: {e.stderr}\n")
-            raise
+        cmd = [
+            "psql",
+            "-h", self.host,
+            "-p", str(self.port),
+            "-U", self.user,
+            "-d", self.dbname,
+            "-c", copy_sql,
+            "-o", str(file),  # psql 把 COPY TO STDOUT 重定向到文件
+        ]
+        self._run_command(cmd, f"    导出数据: {file.name}")
 
     # ---------- 导入脚本 ----------
     def _generate_import_script(self, table_name: str, batch_files: List[str]) -> None:
@@ -262,16 +224,29 @@ class PostgreSQLBatchExporter:
             'echo "📊 导入数据..."',
         ]
         for f in batch_files:
-            lines.extend([f'echo "  📄 {f}"', f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -f {f}'])
-        lines.extend(
-            [
-                'echo "✅ 导入完成!"',
-                f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "SELECT COUNT(*) FROM {table_name};"',
-            ]
-        )
+            lines.extend([
+                f'echo "  📄 {f}"',
+                f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "\\\\copy {table_name} FROM {f}"'
+            ])
+        lines.extend([
+            'echo "✅ 导入完成!"',
+            f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "SELECT COUNT(*) FROM {table_name};"'
+        ])
         script.write_text("\n".join(lines))
         script.chmod(0o755)
         print(f"  ✓ 导入脚本: {script.name}\n")
+
+    # ---------- 通用 ----------
+    def _run_command(self, cmd: List[str], success_msg: str) -> None:
+        env = os.environ.copy()
+        if self.password:
+            env["PGPASSWORD"] = self.password
+        try:
+            subprocess.run(cmd, env=env, check=True, capture_output=True, text=True)
+            print(success_msg)
+        except subprocess.CalledProcessError as e:
+            print(f"\n❌ 命令执行失败:\n   命令: {' '.join(cmd)}\n   错误: {e.stderr}\n")
+            raise
 
 
 # ----------------------------------------------------------------------
