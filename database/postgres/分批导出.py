@@ -8,7 +8,7 @@ from typing import Optional, List, Tuple, Union
 
 
 class PostgreSQLBatchExporter:
-    """PostgreSQL 分批导出工具类（无 OFFSET 累积，支持任意主键）"""
+    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，无字符串哨兵）"""
 
     def __init__(
         self,
@@ -86,13 +86,13 @@ class PostgreSQLBatchExporter:
             # 取「当前起点 + batch_size 偏移」那一行的主键值（仅一次索引扫描）
             upper_key = self._get_nth_key(table_name, pk, lower_key, batch_size)
             if upper_key is None:  # 已到表尾
-                upper_key = "NULL"  # 用 NULL 表示无穷大
+                upper_key = None  # Python None 哨兵，SQL 里用 IS NULL
 
             file_name = f"{batch_num:03d}_{table_name}_data.sql"
             batch_file = self.output_dir / file_name
 
             where = f'"{pk}" >= {self._quote_if_str(lower_key)}'
-            if upper_key != "NULL":
+            if upper_key is not None:
                 where += f' AND "{pk}" < {self._quote_if_str(upper_key)}'
 
             cmd = self._build_pg_dump_cmd(
@@ -101,12 +101,12 @@ class PostgreSQLBatchExporter:
             )
             self._run_command(
                 cmd,
-                f"    第{batch_num:3d}批: {lower_key} ≤ {pk} < {upper_key if upper_key != 'NULL' else '∞'}",
+                f"    第{batch_num:3d}批: {lower_key} ≤ {pk} < {upper_key if upper_key is not None else '∞'}",
             )
             batch_files.append(file_name)
 
             # 下一批起点就是上一批终点
-            if upper_key == "NULL":
+            if upper_key is None:
                 break
             lower_key = upper_key
             batch_num += 1
@@ -132,7 +132,7 @@ class PostgreSQLBatchExporter:
     def _get_total_rows(self, table: str) -> int:
         sql = f"SELECT COUNT(*) FROM {table}"
         (cnt,) = self._execute_sql_one_row(sql)
-        return cnt
+        return int(cnt)
 
     def _get_min_key(self, table: str, pk: str) -> Optional[Union[str, int]]:
         sql = f'SELECT "{pk}" FROM {table} ORDER BY "{pk}" ASC LIMIT 1'
@@ -141,7 +141,7 @@ class PostgreSQLBatchExporter:
 
     def _get_nth_key(
         self, table: str, pk: str, start_key: Union[str, int], n: int
-    ) -> Optional[Union[str, int]]:
+    ) -> Optional[Union[str, int]]:  # 修正：允许 int 也返回
         """
         从 start_key（含）开始，向后跳 n 行，取那一行的主键值。
         仅一次索引范围扫描，无累积 OFFSET。
@@ -181,7 +181,7 @@ class PostgreSQLBatchExporter:
 
     def _execute_sql_one_row_optional(
         self, sql: str
-    ) -> Optional[Tuple[Union[str, int], ...]]:
+    ) -> Optional[Tuple[Union[str], ...]]:  # 修正：允许 Union[str, int] 或 None
         env = os.environ.copy()
         if self.password:
             env["PGPASSWORD"] = self.password
