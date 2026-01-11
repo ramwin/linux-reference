@@ -7,13 +7,8 @@ from datetime import datetime
 from typing import Optional, List, Tuple, Union
 
 
-"""
-点击链接查看和 Kimi 的对话 https://www.kimi.com/share/19bad297-da52-8468-8000-000095724847
-"""
-
-
 class PostgreSQLBatchExporter:
-    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，COPY 导出数据）"""
+    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，带压缩）"""
 
     def __init__(
         self,
@@ -37,6 +32,7 @@ class PostgreSQLBatchExporter:
         batch_size: int = 10_000,
         primary_key: Optional[str] = None,
         output_dir: Optional[str] = None,
+        compress: bool = True,
     ) -> Path:
         if output_dir is None:
             self.output_dir = Path(f"backup_{datetime.now():%Y%m%d_%H%M%S}")
@@ -46,20 +42,20 @@ class PostgreSQLBatchExporter:
 
         print(f"📦 开始导出表 `{table_name}` 到 {self.output_dir}")
 
-        # 1. 结构（pg_dump）
-        self._export_schema(table_name)
+        # 1. 结构（支持压缩）
+        self._export_schema(table_name, compress)
 
-        # 2. 数据（COPY + psql）
-        batch_files = self._export_data_batches_copy(table_name, batch_size, primary_key)
+        # 2. 数据（支持压缩）
+        batch_files = self._export_data_batches_copy(table_name, batch_size, primary_key, compress)
 
-        # 3. 导入脚本
-        self._generate_import_script(table_name, batch_files)
+        # 3. 导入脚本（自动识别压缩格式）
+        self._generate_import_script(table_name, batch_files, compress)
 
         print(f"✅ 导出完成！共 {len(batch_files)} 个数据文件\n")
         return self.output_dir
 
     # -------------------- 内部实现 --------------------
-    def _export_schema(self, table_name: str) -> None:
+    def _export_schema(self, table_name: str, compress: bool) -> None:
         schema_file = self.output_dir / f"00_{table_name}_schema.sql"
         cmd = [
             "pg_dump",
@@ -75,11 +71,15 @@ class PostgreSQLBatchExporter:
         ]
         self._run_command(cmd, f"  ✓ 表结构: {schema_file.name}")
 
+        if compress:
+            self._gzip_file(schema_file)
+
     def _export_data_batches_copy(
         self,
         table_name: str,
         batch_size: int,
         primary_key: Optional[str],
+        compress: bool,
     ) -> List[str]:
         pk = primary_key or self._detect_primary_key(table_name)
         if pk is None:
@@ -90,7 +90,7 @@ class PostgreSQLBatchExporter:
             print("  ⚠️  表中没有数据\n")
             return []
 
-        print(f"  📊 总行数: {total_rows}, 每批约 {batch_size} 条")
+        print(f"  📊 总行数: {total_rows:,}, 每批约 {batch_size:,} 条")
 
         batch_files: List[str] = []
         batch_num = 1
@@ -105,10 +105,10 @@ class PostgreSQLBatchExporter:
             file_name = f"{batch_num:03d}_{table_name}_data.sql"
             batch_file = self.output_dir / file_name
 
-            # 使用 COPY + psql 导出数据
-            copy_sql = f"COPY (SELECT * FROM {table_name} WHERE {where}) TO STDOUT WITH (FORMAT text, HEADER false)"
-            self._copy_to_file(copy_sql, batch_file)
-            batch_files.append(file_name)
+            # 使用 COPY 导出 + 可选压缩
+            self._copy_to_file(table_name, where, batch_file, compress)
+            final_name = f"{file_name}.gz" if compress else file_name
+            batch_files.append(final_name)
 
             if upper_key is None:
                 break
@@ -133,10 +133,11 @@ class PostgreSQLBatchExporter:
         row = self._execute_sql_one_row_optional(sql)
         return row[0] if row else None
 
-    def _get_total_rows(self, table: str) -> int:
-        sql = f"SELECT COUNT(*) FROM {table}"
+    # 修复：显式转 int
+    def _get_total_rows(self, table_name: str) -> int:
+        sql = f"SELECT COUNT(*) FROM {table_name}"
         (cnt,) = self._execute_sql_one_row(sql)
-        return cnt
+        return int(cnt)  # 必须转 int，否则 f-string 格式化报错
 
     def _get_min_key(self, table: str, pk: str) -> Optional[Union[str, int]]:
         sql = f'SELECT "{pk}" FROM {table} ORDER BY "{pk}" ASC LIMIT 1'
@@ -191,52 +192,63 @@ class PostgreSQLBatchExporter:
             return None
         return tuple(result.stdout.strip().split("|"))
 
-    # ---------- COPY 导出 ----------
-    def _copy_to_file(self, copy_sql: str, file: Path) -> None:
+    # ---------- COPY 导出 + 压缩 ----------
+    def _copy_to_file(self, table_name: str, where: str, file: Path, compress: bool) -> None:
+        """COPY 数据到文件，可选 gzip 压缩"""
+        copy_sql = f"COPY (SELECT * FROM {table_name} WHERE {where}) TO STDOUT WITH (FORMAT text, HEADER false)"
+        
         env = os.environ.copy()
         if self.password:
             env["PGPASSWORD"] = self.password
-        cmd = [
-            "psql",
-            "-h", self.host,
-            "-p", str(self.port),
-            "-U", self.user,
-            "-d", self.dbname,
-            "-c", copy_sql,
-            "-o", str(file),  # psql 把 COPY TO STDOUT 重定向到文件
-        ]
-        self._run_command(cmd, f"    导出数据: {file.name}")
 
-    # ---------- 导入脚本 ----------
-    def _generate_import_script(self, table_name: str, batch_files: List[str]) -> None:
-        script = self.output_dir / "import.sh"
-        lines = [
-            "#!/bin/bash",
-            f"# PostgreSQL 导入脚本 - 表: {table_name}",
-            f"# 数据文件数: {len(batch_files)}",
-            "set -e",
-            f'DB_NAME="{self.dbname}"',
-            f'HOST="{self.host}"',
-            f'USER="{self.user}"',
-            'echo "📥 开始导入..."',
-            'echo "📦 导入表结构..."',
-            f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -f 00_{table_name}_schema.sql',
-            'echo "📊 导入数据..."',
-        ]
-        for f in batch_files:
-            lines.extend([
-                f'echo "  📄 {f}"',
-                f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "\\\\copy {table_name} FROM {f}"'
-            ])
-        lines.extend([
-            'echo "✅ 导入完成!"',
-            f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "SELECT COUNT(*) FROM {table_name};"'
-        ])
-        script.write_text("\n".join(lines))
-        script.chmod(0o755)
-        print(f"  ✓ 导入脚本: {script.name}\n")
+        if compress:
+            # psql | gzip 管道压缩
+            psql_cmd = [
+                "psql",
+                "-h", self.host,
+                "-p", str(self.port),
+                "-U", self.user,
+                "-d", self.dbname,
+                "-c", copy_sql,
+            ]
+            gzip_cmd = ["gzip", "-c"]
+            gz_file = file.with_suffix(".sql.gz")
+            
+            with open(gz_file, "wb") as f:
+                psql_proc = subprocess.Popen(psql_cmd, env=env, stdout=subprocess.PIPE)
+                gzip_proc = subprocess.Popen(gzip_cmd, stdin=psql_proc.stdout, stdout=f)
+                psql_proc.stdout.close()
+                gzip_proc.communicate()
+                psql_proc.wait()
+                if psql_proc.returncode != 0:
+                    raise subprocess.CalledProcessError(psql_proc.returncode, psql_cmd)
+            print(f"    导出数据(已压缩): {gz_file.name}")
+        else:
+            # 不压缩，直接 psql -o 输出
+            cmd = [
+                "psql",
+                "-h", self.host,
+                "-p", str(self.port),
+                "-U", self.user,
+                "-d", self.dbname,
+                "-c", copy_sql,
+                "-o", str(file),
+            ]
+            try:
+                subprocess.run(cmd, env=env, check=True, capture_output=True, text=True)
+                print(f"    导出数据: {file.name}")
+            except subprocess.CalledProcessError as e:
+                print(f"\n❌ 命令执行失败:\n   命令: {' '.join(cmd)}\n   错误: {e.stderr}\n")
+                raise
 
-    # ---------- 通用 ----------
+    # ---------- 文件压缩 ----------
+    def _gzip_file(self, file: Path) -> None:
+        """gzip 压缩文件"""
+        cmd = ["gzip", "-f", str(file)]
+        subprocess.run(cmd, check=True)
+        print(f"    已压缩: {file.name}.gz")
+
+    # ---------- 通用命令 ----------
     def _run_command(self, cmd: List[str], success_msg: str) -> None:
         env = os.environ.copy()
         if self.password:
@@ -247,6 +259,54 @@ class PostgreSQLBatchExporter:
         except subprocess.CalledProcessError as e:
             print(f"\n❌ 命令执行失败:\n   命令: {' '.join(cmd)}\n   错误: {e.stderr}\n")
             raise
+
+    # ---------- 导入脚本 ----------
+    def _generate_import_script(self, table_name: str, batch_files: List[str], compress: bool) -> None:
+        script = self.output_dir / "import.sh"
+        lines = [
+            "#!/bin/bash",
+            f"# PostgreSQL 导入脚本 - 表: {table_name}",
+            f"# 数据文件数: {len(batch_files)}",
+            "set -e",
+            f'DB_NAME="{self.dbname}"',
+            f'HOST="{self.host}"',
+            f'USER="{self.user}"',
+            'echo "📥 开始导入..."',
+        ]
+        
+        if compress:
+            # 解压并导入结构（结构文件已压缩）
+            lines.extend([
+                'echo "📦 导入表结构..."',
+                f'gunzip -c 00_{table_name}_schema.sql.gz | psql -h "$HOST" -U "$USER" -d "$DB_NAME"',
+                'echo "📊 导入数据..."',
+            ])
+            for f in batch_files:
+                lines.extend([
+                    f'echo "  📄 {f}"',
+                    f'gunzip -c {f} | psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "\\\\copy {table_name} FROM STDIN"'
+                ])
+        else:
+            # 不压缩，直接导入
+            lines.extend([
+                'echo "📦 导入表结构..."',
+                f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -f 00_{table_name}_schema.sql',
+                'echo "📊 导入数据..."',
+            ])
+            for f in batch_files:
+                lines.extend([
+                    f'echo "  📄 {f}"',
+                    f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "\\\\copy {table_name} FROM ''{f}''"'
+                ])
+        
+        lines.extend([
+            'echo "✅ 导入完成!"',
+            f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "SELECT COUNT(*) FROM {table_name};"'
+        ])
+        
+        script.write_text("\n".join(lines))
+        script.chmod(0o755)
+        print(f"  ✓ 导入脚本: {script.name}\n")
 
 
 # ----------------------------------------------------------------------
@@ -261,7 +321,8 @@ if __name__ == "__main__":
         port=5432,
     )
     try:
-        out = exporter.export_table("school_student", batch_size=5_000)
+        # 默认启用压缩
+        out = exporter.export_table("school_student", batch_size=5_000, compress=True)
         print(f"🎯 输出目录: {out}")
         print("📜 导入命令: cd", out, "&& bash import.sh")
     except Exception as e:
