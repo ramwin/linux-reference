@@ -287,3 +287,26 @@ CREATE TABLESPACE table_03 LOCATION '/ssd1/postgresql/data';
 -- create database table
 create database db_02 TABLESPACE=tablespace_02;
 ```
+
+## 海量数据管理经验
+
+### 大表的孔洞
+更新或者删除数据, 可能导致空间留下孔洞, 安装 pgstattuple 可以直接看到孔洞数量. 但是这个查询是全表查询, 速度慢
+```sql
+-- 安装扩展（只需执行一次）
+CREATE EXTENSION pgstattuple;
+
+-- 查看表的详细空间使用情况
+SELECT * FROM pgstattuple('your_table_name');
+
+-- 查看索引的空洞
+SELECT * FROM pgstatindex('your_table_pkey');
+```
+
+* 使用估算
+```
+-- 快速估算，避免全表扫描
+SELECT * FROM pgstattuple_approx('large_table');
+
+-- 返回结果包含近似值，适合快速巡检
+```
