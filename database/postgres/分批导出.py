@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+
+"""
+点击链接查看和 Kimi 的对话 https://www.kimi.com/share/19bad297-da52-8468-8000-000095724847
+"""
+
+
 import subprocess
 import os
 from pathlib import Path
