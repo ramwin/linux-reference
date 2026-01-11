@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 import subprocess
 import os
+import time  # 新增：用于批次间休眠
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, List, Tuple, Union
 
 
 class PostgreSQLBatchExporter:
-    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，带压缩）"""
+    """PostgreSQL 分批导出工具类（无 OFFSET 累积，任意主键，带压缩，批次间休眠）"""
 
     def __init__(
         self,
@@ -45,7 +46,7 @@ class PostgreSQLBatchExporter:
         # 1. 结构（支持压缩）
         self._export_schema(table_name, compress)
 
-        # 2. 数据（支持压缩）
+        # 2. 数据（支持压缩 + 批次休眠）
         batch_files = self._export_data_batches_copy(table_name, batch_size, primary_key, compress)
 
         # 3. 导入脚本（自动识别压缩格式）
@@ -110,6 +111,9 @@ class PostgreSQLBatchExporter:
             final_name = f"{file_name}.gz" if compress else file_name
             batch_files.append(final_name)
 
+            # 每批导出后休眠 0.2 秒，减轻数据库压力
+            time.sleep(0.2)
+
             if upper_key is None:
                 break
             lower_key = upper_key
@@ -133,7 +137,6 @@ class PostgreSQLBatchExporter:
         row = self._execute_sql_one_row_optional(sql)
         return row[0] if row else None
 
-    # 修复：显式转 int
     def _get_total_rows(self, table_name: str) -> int:
         sql = f"SELECT COUNT(*) FROM {table_name}"
         (cnt,) = self._execute_sql_one_row(sql)
@@ -217,7 +220,7 @@ class PostgreSQLBatchExporter:
             with open(gz_file, "wb") as f:
                 psql_proc = subprocess.Popen(psql_cmd, env=env, stdout=subprocess.PIPE)
                 gzip_proc = subprocess.Popen(gzip_cmd, stdin=psql_proc.stdout, stdout=f)
-                psql_proc.stdout.close()
+                psql_proc.stdout.close()  # 让 psql 知道 stdout 已被接管
                 gzip_proc.communicate()
                 psql_proc.wait()
                 if psql_proc.returncode != 0:
@@ -275,7 +278,6 @@ class PostgreSQLBatchExporter:
         ]
         
         if compress:
-            # 解压并导入结构（结构文件已压缩）
             lines.extend([
                 'echo "📦 导入表结构..."',
                 f'gunzip -c 00_{table_name}_schema.sql.gz | psql -h "$HOST" -U "$USER" -d "$DB_NAME"',
@@ -287,7 +289,6 @@ class PostgreSQLBatchExporter:
                     f'gunzip -c {f} | psql -h "$HOST" -U "$USER" -d "$DB_NAME" -c "\\\\copy {table_name} FROM STDIN"'
                 ])
         else:
-            # 不压缩，直接导入
             lines.extend([
                 'echo "📦 导入表结构..."',
                 f'psql -h "$HOST" -U "$USER" -d "$DB_NAME" -f 00_{table_name}_schema.sql',
@@ -321,7 +322,7 @@ if __name__ == "__main__":
         port=5432,
     )
     try:
-        # 默认启用压缩
+        # 默认启用压缩 + 休眠
         out = exporter.export_table("school_student", batch_size=5_000, compress=True)
         print(f"🎯 输出目录: {out}")
         print("📜 导入命令: cd", out, "&& bash import.sh")
