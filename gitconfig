@@ -42,3 +42,8 @@
     workers = 15
 [color]
 	status = always
+[submodule]
+	fetchJobs = 9
+[fetch]
+	recurseSubmodules = true
+	parallel = 9
