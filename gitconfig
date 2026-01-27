@@ -44,6 +44,7 @@
 	status = always
 [submodule]
 	fetchJobs = 9
+	recurse = true
 [fetch]
 	recurseSubmodules = true
 	parallel = 9
