@@ -1,6 +1,14 @@
-# 举例
+# fstab
 [参考](http://blog.csdn.net/jemmy858585/article/details/4724029)
-* manjaro
+
+1. `sudo blkid /dev/md5` 看UUID
+2. 配置挂载点
+```
+UUID=47a47763-6753-47e5-9dac-efff87494a1f  /mnt/raid1-2tb ext4 defaults,nofail 0 2
+UUID=621e3701-52a5-44f9-b7de-3cd4e6b07d59  /mnt/raid5-2tb ext4 defaults,nofail 0 2
+```
+
+## manjaro配置
 ```
 /dev/nvme0n1p6 /run/media/wangx/d ntfs defaults,rw,user 0,0
 /dev/nvme0n1p2 /run/media/wangx/samsung ntfs3 rw,nosuid,nodev,relatime,uid=1000,gid=1000,iocharset=utf8,uhelper=udisks2 0 0
@@ -24,3 +32,4 @@ UUID=fe7d78cc-9920-4758-bccd-9e694fe79c6b none            swap    sw            
 
 UUID=DA1CA8A71CA8805D /home/wangx/PUTAO ntfs defaults,rw,user 0 0
 ```
+
