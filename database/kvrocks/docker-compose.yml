@@ -1,0 +1,172 @@
+version: '3.8'
+
+services:
+  # Kvrocks 集群节点 - 3主3从架构
+  # Master 1
+  kvrocks-master-1:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-master-1
+    ports:
+      - "6666:6666"
+      - "16666:16666"
+    volumes:
+      - ./data/master-1:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/master-1.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=master-1
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Master 2
+  kvrocks-master-2:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-master-2
+    ports:
+      - "6667:6667"
+      - "16667:16667"
+    volumes:
+      - ./data/master-2:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/master-2.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=master-2
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6667", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Master 3
+  kvrocks-master-3:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-master-3
+    ports:
+      - "6668:6668"
+      - "16668:16668"
+    volumes:
+      - ./data/master-3:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/master-3.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=master-3
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6668", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Replica 1 (对应 Master-1)
+  kvrocks-replica-1:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-replica-1
+    ports:
+      - "6669:6669"
+      - "16669:16669"
+    volumes:
+      - ./data/replica-1:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/replica-1.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=replica-1
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    depends_on:
+      - kvrocks-master-1
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6669", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Replica 2 (对应 Master-2)
+  kvrocks-replica-2:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-replica-2
+    ports:
+      - "6670:6670"
+      - "16670:16670"
+    volumes:
+      - ./data/replica-2:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/replica-2.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=replica-2
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    depends_on:
+      - kvrocks-master-2
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6670", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Replica 3 (对应 Master-3)
+  kvrocks-replica-3:
+    image: apache/kvrocks:latest
+    container_name: kvrocks-replica-3
+    ports:
+      - "6671:6671"
+      - "16671:16671"
+    volumes:
+      - ./data/replica-3:/var/lib/kvrocks
+      - ./config/base.conf:/etc/kvrocks/base.conf:ro
+      - ./config/replica-3.conf:/etc/kvrocks/kvrocks.conf:ro
+    environment:
+      - NODE_NAME=replica-3
+    networks:
+      - kvrocks-cluster
+    restart: unless-stopped
+    depends_on:
+      - kvrocks-master-3
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6671", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # 集群初始化服务
+  cluster-init:
+    image: redis:7-alpine
+    container_name: kvrocks-cluster-init
+    volumes:
+      - ./scripts/init-cluster.sh:/init-cluster.sh:ro
+    command: /bin/sh /init-cluster.sh
+    networks:
+      - kvrocks-cluster
+    depends_on:
+      - kvrocks-master-1
+      - kvrocks-master-2
+      - kvrocks-master-3
+      - kvrocks-replica-1
+      - kvrocks-replica-2
+      - kvrocks-replica-3
+    restart: "no"
+
+networks:
+  kvrocks-cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
