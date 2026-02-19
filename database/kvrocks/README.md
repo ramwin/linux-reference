@@ -2,6 +2,32 @@
 
 基于 Docker Compose 的 Kvrocks 三主三从高可用集群部署方案，支持大数据量存储和故障自动切换。
 
+## 数据持久化特性
+
+Kvrocks 基于 RocksDB 构建，**所有数据默认持久化到磁盘**，内存仅用作缓存：
+
+```
+┌─────────────────────────────────────────┐
+│              客户端请求                  │
+└─────────────────┬───────────────────────┘
+                  ▼
+┌─────────────────────────────────────────┐
+│  内存: Write Buffer + Block Cache       │  ← 临时缓存，可配置大小
+│  (write-buffer-size + block_cache_size) │
+└─────────────────┬───────────────────────┘
+                  ▼
+┌─────────────────────────────────────────┐
+│  磁盘: SST 文件 + WAL 日志               │  ← 持久化存储
+│  (.sst 数据文件 + .log 写前日志)          │
+└─────────────────────────────────────────┘
+```
+
+**关键特性**:
+- ✅ **持久化优先**: 数据先写 WAL 日志，再写内存，定期刷盘
+- ✅ **内存可配置**: 通过 `block_cache_size` 控制内存使用，不影响持久化
+- ✅ **大内存友好**: 即使内存很大，数据仍会写入磁盘（只是缓存更多）
+- ✅ **重启不丢数据**: 容器重启后，数据从磁盘加载
+
 ## 架构概览
 
 ```
@@ -290,6 +316,98 @@ du -sh data/*
 # 容器资源使用
 docker stats --no-stream
 ```
+
+## 验证数据落盘
+
+Kvrocks 使用 RocksDB 存储引擎，数据默认会持久化到磁盘。即使内存充足，也可通过以下方式验证：
+
+### 快速验证
+
+```bash
+# 运行验证脚本
+./deploy.sh verify
+```
+
+### 验证方法说明
+
+#### 方法1: 查看磁盘占用
+```bash
+# 观察数据目录大小
+du -sh data/master-1/
+
+# 查看 SST 文件数量（RocksDB 的数据文件）
+find data/master-1/ -name "*.sst" | wc -l
+```
+
+#### 方法2: 查看 RocksDB 统计
+```bash
+# 连接节点查看内存 vs 磁盘数据量
+redis-cli -p 6666 INFO rocksdb
+
+# 关键指标:
+# - rocksdb.estimate-live-data-size: 磁盘上的数据大小
+# - rocksdb.size-all-mem-tables: 内存表大小
+# - rocksdb.block_cache_usage: 块缓存使用
+```
+
+#### 方法3: 强制小内存配置（强制落盘）
+
+创建临时配置强制数据频繁落盘：
+
+```bash
+# 1. 备份原配置
+cp config/base.conf config/base.conf.bak
+
+# 2. 使用小内存配置
+cp config/base-small-memory.conf config/base.conf
+
+# 3. 重启集群
+./deploy.sh restart
+
+# 4. 写入数据并观察
+redis-cli -p 6666
+> SET key1 "value1"
+> SET key2 "value2"
+# ... 大量写入
+
+# 5. 观察磁盘变化
+du -sh data/master-1/
+ls -lh data/master-1/*.sst
+
+# 6. 恢复配置
+cp config/base.conf.bak config/base.conf
+./deploy.sh restart
+```
+
+小内存配置关键参数：
+```conf
+write-buffer-size 4mb          # 极小的写缓冲区
+max-write-buffer-number 2       # 最多2个缓冲区
+rocksdb.block_cache_size 8mb    # 极小的块缓存
+```
+
+#### 方法4: 使用 iostat 监控磁盘IO
+
+```bash
+# 终端1: 监控磁盘IO
+iostat -x 1
+
+# 终端2: 写入数据
+for i in {1..100000}; do
+    redis-cli -p 6666 SET "test:$i" "value-$i"
+done
+```
+
+如果观察到磁盘写入活动，说明数据正在写入磁盘。
+
+### 数据文件说明
+
+| 文件类型 | 扩展名 | 说明 |
+|---------|-------|------|
+| SST 文件 | `.sst` | 已排序字符串表，实际数据文件 |
+| WAL 日志 | `.log` | 写前日志，崩溃恢复用 |
+| 元数据 | `MANIFEST` | SST 文件组织结构 |
+| 配置 | `OPTIONS-*` | RocksDB 配置快照 |
 
 ## 常见问题
 

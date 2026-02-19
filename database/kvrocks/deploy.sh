@@ -49,6 +49,7 @@ Kvrocks 高可用集群管理脚本
     cleanup     清理所有数据和日志 (⚠️ 危险操作)
     scale-up    扩容集群（添加新节点）
     benchmark   性能测试
+    verify      验证数据落盘
     help        显示此帮助信息
 
 示例:
@@ -57,6 +58,7 @@ Kvrocks 高可用集群管理脚本
     $0 logs kvrocks-master-1    # 查看 master-1 的日志
     $0 backup                   # 备份数据到 backup/ 目录
     $0 status                   # 查看集群健康状态
+    $0 verify                   # 验证数据是否写入磁盘
 
 数据目录: ./data/
 备份目录: ./backup/
@@ -308,6 +310,18 @@ run_benchmark() {
     redis-benchmark -p 6666 -c 50 -n 100000 -d 128 --cluster
 }
 
+# 验证数据落盘
+run_verify() {
+    print_info "运行数据落盘验证..."
+    
+    if [ -f "${SCRIPT_DIR}/scripts/verify-disk-storage.sh" ]; then
+        bash "${SCRIPT_DIR}/scripts/verify-disk-storage.sh"
+    else
+        print_error "验证脚本不存在"
+        exit 1
+    fi
+}
+
 # 主函数
 main() {
     case "${1:-help}" in
@@ -334,6 +348,9 @@ main() {
             ;;
         benchmark)
             run_benchmark
+            ;;
+        verify)
+            run_verify
             ;;
         help|--help|-h)
             show_help
