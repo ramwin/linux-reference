@@ -6,6 +6,7 @@
     mt = mergetool
     rb = "rebase"
     rbc = "rebase --continue"
+	wtpath = "!f(){ b=\"${1:-$(git branch --show-current)}\"; git worktree list --porcelain | while IFS= read -r line; do case \"$line\" in \"worktree \"*) p=\"${line#worktree }\" ;; \"branch refs/heads/\"*) br=\"${line#branch refs/heads/}\"; [ \"$br\" = \"$b\" ] && { echo \"$p\"; break; } ;; esac; done; }; f"
 [branch "master"]
     remote = origin
     merge = refs/heads/master
