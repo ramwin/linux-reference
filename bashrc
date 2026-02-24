@@ -120,4 +120,4 @@ export CMAKE_C_COMPILER=clang
 
 export PYTHONPATH="/home/wangx/venv/lib/python3.12/site-packages"
 
-gcdwt(){ cd "$(git -C "${1:-.}" wtpath "${2:-}")"; }
+gcdwt(){ cd "$(git wtpath "${1:-$(git branch --show-current)}")"; }
