@@ -20,7 +20,7 @@ PATH=\
 :$PATH
 
 # wsl下使用代理
-export ALL_PROXY="socks5://127.0.0.1:1080"
+# export ALL_PROXY="socks5://127.0.0.1:1080"
 
 # 需要配置%USERPROFILE%/.wslconfig
 # [wsl2]
