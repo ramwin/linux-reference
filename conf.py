@@ -18,8 +18,8 @@ extensions = [
         "sphinx_design",
         "sphinx.ext.todo",
         "sphinx.ext.autodoc",
-        "sphinxmermaid",
-        # "sphinxcontrib.mermaid",
+        # "sphinxmermaid",
+        "sphinxcontrib.mermaid",
         ]
 
 templates_path = ['_templates']
@@ -42,7 +42,7 @@ source_suffix = {
     ".rst": "restructuredtext",
     ".md": "markdown",
 }
-myst_heading_anchors = 4
+myst_heading_anchors = 7
 myst_enable_extensions = [
         "attrs_inline",  # 给元素添加属性,比如图片宽度
         "colon_fence",
@@ -59,3 +59,4 @@ suppress_warnings = [
     "myst.not_included",
     "toc.not_included",
 ]
+mermaid_use_local = "/_static/node_modules/mermaid/dist/mermaid.esm.min.mjs"

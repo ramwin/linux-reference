@@ -40,6 +40,7 @@ TODO
 end是group里的end,不能随便用
 
 ### [流程图](https://mermaid.js.org/syntax/flowchart.html)
+
 通过`:::`可以设置类， `(){},<>,>/,可以设置框外观`  
 通过subgraph可以添加组
 ```{mermaid}
@@ -55,4 +56,9 @@ flowchart TB;
     end
     classDef orange fill:#f96
     classDef red color: #f00
+```
+
+```{toctree}
+./mermaid/flowchart.md
+./mermaid/gant.md
 ```

@@ -1,0 +1,7 @@
+{
+	"dependencies": {
+		"@mermaid-js/layout-elk": "^0.2.0",
+		"d3": "^7.9.0",
+		"mermaid": "^11.12.3"
+	}
+}
