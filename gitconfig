@@ -47,5 +47,5 @@
 	fetchJobs = 9
 	recurse = true
 [fetch]
-	recurseSubmodules = true
+	recurseSubmodules = no
 	parallel = 9
