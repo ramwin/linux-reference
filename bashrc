@@ -124,3 +124,6 @@ export PYTHONPATH="/home/wangx/venv/lib/python3.12/site-packages"
 gcdwt(){ cd "$(git wtpath "${1:-$(git branch --show-current)}")"; }
 
 export CLAUDE_CODE_PERMISSION_MODE=acceptEdits
+
+export ALL_PROXY="socks5://192.168.31.6:1080"
+export HTTPS_PROXY="socks5://192.168.31.6:1080"
