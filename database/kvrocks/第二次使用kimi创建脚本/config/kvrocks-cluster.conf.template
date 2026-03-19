@@ -1,0 +1,35 @@
+# 基础配置
+bind 0.0.0.0
+port 6666
+dir /data
+pidfile /data/kvrocks.pid
+logfile /data/kvrocks.log
+daemonize no
+
+# 集群模式配置（关键）
+cluster-enabled yes
+cluster-config-file /data/nodes.conf
+cluster-node-timeout 5000
+cluster-require-full-coverage no
+
+# 持久化配置
+appendonly yes
+appendfsync everysec
+save 900 1
+save 300 10
+save 60 10000
+
+# RocksDB 性能优化（生产环境推荐）
+rocksdb.write_buffer_size 256MB
+rocksdb.max_write_buffer_number 4
+rocksdb.target_file_size_base 128MB
+rocksdb.max_background_compactions 4
+rocksdb.max_background_flushes 2
+
+# 慢日志
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+
+# 客户端输出缓冲区限制
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit replica 256mb 64mb 60

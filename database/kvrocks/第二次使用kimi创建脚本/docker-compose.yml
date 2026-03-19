@@ -1,0 +1,207 @@
+version: '3.8'
+
+networks:
+  kvrocks_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  # 主节点 1 & 其备份 4
+  kvrocks1:
+    image: apache/kvrocks:latest
+    container_name: kvrocks1
+    hostname: kvrocks1
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.11
+    ports:
+      - "6666:6666"
+      - "16666:16666"  # 集群总线端口
+    volumes:
+      - ./data/1:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.11' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  kvrocks4:
+    image: apache/kvrocks:latest
+    container_name: kvrocks4
+    hostname: kvrocks4
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.14
+    ports:
+      - "6669:6666"
+      - "16669:16666"
+    volumes:
+      - ./data/4:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.14' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    depends_on:
+      kvrocks1:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  # 主节点 2 & 其备份 5
+  kvrocks2:
+    image: apache/kvrocks:latest
+    container_name: kvrocks2
+    hostname: kvrocks2
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.12
+    ports:
+      - "6667:6666"
+      - "16667:16666"
+    volumes:
+      - ./data/2:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.12' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  kvrocks5:
+    image: apache/kvrocks:latest
+    container_name: kvrocks5
+    hostname: kvrocks5
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.15
+    ports:
+      - "6670:6666"
+      - "16670:16666"
+    volumes:
+      - ./data/5:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.15' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    depends_on:
+      kvrocks2:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  # 主节点 3 & 其备份 6
+  kvrocks3:
+    image: apache/kvrocks:latest
+    container_name: kvrocks3
+    hostname: kvrocks3
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.13
+    ports:
+      - "6668:6666"
+      - "16668:16666"
+    volumes:
+      - ./data/3:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.13' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  kvrocks6:
+    image: apache/kvrocks:latest
+    container_name: kvrocks6
+    hostname: kvrocks6
+    networks:
+      kvrocks_network:
+        ipv4_address: 172.20.0.16
+    ports:
+      - "6671:6666"
+      - "16671:16666"
+    volumes:
+      - ./data/6:/data
+      - ./config/kvrocks-cluster.conf.template:/opt/kvrocks/conf/kvrocks.conf:ro
+    command: >
+      sh -c "cp /opt/kvrocks/conf/kvrocks.conf /tmp/kvrocks.conf &&
+             echo 'cluster-announce-ip 172.20.0.16' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-port 6666' >> /tmp/kvrocks.conf &&
+             echo 'cluster-announce-bus-port 16666' >> /tmp/kvrocks.conf &&
+             exec kvrocks -c /tmp/kvrocks.conf"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "6666", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    depends_on:
+      kvrocks3:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
