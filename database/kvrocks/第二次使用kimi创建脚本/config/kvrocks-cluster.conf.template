@@ -10,6 +10,12 @@ daemonize no
 cluster-enabled yes
 cluster-config-file /data/nodes.conf
 cluster-node-timeout 5000
+
+# 关键：允许故障转移期间继续服务读请求（可能读到旧数据，但保证可用性）
+cluster-slave-no-failover no
+
+# 优化：加快从节点晋升速度
+cluster-migration-barrier 1
 cluster-require-full-coverage no
 
 # 持久化配置
@@ -30,6 +36,7 @@ rocksdb.max_background_flushes 2
 slowlog-log-slower-than 10000
 slowlog-max-len 128
 
-# 客户端输出缓冲区限制
+# 客户端输出缓冲区（防止故障转移期间客户端被踢出）
 client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit replica 256mb 64mb 60
+client-output-buffer-limit replica 512mb 128mb 60
+client-output-buffer-limit pubsub 64mb 16mb 60
