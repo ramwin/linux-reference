@@ -2,41 +2,30 @@
 bind 0.0.0.0
 port 6666
 dir /data
-pidfile /data/kvrocks.pid
-logfile /data/kvrocks.log
 daemonize no
 
 # 集群模式配置（关键）
+# 注意：Kvrocks 只支持 cluster-enabled，其他 Redis Cluster 配置项（如 cluster-node-timeout 等）不支持
 cluster-enabled yes
-cluster-config-file /data/nodes.conf
 cluster-node-timeout 5000
-
-# 关键：允许故障转移期间继续服务读请求（可能读到旧数据，但保证可用性）
 cluster-slave-no-failover no
 
-# 优化：加快从节点晋升速度
-cluster-migration-barrier 1
-cluster-require-full-coverage no
+# 日志配置
+log-level info
 
-# 持久化配置
-appendonly yes
-appendfsync everysec
-save 900 1
-save 300 10
-save 60 10000
+# 命名空间复制
+repl-namespace-enabled no
 
-# RocksDB 性能优化（生产环境推荐）
-rocksdb.write_buffer_size 256MB
+# 数据库名称
+# 在集群模式下，所有节点应该使用相同的 db-name
+db-name kvrocks.cluster
+
+# RocksDB 性能优化
+rocksdb.write_buffer_size 256
 rocksdb.max_write_buffer_number 4
-rocksdb.target_file_size_base 128MB
-rocksdb.max_background_compactions 4
-rocksdb.max_background_flushes 2
+rocksdb.target_file_size_base 128
+rocksdb.max_background_jobs 4
 
 # 慢日志
 slowlog-log-slower-than 10000
 slowlog-max-len 128
-
-# 客户端输出缓冲区（防止故障转移期间客户端被踢出）
-client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit replica 512mb 128mb 60
-client-output-buffer-limit pubsub 64mb 16mb 60
