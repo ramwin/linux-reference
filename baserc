@@ -32,3 +32,18 @@ PATH=\
 
 # 从 WORDCHARS 中移除点号（让点成为单词分隔符）
 WORDCHARS='*?_-[]~=/&;!#$%^(){}<>'
+
+
+# 1. 基础去重 + 空格忽略
+HISTCONTROL=ignoreboth
+
+# 2. 直接忽略无意义的命令（完全不进历史）
+HISTIGNORE='ls:ll:la:cd:cd -:pwd:exit:clear:bg:fg:history'
+
+# 3. 增加存储上限（配合去重）
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+# 4. 实时追加 + 共享历史（多终端场景）
+shopt -s histappend
+PROMPT_COMMAND='history -a'  # 执行后立即写入文件
