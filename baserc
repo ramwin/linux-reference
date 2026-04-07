@@ -45,5 +45,10 @@ HISTSIZE=10000
 HISTFILESIZE=20000
 
 # 4. 实时追加 + 共享历史（多终端场景）
-shopt -s histappend
+if [[ $HOST == "manjaro.pc5800.ramwin.com" ]]; then
+    echo "manjaro.pc5800.ramwin.com"
+else
+    echo $HOST
+    shopt -s histappend
+fi
 PROMPT_COMMAND='history -a'  # 执行后立即写入文件
