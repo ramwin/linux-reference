@@ -646,3 +646,18 @@ git stash -u/--include-untracked 包含untracked文件
 ```
     git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -5 | awk '{print$1}')"
 ```
+
+## filter-repo
+```
+# 删除单个文件
+git filter-repo --path path/to/your/file.txt --invert-paths
+
+# 删除文件夹（及内部所有文件历史）
+git filter-repo --path path/to/folder/ --invert-paths
+
+# 使用通配符删除某类文件（如所有 .log 文件）
+git filter-repo --path-glob '*.log' --invert-paths
+
+# 删除所有同名文件（如所有 .DS_Store）
+git filter-repo --path '.DS_Store' --invert-paths
+```
