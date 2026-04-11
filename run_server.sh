@@ -7,6 +7,7 @@ then
 fi
 
 sphinx-autobuild \
+    --color \
     --verbose \
     --host 0.0.0.0 \
     -j auto \

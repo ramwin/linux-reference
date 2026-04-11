@@ -1,7 +1,11 @@
+colorlog
+myst-parser
+requests
 sphinx
 sphinx-autobuild
 sphinx-design
-myst-parser
+sphinx-mermaid
 sphinx-rtd-theme
 sphinxcontrib-jquery
 sphinxcontrib-mermaid
+websockets

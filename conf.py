@@ -53,6 +53,8 @@ html_css_files = [
         "custom.css"
         ]
 todo_include_todos = True
+latex_use_xindy = True
+smartquotes = True
 suppress_warnings = [
     "myst.header",
     "myst.xref_missing",
