@@ -45,7 +45,7 @@ HISTSIZE=10000
 HISTFILESIZE=20000
 
 # 4. 实时追加 + 共享历史（多终端场景）
-if [[ $HOST == "manjaro.pc5800.ramwin.com" ]]; then
+if [[ $HOST == "manjaro.pc5800.ramwin.com" || $HOST == "redmibook.ramwin.com" ]]; then
     echo "manjaro.pc5800.ramwin.com"
 else
     echo $HOST
