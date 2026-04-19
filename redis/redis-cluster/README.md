@@ -43,6 +43,10 @@ redis-cli --cluster del-node 127.0.0.1:7000 `<node-id>`
 redis-cli --cluster call 127.0.0.1:7000 cluster forget `<node-id>`
 ```
 
+## 替换一个节点
+* CLUSTER FAILOVER [FORCE | TAKEOVER]
+在slave节点执行,来替换master节点
+
 ## 遇到问题
 [ERR] Nodes don't agree about configuration!  
 直接把报错的那个node删除, 然后清理nodes.conf后重新add
