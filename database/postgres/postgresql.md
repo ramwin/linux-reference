@@ -162,7 +162,7 @@ where table_schema = 'public'
 order by 3 desc;
 ```
 
-#### basic
+### basic
 * 修改用户密码
 ```sql
 ALTER USER user_name WITH PASSWORD 'new_password';
@@ -196,6 +196,13 @@ pg_dump \
     --exclude-schema=\
     -f <outputfie>.sql
     <dbname>
+```
+
+### 升级
+```
+sudo pacman -S postgresql-old-upgrade
+pg_upgrade  -b /opt/pgsql-17/bin/ -B /usr/bin/ -d /var/lib/postgres/data17 -D /var/lib/postgres/data
+j
 ```
 
 ## [PostgreSQL Administration](https://www.postgresqltutorial.com/postgresql-administration/)
