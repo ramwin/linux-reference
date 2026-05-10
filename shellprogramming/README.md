@@ -100,6 +100,14 @@ array=($line)  # 变成了列表
 ```
 
 ## [circle 循环](http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO-7.html)
+* 循环字符串
+```
+db_names=(db_01 db_02)
+for db_name in "${db_names[@]}"; do
+    echo $db_name
+done
+```
+
 * 循环数字
 ```{literalinclude} ./for.sh
 ```
