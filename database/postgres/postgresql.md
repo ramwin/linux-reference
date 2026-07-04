@@ -198,8 +198,11 @@ pg_dump \
     <dbname>
 ```
 
+* `-d, --dbname=DBNAME`
+* `-s, --schema-only`: 只导出格式
+
 ### 升级
-```
+```shell
 sudo pacman -S postgresql-old-upgrade
 pg_upgrade  -b /opt/pgsql-17/bin/ -B /usr/bin/ -d /var/lib/postgres/data17 -D /var/lib/postgres/data
 j
@@ -213,6 +216,17 @@ j
 ```
 
 * 展示所有数据库 `\l`
+```sql
+SELECT
+    d.datname AS "数据库名",
+    pg_get_userbyid(d.datdba) AS "Owner",
+    pg_size_pretty(pg_database_size(d.datname)) AS "尺寸",
+    t.spcname AS "Tablespace",
+    pg_tablespace_location(t.oid) AS "Tablespace位置"
+FROM pg_database d
+JOIN pg_tablespace t ON d.dattablespace = t.oid
+ORDER BY d.datname;
+```
 * 执行sql语句
 ```
 \i lesson1.sql
@@ -244,9 +258,10 @@ ALTER TABLE students ALTER age integer;
 ALTER TABLE students DROP age;
 ```
 
-### CREATE DATABASE
+### [CREATE DATABASE](https://www.postgresql.org/docs/current/sql-createdatabase.html)
 ```
-CREATE DATABASE people WITH OWERN 'pg4e';
+-- 
+CREATE DATABASE people WITH OWNER='pg4e' TABLESPACE=tablespace_nvme1;
 ```
 
 ### [Create Table 创建表](https://www.postgresql.org/docs/current/sql-createtable.html)
