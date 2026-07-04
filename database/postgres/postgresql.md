@@ -227,6 +227,26 @@ FROM pg_database d
 JOIN pg_tablespace t ON d.dattablespace = t.oid
 ORDER BY d.datname;
 ```
+
+* 查询数据库路径
+```sql
+WITH dd AS (SELECT current_setting('data_directory') AS path)
+SELECT
+    d.datname,
+    d.oid,
+    t.spcname,
+    CASE
+        WHEN t.spcname = 'pg_default' THEN dd.path || '/base/' || d.oid
+        WHEN t.spcname = 'pg_global' THEN dd.path || '/global'
+        ELSE pg_tablespace_location(t.oid) || '/' || d.oid
+    END AS db_path
+FROM pg_database d
+JOIN pg_tablespace t ON d.dattablespace = t.oid
+CROSS JOIN dd
+WHERE d.datistemplate = false
+ORDER BY d.datname;
+```
+
 * 执行sql语句
 ```
 \i lesson1.sql
