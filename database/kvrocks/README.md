@@ -158,7 +158,7 @@ redis-cli -c -p 6666 HGETALL order:2000
 - **节点配置** - 仅包含差异化配置（端口、节点ID、主从关系）
 
 **示例** - `master-1.conf`:
-```conf
+```
 # 引用基础配置
 include /etc/kvrocks/base.conf
 
@@ -380,7 +380,7 @@ cp config/base.conf.bak config/base.conf
 ```
 
 小内存配置关键参数：
-```conf
+```
 write-buffer-size 4mb          # 极小的写缓冲区
 max-write-buffer-number 2       # 最多2个缓冲区
 rocksdb.block_cache_size 8mb    # 极小的块缓存

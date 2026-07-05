@@ -554,7 +554,3 @@ task_key = f"task_{instance.id}"
 if client.lock(task_key, timeout=10, blocking=False).acquire():
     pass
 ```
-
-```{toctree}
-./redis-cluster/README.md
-```
