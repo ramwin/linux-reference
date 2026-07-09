@@ -1,4 +1,7 @@
 # markdown
+```
+前面3个` {include} file.md
+```
 
 * 测试引用  
 我是引用  
