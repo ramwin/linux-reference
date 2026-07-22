@@ -128,4 +128,5 @@ export CLAUDE_CODE_PERMISSION_MODE=acceptEdits
 # export ALL_PROXY="socks5://192.168.31.6:1080"
 # export HTTPS_PROXY="socks5://192.168.31.6:1080"
 export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
-source /home/wangx/github/secret/bashrc
+
+source ~/github/secret/bashrc

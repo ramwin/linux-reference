@@ -180,3 +180,5 @@ time.csv
 _build
 *.db
 .npmrc
+
+**/.claude/settings.local.json
