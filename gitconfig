@@ -53,3 +53,5 @@
 [fetch]
 	recurseSubmodules = no
 	parallel = 9
+[lfs "remote"]
+	autoDetect = true
