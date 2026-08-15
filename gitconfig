@@ -14,8 +14,9 @@
 [core]
     bigFileThreshold = 1M
     excludesfile = ~/github/linux-reference/gitignore_global
-    quotepath = false
 	filemode = true
+    hooksPath = ~/github/linux-reference/git/git-hooks/
+    quotepath = false
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f

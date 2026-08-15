@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# commit-msg hook:
+#   1. 校验提交信息符合 Conventional Commits 规范
+#   2. 禁止出现 nothing / update（及其变形，大小写不敏感）
+#
+# 由 git-hooks/install.sh 安装到 ~/.git-hooks/
+
+set -u
+
+msg_file="$1"
+msg="$(cat "$msg_file")"
+first_line="$(head -n 1 "$msg_file")"
+
+# git 自动生成的提交信息（merge / revert / autosquash）不做校验
+case "$first_line" in
+    Merge\ *|Revert\ *|fixup!\ *|squash!\ *)
+        exit 0
+        ;;
+esac
+
+types='feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert'
+
+# 1. 格式: <type>(<scope>)!?: <subject>
+if ! grep -qE "^(${types})(\([^)]*\))?!?: .+" <<<"$first_line"; then
+    cat >&2 <<'EOF'
+提交被拒绝: 信息不符合规范
+  格式:  <type>(<scope>)!?: <subject>
+  type:  feat / fix / docs / style / refactor / perf / test / build / ci / chore / revert
+  示例:  feat(parser): 新增 XML 解析支持
+EOF
+    printf '  当前首行: %s\n' "$first_line" >&2
+    exit 1
+fi
+
+# 2. 禁用词: nothing / update 及其变形（大小写不敏感）
+hit="$(grep -ioE '\b(nothing|update)\w*\b' <<<"$msg" | sort -u | tr '\n' ' ')"
+if [ -n "$hit" ]; then
+    printf '提交被拒绝: 信息中不允许出现禁用词: %s\n' "$hit" >&2
+    echo  '  请用具体动词描述改动，如 fix / add / refactor / remove' >&2
+    exit 1
+fi
+
+# 3. 首行不超过 72 字符
+if [ "${#first_line}" -gt 72 ]; then
+    printf '提交被拒绝: 首行过长 (%s > 72 字符)\n' "${#first_line}" >&2
+    exit 1
+fi
+
+exit 0
