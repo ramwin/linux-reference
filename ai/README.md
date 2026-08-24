@@ -1,5 +1,14 @@
 # AI
 
+```{toctree}
+:maxdepth: 1
+./local-ai-service.md
+./agent.md
+./production-deployment.md
+```
+
+## 学习笔记: 视频记录
+
 ## [从词向量到Transformer，AI大模型背后的原理，一个动画急速入门](https://www.bilibili.com/video/BV1nogs6qEZn/?share_source=copy_web&vd_source=2f16beddb156bf5939a7b19f9044d409)
 
 场景:
