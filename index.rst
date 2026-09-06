@@ -18,6 +18,7 @@ Welcome to linux reference's documentation!
    ./restructed/restructed语法.rst
    ./README.md
    ./hardware.md
+   ./开机速度.md
 
 
 Indices and tables
