@@ -5,6 +5,7 @@
 ./local-ai-service.md
 ./agent.md
 ./production-deployment.md
+./pair-coding.md
 ```
 
 ## 学习笔记: 视频记录
