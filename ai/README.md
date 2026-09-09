@@ -6,6 +6,7 @@
 ./agent.md
 ./production-deployment.md
 ./pair-coding.md
+./multi-model-debate.md
 ```
 
 ## 学习笔记: 视频记录
