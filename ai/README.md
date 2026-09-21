@@ -10,6 +10,7 @@
 ./cloud-service-testing.md
 ./dag.md
 ./rag.md
+./mcp.md
 ```
 
 ## 学习笔记: 视频记录
@@ -158,4 +159,5 @@ flowchart LR
 
 - [从0开始搭建本地 AI 服务](./local-ai-service.md): 把 Transformer 模型跑在自己电脑上;
 - [从0开始搭建一个 Agent](./agent.md): 让模型调用工具、完成任务;
+- [MCP: AI 应用的 "USB-C" 接口](./mcp.md): 把 Agent 的工具标准化, 一处实现处处可用;
 - [从学习到生产](./production-deployment.md): 正式部署该怎么做。
