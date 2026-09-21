@@ -8,6 +8,7 @@
 ./pair-coding.md
 ./multi-model-debate.md
 ./cloud-service-testing.md
+./dag.md
 ```
 
 ## 学习笔记: 视频记录
