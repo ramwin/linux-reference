@@ -9,6 +9,7 @@
 ./multi-model-debate.md
 ./cloud-service-testing.md
 ./dag.md
+./rag.md
 ```
 
 ## 学习笔记: 视频记录
