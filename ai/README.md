@@ -11,6 +11,7 @@
 ./dag.md
 ./rag.md
 ./mcp.md
+./test-agent-architecture.md
 ```
 
 ## 学习笔记: 视频记录
