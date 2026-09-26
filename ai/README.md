@@ -10,6 +10,7 @@
 ./cloud-service-testing.md
 ./dag.md
 ./rag.md
+./kv-cache.md
 ./mcp.md
 ./test-agent-architecture.md
 ```
