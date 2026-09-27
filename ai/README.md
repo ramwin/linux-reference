@@ -12,6 +12,7 @@
 ./rag.md
 ./kv-cache.md
 ./mcp.md
+./plugin-vs-skill.md
 ./test-agent-architecture.md
 ```
 
