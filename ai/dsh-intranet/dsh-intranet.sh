@@ -1,0 +1,422 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+#
+# dsh-intranet.sh —— 把内网的大模型网关接到 DeepSeek Harness(DSH) 上
+#
+# 四个子命令, 按顺序用:
+#   ./dsh-intranet.sh probe     --url http://10.0.0.9:8000 --key sk-xxx
+#   ./dsh-intranet.sh configure --url http://10.0.0.9:8000 --key sk-xxx [--model glm-5.3]
+#   ./dsh-intranet.sh smoke
+#   ./dsh-intranet.sh selftest              # 不碰真网关, 用本机 mock 自检整条链路
+#
+# 设计原则:
+#   * 只写两个地方 —— $DSH_HOME/cordis.patch.yml(受管块) 和 $DSH_HOME/.env(密钥),
+#     其他配置一律不动; 每次写之前都备份。
+#   * 网关能接受什么字段, 由 probe 实测决定, 不靠猜。
+#   * 所有判断都能在 selftest 里离线复现。
+
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROBE="$HERE/probe_gateway.py"
+MOCK="$HERE/mock_gateway.py"
+
+# ---------------------------------------------------------------- 默认值
+DSH_HOME_DIR="${DSH_HOME:-$HOME/.dsh}"
+PATCH_FILE=""                 # 缺省 = $DSH_HOME_DIR/cordis.patch.yml
+PROFILE="headless"
+BASE_URL=""
+API_KEY=""
+MODEL=""
+API_CHOICE="auto"             # auto | openai | anthropic
+CONTEXT_WINDOW="204800"
+MAX_TOKENS="32768"
+INSECURE=0
+USE_PROXY=0
+NO_KEY_FILE=0
+KEY_VAR="INTRANET_LLM_API_KEY"   # 不能以 DSH_/XDG_ 开头: 那类名字 DSH 只认启动环境
+TIMEOUT_S="300"
+SMOKE_PROMPT="只回答两个字：正常"
+BACKUP_TAG="$(date +%Y%m%d-%H%M%S)"
+BLOCK_BEGIN="# >>> dsh-intranet managed block (由 dsh-intranet.sh 维护, 手改会被覆盖) >>>"
+BLOCK_END="# <<< dsh-intranet managed block <<<"
+
+say()  { printf '%s\n' "$*"; }
+step() { printf '\n\033[1;36m==> %s\033[0m\n' "$*"; }
+warn() { printf '\033[1;33m[warn] %s\033[0m\n' "$*" >&2; }
+die()  { printf '\033[1;31m[error] %s\033[0m\n' "$*" >&2; exit 1; }
+
+usage() {
+    cat <<'EOF'
+dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
+
+  probe       只探测网关: 它能接受哪些字段, 推荐用哪种协议
+  configure   探测 + 写 $DSH_HOME/cordis.patch.yml 与 $DSH_HOME/.env + 校验配置
+  smoke       真跑一次 dsh, 看模型是否回话
+  show        打印当前受管配置块(密钥打码)
+  install     安装 DSH(在线用 --registry, 离线用 --bundle)
+  bundle      在"有外网的机器"上打包离线安装包
+  selftest    本机起 mock 网关, 走一遍 probe+configure+smoke(不碰真网关)
+
+公共参数:
+  --url URL            网关地址, 带不带 /v1 都行
+  --key KEY            API Key
+  --model ID           模型 id(省略则从 /v1/models 里挑, 优先含 glm 的)
+  --api NAME           auto(默认) | openai | anthropic
+  --dsh-home DIR       DSH 家目录, 默认 $DSH_HOME 或 ~/.dsh
+  --profile NAME       校验/冒烟用的 profile, 默认 headless
+  --patch-file FILE    受管块写到哪里, 默认 $DSH_HOME/cordis.patch.yml
+  --context-window N   模型上下文窗口, 默认 204800
+  --max-tokens N       单次输出上限, 默认 32768(要小于网关允许值)
+  --key-var NAME       凭据环境变量名, 默认 INTRANET_LLM_API_KEY
+  --no-key-file        不写 .env, 自己 export 那个变量
+  --insecure           忽略自签证书
+  --use-proxy          探测时走 http_proxy/https_proxy(默认绕过)
+  --timeout S          冒烟超时, 默认 300
+  --prompt TEXT        冒烟用的提示词
+  --registry URL       install 时用的 npm 源
+  --bundle FILE        install 时用离线包
+  --out FILE           bundle 的输出路径
+  --version VER        install 的 dsh 版本
+EOF
+}
+
+# ------------------------------------------------------------ 参数解析
+CMD="${1:-help}"
+shift || true
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --url)            BASE_URL="${2:?}"; shift 2 ;;
+        --key)            API_KEY="${2:?}"; shift 2 ;;
+        --model)          MODEL="${2:?}"; shift 2 ;;
+        --api)            API_CHOICE="${2:?}"; shift 2 ;;
+        --dsh-home)       DSH_HOME_DIR="${2:?}"; shift 2 ;;
+        --profile)        PROFILE="${2:?}"; shift 2 ;;
+        --patch-file)     PATCH_FILE="${2:?}"; shift 2 ;;
+        --context-window) CONTEXT_WINDOW="${2:?}"; shift 2 ;;
+        --max-tokens)     MAX_TOKENS="${2:?}"; shift 2 ;;
+        --key-var)        KEY_VAR="${2:?}"; shift 2 ;;
+        --no-key-file)    NO_KEY_FILE=1; shift ;;
+        --insecure)       INSECURE=1; shift ;;
+        --use-proxy)      USE_PROXY=1; shift ;;
+        --timeout)        TIMEOUT_S="${2:?}"; shift 2 ;;
+        --bundle)         BUNDLE="${2:?}"; shift 2 ;;
+        --registry)       REGISTRY="${2:?}"; shift 2 ;;
+        --out)            OUT="${2:?}"; shift 2 ;;
+        --version)        DSH_VERSION="${2:?}"; shift 2 ;;
+        --prompt)         SMOKE_PROMPT="${2:?}"; shift 2 ;;
+        -h|--help)        usage; exit 0 ;;
+        *) die "未知参数: $1 (--help 看用法)" ;;
+    esac
+done
+
+case "$KEY_VAR" in
+    DSH_*|XDG_*|DYLD_*) die "--key-var 不能以 DSH_/XDG_/DYLD_ 开头: DSH 只允许启动环境设置这类变量" ;;
+esac
+[ -n "$PATCH_FILE" ] || PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
+
+need_python() {
+    command -v python3 >/dev/null 2>&1 || die "需要 python3(零依赖, 只用标准库)。装一个, 或看 README 的手工配置法"
+}
+
+# --------------------------------------------------------- 定位 dsh 命令
+# 全局数组 DSH_RUN; 找不到就返回 1
+find_dsh() {
+    if command -v dsh >/dev/null 2>&1; then
+        DSH_RUN=(dsh); return 0
+    fi
+    local candidate
+    for candidate in \
+        "$HOME/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js" \
+        "$HOME/node_modules/@deepseek-ai/dsh/lib/bin.js" \
+        "/usr/lib/node_modules/@deepseek-ai/dsh/lib/bin.js" \
+        "/usr/local/lib/node_modules/@deepseek-ai/dsh/lib/bin.js"
+    do
+        if [ -f "$candidate" ]; then
+            DSH_RUN=(node "$candidate"); return 0
+        fi
+    done
+    return 1
+}
+
+require_dsh() {
+    find_dsh || die "找不到 dsh。先跑 ./dsh-intranet.sh install(--help 看离线安装)"
+}
+
+# ------------------------------------------------------- YAML 受管块写入
+apply_block() {
+    # $1=目标 yml  $2=内容文件
+    python3 - "$1" "$2" "$BLOCK_BEGIN" "$BLOCK_END" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+body = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8").rstrip()
+begin, end = sys.argv[3], sys.argv[4]
+block = f"{begin}\n{body}\n{end}\n"
+text = path.read_text(encoding="utf-8") if path.exists() else ""
+if begin in text and end in text:
+    head, rest = text.split(begin, 1)
+    _, tail = rest.split(end, 1)
+    text = head + block + tail.lstrip("\n")
+else:
+    if text.strip():
+        text = text.rstrip("\n") + "\n\n" + block
+    else:
+        text = "# DSH 用户覆盖层(home patch): 对 web / headless 等所有 profile 生效。\n" + block
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text(text, encoding="utf-8")
+print(f"[ok] 已写入受管块: {path}")
+PY
+}
+
+# ----------------------------------------------------------- .env 写入
+apply_key_file() {
+    local env_file="$DSH_HOME_DIR/.env"
+    if [ -f "$env_file" ]; then
+        cp -p "$env_file" "$env_file.bak-$BACKUP_TAG"
+        say "[ok] 已备份 $env_file -> $env_file.bak-$BACKUP_TAG"
+    fi
+    python3 - "$env_file" "$KEY_VAR" "$API_KEY" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1]); name = sys.argv[2]; value = sys.argv[3]
+lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+out, replaced = [], False
+for line in lines:
+    if line.strip().startswith(name + "="):
+        out.append(f"{name}={value}"); replaced = True
+    else:
+        out.append(line)
+if not replaced:
+    if not out:
+        out = ["# DSH home 级 .env: 只有本用户可以读。这里的变量会进到模型请求的凭据解析里。",
+               "# 注意: DSH_ / XDG_ / PATH / NODE_* 这类「启动引导」变量不允许写在 .env 里。"]
+    if out and out[-1].strip() == "":
+        out[-1] = f"{name}={value}"
+    else:
+        out.append(f"{name}={value}")
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text("\n".join(out).rstrip("\n") + "\n", encoding="utf-8")
+PY
+    chmod 600 "$env_file"
+    say "[ok] 已写入密钥: $env_file ($KEY_VAR=***)"
+}
+
+check_key_shape() {
+    case "$API_KEY" in
+        *[!A-Za-z0-9._:-]*) warn "key 里有非 [A-Za-z0-9._:-] 的字符, .env 解析可能出问题; 建议改用 --no-key-file 自己 export" ;;
+    esac
+    [ -n "$API_KEY" ] || die "缺少 --key"
+    [ -n "$BASE_URL" ] || die "缺少 --url"
+}
+
+# ------------------------------------------------------------- probe
+run_probe() {
+    need_python
+    check_key_shape
+    local emit_dir="${1:-}"
+    local args=(--url "$BASE_URL" --key "$API_KEY" --context-window "$CONTEXT_WINDOW"
+                --max-tokens "$MAX_TOKENS")
+    if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
+    if [ "$INSECURE" = 1 ]; then args+=(--insecure); fi
+    if [ "$USE_PROXY" = 1 ]; then args+=(--use-proxy); fi
+    if [ -n "$emit_dir" ]; then args+=(--emit "$emit_dir"); fi
+    python3 "$PROBE" "${args[@]}"
+}
+
+# --------------------------------------------------------- configure
+PATCH_CHOSEN=""
+pick_patch() {
+    local dir="$1"
+    local wanted="$API_CHOICE"
+    if [ "$wanted" = auto ]; then
+        if [ -f "$dir/cordis.patch.openai.yml" ]; then wanted=openai
+        elif [ -f "$dir/cordis.patch.anthropic.yml" ]; then wanted=anthropic
+        else die "网关两种协议都没打通, 先看 probe 输出"; fi
+    fi
+    PATCH_CHOSEN="$dir/cordis.patch.$wanted.yml"
+    [ -f "$PATCH_CHOSEN" ] || die "网关不支持 $wanted 协议(或探测失败), 换 --api 或先看 probe 输出"
+    say "[ok] 选用 $wanted 路由"
+}
+
+cmd_probe() { run_probe; }
+
+cmd_configure() {
+    need_python
+    require_dsh
+    step "1/4 探测网关"
+    local tmp; tmp="$(mktemp -d)"
+    run_probe "$tmp/patches"
+
+    step "2/4 选择路由"
+    pick_patch "$tmp/patches"
+
+    step "3/4 写入配置"
+    if [ -f "$PATCH_FILE" ]; then
+        cp -p "$PATCH_FILE" "$PATCH_FILE.bak-$BACKUP_TAG"
+        say "[ok] 已备份 $PATCH_FILE -> $PATCH_FILE.bak-$BACKUP_TAG"
+    fi
+    apply_block "$PATCH_FILE" "$PATCH_CHOSEN"
+    if [ "$NO_KEY_FILE" = 1 ]; then
+        say "[--] 按 --no-key-file 跳过 .env; 请自行 export $KEY_VAR=..."
+    else
+        apply_key_file
+    fi
+
+    step "4/4 校验配置能被 DSH 组装"
+    local dumped
+    if dumped="$(DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --profile "$PROFILE" --dump-config 2>&1)"; then
+        if printf '%s' "$dumped" | grep -q "intranet-gw\|llm-deepseek"; then
+            say "[ok] 配置加载成功, 路由已注册"
+        else
+            warn "配置能加载, 但没看到内网路由; 检查 $PATCH_FILE"
+        fi
+    else
+        printf '%s\n' "$dumped" | tail -20
+        if [ -f "$PATCH_FILE.bak-$BACKUP_TAG" ]; then
+            cp -p "$PATCH_FILE.bak-$BACKUP_TAG" "$PATCH_FILE"
+            warn "配置校验失败, 已回滚 $PATCH_FILE"
+        else
+            rm -f "$PATCH_FILE"
+            warn "配置校验失败, 已删除新写的 $PATCH_FILE"
+        fi
+        die "配置校验失败(上面是 DSH 的报错)"
+    fi
+
+    rm -rf "$tmp"
+    step "下一步"
+    say "  ./dsh-intranet.sh smoke            # 真跑一次"
+    say "  dsh web                            # 起 Web GUI(如果内网装了 web profile)"
+}
+
+cmd_smoke() {
+    require_dsh
+    step "冒烟: dsh --profile $PROFILE \"$SMOKE_PROMPT\""
+    local out status=0
+    out="$(DSH_HOME="$DSH_HOME_DIR" timeout "$TIMEOUT_S" "${DSH_RUN[@]}" \
+            --profile "$PROFILE" "$SMOKE_PROMPT" 2>&1)" || status=$?
+    printf '%s\n' "$out"
+    echo "----------------------------------------------------------------"
+    if [ "$status" -eq 0 ] && [ -n "$out" ]; then
+        say "✅ 模型回话了, 内网 DSH 接通。"
+        return 0
+    fi
+    warn "退出码 $status"
+    case "$out" in
+        *MISSING_CREDENTIAL*) say "→ 没拿到 key: 检查 $DSH_HOME_DIR/.env 里的 $KEY_VAR, 或者你 export 了没有" ;;
+        *INVALID_CREDENTIAL*) say "→ key 格式不对(被网关/DSH 拒绝)" ;;
+        *AUTH*|*401*|*403*)   say "→ 鉴权失败: key 不对, 或网关需要别的头" ;;
+        *404*|*"not found"*)  say "→ 路径不对: 多半是 baseURL 少了/多了 /v1, 重跑 probe 看它报的可用路径" ;;
+        *400*)                say "→ 网关拒了某个字段: 重跑 probe, 把它标记 false 的 compat 开关写进配置" ;;
+        *ECONNREFUSED*|*TIMEOUT*) say "→ 连不上网关: 地址/端口/防火墙, 或需要 export HTTPS_PROXY" ;;
+    esac
+    die "冒烟失败"
+}
+
+cmd_show() {
+    say "DSH_HOME   : $DSH_HOME_DIR"
+    say "受管配置块 : $PATCH_FILE"
+    if [ -f "$PATCH_FILE" ] && grep -qF "$BLOCK_BEGIN" "$PATCH_FILE"; then
+        awk -v b="$BLOCK_BEGIN" -v e="$BLOCK_END" '$0==b{f=1} f{print} $0==e{f=0}' "$PATCH_FILE"
+    else
+        warn "还没有受管块(先跑 configure)"
+    fi
+    local env_file="$DSH_HOME_DIR/.env"
+    if [ -f "$env_file" ]; then
+        say ""
+        say "密钥文件   : $env_file"
+        sed -E "s/^(${KEY_VAR}=).*/\1***/" "$env_file" | sed 's/^/    /'
+    else
+        warn "没有 $env_file(可能用了 --no-key-file)"
+    fi
+    if find_dsh; then
+        say ""
+        say "dsh 命令   : ${DSH_RUN[*]}"
+    fi
+}
+
+# ------------------------------------------------------------ install
+cmd_install() {
+    if [ -n "${BUNDLE:-}" ]; then
+        cmd_unpack
+        return
+    fi
+    command -v npm >/dev/null 2>&1 || die "没有 npm。离线部署请用 ./dsh-intranet.sh bundle 打包后 --bundle 安装"
+    local ver="${DSH_VERSION:-latest}"
+    local registry_args=()
+    if [ -n "${REGISTRY:-}" ]; then registry_args=(--registry "$REGISTRY"); fi
+    step "npm 全局安装 @deepseek-ai/dsh@$ver"
+    npm install -g "${registry_args[@]}" "@deepseek-ai/dsh@$ver"
+    find_dsh || die "装完了还是找不到 dsh, 看 npm prefix -g 是否在 PATH 里"
+    say "[ok] ${DSH_RUN[*]}"
+}
+
+cmd_unpack() {
+    [ -n "${BUNDLE:-}" ] || die "缺少 --bundle 包路径"
+    [ -f "$BUNDLE" ] || die "找不到 $BUNDLE"
+    local target="${DSH_INSTALL_DIR:-$HOME/dsh}"
+    step "解包 $BUNDLE -> $target"
+    mkdir -p "$target"
+    tar -xzf "$BUNDLE" -C "$target"
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$target/node_modules/@deepseek-ai/dsh/lib/bin.js" "$HOME/.local/bin/dsh"
+    chmod +x "$target/node_modules/@deepseek-ai/dsh/lib/bin.js" 2>/dev/null || true
+    say "[ok] 装好了。把 export PATH=\"\$HOME/.local/bin:\$PATH\" 加进 ~/.bashrc, 然后 dsh --version"
+}
+
+cmd_bundle() {
+    local out="${OUT:-$PWD/dsh-offline-$(date +%Y%m%d).tar.gz}"
+    local src="${DSH_INSTALL_DIR:-$HOME}"
+    [ -d "$src/node_modules/@deepseek-ai/dsh" ] || die "$src/node_modules 里没有 @deepseek-ai/dsh"
+    step "打包 $src/node_modules -> $out (几百 MB, 耐心等)"
+    tar -czf "$out" -C "$src" node_modules package.json 2>/dev/null || \
+        tar -czf "$out" -C "$src" node_modules
+    say "[ok] $out  ($(du -h "$out" | cut -f1))"
+    say "目标机器上: ./dsh-intranet.sh install --bundle $out"
+    warn "离线包与 CPU 架构/glibc 绑定(这里是 $(uname -m)); 目标机同架构才能直接用"
+}
+
+# ----------------------------------------------------------- selftest
+cmd_selftest() {
+    need_python
+    local tmp; tmp="$(mktemp -d)"
+    local port="${MOCK_PORT:-18099}"
+    step "selftest: 本机 mock 网关 + 隔离 DSH_HOME ($tmp)"
+    python3 "$MOCK" --port "$port" --model "${MODEL:-glm-5.3}" \
+        --log "$tmp/requests.jsonl" >"$tmp/mock.log" 2>&1 &
+    local mock_pid=$!
+    trap "kill $mock_pid 2>/dev/null || true; rm -rf '$tmp'" EXIT
+    sleep 1
+    BASE_URL="http://127.0.0.1:$port"
+    API_KEY="selftest-key"
+    MODEL="${MODEL:-glm-5.3}"
+
+    # 两种路由各验证一遍, 各自写进隔离的 DSH_HOME
+    local api
+    for api in openai anthropic; do
+        step "### $api 路由"
+        API_CHOICE="$api"
+        DSH_HOME_DIR="$tmp/home-$api"
+        PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
+        export DSH_HOME="$DSH_HOME_DIR"
+        mkdir -p "$DSH_HOME_DIR"
+        cmd_configure
+        cmd_smoke
+    done
+
+    step "网关侧看到的请求"
+    python3 "$HERE/summarize_requests.py" "$tmp/requests.jsonl"
+    say ""
+    say "✅ selftest 通过: 配置生成 -> 凭据解析 -> 协议转换 -> 模型回话, 两种路由全通。"
+}
+
+case "$CMD" in
+    probe)     cmd_probe ;;
+    configure) cmd_configure ;;
+    smoke)     cmd_smoke ;;
+    show)      cmd_show ;;
+    install)   cmd_install ;;
+    bundle)    cmd_bundle ;;
+    selftest)  cmd_selftest ;;
+    help|--help|-h) usage ;;
+    *) usage; die "未知子命令: $CMD" ;;
+esac

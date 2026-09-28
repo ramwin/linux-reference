@@ -13,6 +13,7 @@
 ./kv-cache.md
 ./mcp.md
 ./plugin-vs-skill.md
+./dsh-intranet/README.md
 ./test-agent-architecture.md
 ```
 
