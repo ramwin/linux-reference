@@ -397,6 +397,7 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 | 10 | 窗口小于输出上限 | 被拒绝 |
 | 11 | 自签 HTTPS 网关(有 openssl 才跑) | `--ca-file` 同时喂给探测与 DSH |
 | 12 | `smoke --profile web` | 当场拒绝并给出 GUI 人工自检指引(不能挂住) |
+| 13 | 任务书附录 B 里手写的 YAML | 原样可用(改了生成器没改文档就会被这条抓住) |
 
 内网机器上先跑这一条确认**工具箱本身**没问题, 再去碰真网关 —— 这样失败时就能立刻区分
 "是脚本/环境的问题"还是"是网关的问题"。
@@ -468,3 +469,4 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 | `probe_gateway.py` | 网关探测器, 输出推荐配置(零依赖) |
 | `mock_gateway.py` | 内网网关模拟器, 供离线验证; `--strict` 可扮演严格网关(零依赖) |
 | `summarize_requests.py` | 统计 mock 收到的请求路径与字段, 用于核对协议 |
+| `check_doc_examples.py` | 把任务书里手写的 YAML 抽出来实跑, 防止文档与生成器脱节 |
