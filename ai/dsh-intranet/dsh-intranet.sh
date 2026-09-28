@@ -242,7 +242,7 @@ run_probe() {
     check_key_shape
     local emit_dir="${1:-}"
     local args=(--url "$BASE_URL" --key "$API_KEY" --context-window "$CONTEXT_WINDOW"
-                --max-tokens "$MAX_TOKENS")
+                --max-tokens "$MAX_TOKENS" --key-var "$KEY_VAR")
     if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
     if [ "$INSECURE" = 1 ]; then args+=(--insecure); fi
     if [ "$USE_PROXY" = 1 ]; then args+=(--use-proxy); fi
@@ -303,6 +303,11 @@ cmd_configure() {
     if [ -f "$PATCH_FILE" ]; then
         cp -p "$PATCH_FILE" "$PATCH_FILE.bak-$BACKUP_TAG"
         say "[ok] 已备份 $PATCH_FILE -> $PATCH_FILE.bak-$BACKUP_TAG"
+    fi
+    # 防御: 配置里引用的凭据名必须和我们写进 .env 的名字一致, 否则冒烟才会以
+    # MISSING_CREDENTIAL 暴露出来。这里当场拦住。
+    if ! grep -q "apiKeyEnv: $KEY_VAR" "$PATCH_CHOSEN"; then
+        die "生成的配置里没有 apiKeyEnv: $KEY_VAR(生成的凭据名与 --key-var 不一致), 已中止, 未写入 $PATCH_FILE"
     fi
     apply_block "$PATCH_FILE" "$PATCH_CHOSEN"
     if [ "$NO_KEY_FILE" = 1 ]; then
@@ -369,7 +374,10 @@ cmd_smoke() {
         say "  先跑 dsh --version, 同样空的话换 Node $MIN_NODE_MAJOR+ 再试。"
     fi
     case "$out" in
-        *MISSING_CREDENTIAL*) say "→ 没拿到 key: 检查 $DSH_HOME_DIR/.env 里的 $KEY_VAR, 或者你 export 了没有" ;;
+        *MISSING_CREDENTIAL*)
+            local want; want="$(grep -m1 -oE 'apiKeyEnv: *[A-Za-z_][A-Za-z0-9_]*' "$PATCH_FILE" 2>/dev/null | awk '{print $2}')"
+            say "→ 没拿到 key: 配置里 apiKeyEnv 指定的是 ${want:-$KEY_VAR}, 但 $DSH_HOME_DIR/.env 和启动环境里都没有它"
+            say "  (用了 --no-key-file 的话, 就得自己在启动 DSH 前 export)" ;;
         *INVALID_CREDENTIAL*) say "→ key 格式不对(被网关/DSH 拒绝)" ;;
         *AUTH*|*401*|*403*)   say "→ 鉴权失败: key 不对, 或网关需要别的头" ;;
         *404*|*"not found"*)  say "→ 路径不对: 多半是 baseURL 少了/多了 /v1, 重跑 probe 看它报的可用路径" ;;
@@ -392,7 +400,9 @@ cmd_show() {
     if [ -f "$env_file" ]; then
         say ""
         say "密钥文件   : $env_file"
-        sed -E "s/^(${KEY_VAR}=).*/\1***/" "$env_file" | sed 's/^/    /'
+        # 掩掉"每一行赋值", 而不是只掩 $KEY_VAR: 否则用 --key-var 换了变量名时,
+        # 这里会把密钥原样打出来(而这份输出是要贴进报告里的)。
+        sed -E 's/^([A-Za-z_][A-Za-z0-9_]*)=.*/\1=***/' "$env_file" | sed 's/^/    /'
     else
         warn "没有 $env_file(可能用了 --no-key-file)"
     fi
@@ -484,18 +494,30 @@ cmd_doctor() {
     else
         say "  受管配置块  : $PATCH_FILE  不存在 ❌ 还没 configure"; failed=1
     fi
+    # 配置要哪个凭据名, 就读配置里的, 而不是命令行默认值
+    local want_key="$KEY_VAR"
+    if [ -f "$PATCH_FILE" ]; then
+        local from_config
+        from_config="$(grep -m1 -oE 'apiKeyEnv: *[A-Za-z_][A-Za-z0-9_]*' "$PATCH_FILE" | awk '{print $2}')"
+        if [ -n "$from_config" ]; then want_key="$from_config"; fi
+    fi
     local env_file="$DSH_HOME_DIR/.env"
     if [ -f "$env_file" ]; then
         say "  密钥文件    : $env_file (权限 $(stat -c '%a' "$env_file" 2>/dev/null || echo '?'))"
-        if grep -q "^${KEY_VAR}=" "$env_file"; then
-            say "  $KEY_VAR : ✅ 已设置"
+        local names
+        names="$(grep -oE '^[A-Za-z_][A-Za-z0-9_]*=' "$env_file" | tr -d '=' | paste -sd', ' -)"
+        say "  文件里的变量: ${names:-(没有任何赋值)}"
+        if grep -q "^${want_key}=" "$env_file"; then
+            say "  $want_key : ✅ 在 .env 里"
+        elif [ -n "${!want_key:-}" ]; then
+            say "  $want_key : ✅ 在启动环境里"
         else
-            say "  $KEY_VAR : 文件里没有 ❌"; failed=1
+            say "  $want_key : ❌ 配置要这个变量, 但 .env 与启动环境里都没有"; failed=1
         fi
-    elif [ -n "${!KEY_VAR:-}" ]; then
-        say "  密钥文件    : 没有, 但启动环境里已有 $KEY_VAR ✅"
+    elif [ -n "${!want_key:-}" ]; then
+        say "  密钥文件    : 没有, 但启动环境里已有 $want_key ✅"
     else
-        say "  密钥文件    : 没有 ❌ 也没 export $KEY_VAR"; failed=1
+        say "  密钥文件    : 没有 ❌ 也没 export $want_key (配置里 apiKeyEnv 指定的名字)"; failed=1
     fi
 
     step "3/4 网关"

@@ -38,7 +38,7 @@ uname -m
 |---|---|---|
 | `node -v` | **必须 ≥ v22** | ⚠️ 见下方警告。让人类装 Node 22+, 或解压官方静态包 `node-v22.x-linux-x64.tar.xz` 并把 `bin/` 加进 PATH |
 | `python3` | ≥ 3.8, 只用标准库 | 没有就走文末的附录 B(手工路径) |
-| `dsh` | 能找到 | 没有就 `./dsh-intranet.sh install --registry <内网npm源>`; 完全离线用 `--bundle` |
+| `dsh` | 能找到 | **注意: `command -v dsh` 找不到不代表没装** —— 脚本会自动在 `~/node_modules/@deepseek-ai/dsh`、`/usr/lib/node_modules/...` 等常见位置找, 找不到时 `selftest` 会报出它实际用的路径。真的没装才 `./dsh-intranet.sh install --registry <内网npm源>`; 完全离线用 `--bundle` |
 | 网关连通 | `curl` 得通 | 不通先解决地址/端口/防火墙/代理, 别往下走 |
 
 > ⚠️ **Node 20 是静默陷阱**: 实测 Node 20.20.2 上 `dsh` 退出码是 **0**,
@@ -88,7 +88,8 @@ cd ai/dsh-intranet
 | `--model ID` | 网关上的确切模型 id; 不传则从 `/v1/models` 里挑含 `glm` 的 |
 | `--insecure` | 网关是自签 HTTPS |
 | `--use-proxy` | 探测时**要走** `http_proxy/https_proxy`(默认绕过代理直连内网) |
-| `--no-key-file` | 不写 `.env`, 由你自己 export `INTRANET_LLM_API_KEY` |
+| `--no-key-file` | 不写 `.env`, 由你自己 export 凭据变量(名字见配置里的 `apiKeyEnv`, 默认 `INTRANET_LLM_API_KEY`) |
+| `--key-var NAME` | 换一个凭据变量名(默认 `INTRANET_LLM_API_KEY`); 生成的配置与 `.env` 会一起跟着换 |
 | `--max-tokens N` | 单次输出上限, 默认 32768(必须小于网关允许值) |
 | `--context-window N` | 模型上下文窗口, 默认 204800 |
 | `--dsh-home DIR` | 换一个 DSH 家目录(默认 `$DSH_HOME` 或 `~/.dsh`) |
@@ -177,7 +178,7 @@ Claude 对接:  POST {baseURL}/v1/messages        x-api-key: <key> + anthropic-v
 
 ### 3. 落盘的配置
 - $DSH_HOME/cordis.patch.yml 的受管块(原样粘贴; key 不会出现在里面):
-- $DSH_HOME/.env 里设置了哪个变量名(只写名字, 不要写值):
+- $DSH_HOME/.env 里设置了哪些变量名(`./dsh-intranet.sh show` 的输出已把值掩成 `***`, 可整段粘贴):
 - 密钥文件权限(stat -c '%a'):
 
 ### 4. 冒烟结果
@@ -219,7 +220,7 @@ ai/dsh-intranet/
 ./dsh-intranet.sh configure --url U --key K [--model M]
 ./dsh-intranet.sh smoke                 # 真跑一次
 ./dsh-intranet.sh doctor   --url U --key K
-./dsh-intranet.sh show                  # 打印受管块(密钥打码)
+./dsh-intranet.sh show                  # 打印受管块; .env 里每一行赋值都会被掩成 ***, 可安全贴进报告
 ./dsh-intranet.sh install  --registry URL | --bundle FILE
 ./dsh-intranet.sh bundle   --out FILE   # 在有外网的机器上打包
 ```

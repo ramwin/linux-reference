@@ -360,6 +360,14 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 `POST /v1/chat/completions`(OpenAI), 并把 DSH 发来的每个请求体原样落到
 `/tmp/mock-gateway-requests.jsonl` —— 想知道 DSH 到底发了什么字段, 看这个文件最快。
 
+内网网关的形态不止一种, 所以三种都在本机演练过一遍(用 mock 分别扮演):
+**只开 OpenAI 兼容**、**只开 Claude 对接**、**严格网关(拒私有字段与方言)** ——
+三种情况下 `configure` + `doctor` 都全绿; 强制指定网关不支持的那种协议时,
+`configure` 会在写任何文件之前退出并提示换 `--api`。此外还演练过:
+用户 `$DSH_HOME/cordis.patch.yml` 已有无关配置(原条目保留、两者共存)、
+已有同 id 的 `llm-pi-ai` 条目(追加的受管块生效)、`--no-key-file`(不写 `.env`,
+靠启动环境提供凭据)、`--key-var`(自定义凭据变量名)。
+
 `selftest --strict` 让 mock 扮演**严格网关**: 它会 400 掉
 `max_completion_tokens` / `store` / `stream_options` / `reasoning_effort` /
 `developer` 角色 / 工具 `strict`, 以及 Anthropic 侧的所有私有顶层字段。

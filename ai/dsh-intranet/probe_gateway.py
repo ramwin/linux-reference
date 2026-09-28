@@ -333,7 +333,8 @@ ANTHROPIC_COMPAT_KEYS = {
 }
 
 
-def openai_patch(model: str, root: str, context: int, max_tokens: int, compat: dict) -> str:
+def openai_patch(model: str, root: str, context: int, max_tokens: int, compat: dict,
+                 key_var: str) -> str:
     compat_lines = []
     for key in ("supportsStore", "supportsDeveloperRole", "supportsReasoningEffort",
                 "supportsUsageInStreaming", "supportsStrictMode"):
@@ -354,7 +355,7 @@ def openai_patch(model: str, root: str, context: int, max_tokens: int, compat: d
         displayName: 内网网关
         api: openai-completions
         baseURL: {root}
-        apiKeyEnv: INTRANET_LLM_API_KEY
+        apiKeyEnv: {key_var}
 {compat_block}        defaultContextWindow: {context}
         defaultMaxTokens: {max_tokens}
         models:
@@ -370,7 +371,7 @@ def openai_patch(model: str, root: str, context: int, max_tokens: int, compat: d
 
 
 def anthropic_patch(model: str, root: str, context: int, max_tokens: int,
-                    effort: str, disable_extensions: bool) -> str:
+                    effort: str, disable_extensions: bool, key_var: str) -> str:
     block = ""
     if disable_extensions:
         block = """# 网关不认识 DSH 的私有顶层字段, 先关掉 DeepSeek 专属扩展
@@ -385,7 +386,7 @@ def anthropic_patch(model: str, root: str, context: int, max_tokens: int,
 {block}- id: llm-deepseek
   name: '@deepseek-ai/dsh-llm-deepseek-api-key'
   config:
-    apiKeyEnv: INTRANET_LLM_API_KEY
+    apiKeyEnv: {key_var}
     baseURL: {root}
     maxTokens: {max_tokens}
     reasoningEffort: {effort}
@@ -413,6 +414,8 @@ def main() -> int:
     parser.add_argument("--insecure", action="store_true", help="忽略自签证书校验")
     parser.add_argument("--use-proxy", action="store_true",
                         help="走 http_proxy/https_proxy(默认绕过, 内网直连)")
+    parser.add_argument("--key-var", default="INTRANET_LLM_API_KEY",
+                        help="凭据环境变量名, 会写进生成的 apiKeyEnv(不能以 DSH_ 开头)")
     parser.add_argument("--emit", metavar="DIR", help="把推荐配置写到该目录")
     opts = parser.parse_args()
 
@@ -457,9 +460,9 @@ def main() -> int:
         print("注意           : Claude 路由的 reasoningEffort 用 off(网关不认识 output_config)")
 
     openai_text = openai_patch(opts.model, openai_root, opts.context_window,
-                               opts.max_tokens, openai_verdict["compat"])
+                               opts.max_tokens, openai_verdict["compat"], opts.key_var)
     anthropic_text = anthropic_patch(opts.model, anthropic_root, opts.context_window,
-                                     opts.max_tokens, effort, disable_extensions)
+                                     opts.max_tokens, effort, disable_extensions, opts.key_var)
 
     if opts.emit:
         import os  # noqa: PLC0415  只在这里用到

@@ -177,6 +177,16 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
+        if path == "/v1/messages" and ARGS.only == "openai":
+            self._send_json({"type": "error", "error": {
+                "type": "not_found_error",
+                "message": "this gateway does not serve the Messages API"}}, status=404)
+            return
+        if path == "/v1/chat/completions" and ARGS.only == "anthropic":
+            self._send_json({"error": {
+                "message": "this gateway does not serve the Chat Completions API",
+                "type": "not_found_error"}}, status=404)
+            return
         body = self._read_body()
         self._record(path, body)
         if ARGS.strict:
@@ -303,13 +313,19 @@ def main() -> int:
     parser.add_argument("--model", default="glm-5.3", help="对外公布的模型 id")
     parser.add_argument("--context-window", type=int, default=204800)
     parser.add_argument("--log", default="/tmp/mock-gateway-requests.jsonl")
+    parser.add_argument("--only", choices=("both", "openai", "anthropic"), default="both",
+                        help="只开一种协议, 用来模拟内网只给了一个口子的网关")
     parser.add_argument("--strict", action="store_true",
                         help="扮演严格的网关: 拒掉 DeepSeek 私有字段与 OpenAI 方言, 用来验证降级配置")
     ARGS = parser.parse_args()
     server = ThreadingHTTPServer((ARGS.host, ARGS.port), Handler)
     print(f"[mock] 监听 http://{ARGS.host}:{ARGS.port}", flush=True)
-    print(f"[mock] 模型 {ARGS.model}; 请求记录 {ARGS.log}"
-          + ("; 严格模式(拒私有字段/方言)" if ARGS.strict else ""), flush=True)
+    extra = ""
+    if ARGS.only != "both":
+        extra += f"; 只开 {ARGS.only} 口子"
+    if ARGS.strict:
+        extra += "; 严格模式(拒私有字段/方言)"
+    print(f"[mock] 模型 {ARGS.model}; 请求记录 {ARGS.log}{extra}", flush=True)
     print("[mock] Anthropic: POST /v1/messages   OpenAI: POST /v1/chat/completions", flush=True)
     try:
         server.serve_forever()
