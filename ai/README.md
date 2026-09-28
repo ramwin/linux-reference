@@ -14,6 +14,7 @@
 ./mcp.md
 ./plugin-vs-skill.md
 ./dsh-intranet/README.md
+./dsh-intranet/AGENT-TASK.md
 ./test-agent-architecture.md
 ```
 
