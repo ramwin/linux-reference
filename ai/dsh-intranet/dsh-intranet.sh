@@ -56,6 +56,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   show        打印当前受管配置块(密钥打码)
   install     安装 DSH(在线用 --registry, 离线用 --bundle)
   bundle      在"有外网的机器"上打包离线安装包
+  doctor      体检: 环境 + 配置 + 网关 + 冒烟, 一次跑完(输出整段贴回来最省事)
   selftest    本机起 mock 网关, 走一遍 probe+configure+smoke(不碰真网关)
 
 公共参数:
@@ -307,9 +308,10 @@ cmd_smoke() {
         *AUTH*|*401*|*403*)   say "→ 鉴权失败: key 不对, 或网关需要别的头" ;;
         *404*|*"not found"*)  say "→ 路径不对: 多半是 baseURL 少了/多了 /v1, 重跑 probe 看它报的可用路径" ;;
         *400*)                say "→ 网关拒了某个字段: 重跑 probe, 把它标记 false 的 compat 开关写进配置" ;;
-        *ECONNREFUSED*|*TIMEOUT*) say "→ 连不上网关: 地址/端口/防火墙, 或需要 export HTTPS_PROXY" ;;
+        *TRANSPORT*|*Connection*|*ECONNREFUSED*|*TIMEOUT*)
+            say "→ 连不上网关: 地址/端口/防火墙; 需要走代理就 export HTTPS_PROXY" ;;
     esac
-    die "冒烟失败"
+    return 1
 }
 
 cmd_show() {
@@ -375,6 +377,86 @@ cmd_bundle() {
     warn "离线包与 CPU 架构/glibc 绑定(这里是 $(uname -m)); 目标机同架构才能直接用"
 }
 
+# ----------------------------------------------------------- doctor
+# 一条命令收集"内网这台机器上, DSH 到底行不行"的全部事实, 方便整段贴回来。
+cmd_doctor() {
+    local failed=0
+
+    step "1/4 运行环境"
+    say "  系统        : $(uname -srm)"
+    say "  发行版      : $( (. /etc/os-release 2>/dev/null && echo "$PRETTY_NAME") || echo '(没有 /etc/os-release)')"
+    if command -v node >/dev/null 2>&1; then
+        say "  node        : $(node -v)"
+    else
+        say "  node        : 缺失 ❌ (DSH 跑不起来)"; failed=1
+    fi
+    if command -v python3 >/dev/null 2>&1; then
+        say "  python3     : $(python3 -V 2>&1)"
+    else
+        say "  python3     : 缺失 ❌ (probe/configure 用不了, 见 README 手工配置法)"; failed=1
+    fi
+    if command -v npm >/dev/null 2>&1; then say "  npm         : $(npm -v)"; else say "  npm         : 缺失"; fi
+    if find_dsh; then
+        local ver; ver="$(DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --version 2>&1 | tail -1)"
+        say "  dsh         : ${DSH_RUN[*]}  (版本 $ver)"
+    else
+        say "  dsh         : 没找到 ❌ 先跑 install"; failed=1
+    fi
+
+    step "2/4 配置与凭据"
+    say "  DSH_HOME    : $DSH_HOME_DIR"
+    if [ -f "$PATCH_FILE" ]; then
+        if grep -qF "$BLOCK_BEGIN" "$PATCH_FILE"; then
+            say "  受管配置块  : $PATCH_FILE  ✅ 已写入"
+        else
+            say "  受管配置块  : $PATCH_FILE  存在但没有我们的块(还没 configure?)"; failed=1
+        fi
+    else
+        say "  受管配置块  : $PATCH_FILE  不存在 ❌ 还没 configure"; failed=1
+    fi
+    local env_file="$DSH_HOME_DIR/.env"
+    if [ -f "$env_file" ]; then
+        say "  密钥文件    : $env_file (权限 $(stat -c '%a' "$env_file" 2>/dev/null || echo '?'))"
+        if grep -q "^${KEY_VAR}=" "$env_file"; then
+            say "  $KEY_VAR : ✅ 已设置"
+        else
+            say "  $KEY_VAR : 文件里没有 ❌"; failed=1
+        fi
+    elif [ -n "${!KEY_VAR:-}" ]; then
+        say "  密钥文件    : 没有, 但启动环境里已有 $KEY_VAR ✅"
+    else
+        say "  密钥文件    : 没有 ❌ 也没 export $KEY_VAR"; failed=1
+    fi
+
+    step "3/4 网关"
+    if [ -n "$BASE_URL" ]; then
+        local pdir; pdir="$(mktemp -d)"
+        if run_probe "$pdir"; then
+            say ""
+        else
+            say "  探测失败 ❌ (看上面的 HTTP 状态)"; failed=1
+        fi
+        rm -rf "$pdir"
+    else
+        say "  (没给 --url, 跳过; 加上 --url 与 --key 一起跑)"
+    fi
+
+    step "4/4 冒烟"
+    if [ -f "$PATCH_FILE" ] && grep -qF "$BLOCK_BEGIN" "$PATCH_FILE"; then
+        if ! cmd_smoke; then failed=1; fi
+    else
+        say "  (受管配置块还没写, 先跑 configure; 冒烟跳过)"
+    fi
+
+    echo
+    if [ "$failed" = 0 ]; then
+        say "✅ doctor 全绿: 这台机器上 DSH + 内网网关已经能用。"
+    else
+        warn "doctor 有项目没过(上面带 ❌ 的行)。把这份输出整段贴回来说一声就行。"
+    fi
+    return 0
+}
+
 # ----------------------------------------------------------- selftest
 cmd_selftest() {
     need_python
@@ -416,6 +498,7 @@ case "$CMD" in
     show)      cmd_show ;;
     install)   cmd_install ;;
     bundle)    cmd_bundle ;;
+    doctor)    cmd_doctor ;;
     selftest)  cmd_selftest ;;
     help|--help|-h) usage ;;
     *) usage; die "未知子命令: $CMD" ;;

@@ -37,9 +37,12 @@ dsh --version
 ./dsh-intranet.sh install --bundle /tmp/dsh-offline.tar.gz # 在内网机器上
 ```
 
-> 离线包本质是 `node_modules` 整包(几百 MB), 和 CPU 架构 / glibc 版本绑定,
-> 目标机同架构才能直接用。取不到外网又要跑 DSH, 建议先在内网 registry 上
-> 代理一份 `@deepseek-ai/dsh`。
+> 离线包本质是 `node_modules` 整包, 和 CPU 架构 / glibc 版本绑定, 目标机同架构才能直接用。
+> 本机实测: 496 MB 的 `node_modules` 打成 **117 MB** 的 tar.gz, 解包后
+> `dsh --version` 正常, `selftest` 也全绿(见下文"本机验证")。
+> 包**不含 Node 运行时** —— 内网机器得自己有 node, 没有的话再带一份
+> [Node 官方静态包](https://nodejs.org/dist/) 进去。取不到外网又要跑 DSH,
+> 更省事的做法是在内网 registry 上代理一份 `@deepseek-ai/dsh`。
 
 ## 三步接通
 
@@ -57,7 +60,14 @@ cd ai/dsh-intranet
 
 # 顺手看看写了什么(密钥打码)
 ./dsh-intranet.sh show
+
+# 一步体检(环境/配置/网关/冒烟), 输出可以整段贴回来
+./dsh-intranet.sh doctor --url http://10.0.0.9:8000 --key sk-xxx
 ```
+
+`doctor` 是给"出问题要找人看"准备的一条命令: 它把系统与 node/python3 版本、
+dsh 位置与版本、`DSH_HOME`、受管块在不在、密钥文件权限与变量名、
+网关探测结论、冒烟结果一次性列全, 最后给出 ✅/❌ 汇总, 且**永远不写配置**。
 
 `probe` 会逐个试探这些字段, 把"网关接受什么"变成实测事实而不是猜测:
 
@@ -206,7 +216,7 @@ DSH 的凭据按固定顺序取, 先命中先赢:
 | `INVALID_CREDENTIAL` / 401 / 403 | key 不对, 或鉴权头不对 | 用 `probe` 看哪个鉴权头是 200 |
 | 404 / not found | 路径不对 | `baseURL` 多写或少写 `/v1`, 看 `probe` 报的可用路径 |
 | 400 | 网关拒了某个字段 | 重跑 `probe`, 把它标红的项变成配置里的 `compat` 开关 |
-| `ECONNREFUSED` / 超时 | 地址、防火墙、代理 | 先 `curl` 一下网关; 需要代理就 export `HTTPS_PROXY`(home 层 `.env` 允许) |
+| `TRANSPORT: Connection error.` / `ECONNREFUSED` / 超时 | 地址、端口、防火墙、代理 | 先 `curl` 一下网关; 需要代理就 export `HTTPS_PROXY`(home 层 `.env` 允许) |
 | 模型回话但内容是乱的 | 思维链方言不对 | GLM 系在 OpenAI 路由里加 `compat.thinkingFormat: zai` |
 | GUI 里选不到模型 | 目录里没有这个 id | `models:` 列表里补上, `id` 必须和网关的模型名一致 |
 
@@ -249,6 +259,22 @@ Claude 对接版(把上面受管块换成这段):
     model: glm-5.3
 ```
 
+## Web GUI 也吃同一份配置
+
+`dsh web` 用的就是那个 home 层 patch, 不用另配一份。实测:
+
+```bash
+DSH_HOME=/tmp/webhome ./dsh-intranet.sh configure --url http://10.0.0.9:8000 --key sk-xxx
+dsh web --host 0.0.0.0 --port 3080 --no-open
+# 启动日志会打印带 token 的地址; 打开它, 在模型选择器里挑「内网网关 / glm-5.3」
+```
+
+本机验证结果: `dsh web` 用内网配置正常启动并打印
+`http://127.0.0.1:3901/?token=…`; 带 token 访问返回 303 换成 cookie,
+不带 token 返回 401; 前端 `index.html`(34 KB)与 JS/CSS 资源都是 200。
+也就是说 GUI 侧的"进程起得来、认证生效、静态资源齐、配置已加载"这四项都过了,
+模型请求本身走的是和 headless 完全相同的那条 LLM 路由(见下)。
+
 ## 本机验证: selftest
 
 内网网关不一定随时能动, 所以这套脚本自带一个 mock 网关, 断网也能验证整条链路:
@@ -281,6 +307,10 @@ Claude 对接版(把上面受管块换成这段):
 `POST /v1/chat/completions`(OpenAI), 并把 DSH 发来的每个请求体原样落到
 `/tmp/mock-gateway-requests.jsonl` —— 想知道 DSH 到底发了什么字段, 看这个文件最快。
 
+两条路由都验证过之后, 用**离线解包出来的那份 DSH**再跑一遍 `selftest`
+(把 `HOME` 指到一个干净目录, 模拟内网目标机), 一样全绿 ——
+说明"打包 → 拷进去 → 解包 → 配好 → 跑通"这条离线路径本身没有坑。
+
 ```{note}
 `selftest` 用临时 `DSH_HOME`, 不会碰你正在用的 `~/.dsh`。
 ```
@@ -289,7 +319,7 @@ Claude 对接版(把上面受管块换成这段):
 
 | 文件 | 作用 |
 |---|---|
-| `dsh-intranet.sh` | 主入口: `probe / configure / smoke / show / install / bundle / selftest` |
+| `dsh-intranet.sh` | 主入口: `probe / configure / smoke / doctor / show / install / bundle / selftest` |
 | `probe_gateway.py` | 网关探测器, 输出推荐配置(零依赖) |
 | `mock_gateway.py` | 内网网关模拟器, 供离线验证(零依赖) |
 | `summarize_requests.py` | 统计 mock 收到的请求路径与字段, 用于核对协议 |
