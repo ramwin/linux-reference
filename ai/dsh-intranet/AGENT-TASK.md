@@ -103,6 +103,7 @@ cd ai/dsh-intranet
 | `--max-tokens N` | 单次输出上限, 默认 32768(必须小于网关允许值) |
 | `--context-window N` | 模型上下文窗口, 默认 204800 |
 | `--dsh-home DIR` | 换一个 DSH 家目录(默认 `$DSH_HOME` 或 `~/.dsh`) |
+| `--profile NAME` | 校验/冒烟用的 profile, **保持默认 headless**; 传 `web` 会被冒烟拒绝(它常驻) |
 | `--strict` | 只给 `selftest` 用: 让 mock 扮演"严格网关"验证降级路径 |
 
 **推荐用 OpenAI 兼容口子**: pi-ai 路由有 GLM/Zhipu 的原生思维链方言(`thinkingFormat: zai`),

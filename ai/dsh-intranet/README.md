@@ -348,6 +348,17 @@ Claude 对接版(把上面受管块换成这段):
     model: glm-5.3
 ```
 
+## `--profile` 的用法: 校验/冒烟固定用 headless
+
+`doctor` 与 `smoke` 里的"跑一句看模型回不回话"只能在 **headless** profile 上做 —— 它是
+唯一"跑完就退出"的 profile。`web`/`acp`/`sdk` 会常驻, 拿不到结论还可能占住端口,
+所以 `smoke --profile web` 会**明确拒绝**并告诉你去做人工自检, 而不是挂在那里等超时。
+
+`configure` 的配置校验也固定用 headless 启动一次: 配置写在 home 层, 对所有 profile
+是同一份, 校验等价。而且这次校验现在要求"**要么看见 INVALID_CONFIG, 要么看见它真的
+走到发请求/取凭据那一步**"—— 否则算校验失败。之前 `--profile web` 会让这次启动报
+`too many arguments`, 旧的判断只看 INVALID_CONFIG, 于是把"没校验成"当成了"校验通过"。
+
 ## Web GUI 也吃同一份配置
 
 `dsh web` 用的就是那个 home 层 patch, 不用另配一份。实测:
@@ -385,6 +396,7 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 | 9 | 用户 home patch 已有无关配置 | 原条目保留, 两者共存可跑 |
 | 10 | 窗口小于输出上限 | 被拒绝 |
 | 11 | 自签 HTTPS 网关(有 openssl 才跑) | `--ca-file` 同时喂给探测与 DSH |
+| 12 | `smoke --profile web` | 当场拒绝并给出 GUI 人工自检指引(不能挂住) |
 
 内网机器上先跑这一条确认**工具箱本身**没问题, 再去碰真网关 —— 这样失败时就能立刻区分
 "是脚本/环境的问题"还是"是网关的问题"。

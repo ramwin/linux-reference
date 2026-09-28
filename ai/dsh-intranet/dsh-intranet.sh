@@ -69,7 +69,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   show        打印当前受管配置块(密钥打码)
   install     安装 DSH(在线用 --registry, 离线用 --bundle)
   bundle      在"有外网的机器"上打包离线安装包
-  verify      验收工具箱本身: 11 个用例(协议形态/locale/凭据/边界/自签 HTTPS), 不碰真网关
+  verify      验收工具箱本身: 12 个用例(协议形态/locale/凭据/边界/自签 HTTPS/profile), 不碰真网关
   doctor      体检: 环境 + 配置 + 网关 + 冒烟, 一次跑完(输出整段贴回来最省事)
   selftest    本机起 mock 网关, 走一遍 probe+configure+smoke(不碰真网关)
 
@@ -348,14 +348,27 @@ validate_config_offline() {
     tmp="$(mktemp)"
     sed -E 's#^([[:space:]]*baseURL:).*#\1 http://127.0.0.1:1/v1#' "$src" > "$tmp"
     if ! grep -q 'baseURL:' "$tmp"; then rm -f "$tmp"; return 0; fi
+    # 固定用 headless 做这次启动: 它"跑一句就退出", 而 web/acp/sdk 会常驻, 既拿不到
+    # 结论、还可能占住端口。配置在 home 层, 对所有 profile 是同一份, 校验等价。
     out="$(NODE_NO_WARNINGS=1 DSH_HOME="$DSH_HOME_DIR" timeout 120 "${DSH_RUN[@]}" \
-            --profile "$PROFILE" --patch "$tmp" "config-check" 2>&1)" || true
+            --profile headless --patch "$tmp" "config-check" 2>&1)" || true
     rm -f "$tmp"
-    VALIDATE_MSG="$(printf '%s\n' "$out" | grep -m1 INVALID_CONFIG || true)"
-    if [ -n "$VALIDATE_MSG" ]; then
-        return 1
-    fi
-    return 0
+    case "$out" in
+        *INVALID_CONFIG*)
+            VALIDATE_MSG="$(printf '%s\n' "$out" | grep -m1 INVALID_CONFIG)"
+            return 1
+            ;;
+        # 走到"连不上死地址"或"凭据缺失"这一步, 就说明插件已经加载成功了
+        *TRANSPORT*|*MISSING_CREDENTIAL*|*INVALID_CREDENTIAL*|*AUTH*|*RATE_LIMIT*|*QUOTA*|*HTTP_*)
+            return 0
+            ;;
+        # 既不是配置错误, 也不是预期的连接失败 —— 说明这次校验根本没真正跑起来。
+        # 曾经出现过: --profile web 启动报 "too many arguments", 却被当成"校验通过"。
+        *)
+            VALIDATE_MSG="校验没能真正跑起来(输出既不是 INVALID_CONFIG, 也不是预期的连接失败): $(printf '%s\n' "$out" | tail -1)"
+            return 1
+            ;;
+    esac
 }
 
 cmd_probe() { run_probe; }
@@ -400,7 +413,7 @@ cmd_configure() {
     fi
     if [ "$ok_config" = 1 ]; then
         if validate_config_offline "$PATCH_CHOSEN"; then
-            say "[ok] 插件级校验通过(把 baseURL 临时指向死地址启动一次, 只查 INVALID_CONFIG)"
+            say "[ok] 插件级校验通过(死地址启动一次: 没有 INVALID_CONFIG, 也确实走到了发请求那一步)"
         else
             ok_config=0
         fi
@@ -429,6 +442,12 @@ cmd_configure() {
 
 cmd_smoke() {
     require_dsh
+    if [ "$PROFILE" != "headless" ]; then
+        die "smoke 只能在 headless profile 上跑(收到 --profile $PROFILE)。
+      web / acp / sdk 这些 profile 不会因为一句任务就退出, 拿不到冒烟结论。
+      GUI 的人工自检: dsh web --no-open, 打开它打印的带 token 地址,
+      在模型选择器里选「内网网关 / <模型 id>」再发一句"你好"。"
+    fi
     step "冒烟: dsh --profile $PROFILE \"$SMOKE_PROMPT\""
     local out status=0
     out="$(DSH_HOME="$DSH_HOME_DIR" timeout "$TIMEOUT_S" "${DSH_RUN[@]}" \
@@ -592,40 +611,40 @@ cmd_verify() {
     fresh() { DSH_HOME_DIR="$tmp/home-$1"; PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
               rm -rf "$DSH_HOME_DIR"; mkdir -p "$DSH_HOME_DIR"; export DSH_HOME="$DSH_HOME_DIR"; }
 
-    step "1/11 selftest: 本机两种路由(宽松网关)"
+    step "1/12 selftest: 本机两种路由(宽松网关)"
     if API_CHOICE=auto MOCK_STRICT=0 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c1" 2>&1
     then ok "selftest 通过"; else bad "selftest 失败" "$tmp/c1"; fi
 
-    step "2/11 selftest: 严格网关(拒私有字段与方言)"
+    step "2/12 selftest: 严格网关(拒私有字段与方言)"
     if MOCK_STRICT=1 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c2" 2>&1
     then ok "严格网关下降级仍然可用"; else bad "严格网关用例失败" "$tmp/c2"; fi
 
-    step "3/11 selftest: 非 UTF-8 locale(zh_CN.GBK)"
+    step "3/12 selftest: 非 UTF-8 locale(zh_CN.GBK)"
     if env LANG=zh_CN.GBK LC_ALL=zh_CN.GBK ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c3" 2>&1
     then ok "GBK locale 下不崩"; else bad "GBK locale 用例失败" "$tmp/c3"; fi
 
-    step "4/11 只开 OpenAI 的网关"
+    step "4/12 只开 OpenAI 的网关"
     fresh openai
     if BASE_URL="http://127.0.0.1:$p_openai" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c4" 2>&1 \
        && cmd_smoke >"$tmp/c4s" 2>&1 && grep -q "llm-pi-ai" "$PATCH_FILE"
     then ok "configure + smoke 通过, 路由为 llm-pi-ai"
     else bad "只开 OpenAI 的用例失败" "$tmp/c4"; fi
 
-    step "5/11 只开 Claude 的网关"
+    step "5/12 只开 Claude 的网关"
     fresh anth
     if BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c5" 2>&1 \
        && cmd_smoke >"$tmp/c5s" 2>&1 && grep -q "llm-deepseek" "$PATCH_FILE"
     then ok "configure + smoke 通过, 路由为 llm-deepseek"
     else bad "只开 Claude 的用例失败" "$tmp/c5"; fi
 
-    step "6/11 强制网关不支持的协议(应拒绝且不写文件)"
+    step "6/12 强制网关不支持的协议(应拒绝且不写文件)"
     fresh wrongproto
     if ( BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=openai cmd_configure ) >"$tmp/c6" 2>&1
     then bad "本该失败却成功了"
     elif [ -f "$PATCH_FILE" ]; then bad "失败了但留下了半成品 $PATCH_FILE"
     else ok "写文件前干净退出"; fi
 
-    step "7/11 --key-var 自定义凭据名"
+    step "7/12 --key-var 自定义凭据名"
     fresh keyvar
     KEY_VAR="VERIFY_CUSTOM_KEY"
     if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c7" 2>&1 \
@@ -633,7 +652,7 @@ cmd_verify() {
     then ok "配置与 .env 用同一个变量名"; else bad "--key-var 用例失败" "$tmp/c7"; fi
     KEY_VAR="INTRANET_LLM_API_KEY"
 
-    step "8/11 --no-key-file(凭据只从启动环境来)"
+    step "8/12 --no-key-file(凭据只从启动环境来)"
     fresh nokeyfile
     if NO_KEY_FILE=1 BASE_URL="http://127.0.0.1:$p_plain" API_KEY=env-only-key API_CHOICE=auto \
          cmd_configure >"$tmp/c8" 2>&1 && [ ! -f "$DSH_HOME_DIR/.env" ] \
@@ -641,14 +660,14 @@ cmd_verify() {
     then ok "没写 .env, 靠启动环境跑通"; else bad "--no-key-file 用例失败" "$tmp/c8"; fi
     NO_KEY_FILE=0
 
-    step "9/11 用户 home patch 里已有无关配置"
+    step "9/12 用户 home patch 里已有无关配置"
     fresh coexist
     printf -- '- id: ui-settings-general\n  config:\n    welcomeNoticeVersion: keep-me\n' > "$PATCH_FILE"
     if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c9" 2>&1 \
        && grep -q "keep-me" "$PATCH_FILE" && cmd_smoke >"$tmp/c9s" 2>&1
     then ok "原条目保留, 且两者共存可跑"; else bad "共存用例失败" "$tmp/c9"; fi
 
-    step "10/11 窗口小于输出上限(应拒绝)"
+    step "10/12 窗口小于输出上限(应拒绝)"
     fresh badmath
     if ( BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k CONTEXT_WINDOW=8000 MAX_TOKENS=32768 \
          cmd_configure ) >"$tmp/c10" 2>&1
@@ -656,7 +675,7 @@ cmd_verify() {
     else ok "拒绝不合理组合"; fi
     CONTEXT_WINDOW=204800; MAX_TOKENS=32768
 
-    step "11/11 自签 HTTPS 网关(探测与 DSH 是两套 TLS, --ca-file 要同时喂到)"
+    step "11/12 自签 HTTPS 网关(探测与 DSH 是两套 TLS, --ca-file 要同时喂到)"
     if command -v openssl >/dev/null 2>&1; then
         if openssl req -x509 -newkey rsa:2048 -keyout "$tmp/key.pem" -out "$tmp/cert.pem" \
                 -days 2 -nodes -subj "/CN=127.0.0.1" \
@@ -678,6 +697,15 @@ cmd_verify() {
     else
         say "  (没有 openssl, 跳过自签 HTTPS 用例)"
     fi
+
+    step "12/12 非 headless profile 的冒烟要当场拒绝(不能挂住)"
+    fresh prof
+    if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c12" 2>&1 \
+       && timeout 60 ./"$(basename "${BASH_SOURCE[0]}")" smoke --profile web --dsh-home "$DSH_HOME_DIR" \
+            >"$tmp/c12s" 2>&1
+    then bad "本该拒绝却成功了"
+    elif grep -q "只能在 headless" "$tmp/c12s"; then ok "明确拒绝并给出 GUI 自检指引"
+    else bad "拒绝了但没说清原因" "$tmp/c12s"; fi
 
     echo
     say "======= verify 结果: $pass 通过, $fail 失败 ======="
@@ -767,7 +795,11 @@ cmd_doctor() {
 
     step "4/4 冒烟"
     if [ -f "$PATCH_FILE" ] && grep -qF "$BLOCK_BEGIN" "$PATCH_FILE"; then
-        if ! cmd_smoke; then failed=1; fi
+        if [ "$PROFILE" = "headless" ]; then
+            if ! cmd_smoke; then failed=1; fi
+        else
+            say "  (--profile $PROFILE 不是 headless, 冒烟跳过; web 请按 README 做人工自检)"
+        fi
     else
         say "  (受管配置块还没写, 先跑 configure; 冒烟跳过)"
     fi
