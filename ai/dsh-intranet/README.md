@@ -63,7 +63,7 @@ cd ai/dsh-intranet
 # 1. 探测: 网关在哪个路径、两种协议哪种能用、哪些字段会被拒
 ./dsh-intranet.sh probe --url http://10.0.0.9:8000 --key sk-xxx
 
-# 2. 配置: 按探测结论写 cordis.patch.yml + .env, 并校验 DSH 能组装这份配置
+# 2. 配置: 按探测结论写 cordis.patch.yml + .env, 并校验这份配置真能加载
 ./dsh-intranet.sh configure --url http://10.0.0.9:8000 --key sk-xxx --model glm-5.3
 
 # 3. 冒烟: 真跑一次
