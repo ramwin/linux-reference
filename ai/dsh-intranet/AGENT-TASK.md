@@ -140,10 +140,23 @@ cd ai/dsh-intranet
 | `.env` 里写 `DSH_XXX=...` 后 DSH 直接拒绝启动 | DSH 不允许 `.env` 设置 `DSH_`/`XDG_`/`DYLD_` 前缀与 `PATH`/`NODE_*` 这类"启动引导变量" | 用 `INTRANET_LLM_API_KEY` 这个名字 |
 | 网关 400, 说 `max_tokens` 超限 | Claude 路由默认输出上限是 **256000** | 配置里显式 `maxTokens: 32768` |
 | 网关 400, 说字段不认识 | Claude 路由默认会带 `output_config`、`dsh_session_log`、`dsh_plugin_packages` 三个 DeepSeek 私有顶层字段 | 让 `probe` 判定后自动关掉(配置里三个 `disabled: true`) |
-| 启动即 `dsh: INVALID_CONFIG: ... sets compat "xxx", but no model on the route speaks a protocol that takes it` | `compat` 的键**按协议分流**, 放错协议了 | 脚本已内置白名单; 手工改配置时查 README 的归属表 |
+| 启动即 `dsh: INVALID_CONFIG: ... sets compat "xxx", but no model on the route speaks a protocol that takes it` | `compat` 的键**按协议分流**, 放错协议了 | 见下方"compat 归属" |
 | 404 / not found | `baseURL` 的 `/v1` 写法不对(两种协议语义不同) | 重跑 `probe`, 看它报的可用路径; 脚本已归一化 |
 | 连接超时/被劫持 | 机器上设了 `http_proxy` | 探测默认绕过代理直连; 确实要走代理加 `--use-proxy` |
 | GUI 里选不到模型 | 模型 id 与网关不一致 | `models:` 列表里的 `id` 必须与网关模型名完全一致 |
+
+**compat 归属(手工改配置时必看)**: `openai-completions` 路由只认
+`maxTokensField`、`thinkingFormat`、`vllmPriority`、`cacheControlFormat`、
+`chatTemplateArgs`、`chatTemplateKwargs`、`supportsStore`、`supportsDeveloperRole`、
+`supportsReasoningEffort`、`supportsUsageInStreaming`、`supportsStrictMode`、
+`supportsFinishReason`、`supportsThinkingTokenBudget`、`thinkingTokenBudgetField`、
+`requiresToolResultName`、`requiresAssistantAfterToolResult`、`requiresThinkingAsText`、
+`requiresReasoningContentOnAssistantMessages`、`supportsLongCacheRetention`;
+`supportsStrictTools`、`supportsTemperature`、`forceAdaptiveThinking`、
+`allowEmptySignature`、`supportsEagerToolInputStreaming`、`supportsCacheControlOnTools`
+属于 `anthropic-messages`, **写到 OpenAI 路由上会启动失败**;
+`supportsMaxOutputTokens` 属于 `openai-responses`。
+另外: Claude 路由走 `llm-deepseek`, 没有 `compat` 面, 不需要也不该给它加 `compat`。
 
 DSH 实际发出的请求体(实测, 可用来和网关日志对照):
 
