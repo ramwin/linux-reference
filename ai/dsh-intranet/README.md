@@ -340,6 +340,30 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 也就是说 GUI 侧的"进程起得来、认证生效、静态资源齐、配置已加载"这四项都过了,
 模型请求本身走的是和 headless 完全相同的那条 LLM 路由(见下)。
 
+## 一条命令验收工具箱: verify
+
+```bash
+./dsh-intranet.sh verify
+```
+
+它用几个 mock 分别扮演不同的网关, 把下面 10 项跑成 ✅/❌ 矩阵, **全程不碰真网关、不花额度**:
+
+| # | 用例 | 期望 |
+|---|---|---|
+| 1 | `selftest`(宽松网关, 两种路由) | 全绿 |
+| 2 | `selftest --strict`(严格网关) | 降级后仍可用 |
+| 3 | `selftest` under `LANG=zh_CN.GBK` | 非 UTF-8 locale 不崩 |
+| 4 | 只开 OpenAI 的网关 | 选 `llm-pi-ai` 路由并冒烟通过 |
+| 5 | 只开 Claude 的网关 | 选 `llm-deepseek` 路由并冒烟通过 |
+| 6 | 强制网关不支持的协议 | 写文件前干净退出, 不留半成品 |
+| 7 | `--key-var` 自定义凭据名 | 配置与 `.env` 用同一个名字 |
+| 8 | `--no-key-file` | 不写 `.env`, 靠启动环境跑通 |
+| 9 | 用户 home patch 已有无关配置 | 原条目保留, 两者共存可跑 |
+| 10 | 窗口小于输出上限 | 被拒绝 |
+
+内网机器上先跑这一条确认**工具箱本身**没问题, 再去碰真网关 —— 这样失败时就能立刻区分
+"是脚本/环境的问题"还是"是网关的问题"。
+
 ## 本机验证: selftest
 
 内网网关不一定随时能动, 所以这套脚本自带一个 mock 网关, 断网也能验证整条链路:
@@ -403,7 +427,7 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 
 | 文件 | 作用 |
 |---|---|
-| `dsh-intranet.sh` | 主入口: `probe / configure / smoke / doctor / show / install / bundle / selftest` |
+| `dsh-intranet.sh` | 主入口: `verify / probe / configure / smoke / doctor / show / install / bundle / selftest` |
 | `probe_gateway.py` | 网关探测器, 输出推荐配置(零依赖) |
 | `mock_gateway.py` | 内网网关模拟器, 供离线验证; `--strict` 可扮演严格网关(零依赖) |
 | `summarize_requests.py` | 统计 mock 收到的请求路径与字段, 用于核对协议 |

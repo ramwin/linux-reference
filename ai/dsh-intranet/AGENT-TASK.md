@@ -68,6 +68,14 @@ cd ai/dsh-intranet
 `selftest` 期望最后一行是 `✅ selftest 通过: ... 两种路由全通。`
 若它就没过, 说明本机 DSH 或 Node 有问题, 先解决, 不要进入下一步。
 
+想更彻底一点(尤其是怀疑脚本本身有问题时), 跑这一条:
+
+```bash
+./dsh-intranet.sh verify     # 10 个用例: 协议形态 / GBK locale / 凭据方式 / 边界拒绝
+```
+
+它同样不碰真网关。全绿就说明"工具箱本身没问题", 后面出问题基本都出在网关上。
+
 然后接真网关:
 
 ```bash
@@ -216,6 +224,23 @@ Claude 对接:  POST {baseURL}/v1/messages        x-api-key: <key> + anthropic-v
 
 ---
 
+## 5.5 可选: 看一眼 Web GUI
+
+如果这台机器上要给人用图形界面:
+
+```bash
+dsh web --host 0.0.0.0 --port 3080 --no-open
+```
+
+启动日志会打印一个带 token 的地址, 打开它, 期望看到:
+
+1. 页面正常打开(不是白屏/401);
+2. 模型选择器里能选到「内网网关 / <模型 id>」;
+3. 发一句"你好"能收到回复。
+
+对不上的话: 选择器里没有模型 → `models:` 里的 `id` 与网关模型名不一致;
+有模型但发不出去 → 回去看 `probe` 里被标 ❌ 的字段与它对应的 `compat` 结论。
+
 ## 附录 A: 文件清单与期望布局
 
 ```
@@ -231,7 +256,8 @@ ai/dsh-intranet/
 子命令速查:
 
 ```bash
-./dsh-intranet.sh selftest [--strict]   # 本机自检(不碰真网关)
+./dsh-intranet.sh verify                 # 10 项验收(不碰真网关)
+./dsh-intranet.sh selftest [--strict]   # 快速自检(不碰真网关)
 ./dsh-intranet.sh probe    --url U --key K
 ./dsh-intranet.sh configure --url U --key K [--model M]
 ./dsh-intranet.sh smoke                 # 真跑一次

@@ -43,6 +43,7 @@ INSECURE=0
 USE_PROXY=0
 NO_KEY_FILE=0
 MOCK_STRICT=0                 # selftest 专用: 让 mock 扮演严格网关
+MOCK_PORT_BASE="${MOCK_PORT_BASE:-18500}"   # verify 用的端口起点
 KEY_VAR="INTRANET_LLM_API_KEY"   # 不能以 DSH_/XDG_ 开头: 那类名字 DSH 只认启动环境
 TIMEOUT_S="300"
 SMOKE_PROMPT="只回答两个字：正常"
@@ -65,6 +66,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   show        打印当前受管配置块(密钥打码)
   install     安装 DSH(在线用 --registry, 离线用 --bundle)
   bundle      在"有外网的机器"上打包离线安装包
+  verify      验收工具箱本身: 10 个用例(协议形态/locale/凭据/边界), 不碰真网关
   doctor      体检: 环境 + 配置 + 网关 + 冒烟, 一次跑完(输出整段贴回来最省事)
   selftest    本机起 mock 网关, 走一遍 probe+configure+smoke(不碰真网关)
 
@@ -242,6 +244,20 @@ PY
     say "[ok] 已写入密钥: $env_file ($KEY_VAR=***)"
 }
 
+# 数字参数校验 + 窗口/输出上限的关系。主动压缩(compaction-basic)默认是开着的,
+# 窗口留不出发出请求的余量时, 配置能启动、冒烟也可能过, 但在真实对话里迟早撞窗口。
+check_numbers() {
+    case "$CONTEXT_WINDOW" in ''|*[!0-9]*) die "--context-window 必须是正整数(收到: $CONTEXT_WINDOW)" ;; esac
+    case "$MAX_TOKENS" in ''|*[!0-9]*) die "--max-tokens 必须是正整数(收到: $MAX_TOKENS)" ;; esac
+    if [ "$MAX_TOKENS" -ge "$CONTEXT_WINDOW" ]; then
+        die "--max-tokens $MAX_TOKENS 不小于 --context-window $CONTEXT_WINDOW: 窗口连一次输出都装不下。
+     典型配法: --context-window 204800 --max-tokens 32768"
+    fi
+    if [ "$CONTEXT_WINDOW" -lt $((MAX_TOKENS * 2)) ]; then
+        warn "上下文窗口 $CONTEXT_WINDOW 不到输出上限 $MAX_TOKENS 的两倍, 主动压缩会频繁触发; 确认这是有意的"
+    fi
+}
+
 check_key_shape() {
     case "$API_KEY" in
         *[!A-Za-z0-9._:-]*) warn "key 里有非 [A-Za-z0-9._:-] 的字符, .env 解析可能出问题; 建议改用 --no-key-file 自己 export" ;;
@@ -253,6 +269,7 @@ check_key_shape() {
 # ------------------------------------------------------------- probe
 run_probe() {
     need_python
+    check_numbers
     check_key_shape
     local emit_dir="${1:-}"
     local args=(--url "$BASE_URL" --key "$API_KEY" --context-window "$CONTEXT_WINDOW"
@@ -491,6 +508,107 @@ cmd_bundle() {
     warn "离线包与 CPU 架构/glibc 绑定(这里是 $(uname -m)); 目标机同架构才能直接用"
 }
 
+# ----------------------------------------------------------- verify
+# 把"本机验证过的形态"固化成一条可重复执行的验收命令。用几个 mock 分别扮演
+# 不同的网关(each on its own port), 逐项跑完打印 ✅/❌ 矩阵。
+cmd_verify() {
+    need_python
+    require_dsh
+    local tmp; tmp="$(mktemp -d)"
+    local base=$((MOCK_PORT_BASE))
+    local p_plain="$((base))" p_strict="$((base + 1))" p_openai="$((base + 2))" p_anth="$((base + 3))"
+    local -a mock_pids=()
+    start_mock() {  # $1=port $2=log 其余=额外参数
+        local port="$1" log="$2"; shift 2
+        nohup python3 "$MOCK" --port "$port" --model "glm-5.3" --log "$log" "$@"             >"$tmp/mock-$port.log" 2>&1 &
+        mock_pids+=("$!")
+    }
+    start_mock "$p_plain"  "$tmp/plain.jsonl"
+    start_mock "$p_strict" "$tmp/strict.jsonl" --strict
+    start_mock "$p_openai" "$tmp/openai.jsonl" --only openai
+    start_mock "$p_anth"   "$tmp/anth.jsonl"   --only anthropic
+    trap "for p in ${mock_pids[*]}; do kill \$p 2>/dev/null || true; done; rm -rf '$tmp'" EXIT
+    sleep 1.5
+
+    local pass=0 fail=0
+    ok()   { printf '  \033[1;32m✅ %s\033[0m\n' "$1"; pass=$((pass + 1)); }
+    bad()  { printf '  \033[1;31m❌ %s\033[0m\n' "$1"; fail=$((fail + 1));
+             [ -n "${2:-}" ] && tail -6 "$2" | sed 's/^/       /' || true; }
+
+    # 每个用例都在自己的 DSH_HOME 里, 互不干扰
+    fresh() { DSH_HOME_DIR="$tmp/home-$1"; PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
+              rm -rf "$DSH_HOME_DIR"; mkdir -p "$DSH_HOME_DIR"; export DSH_HOME="$DSH_HOME_DIR"; }
+
+    step "1/10 selftest: 本机两种路由(宽松网关)"
+    if API_CHOICE=auto MOCK_STRICT=0 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c1" 2>&1
+    then ok "selftest 通过"; else bad "selftest 失败" "$tmp/c1"; fi
+
+    step "2/10 selftest: 严格网关(拒私有字段与方言)"
+    if MOCK_STRICT=1 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c2" 2>&1
+    then ok "严格网关下降级仍然可用"; else bad "严格网关用例失败" "$tmp/c2"; fi
+
+    step "3/10 selftest: 非 UTF-8 locale(zh_CN.GBK)"
+    if env LANG=zh_CN.GBK LC_ALL=zh_CN.GBK ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c3" 2>&1
+    then ok "GBK locale 下不崩"; else bad "GBK locale 用例失败" "$tmp/c3"; fi
+
+    step "4/10 只开 OpenAI 的网关"
+    fresh openai
+    if BASE_URL="http://127.0.0.1:$p_openai" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c4" 2>&1 \
+       && cmd_smoke >"$tmp/c4s" 2>&1 && grep -q "llm-pi-ai" "$PATCH_FILE"
+    then ok "configure + smoke 通过, 路由为 llm-pi-ai"
+    else bad "只开 OpenAI 的用例失败" "$tmp/c4"; fi
+
+    step "5/10 只开 Claude 的网关"
+    fresh anth
+    if BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c5" 2>&1 \
+       && cmd_smoke >"$tmp/c5s" 2>&1 && grep -q "llm-deepseek" "$PATCH_FILE"
+    then ok "configure + smoke 通过, 路由为 llm-deepseek"
+    else bad "只开 Claude 的用例失败" "$tmp/c5"; fi
+
+    step "6/10 强制网关不支持的协议(应拒绝且不写文件)"
+    fresh wrongproto
+    if ( BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=openai cmd_configure ) >"$tmp/c6" 2>&1
+    then bad "本该失败却成功了"
+    elif [ -f "$PATCH_FILE" ]; then bad "失败了但留下了半成品 $PATCH_FILE"
+    else ok "写文件前干净退出"; fi
+
+    step "7/10 --key-var 自定义凭据名"
+    fresh keyvar
+    KEY_VAR="VERIFY_CUSTOM_KEY"
+    if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c7" 2>&1 \
+       && grep -q "apiKeyEnv: VERIFY_CUSTOM_KEY" "$PATCH_FILE" && cmd_smoke >"$tmp/c7s" 2>&1
+    then ok "配置与 .env 用同一个变量名"; else bad "--key-var 用例失败" "$tmp/c7"; fi
+    KEY_VAR="INTRANET_LLM_API_KEY"
+
+    step "8/10 --no-key-file(凭据只从启动环境来)"
+    fresh nokeyfile
+    if NO_KEY_FILE=1 BASE_URL="http://127.0.0.1:$p_plain" API_KEY=env-only-key API_CHOICE=auto \
+         cmd_configure >"$tmp/c8" 2>&1 && [ ! -f "$DSH_HOME_DIR/.env" ] \
+       && INTRANET_LLM_API_KEY=env-only-key cmd_smoke >"$tmp/c8s" 2>&1
+    then ok "没写 .env, 靠启动环境跑通"; else bad "--no-key-file 用例失败" "$tmp/c8"; fi
+    NO_KEY_FILE=0
+
+    step "9/10 用户 home patch 里已有无关配置"
+    fresh coexist
+    printf -- '- id: ui-settings-general\n  config:\n    welcomeNoticeVersion: keep-me\n' > "$PATCH_FILE"
+    if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c9" 2>&1 \
+       && grep -q "keep-me" "$PATCH_FILE" && cmd_smoke >"$tmp/c9s" 2>&1
+    then ok "原条目保留, 且两者共存可跑"; else bad "共存用例失败" "$tmp/c9"; fi
+
+    step "10/10 窗口小于输出上限(应拒绝)"
+    fresh badmath
+    if ( BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k CONTEXT_WINDOW=8000 MAX_TOKENS=32768 \
+         cmd_configure ) >"$tmp/c10" 2>&1
+    then bad "本该拒绝却成功了"
+    else ok "拒绝不合理组合"; fi
+    CONTEXT_WINDOW=204800; MAX_TOKENS=32768
+
+    echo
+    say "======= verify 结果: $pass 通过, $fail 失败 ======="
+    [ "$fail" = 0 ] || die "验收未全绿, 上面 ❌ 的项就是问题所在"
+    say "✅ 工具箱本身验收全绿(这些都不需要真网关)。"
+}
+
 # ----------------------------------------------------------- doctor
 # 一条命令收集"内网这台机器上, DSH 到底行不行"的全部事实, 方便整段贴回来。
 cmd_doctor() {
@@ -633,6 +751,7 @@ case "$CMD" in
     show)      cmd_show ;;
     install)   cmd_install ;;
     bundle)    cmd_bundle ;;
+    verify)    cmd_verify ;;
     doctor)    cmd_doctor ;;
     selftest)  cmd_selftest ;;
     help|--help|-h) usage ;;
