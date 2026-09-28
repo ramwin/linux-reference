@@ -141,8 +141,31 @@ find_dsh() {
     return 1
 }
 
+node_major() {
+    command -v node >/dev/null 2>&1 || return 1
+    node -p 'process.versions.node.split(".")[0]' 2>/dev/null
+}
+
+# 实测: Node 20 上 dsh 会"退出码 0 + 一个字都不输出"(连请求都不发), Node 22 起正常。
+MIN_NODE_MAJOR=22
+check_node() {
+    local maj; maj="$(node_major || true)"
+    if [ -z "$maj" ]; then
+        warn "没找到 node —— DSH 是 Node 应用, 得先装 Node"
+        return 1
+    fi
+    if [ "$maj" -lt "$MIN_NODE_MAJOR" ]; then
+        warn "node $(node -v) 低于本方案实测可用的下限 v$MIN_NODE_MAJOR:
+       Node 20 上 dsh 会静默什么都不做(退出码 0, 无任何输出, 连模型请求都不发)。
+       换 Node 22+ 再试, 官方静态包: https://nodejs.org/dist/"
+        return 1
+    fi
+    return 0
+}
+
 require_dsh() {
     find_dsh || die "找不到 dsh。先跑 ./dsh-intranet.sh install(--help 看离线安装)"
+    check_node || true
 }
 
 # ------------------------------------------------------- YAML 受管块写入
@@ -265,7 +288,7 @@ cmd_configure() {
 
     step "4/4 校验配置能被 DSH 组装"
     local dumped
-    if dumped="$(DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --profile "$PROFILE" --dump-config 2>&1)"; then
+    if dumped="$(NODE_NO_WARNINGS=1 DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --profile "$PROFILE" --dump-config 2>&1)"; then
         if printf '%s' "$dumped" | grep -q "intranet-gw\|llm-deepseek"; then
             say "[ok] 配置加载成功, 路由已注册"
         else
@@ -302,6 +325,10 @@ cmd_smoke() {
         return 0
     fi
     warn "退出码 $status"
+    if [ "$status" -eq 0 ] && [ -z "$out" ]; then
+        say "→ 退出码 0 却一个字都没输出: 头号嫌疑是 node 版本过低(实测 Node 20 就是这种静默)。"
+        say "  先跑 dsh --version, 同样空的话换 Node $MIN_NODE_MAJOR+ 再试。"
+    fi
     case "$out" in
         *MISSING_CREDENTIAL*) say "→ 没拿到 key: 检查 $DSH_HOME_DIR/.env 里的 $KEY_VAR, 或者你 export 了没有" ;;
         *INVALID_CREDENTIAL*) say "→ key 格式不对(被网关/DSH 拒绝)" ;;
@@ -385,10 +412,14 @@ cmd_doctor() {
     step "1/4 运行环境"
     say "  系统        : $(uname -srm)"
     say "  发行版      : $( (. /etc/os-release 2>/dev/null && echo "$PRETTY_NAME") || echo '(没有 /etc/os-release)')"
-    if command -v node >/dev/null 2>&1; then
-        say "  node        : $(node -v)"
-    else
+    local nmaj; nmaj="$(node_major || true)"
+    if [ -z "$nmaj" ]; then
         say "  node        : 缺失 ❌ (DSH 跑不起来)"; failed=1
+    elif [ "$nmaj" -lt "$MIN_NODE_MAJOR" ]; then
+        say "  node        : $(node -v)  ❌ 低于 v$MIN_NODE_MAJOR —— 实测这个版本上 dsh 静默无输出"
+        failed=1
+    else
+        say "  node        : $(node -v)  ✅"
     fi
     if command -v python3 >/dev/null 2>&1; then
         say "  python3     : $(python3 -V 2>&1)"
@@ -397,7 +428,7 @@ cmd_doctor() {
     fi
     if command -v npm >/dev/null 2>&1; then say "  npm         : $(npm -v)"; else say "  npm         : 缺失"; fi
     if find_dsh; then
-        local ver; ver="$(DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --version 2>&1 | tail -1)"
+        local ver; ver="$(NODE_NO_WARNINGS=1 DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --version 2>&1 | tail -1)"
         say "  dsh         : ${DSH_RUN[*]}  (版本 $ver)"
     else
         say "  dsh         : 没找到 ❌ 先跑 install"; failed=1

@@ -21,10 +21,17 @@
 ## 前置条件
 
 ```bash
-node -v      # DSH 是 Node 应用; 建议 22+, 实测 26.8.1
+node -v      # 必须 v22 及以上(见下)
 python3 -V   # 脚本只用标准库; 3.8+ 均可
 dsh --version
 ```
+
+**Node 版本是硬门槛, 而且低版本的失败方式是静默的**: 实测
+Node **20.20.2** 上 `dsh` 退出码 0、stdout/stderr 都是 0 字节、连模型请求都不发,
+看起来就像"跑完了什么都没干"; 换成 Node **22.23.3** 立刻全绿。所以脚本会在
+`doctor` 和每次 `smoke` 前检查 node 主版本, 低于 22 直接标 ❌ 并给出这个解释。
+内网机器 node 太旧的话, 把 [Node 官方静态包](https://nodejs.org/dist/) 一起带进去
+(`tar -xJf node-v22.x-linux-x64.tar.xz` 后把 `bin/` 加进 PATH, 不用装系统包)。
 
 没有 `dsh` 的话先装, 两条路:
 
@@ -40,7 +47,11 @@ dsh --version
 > 离线包本质是 `node_modules` 整包, 和 CPU 架构 / glibc 版本绑定, 目标机同架构才能直接用。
 > 本机实测: 496 MB 的 `node_modules` 打成 **117 MB** 的 tar.gz, 解包后
 > `dsh --version` 正常, `selftest` 也全绿(见下文"本机验证")。
-> 包**不含 Node 运行时** —— 内网机器得自己有 node, 没有的话再带一份
+> 另外实测: profile 首次初始化**不需要联网** —— 新建的
+> `$DSH_HOME/profiles/web/` 里 `dependencies` 是空的, `node_modules` 也不会生成,
+> 随附 bundle 直接从 DSH 安装目录解析。所以只要 DSH 装上了, 断网起 `dsh web` 没问题。
+>
+> 包**不含 Node 运行时** —— 内网机器得自己有 node(且 ≥22), 没有的话再带一份
 > [Node 官方静态包](https://nodejs.org/dist/) 进去。取不到外网又要跑 DSH,
 > 更省事的做法是在内网 registry 上代理一份 `@deepseek-ai/dsh`。
 
@@ -212,6 +223,7 @@ DSH 的凭据按固定顺序取, 先命中先赢:
 
 | 现象 | 多半是 | 处置 |
 |---|---|---|
+| 退出码 0 但一个字都没输出 | **node 版本过低**(高发) | `dsh --version` 同样是空的话换 Node 22+; 实测 Node 20 就是这样 |
 | `MISSING_CREDENTIAL` | 没拿到 key | 看 `$DSH_HOME/.env` 有没有 `INTRANET_LLM_API_KEY`; 或你在别的 shell export 了但它没进这次启动 |
 | `INVALID_CREDENTIAL` / 401 / 403 | key 不对, 或鉴权头不对 | 用 `probe` 看哪个鉴权头是 200 |
 | 404 / not found | 路径不对 | `baseURL` 多写或少写 `/v1`, 看 `probe` 报的可用路径 |
@@ -219,6 +231,12 @@ DSH 的凭据按固定顺序取, 先命中先赢:
 | `TRANSPORT: Connection error.` / `ECONNREFUSED` / 超时 | 地址、端口、防火墙、代理 | 先 `curl` 一下网关; 需要代理就 export `HTTPS_PROXY`(home 层 `.env` 允许) |
 | 模型回话但内容是乱的 | 思维链方言不对 | GLM 系在 OpenAI 路由里加 `compat.thinkingFormat: zai` |
 | GUI 里选不到模型 | 目录里没有这个 id | `models:` 列表里补上, `id` 必须和网关的模型名一致 |
+
+```{note}
+机器上设了 `http_proxy` 时, Node 22 会打印一行
+`[UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental`。它只是告警, 不影响请求;
+嫌吵就在启动 DSH 时带上 `NODE_NO_WARNINGS=1`(脚本内部调用已自动压掉)。
+```
 
 ## 不依赖脚本的手工配置
 
