@@ -205,10 +205,9 @@ class Probe:
         }]
         ok = self.hit("openai: tools + strict", "POST", chat, self.openai_headers(),
                       self.openai_body(tools=tools)).ok
-        verdict["compat"]["supportsStrictTools"] = ok
         verdict["compat"]["supportsStrictMode"] = ok
         if not ok:
-            verdict["notes"].append("网关拒绝 strict 工具, 已关闭 compat.supportsStrictMode/Tools")
+            verdict["notes"].append("网关拒绝 strict 工具, 已关闭 compat.supportsStrictMode")
 
         # 工具调用本身能不能过 (只验 schema 被接受 + 流式)
         ok = self.hit("openai: 流式 + tools", "POST", chat, self.openai_headers(),
@@ -315,11 +314,30 @@ def normalize_roots(url: str) -> tuple[str, str]:
     return url + "/v1", url
 
 
+# 实测(dsh 0.1.7-rc.2): compat 的键是按协议分的, 放错协议会在真正启动时报
+# INVALID_CONFIG —— 而 --dump-config 查不出来, 所以生成时必须只挑本协议认的键。
+# openai-completions 认这些:
+OPENAI_COMPAT_KEYS = {
+    "cacheControlFormat", "chatTemplateArgs", "chatTemplateKwargs", "maxTokensField",
+    "requiresAssistantAfterToolResult", "requiresReasoningContentOnAssistantMessages",
+    "requiresThinkingAsText", "requiresToolResultName", "supportsDeveloperRole",
+    "supportsFinishReason", "supportsLongCacheRetention", "supportsReasoningEffort",
+    "supportsStore", "supportsStrictMode", "supportsThinkingTokenBudget",
+    "supportsUsageInStreaming", "thinkingFormat", "thinkingTokenBudgetField", "vllmPriority",
+}
+# anthropic-messages 认这些(本方案里 Claude 路由走 llm-deepseek, 没有 compat 面, 仅作参考):
+ANTHROPIC_COMPAT_KEYS = {
+    "allowEmptySignature", "forceAdaptiveThinking", "supportsCacheControlOnTools",
+    "supportsEagerToolInputStreaming", "supportsStrictTools", "supportsTemperature",
+    "supportsLongCacheRetention",
+}
+
+
 def openai_patch(model: str, root: str, context: int, max_tokens: int, compat: dict) -> str:
     compat_lines = []
     for key in ("supportsStore", "supportsDeveloperRole", "supportsReasoningEffort",
-                "supportsUsageInStreaming", "supportsStrictMode", "supportsStrictTools"):
-        if compat.get(key) is False:
+                "supportsUsageInStreaming", "supportsStrictMode"):
+        if compat.get(key) is False and key in OPENAI_COMPAT_KEYS:
             compat_lines.append(f"          {key}: false")
     if compat.get("maxTokensField") == "max_tokens":
         compat_lines.append("          maxTokensField: max_tokens")

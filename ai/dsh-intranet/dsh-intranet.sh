@@ -34,6 +34,7 @@ MAX_TOKENS="32768"
 INSECURE=0
 USE_PROXY=0
 NO_KEY_FILE=0
+MOCK_STRICT=0                 # selftest 专用: 让 mock 扮演严格网关
 KEY_VAR="INTRANET_LLM_API_KEY"   # 不能以 DSH_/XDG_ 开头: 那类名字 DSH 只认启动环境
 TIMEOUT_S="300"
 SMOKE_PROMPT="只回答两个字：正常"
@@ -75,6 +76,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   --use-proxy          探测时走 http_proxy/https_proxy(默认绕过)
   --timeout S          冒烟超时, 默认 300
   --prompt TEXT        冒烟用的提示词
+  --strict             selftest 专用: 让 mock 扮演严格网关(拒 DeepSeek 私有字段与 OpenAI 方言)
   --registry URL       install 时用的 npm 源
   --bundle FILE        install 时用离线包
   --out FILE           bundle 的输出路径
@@ -107,6 +109,7 @@ while [ $# -gt 0 ]; do
         --out)            OUT="${2:?}"; shift 2 ;;
         --version)        DSH_VERSION="${2:?}"; shift 2 ;;
         --prompt)         SMOKE_PROMPT="${2:?}"; shift 2 ;;
+        --strict)         MOCK_STRICT=1; shift ;;
         -h|--help)        usage; exit 0 ;;
         *) die "未知参数: $1 (--help 看用法)" ;;
     esac
@@ -262,6 +265,28 @@ pick_patch() {
     say "[ok] 选用 $wanted 路由"
 }
 
+# --dump-config 只组装配置树, 不加载插件, 因此查不出 "compat 开关放错协议" 这类
+# 运行期校验错误; 这里用一份"只把 baseURL 换成死地址"的副本真启动一次:
+#   * 配置本身有问题 -> INVALID_CONFIG(在任何网络 I/O 之前抛出)
+#   * 配置没问题     -> TRANSPORT(连不上 127.0.0.1:1), 这是我们想要的
+# 代价是一次本地连接失败, 不碰真网关、不发模型请求。
+VALIDATE_MSG=""
+validate_config_offline() {
+    local src="$1" tmp out
+    VALIDATE_MSG=""
+    tmp="$(mktemp)"
+    sed -E 's#^([[:space:]]*baseURL:).*#\1 http://127.0.0.1:1/v1#' "$src" > "$tmp"
+    if ! grep -q 'baseURL:' "$tmp"; then rm -f "$tmp"; return 0; fi
+    out="$(NODE_NO_WARNINGS=1 DSH_HOME="$DSH_HOME_DIR" timeout 120 "${DSH_RUN[@]}" \
+            --profile "$PROFILE" --patch "$tmp" "config-check" 2>&1)" || true
+    rm -f "$tmp"
+    VALIDATE_MSG="$(printf '%s\n' "$out" | grep -m1 INVALID_CONFIG || true)"
+    if [ -n "$VALIDATE_MSG" ]; then
+        return 1
+    fi
+    return 0
+}
+
 cmd_probe() { run_probe; }
 
 cmd_configure() {
@@ -286,16 +311,30 @@ cmd_configure() {
         apply_key_file
     fi
 
-    step "4/4 校验配置能被 DSH 组装"
-    local dumped
+    step "4/4 校验配置"
+    local dumped ok_config=1
     if dumped="$(NODE_NO_WARNINGS=1 DSH_HOME="$DSH_HOME_DIR" "${DSH_RUN[@]}" --profile "$PROFILE" --dump-config 2>&1)"; then
         if printf '%s' "$dumped" | grep -q "intranet-gw\|llm-deepseek"; then
-            say "[ok] 配置加载成功, 路由已注册"
+            say "[ok] 配置树组装成功, 路由已注册"
         else
-            warn "配置能加载, 但没看到内网路由; 检查 $PATCH_FILE"
+            warn "配置能组装, 但没看到内网路由; 检查 $PATCH_FILE"
         fi
     else
-        printf '%s\n' "$dumped" | tail -20
+        ok_config=0
+    fi
+    if [ "$ok_config" = 1 ]; then
+        if validate_config_offline "$PATCH_CHOSEN"; then
+            say "[ok] 插件级校验通过(把 baseURL 临时指向死地址启动一次, 只查 INVALID_CONFIG)"
+        else
+            ok_config=0
+        fi
+    fi
+    if [ "$ok_config" = 0 ]; then
+        if [ -n "$VALIDATE_MSG" ]; then
+            printf '%s\n' "$VALIDATE_MSG" >&2
+        else
+            printf '%s\n' "$dumped" | tail -20
+        fi
         if [ -f "$PATCH_FILE.bak-$BACKUP_TAG" ]; then
             cp -p "$PATCH_FILE.bak-$BACKUP_TAG" "$PATCH_FILE"
             warn "配置校验失败, 已回滚 $PATCH_FILE"
@@ -493,9 +532,14 @@ cmd_selftest() {
     need_python
     local tmp; tmp="$(mktemp -d)"
     local port="${MOCK_PORT:-18099}"
-    step "selftest: 本机 mock 网关 + 隔离 DSH_HOME ($tmp)"
-    python3 "$MOCK" --port "$port" --model "${MODEL:-glm-5.3}" \
-        --log "$tmp/requests.jsonl" >"$tmp/mock.log" 2>&1 &
+    if [ "$MOCK_STRICT" = 1 ]; then
+        step "selftest(严格网关): 本机 mock 拒掉私有字段与方言 + 隔离 DSH_HOME ($tmp)"
+    else
+        step "selftest(宽松网关): 本机 mock + 隔离 DSH_HOME ($tmp)"
+    fi
+    local mock_args=(--port "$port" --model "${MODEL:-glm-5.3}" --log "$tmp/requests.jsonl")
+    if [ "$MOCK_STRICT" = 1 ]; then mock_args+=(--strict); fi
+    python3 "$MOCK" "${mock_args[@]}" >"$tmp/mock.log" 2>&1 &
     local mock_pid=$!
     trap "kill $mock_pid 2>/dev/null || true; rm -rf '$tmp'" EXIT
     sleep 1

@@ -39,6 +39,41 @@ def log_request_record(record: dict) -> None:
             fp.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
+# --strict 用: 严格的 Claude 兼容网关只认这些顶层字段, 其余一律 400
+ANTHROPIC_ALLOWED = {
+    "model", "messages", "max_tokens", "stream", "system", "tools", "tool_choice",
+    "temperature", "top_p", "top_k", "stop_sequences", "metadata", "thinking",
+}
+
+# --strict 用: 很多中转/自建网关不认这些 OpenAI 方言
+OPENAI_REJECTED_FIELDS = {
+    "max_completion_tokens": "unsupported parameter: max_completion_tokens (use max_tokens)",
+    "store": "unsupported parameter: store",
+    "stream_options": "unsupported parameter: stream_options",
+    "reasoning_effort": "unsupported parameter: reasoning_effort",
+}
+
+
+def strict_problem(path: str, body: dict) -> str | None:
+    """严格模式下返回拒绝原因, 通过则返回 None。"""
+    if path == "/v1/messages":
+        unknown = sorted(set(body) - ANTHROPIC_ALLOWED)
+        if unknown:
+            return f"unknown top-level field(s): {', '.join(unknown)}"
+        return None
+    for field, message in OPENAI_REJECTED_FIELDS.items():
+        if field in body:
+            return message
+    if any(m.get("role") == "developer" for m in body.get("messages") or []
+           if isinstance(m, dict)):
+        return "unsupported role: developer (use system)"
+    for tool in body.get("tools") or []:
+        fn = tool.get("function") if isinstance(tool, dict) else None
+        if isinstance(fn, dict) and "strict" in fn:
+            return "unsupported parameter: tools[].function.strict"
+    return None
+
+
 def extract_prompt(body: dict) -> str:
     """从两种协议的请求体里取出最后一条用户文本, 用来回显。"""
     messages = body.get("messages") or []
@@ -144,6 +179,21 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?", 1)[0].rstrip("/") or "/"
         body = self._read_body()
         self._record(path, body)
+        if ARGS.strict:
+            problem = strict_problem(path, body)
+            if problem is not None:
+                if path == "/v1/messages":
+                    self._send_json(
+                        {"type": "error", "error": {"type": "invalid_request_error",
+                                                    "message": problem}},
+                        status=400,
+                    )
+                else:
+                    self._send_json(
+                        {"error": {"message": problem, "type": "invalid_request_error"}},
+                        status=400,
+                    )
+                return
         if path == "/v1/messages":
             self._anthropic_messages(body)
             return
@@ -253,10 +303,13 @@ def main() -> int:
     parser.add_argument("--model", default="glm-5.3", help="对外公布的模型 id")
     parser.add_argument("--context-window", type=int, default=204800)
     parser.add_argument("--log", default="/tmp/mock-gateway-requests.jsonl")
+    parser.add_argument("--strict", action="store_true",
+                        help="扮演严格的网关: 拒掉 DeepSeek 私有字段与 OpenAI 方言, 用来验证降级配置")
     ARGS = parser.parse_args()
     server = ThreadingHTTPServer((ARGS.host, ARGS.port), Handler)
     print(f"[mock] 监听 http://{ARGS.host}:{ARGS.port}", flush=True)
-    print(f"[mock] 模型 {ARGS.model}; 请求记录 {ARGS.log}", flush=True)
+    print(f"[mock] 模型 {ARGS.model}; 请求记录 {ARGS.log}"
+          + ("; 严格模式(拒私有字段/方言)" if ARGS.strict else ""), flush=True)
     print("[mock] Anthropic: POST /v1/messages   OpenAI: POST /v1/chat/completions", flush=True)
     try:
         server.serve_forever()

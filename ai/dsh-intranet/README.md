@@ -171,6 +171,35 @@ DSH 的凭据按固定顺序取, 先命中先赢:
 两条都能跑通(本仓库的 `selftest` 会各跑一遍)。**GLM 系建议走 OpenAI 兼容**:
 请求体里没有 DeepSeek 私有字段, 且 pi-ai 原生认识 GLM/Zhipu 的思维链方言。
 
+### `compat` 开关是按协议分的(实测)
+
+`compat` 的键不是通用开关。放错协议的后果是**启动即报错**:
+
+```
+dsh: INVALID_CONFIG: llm-pi-ai: provider "intranet-gw" sets compat
+     "supportsStrictTools", but no model on the route speaks a protocol
+     that takes it; it exists on anthropic-messages
+```
+
+要命的是 `--dump-config` 查不出来 —— 它只组装配置树、不加载插件。实测
+(dsh 0.1.7-rc.2) 两边各认哪些键:
+
+| 协议 | 合法键 |
+|---|---|
+| `openai-completions` | `maxTokensField`、`thinkingFormat`、`vllmPriority`、`cacheControlFormat`、`chatTemplateArgs`、`chatTemplateKwargs`、`supportsStore`、`supportsDeveloperRole`、`supportsReasoningEffort`、`supportsUsageInStreaming`、`supportsStrictMode`、`supportsFinishReason`、`supportsThinkingTokenBudget`、`thinkingTokenBudgetField`、`requiresToolResultName`、`requiresAssistantAfterToolResult`、`requiresThinkingAsText`、`requiresReasoningContentOnAssistantMessages`、`supportsLongCacheRetention` |
+| `anthropic-messages` | `allowEmptySignature`、`forceAdaptiveThinking`、`supportsCacheControlOnTools`、`supportsEagerToolInputStreaming`、`supportsLongCacheRetention`、`supportsStrictTools`、`supportsTemperature` |
+| (`openai-responses` 专属) | `supportsMaxOutputTokens` |
+
+本方案里 Claude 路由走 `llm-deepseek`, **没有 compat 面**, 所以这张表主要约束
+OpenAI 兼容路由。`probe_gateway.py` 里内置了这份白名单: 只生成目标协议认的键,
+不会把 `supportsStrictTools` 这类 anthropic 专属开关写到 `openai-completions` 上。
+
+因为 `--dump-config` 挡不住这类错误, `configure` 的第 4 步除了组装配置树, 还会
+**把刚写的配置复制一份、把 `baseURL` 改成死地址(`127.0.0.1:1`)真启动一次**:
+配置有问题会在任何网络 I/O 之前抛 `INVALID_CONFIG`(于是回滚并打印那一行),
+配置没问题则只会得到 `TRANSPORT`(连不上死地址)。这样校验**不碰真网关、不发
+模型请求**, 却能把插件级错误挡在配置落盘之后、冒烟之前。
+
 ## 实测踩过的坑
 
 1. **`.env` 里不能放 `DSH_` 开头的变量名**。DSH 把 `DSH_` / `XDG_` / `DYLD_` 前缀,
@@ -223,6 +252,7 @@ DSH 的凭据按固定顺序取, 先命中先赢:
 
 | 现象 | 多半是 | 处置 |
 |---|---|---|
+| 启动就 `INVALID_CONFIG` | `compat` 开关放错协议, 或路由字段不认识 | 按上面的归属表改; `configure` 已内置这项校验 |
 | 退出码 0 但一个字都没输出 | **node 版本过低**(高发) | `dsh --version` 同样是空的话换 Node 22+; 实测 Node 20 就是这样 |
 | `MISSING_CREDENTIAL` | 没拿到 key | 看 `$DSH_HOME/.env` 有没有 `INTRANET_LLM_API_KEY`; 或你在别的 shell export 了但它没进这次启动 |
 | `INVALID_CREDENTIAL` / 401 / 403 | key 不对, 或鉴权头不对 | 用 `probe` 看哪个鉴权头是 200 |
@@ -325,6 +355,17 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 `POST /v1/chat/completions`(OpenAI), 并把 DSH 发来的每个请求体原样落到
 `/tmp/mock-gateway-requests.jsonl` —— 想知道 DSH 到底发了什么字段, 看这个文件最快。
 
+`selftest --strict` 让 mock 扮演**严格网关**: 它会 400 掉
+`max_completion_tokens` / `store` / `stream_options` / `reasoning_effort` /
+`developer` 角色 / 工具 `strict`, 以及 Anthropic 侧的所有私有顶层字段。
+这一轮跑通, 说明"探测发现被拒 → 关掉对应 compat 开关与插件 → 仍然能干活"
+的降级路径是通的。实测严格模式下 DSH 最终发出的请求体收敛成:
+
+```
+/v1/chat/completions  x2   请求体字段: max_tokens, messages, model, stream, tools
+/v1/messages          x2   请求体字段: max_tokens, messages, model, stream, system, thinking, tools
+```
+
 两条路由都验证过之后, 用**离线解包出来的那份 DSH**再跑一遍 `selftest`
 (把 `HOME` 指到一个干净目录, 模拟内网目标机), 一样全绿 ——
 说明"打包 → 拷进去 → 解包 → 配好 → 跑通"这条离线路径本身没有坑。
@@ -339,5 +380,5 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 |---|---|
 | `dsh-intranet.sh` | 主入口: `probe / configure / smoke / doctor / show / install / bundle / selftest` |
 | `probe_gateway.py` | 网关探测器, 输出推荐配置(零依赖) |
-| `mock_gateway.py` | 内网网关模拟器, 供离线验证(零依赖) |
+| `mock_gateway.py` | 内网网关模拟器, 供离线验证; `--strict` 可扮演严格网关(零依赖) |
 | `summarize_requests.py` | 统计 mock 收到的请求路径与字段, 用于核对协议 |
