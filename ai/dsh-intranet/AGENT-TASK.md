@@ -95,7 +95,8 @@ cd ai/dsh-intranet
 |---|---|
 | `--api openai|anthropic` | 强制选一种口子; 默认 `auto`(能用 OpenAI 兼容就用它) |
 | `--model ID` | 网关上的确切模型 id; 不传则从 `/v1/models` 里挑含 `glm` 的 |
-| `--insecure` | 网关是自签 HTTPS |
+| `--insecure` | 网关是自签 HTTPS(只影响**探测**; DSH 那边要 `--ca-file`) |
+| `--ca-file FILE` | 自签 HTTPS 网关的 CA 证书: 探测与 DSH 都会信任它(推荐) |
 | `--use-proxy` | 探测时**要走** `http_proxy/https_proxy`(默认绕过代理直连内网) |
 | `--no-key-file` | 不写 `.env`, 由你自己 export 凭据变量(名字见配置里的 `apiKeyEnv`, 默认 `INTRANET_LLM_API_KEY`) |
 | `--key-var NAME` | 换一个凭据变量名(默认 `INTRANET_LLM_API_KEY`); 生成的配置与 `.env` 会一起跟着换 |
@@ -116,13 +117,16 @@ cd ai/dsh-intranet
 1. **网关只有 OpenAI 兼容** → `configure --api openai`
 2. **网关只有 Claude 对接** → `configure --api anthropic`
    (会自动在配置里 `disabled` 掉三个 DeepSeek 扩展插件、把 `reasoningEffort` 设为 `off`)
-3. **网关拒掉某些字段** → 什么都不用做: `probe` 已经把它们翻译成 `compat` 开关写进配置了。
+3. **网关是自签 HTTPS** → 一律加 `--ca-file /path/to/ca.pem`(探测和 DSH 都要信)。
+   注意 `--insecure` 只让探测不校验证书, **DSH 是独立 Node 进程, 它仍会失败**,
+   而且只报 `TRANSPORT: Connection error.`, 看起来像防火墙问题。
+4. **网关拒掉某些字段** → 什么都不用做: `probe` 已经把它们翻译成 `compat` 开关写进配置了。
    看 `probe` 输出里 `注意: 网关拒绝 xxx, 已关闭 compat.yyy` 那几行。
-4. **`probe` 报"流式"是 ❌** → 该口子不可用(DSH 的模型请求走 SSE 流式), 换另一种协议或换网关,
+5. **`probe` 报"流式"是 ❌** → 该口子不可用(DSH 的模型请求走 SSE 流式), 换另一种协议或换网关,
    **不要**试图用非流式凑。
-5. **模型 id 不确定** → 不传 `--model`, 或先 `curl <网关>/v1/models -H "Authorization: Bearer <key>"`
-6. **没有 python3** → 走文末的附录 B(手工路径)
-7. **没有 dsh** → `./dsh-intranet.sh install --registry <内网 npm 源>`;
+6. **模型 id 不确定** → 不传 `--model`, 或先 `curl <网关>/v1/models -H "Authorization: Bearer <key>"`
+7. **没有 python3** → 走文末的附录 B(手工路径)
+8. **没有 dsh** → `./dsh-intranet.sh install --registry <内网 npm 源>`;
    **没有 root 或不想装全局** → 加 `--prefix ~/dsh`(装完自动软链到 `~/.local/bin/dsh`,
    脚本自己认这个入口, 不需要改 PATH);
    完全离线时在有外网的机器上 `./dsh-intranet.sh bundle --out dsh-offline.tar.gz`,
@@ -154,6 +158,7 @@ cd ai/dsh-intranet
 | 启动即 `dsh: INVALID_CONFIG: ... sets compat "xxx", but no model on the route speaks a protocol that takes it` | `compat` 的键**按协议分流**, 放错协议了 | 见下方"compat 归属" |
 | 404 / not found | `baseURL` 的 `/v1` 写法不对(两种协议语义不同) | 重跑 `probe`, 看它报的可用路径; 脚本已归一化 |
 | 连接超时/被劫持 | 机器上设了 `http_proxy` | 探测默认绕过代理直连; 确实要走代理加 `--use-proxy` |
+| `probe` 用 `--insecure` 过了, 但 `smoke` 报 `TRANSPORT: Connection error.` | 探测与 DSH 是**两套 TLS**: `--insecure` 只作用于探测 | 加 `--ca-file /path/to/ca.pem`; 拿不到 CA 才用 `export NODE_TLS_REJECT_UNAUTHORIZED=0` |
 | GUI 里选不到模型 | 模型 id 与网关不一致 | `models:` 列表里的 `id` 必须与网关模型名完全一致 |
 
 **compat 归属(手工改配置时必看)**: `openai-completions` 路由只认

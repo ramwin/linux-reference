@@ -50,14 +50,18 @@ PROBE_MAX_TOKENS = 8
 
 # --------------------------------------------------------------------- HTTP
 
-def build_opener(insecure: bool, use_proxy: bool):
+def build_opener(insecure: bool, use_proxy: bool, ca_file: str | None = None):
     handlers = []
     if not use_proxy:  # 内网地址默认绕开 http_proxy/https_proxy
         handlers.append(urllib.request.ProxyHandler({}))
-    if insecure:
+    if insecure or ca_file:
         ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        if ca_file:
+            # 指定 CA 比直接关校验干净: 只多信这一张证书
+            ctx.load_verify_locations(cafile=ca_file)
+        if insecure:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
         handlers.append(urllib.request.HTTPSHandler(context=ctx))
     return urllib.request.build_opener(*handlers)
 
@@ -120,7 +124,7 @@ def error_message(raw: str) -> str:
 class Probe:
     def __init__(self, opts):
         self.o = opts
-        self.opener = build_opener(opts.insecure, opts.use_proxy)
+        self.opener = build_opener(opts.insecure, opts.use_proxy, opts.ca_file)
         self.results: list[Result] = []
 
     # ---- 基础工具
@@ -428,6 +432,7 @@ def main() -> int:
     parser.add_argument("--max-tokens", type=int, default=32768,
                         help="DSH 请求的输出上限, 要小于网关允许值")
     parser.add_argument("--insecure", action="store_true", help="忽略自签证书校验")
+    parser.add_argument("--ca-file", help="自签网关的 CA 证书路径(比 --insecure 干净)")
     parser.add_argument("--use-proxy", action="store_true",
                         help="走 http_proxy/https_proxy(默认绕过, 内网直连)")
     parser.add_argument("--key-var", default="INTRANET_LLM_API_KEY",

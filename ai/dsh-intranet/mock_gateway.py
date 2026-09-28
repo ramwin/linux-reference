@@ -329,13 +329,22 @@ def main() -> int:
     parser.add_argument("--model", default="glm-5.3", help="对外公布的模型 id")
     parser.add_argument("--context-window", type=int, default=204800)
     parser.add_argument("--log", default="/tmp/mock-gateway-requests.jsonl")
+    parser.add_argument("--cert", help="TLS 证书(配合 --key), 用来模拟自签 HTTPS 网关")
+    parser.add_argument("--key", help="TLS 私钥")
     parser.add_argument("--only", choices=("both", "openai", "anthropic"), default="both",
                         help="只开一种协议, 用来模拟内网只给了一个口子的网关")
     parser.add_argument("--strict", action="store_true",
                         help="扮演严格的网关: 拒掉 DeepSeek 私有字段与 OpenAI 方言, 用来验证降级配置")
     ARGS = parser.parse_args()
     server = ThreadingHTTPServer((ARGS.host, ARGS.port), Handler)
-    print(f"[mock] 监听 http://{ARGS.host}:{ARGS.port}", flush=True)
+    scheme = "http"
+    if ARGS.cert and ARGS.key:
+        import ssl as _ssl
+        ctx = _ssl.SSLContext(_ssl.PROTOCOL_TLS_SERVER)
+        ctx.load_cert_chain(ARGS.cert, ARGS.key)
+        server.socket = ctx.wrap_socket(server.socket, server_side=True)
+        scheme = "https"
+    print(f"[mock] 监听 {scheme}://{ARGS.host}:{ARGS.port}", flush=True)
     extra = ""
     if ARGS.only != "both":
         extra += f"; 只开 {ARGS.only} 口子"

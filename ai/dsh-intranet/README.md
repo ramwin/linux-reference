@@ -158,6 +158,30 @@ home 层对 **所有 profile** 生效, 所以改一次, `dsh headless` 和 `dsh 
 每次写入前都会备份成 `cordis.patch.yml.bak-<时间戳>`; 如果 DSH 组装配置时报错,
 脚本会**自动回滚**并打印报错原文。
 
+### 自签 HTTPS 网关: 探测与 DSH 是两套 TLS
+
+内网网关常用自签证书, 这里有个**很容易误判**的坑: `probe --insecure` 只让 **探测**
+(Python)不校验证书, 而模型请求是 **DSH 这个独立 Node 进程**发出的, 它按自己的
+证书库校验。于是会出现:
+
+```
+probe     ✅ 可用协议: openai-completions
+configure ✅ 配置已写入、校验通过
+smoke     ❌ dsh: TRANSPORT: Connection error.      ← 看起来像防火墙/端口问题
+```
+
+DSH 不会告诉你是证书问题。正确做法是给**两边同一个 CA**:
+
+```bash
+./dsh-intranet.sh configure --url https://gw.corp --key sk-xxx --ca-file /path/to/ca.pem
+./dsh-intranet.sh smoke     --ca-file /path/to/ca.pem
+# 或者永久生效(注意: NODE_EXTRA_CA_CERTS 属于"启动引导变量", 只能从环境来, 不能写 .env)
+echo 'export NODE_EXTRA_CA_CERTS=/path/to/ca.pem' >> ~/.bashrc
+```
+
+实在拿不到 CA 时的下策是 `export NODE_TLS_REJECT_UNAUTHORIZED=0`(全局关校验,
+自己权衡)。`smoke` 失败时会**主动验一次证书再下结论**, 所以上面那种误判不会再发生。
+
 ### 密钥的解析顺序
 
 DSH 的凭据按固定顺序取, 先命中先赢:
@@ -275,7 +299,7 @@ OpenAI 兼容路由。`probe_gateway.py` 里内置了这份白名单: 只生成�
 | `INVALID_CREDENTIAL` / 401 / 403 | key 不对, 或鉴权头不对 | 用 `probe` 看哪个鉴权头是 200 |
 | 404 / not found | 路径不对 | `baseURL` 多写或少写 `/v1`, 看 `probe` 报的可用路径 |
 | 400 | 网关拒了某个字段 | 重跑 `probe`, 把它标红的项变成配置里的 `compat` 开关 |
-| `TRANSPORT: Connection error.` / `ECONNREFUSED` / 超时 | 地址、端口、防火墙、代理 | 先 `curl` 一下网关; 需要代理就 export `HTTPS_PROXY`(home 层 `.env` 允许) |
+| `TRANSPORT: Connection error.` / `ECONNREFUSED` / 超时 | 地址、端口、防火墙、代理, **或自签证书** | 先 `curl` 一下网关; 需要代理就 export `HTTPS_PROXY`(home 层 `.env` 允许); 探测能过而冒烟过不去, 基本就是证书 → 加 `--ca-file` |
 | 模型回话但内容是乱的 | 思维链方言不对 | GLM 系在 OpenAI 路由里加 `compat.thinkingFormat: zai` |
 | GUI 里选不到模型 | 目录里没有这个 id | `models:` 列表里补上, `id` 必须和网关的模型名一致 |
 
@@ -360,6 +384,7 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 | 8 | `--no-key-file` | 不写 `.env`, 靠启动环境跑通 |
 | 9 | 用户 home patch 已有无关配置 | 原条目保留, 两者共存可跑 |
 | 10 | 窗口小于输出上限 | 被拒绝 |
+| 11 | 自签 HTTPS 网关(有 openssl 才跑) | `--ca-file` 同时喂给探测与 DSH |
 
 内网机器上先跑这一条确认**工具箱本身**没问题, 再去碰真网关 —— 这样失败时就能立刻区分
 "是脚本/环境的问题"还是"是网关的问题"。

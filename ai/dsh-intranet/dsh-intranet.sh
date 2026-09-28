@@ -40,10 +40,13 @@ API_CHOICE="auto"             # auto | openai | anthropic
 CONTEXT_WINDOW="204800"
 MAX_TOKENS="32768"
 INSECURE=0
+CA_FILE=""                     # 自签 HTTPS 网关的 CA; 会同时喂给探测与 DSH 自己
 USE_PROXY=0
 NO_KEY_FILE=0
 MOCK_STRICT=0                 # selftest 专用: 让 mock 扮演严格网关
 MOCK_PORT_BASE="${MOCK_PORT_BASE:-18500}"   # verify 用的端口起点
+VERIFY_TMP=""                 # verify 的临时目录(全局, 供 EXIT trap 清理)
+VERIFY_PIDS=()                # verify 起的 mock 进程(全局, 同上)
 KEY_VAR="INTRANET_LLM_API_KEY"   # 不能以 DSH_/XDG_ 开头: 那类名字 DSH 只认启动环境
 TIMEOUT_S="300"
 SMOKE_PROMPT="只回答两个字：正常"
@@ -66,7 +69,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   show        打印当前受管配置块(密钥打码)
   install     安装 DSH(在线用 --registry, 离线用 --bundle)
   bundle      在"有外网的机器"上打包离线安装包
-  verify      验收工具箱本身: 10 个用例(协议形态/locale/凭据/边界), 不碰真网关
+  verify      验收工具箱本身: 11 个用例(协议形态/locale/凭据/边界/自签 HTTPS), 不碰真网关
   doctor      体检: 环境 + 配置 + 网关 + 冒烟, 一次跑完(输出整段贴回来最省事)
   selftest    本机起 mock 网关, 走一遍 probe+configure+smoke(不碰真网关)
 
@@ -82,7 +85,8 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   --max-tokens N       单次输出上限, 默认 32768(要小于网关允许值)
   --key-var NAME       凭据环境变量名, 默认 INTRANET_LLM_API_KEY
   --no-key-file        不写 .env, 自己 export 那个变量
-  --insecure           忽略自签证书
+  --insecure           探测时忽略自签证书(只影响探测, 见 --ca-file)
+  --ca-file FILE       自签 HTTPS 网关的 CA 证书: 探测与 DSH 都会信任它(推荐)
   --use-proxy          探测时走 http_proxy/https_proxy(默认绕过)
   --timeout S          冒烟超时, 默认 300
   --prompt TEXT        冒烟用的提示词
@@ -113,6 +117,7 @@ while [ $# -gt 0 ]; do
         --key-var)        KEY_VAR="${2:?}"; shift 2 ;;
         --no-key-file)    NO_KEY_FILE=1; shift ;;
         --insecure)       INSECURE=1; shift ;;
+        --ca-file)        CA_FILE="${2:?}"; shift 2 ;;
         --use-proxy)      USE_PROXY=1; shift ;;
         --timeout)        TIMEOUT_S="${2:?}"; shift 2 ;;
         --bundle)         BUNDLE="${2:?}"; shift 2 ;;
@@ -131,6 +136,13 @@ case "$KEY_VAR" in
     DSH_*|XDG_*|DYLD_*) die "--key-var 不能以 DSH_/XDG_/DYLD_ 开头: DSH 只允许启动环境设置这类变量" ;;
 esac
 [ -n "$PATCH_FILE" ] || PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
+
+# 关键: 探测用的 TLS 设置不会跟着 DSH 进程走 —— DSH 是独立的 Node 进程, 它信不信
+# 那张自签证书由 NODE_EXTRA_CA_CERTS 决定。这里统一导出, 两边才一致。
+if [ -n "$CA_FILE" ]; then
+    [ -f "$CA_FILE" ] || die "--ca-file 指向的 $CA_FILE 不存在"
+    export NODE_EXTRA_CA_CERTS="$CA_FILE"
+fi
 
 need_python() {
     command -v python3 >/dev/null 2>&1 || die "需要 python3(零依赖, 只用标准库)。装一个, 或看 README 的手工配置法"
@@ -276,9 +288,37 @@ run_probe() {
                 --max-tokens "$MAX_TOKENS" --key-var "$KEY_VAR")
     if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
     if [ "$INSECURE" = 1 ]; then args+=(--insecure); fi
+    if [ -n "$CA_FILE" ]; then args+=(--ca-file "$CA_FILE"); fi
     if [ "$USE_PROXY" = 1 ]; then args+=(--use-proxy); fi
     if [ -n "$emit_dir" ]; then args+=(--emit "$emit_dir"); fi
     python3 "$PROBE" "${args[@]}"
+}
+
+# 只有 https 才检查证书: 0=可信或不是 https, 1=证书不被信任
+tls_trust_check() {
+    case "$1" in https://*) ;; *) return 0 ;; esac
+    python3 - "$1" "${CA_FILE:-}" <<'PY'
+import socket, ssl, sys, urllib.parse
+
+url, ca_file = sys.argv[1], sys.argv[2]
+parts = urllib.parse.urlsplit(url)
+host, port = parts.hostname or "", parts.port or 443
+ctx = ssl.create_default_context()
+if ca_file:
+    try:
+        ctx.load_verify_locations(cafile=ca_file)
+    except Exception:
+        pass
+try:
+    with socket.create_connection((host, port), timeout=6) as sock:
+        with ctx.wrap_socket(sock, server_hostname=host):
+            pass
+except ssl.SSLCertVerificationError:
+    sys.exit(1)
+except Exception:
+    sys.exit(0)  # 连不上之类的问题不在这里下结论
+sys.exit(0)
+PY
 }
 
 # --------------------------------------------------------- configure
@@ -404,6 +444,17 @@ cmd_smoke() {
         say "→ 退出码 0 却一个字都没输出: 头号嫌疑是 node 版本过低(实测 Node 20 就是这种静默)。"
         say "  先跑 dsh --version, 同样空的话换 Node $MIN_NODE_MAJOR+ 再试。"
     fi
+    # DSH 把证书问题也报成 "TRANSPORT: Connection error.", 不主动查一下就会
+    # 让人去怀疑防火墙/端口。这里先自己验一次证书。
+    local cbase
+    cbase="$(grep -m1 -oE 'baseURL: *[^ ]+' "$PATCH_FILE" 2>/dev/null | awk '{print $2}')"
+    if [ -n "$cbase" ] && ! tls_trust_check "$cbase"; then
+        say "→ 网关的 HTTPS 证书不被信任(DSH 只会说 Connection error, 不会告诉你这个)"
+        say "  探测用的 --insecure 不会传给 DSH: DSH 是独立的 Node 进程。这样修:"
+        say "    ./dsh-intranet.sh smoke --ca-file /path/to/ca.pem     # 只多信这一张证书(推荐)"
+        say "    export NODE_EXTRA_CA_CERTS=/path/to/ca.pem            # 或永久加到 ~/.bashrc"
+        say "    export NODE_TLS_REJECT_UNAUTHORIZED=0                 # 实在没有 CA 时的下策"
+    fi
     case "$out" in
         *MISSING_CREDENTIAL*)
             local want; want="$(grep -m1 -oE 'apiKeyEnv: *[A-Za-z_][A-Za-z0-9_]*' "$PATCH_FILE" 2>/dev/null | awk '{print $2}')"
@@ -514,20 +565,22 @@ cmd_bundle() {
 cmd_verify() {
     need_python
     require_dsh
-    local tmp; tmp="$(mktemp -d)"
+    VERIFY_TMP="$(mktemp -d)"; local tmp="$VERIFY_TMP"
     local base=$((MOCK_PORT_BASE))
-    local p_plain="$((base))" p_strict="$((base + 1))" p_openai="$((base + 2))" p_anth="$((base + 3))"
-    local -a mock_pids=()
+    local p_plain="$((base))" p_strict="$((base + 1))" p_openai="$((base + 2))"
+    local p_anth="$((base + 3))" p_tls="$((base + 4))"
+    VERIFY_PIDS=()
     start_mock() {  # $1=port $2=log 其余=额外参数
         local port="$1" log="$2"; shift 2
         nohup python3 "$MOCK" --port "$port" --model "glm-5.3" --log "$log" "$@"             >"$tmp/mock-$port.log" 2>&1 &
-        mock_pids+=("$!")
+        VERIFY_PIDS+=("$!")
     }
     start_mock "$p_plain"  "$tmp/plain.jsonl"
     start_mock "$p_strict" "$tmp/strict.jsonl" --strict
     start_mock "$p_openai" "$tmp/openai.jsonl" --only openai
     start_mock "$p_anth"   "$tmp/anth.jsonl"   --only anthropic
-    trap "for p in ${mock_pids[*]}; do kill \$p 2>/dev/null || true; done; rm -rf '$tmp'" EXIT
+    # 变量都是全局的: EXIT trap 在函数返回后才跑, 那时 local 已经看不到了
+    trap '[ ${#VERIFY_PIDS[@]} -gt 0 ] && for p in "${VERIFY_PIDS[@]}"; do kill "$p" 2>/dev/null || true; done; rm -rf "$VERIFY_TMP"' EXIT
     sleep 1.5
 
     local pass=0 fail=0
@@ -539,40 +592,40 @@ cmd_verify() {
     fresh() { DSH_HOME_DIR="$tmp/home-$1"; PATCH_FILE="$DSH_HOME_DIR/cordis.patch.yml"
               rm -rf "$DSH_HOME_DIR"; mkdir -p "$DSH_HOME_DIR"; export DSH_HOME="$DSH_HOME_DIR"; }
 
-    step "1/10 selftest: 本机两种路由(宽松网关)"
+    step "1/11 selftest: 本机两种路由(宽松网关)"
     if API_CHOICE=auto MOCK_STRICT=0 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c1" 2>&1
     then ok "selftest 通过"; else bad "selftest 失败" "$tmp/c1"; fi
 
-    step "2/10 selftest: 严格网关(拒私有字段与方言)"
+    step "2/11 selftest: 严格网关(拒私有字段与方言)"
     if MOCK_STRICT=1 ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c2" 2>&1
     then ok "严格网关下降级仍然可用"; else bad "严格网关用例失败" "$tmp/c2"; fi
 
-    step "3/10 selftest: 非 UTF-8 locale(zh_CN.GBK)"
+    step "3/11 selftest: 非 UTF-8 locale(zh_CN.GBK)"
     if env LANG=zh_CN.GBK LC_ALL=zh_CN.GBK ./"$(basename "${BASH_SOURCE[0]}")" selftest >"$tmp/c3" 2>&1
     then ok "GBK locale 下不崩"; else bad "GBK locale 用例失败" "$tmp/c3"; fi
 
-    step "4/10 只开 OpenAI 的网关"
+    step "4/11 只开 OpenAI 的网关"
     fresh openai
     if BASE_URL="http://127.0.0.1:$p_openai" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c4" 2>&1 \
        && cmd_smoke >"$tmp/c4s" 2>&1 && grep -q "llm-pi-ai" "$PATCH_FILE"
     then ok "configure + smoke 通过, 路由为 llm-pi-ai"
     else bad "只开 OpenAI 的用例失败" "$tmp/c4"; fi
 
-    step "5/10 只开 Claude 的网关"
+    step "5/11 只开 Claude 的网关"
     fresh anth
     if BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c5" 2>&1 \
        && cmd_smoke >"$tmp/c5s" 2>&1 && grep -q "llm-deepseek" "$PATCH_FILE"
     then ok "configure + smoke 通过, 路由为 llm-deepseek"
     else bad "只开 Claude 的用例失败" "$tmp/c5"; fi
 
-    step "6/10 强制网关不支持的协议(应拒绝且不写文件)"
+    step "6/11 强制网关不支持的协议(应拒绝且不写文件)"
     fresh wrongproto
     if ( BASE_URL="http://127.0.0.1:$p_anth" API_KEY=k API_CHOICE=openai cmd_configure ) >"$tmp/c6" 2>&1
     then bad "本该失败却成功了"
     elif [ -f "$PATCH_FILE" ]; then bad "失败了但留下了半成品 $PATCH_FILE"
     else ok "写文件前干净退出"; fi
 
-    step "7/10 --key-var 自定义凭据名"
+    step "7/11 --key-var 自定义凭据名"
     fresh keyvar
     KEY_VAR="VERIFY_CUSTOM_KEY"
     if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c7" 2>&1 \
@@ -580,7 +633,7 @@ cmd_verify() {
     then ok "配置与 .env 用同一个变量名"; else bad "--key-var 用例失败" "$tmp/c7"; fi
     KEY_VAR="INTRANET_LLM_API_KEY"
 
-    step "8/10 --no-key-file(凭据只从启动环境来)"
+    step "8/11 --no-key-file(凭据只从启动环境来)"
     fresh nokeyfile
     if NO_KEY_FILE=1 BASE_URL="http://127.0.0.1:$p_plain" API_KEY=env-only-key API_CHOICE=auto \
          cmd_configure >"$tmp/c8" 2>&1 && [ ! -f "$DSH_HOME_DIR/.env" ] \
@@ -588,20 +641,43 @@ cmd_verify() {
     then ok "没写 .env, 靠启动环境跑通"; else bad "--no-key-file 用例失败" "$tmp/c8"; fi
     NO_KEY_FILE=0
 
-    step "9/10 用户 home patch 里已有无关配置"
+    step "9/11 用户 home patch 里已有无关配置"
     fresh coexist
     printf -- '- id: ui-settings-general\n  config:\n    welcomeNoticeVersion: keep-me\n' > "$PATCH_FILE"
     if BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c9" 2>&1 \
        && grep -q "keep-me" "$PATCH_FILE" && cmd_smoke >"$tmp/c9s" 2>&1
     then ok "原条目保留, 且两者共存可跑"; else bad "共存用例失败" "$tmp/c9"; fi
 
-    step "10/10 窗口小于输出上限(应拒绝)"
+    step "10/11 窗口小于输出上限(应拒绝)"
     fresh badmath
     if ( BASE_URL="http://127.0.0.1:$p_plain" API_KEY=k CONTEXT_WINDOW=8000 MAX_TOKENS=32768 \
          cmd_configure ) >"$tmp/c10" 2>&1
     then bad "本该拒绝却成功了"
     else ok "拒绝不合理组合"; fi
     CONTEXT_WINDOW=204800; MAX_TOKENS=32768
+
+    step "11/11 自签 HTTPS 网关(探测与 DSH 是两套 TLS, --ca-file 要同时喂到)"
+    if command -v openssl >/dev/null 2>&1; then
+        if openssl req -x509 -newkey rsa:2048 -keyout "$tmp/key.pem" -out "$tmp/cert.pem" \
+                -days 2 -nodes -subj "/CN=127.0.0.1" \
+                -addext "subjectAltName=IP:127.0.0.1" >"$tmp/openssl.log" 2>&1; then
+            start_mock "$p_tls" "$tmp/tls.jsonl" --cert "$tmp/cert.pem" --key "$tmp/key.pem"
+            sleep 1
+            fresh tls
+            # 顶层的 NODE_EXTRA_CA_CERTS 导出只在启动时做一次, 这里改了 CA_FILE
+            # 必须跟着重导, 否则 DSH 那一侧还是不信这张证书
+            CA_FILE="$tmp/cert.pem"; export NODE_EXTRA_CA_CERTS="$CA_FILE"
+            if BASE_URL="https://127.0.0.1:$p_tls" API_KEY=k API_CHOICE=auto cmd_configure >"$tmp/c11" 2>&1 \
+               && cmd_smoke >"$tmp/c11s" 2>&1
+            then ok "自签 HTTPS: --ca-file 同时喂给了探测与 DSH"
+            else bad "自签 HTTPS 用例失败" "$tmp/c11s"; fi
+            CA_FILE=""; unset NODE_EXTRA_CA_CERTS
+        else
+            say "  (openssl 生成证书失败, 跳过)"
+        fi
+    else
+        say "  (没有 openssl, 跳过自签 HTTPS 用例)"
+    fi
 
     echo
     say "======= verify 结果: $pass 通过, $fail 失败 ======="
