@@ -52,10 +52,11 @@ myst_enable_extensions = [
 html_css_files = [
         "custom.css"
         ]
-mermaid_version = "11.9.0"
+mermaid_version = "12.0.0"
 mermaid_use_local = "/_static/node_modules/mermaid/dist/mermaid.esm.min.mjs"
 mermaid_elk_use_local = "/_static/node_modules/@mermaid-js/layout-elk/dist/mermaid-layout-elk.esm.min.mjs"
 d3_use_local = "/_static/node_modules/d3/dist/d3.min.js"
+mermaid_d3_zoom = True
 todo_include_todos = True
 latex_use_xindy = True
 smartquotes = True

@@ -64,4 +64,5 @@ flowchart TB;
 ```{toctree}
 ./mermaid/flowchart.md
 ./mermaid/gant.md
+./mermaid/usecase.md
 ```
