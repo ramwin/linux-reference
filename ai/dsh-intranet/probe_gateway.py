@@ -29,6 +29,21 @@ import time
 import urllib.error
 import urllib.request
 
+
+def _force_utf8_stdio() -> None:
+    """把 stdout/stderr 掰成 UTF-8。
+
+    内网机器常见 LANG=zh_CN.GBK: 那时 Python 会按 GBK 编码输出, 而 ✅/❌/→ 这些
+    字符不在 GBK 里, 打印第一行结果就 UnicodeEncodeError 崩掉。这里统一成 UTF-8
+    并把无法编码的字符替换掉, 保证脚本永远不会因为终端编码而死。
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 TIMEOUT = 30
 PROBE_MAX_TOKENS = 8
 
@@ -404,6 +419,7 @@ def anthropic_patch(model: str, root: str, context: int, max_tokens: int,
 # -------------------------------------------------------------------- main
 
 def main() -> int:
+    _force_utf8_stdio()
     parser = argparse.ArgumentParser(description="内网大模型网关探测器")
     parser.add_argument("--url", required=True, help="网关地址, 带不带 /v1 都行")
     parser.add_argument("--key", required=True, help="API Key")

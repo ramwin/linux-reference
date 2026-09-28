@@ -17,6 +17,14 @@
 
 set -euo pipefail
 
+# 内网机器常见 LANG=zh_CN.GBK。那种 locale 下 Python 会把"文件系统编码"也当成
+# GBK: ✅/❌ 之类的输出字符编不出去(UnicodeEncodeError), 而且 argv 里的中文
+# (比如受管块的起止标记)会被 surrogate-escape 成孤立代理字符, 写文件时再炸一次。
+# PYTHONUTF8=1 打开 UTF-8 模式, argv / 文件名 / 标准输出一起归一, 两个坑都堵上;
+# PYTHONIOENCODING 只是额外保险。
+export PYTHONUTF8="${PYTHONUTF8:-1}"
+export PYTHONIOENCODING="${PYTHONIOENCODING:-utf-8}"
+
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROBE="$HERE/probe_gateway.py"
 MOCK="$HERE/mock_gateway.py"
@@ -78,6 +86,7 @@ dsh-intranet.sh —— 把内网大模型网关接到 DeepSeek Harness(DSH) 上
   --prompt TEXT        冒烟用的提示词
   --strict             selftest 专用: 让 mock 扮演严格网关(拒 DeepSeek 私有字段与 OpenAI 方言)
   --registry URL       install 时用的 npm 源
+  --prefix DIR         install 时装到这个目录(不需要 root), 例如 --prefix ~/dsh
   --bundle FILE        install 时用离线包
   --out FILE           bundle 的输出路径
   --version VER        install 的 dsh 版本
@@ -106,6 +115,7 @@ while [ $# -gt 0 ]; do
         --timeout)        TIMEOUT_S="${2:?}"; shift 2 ;;
         --bundle)         BUNDLE="${2:?}"; shift 2 ;;
         --registry)       REGISTRY="${2:?}"; shift 2 ;;
+        --prefix)         PREFIX_DIR="${2:?}"; shift 2 ;;
         --out)            OUT="${2:?}"; shift 2 ;;
         --version)        DSH_VERSION="${2:?}"; shift 2 ;;
         --prompt)         SMOKE_PROMPT="${2:?}"; shift 2 ;;
@@ -129,6 +139,10 @@ need_python() {
 find_dsh() {
     if command -v dsh >/dev/null 2>&1; then
         DSH_RUN=(dsh); return 0
+    fi
+    # install --prefix 装到非标准目录时, 这里挂的软链就是唯一的入口
+    if [ -x "$HOME/.local/bin/dsh" ]; then
+        DSH_RUN=("$HOME/.local/bin/dsh"); return 0
     fi
     local candidate
     for candidate in \
@@ -422,8 +436,32 @@ cmd_install() {
     local ver="${DSH_VERSION:-latest}"
     local registry_args=()
     if [ -n "${REGISTRY:-}" ]; then registry_args=(--registry "$REGISTRY"); fi
-    step "npm 全局安装 @deepseek-ai/dsh@$ver"
-    npm install -g "${registry_args[@]}" "@deepseek-ai/dsh@$ver"
+
+    if [ -n "${PREFIX_DIR:-}" ]; then
+        # 非 root 机器的正路: 装进自己的目录, find_dsh 认得 $HOME/dsh, 其他前缀挂个软链
+        step "npm 本地安装 @deepseek-ai/dsh@$ver -> $PREFIX_DIR(不需要 root)"
+        mkdir -p "$PREFIX_DIR"
+        if ! npm install --prefix "$PREFIX_DIR" --no-audit --no-fund \
+                "${registry_args[@]}" "@deepseek-ai/dsh@$ver"; then
+            warn "npm 安装失败。内网常见原因: 没有内网 npm 源(加 --registry)、需要代理、或包名/版本不对"
+            die "安装失败, 见上面 npm 的输出"
+        fi
+        local bin="$PREFIX_DIR/node_modules/@deepseek-ai/dsh/lib/bin.js"
+        [ -f "$bin" ] || die "装完了但找不到 $bin"
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$bin" "$HOME/.local/bin/dsh"
+        chmod +x "$bin" 2>/dev/null || true
+        say "[ok] 已装到 $PREFIX_DIR, 并软链到 $HOME/.local/bin/dsh"
+        say "     把 export PATH=\"\$HOME/.local/bin:\$PATH\" 加进 ~/.bashrc 就能直接敲 dsh"
+        find_dsh || true
+        return 0
+    fi
+
+    step "npm 全局安装 @deepseek-ai/dsh@$ver(需要写全局目录的权限; 没权限就加 --prefix ~/dsh)"
+    if ! npm install -g "${registry_args[@]}" "@deepseek-ai/dsh@$ver"; then
+        warn "全局安装失败。没有 root/写权限时改用: ./dsh-intranet.sh install --prefix ~/dsh"
+        die "安装失败, 见上面 npm 的输出"
+    fi
     find_dsh || die "装完了还是找不到 dsh, 看 npm prefix -g 是否在 PATH 里"
     say "[ok] ${DSH_RUN[*]}"
 }

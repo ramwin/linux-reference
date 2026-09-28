@@ -31,6 +31,11 @@ python3 -V   # 脚本只用标准库; 3.8+ 均可
 dsh --version
 ```
 
+**语言环境不用管**: 内网机器若是 `LANG=zh_CN.GBK` 这类非 UTF-8 locale, 脚本会自动
+用 Python 的 UTF-8 模式(`PYTHONUTF8=1`)。这不是可选项 —— 实测 GBK locale 下
+Python 会把"文件系统编码"也当 GBK, 结果 ✅/❌ 打印不出来(`UnicodeEncodeError`),
+argv 里的中文还会被 surrogate-escape 成孤立代理字符, 写配置文件时再崩一次。
+
 **Node 版本是硬门槛, 而且低版本的失败方式是静默的**: 实测
 Node **20.20.2** 上 `dsh` 退出码 0、stdout/stderr 都是 0 字节、连模型请求都不发,
 看起来就像"跑完了什么都没干"; 换成 Node **22.23.3** 立刻全绿。所以脚本会在
@@ -44,10 +49,17 @@ Node **20.20.2** 上 `dsh` 退出码 0、stdout/stderr 都是 0 字节、连模�
 # A. 内网有 npm 源(Nexus/Verdaccio/内网 registry)
 ./dsh-intranet.sh install --registry http://npm.intranet/repository/npm/
 
+# A'. 没有 root / 不想装到全局(内网机器常见): 装进自己目录
+./dsh-intranet.sh install --prefix ~/dsh --registry http://npm.intranet/repository/npm/
+#   装完会在 ~/.local/bin/dsh 挂一个软链, 脚本自己认这个入口, 不加 PATH 也能用
+
 # B. 内网完全离线: 在有外网的机器上先打包, 再拷进来
 ./dsh-intranet.sh bundle  --out /tmp/dsh-offline.tar.gz     # 在联网机器上
 ./dsh-intranet.sh install --bundle /tmp/dsh-offline.tar.gz # 在内网机器上
 ```
+
+> `--prefix` 这条路本机实测过: `npm install --prefix <dir>` 得到 496 MB 的
+> `node_modules`, 里面的 `dsh` 能直接跑, 拿它做 `smoke` 也通。
 
 > 离线包本质是 `node_modules` 整包, 和 CPU 架构 / glibc 版本绑定, 目标机同架构才能直接用。
 > 本机实测: 496 MB 的 `node_modules` 打成 **117 MB** 的 tar.gz, 解包后

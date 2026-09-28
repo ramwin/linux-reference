@@ -40,6 +40,7 @@ uname -m
 | `python3` | ≥ 3.8, 只用标准库 | 没有就走文末的附录 B(手工路径) |
 | `dsh` | 能找到 | **注意: `command -v dsh` 找不到不代表没装** —— 脚本会自动在 `~/node_modules/@deepseek-ai/dsh`、`/usr/lib/node_modules/...` 等常见位置找, 找不到时 `selftest` 会报出它实际用的路径。真的没装才 `./dsh-intranet.sh install --registry <内网npm源>`; 完全离线用 `--bundle` |
 | 网关连通 | `curl` 得通 | 不通先解决地址/端口/防火墙/代理, 别往下走 |
+| `LANG` / locale | 不用管 | `zh_CN.GBK` 这类非 UTF-8 locale 脚本已自动处理(强制 Python UTF-8 模式), 不要手动去改 locale |
 
 > ⚠️ **Node 20 是静默陷阱**: 实测 Node 20.20.2 上 `dsh` 退出码是 **0**,
 > stdout 与 stderr 都是 **0 字节**, 网关侧一条请求都不会收到 —— 看起来像"跑完了什么都没干"。
@@ -114,6 +115,8 @@ cd ai/dsh-intranet
 5. **模型 id 不确定** → 不传 `--model`, 或先 `curl <网关>/v1/models -H "Authorization: Bearer <key>"`
 6. **没有 python3** → 走文末的附录 B(手工路径)
 7. **没有 dsh** → `./dsh-intranet.sh install --registry <内网 npm 源>`;
+   **没有 root 或不想装全局** → 加 `--prefix ~/dsh`(装完自动软链到 `~/.local/bin/dsh`,
+   脚本自己认这个入口, 不需要改 PATH);
    完全离线时在有外网的机器上 `./dsh-intranet.sh bundle --out dsh-offline.tar.gz`,
    拷进来后 `install --bundle dsh-offline.tar.gz`(包与 CPU 架构/glibc 绑定, 需同架构)
 
