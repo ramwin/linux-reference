@@ -16,6 +16,7 @@
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
 ./test-agent-architecture.md
+./requirements-prompting.md
 ```
 
 ## 学习笔记: 视频记录
