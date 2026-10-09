@@ -16,6 +16,7 @@
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
 ./test-agent-architecture.md
+./multi-user-agent-shared-memory.md
 ./requirements-prompting.md
 ```
 
