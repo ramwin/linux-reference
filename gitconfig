@@ -40,6 +40,7 @@
 [safe]
     directory = /run/media/wangx/samsung/github/coin
 	directory = /run/media/wangx/samsung/github/
+	directory = /home/wangx/github/其他小项目/rt_dc/src/binance-futures
 [url "git@github.com:"]
     insteadOf = https://github.com/
 [url "git@github.com:"]
