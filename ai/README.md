@@ -4,6 +4,7 @@
 :maxdepth: 1
 ./local-ai-service.md
 ./agent.md
+./agent-engineer.md
 ./production-deployment.md
 ./pair-coding.md
 ./multi-model-debate.md
