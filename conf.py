@@ -38,6 +38,7 @@ language = 'zh_CN'
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_extra_path = ['e8e67f31d2c9d913227f6df4b430bf6b.txt']  # 微信验证文件，构建时拷贝到输出根目录
 source_suffix = {
     ".rst": "restructuredtext",
     ".md": "markdown",
