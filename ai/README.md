@@ -18,6 +18,7 @@
 ./dsh-intranet/AGENT-TASK.md
 ./test-agent-architecture.md
 ./multi-user-agent-shared-memory.md
+./memory-git.md
 ./requirements-prompting.md
 ./agent-testing-and-general-dag.md
 ```
