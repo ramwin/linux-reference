@@ -21,6 +21,7 @@
 ./memory-git.md
 ./requirements-prompting.md
 ./agent-testing-and-general-dag.md
+./redis-upgrade-testing-agent-case.md
 ```
 
 ## 学习笔记: 视频记录
