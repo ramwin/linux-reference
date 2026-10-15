@@ -70,12 +70,23 @@ Apache 2.0 协议,2025 年底开源,2026 年 8 月在 828 B2B 企业节正式发
 4. 反向机会:openJiuwen 生态缺强 eval 能力,测试平台支持评测 JiuwenSwarm 团队是切入其生态的
    差异化卖点——华为系落地场景(如邮储银行)天然需要验收端
 
+**方案 A 的现成评测资产:Finding the Right Fit**。论文
+[Finding the Right Fit: Model-Harness Interactions across Agent Tasks](https://huggingface.co/papers/2610.00917)
+把 openJiuwen、OpenHands、DeepSeek Harness(DSH)、PI 四个 harness × 5 个模型做了 66 组交叉评测,
+结论是**模型 × harness × 任务要联合评测,排名会随配置反转**——例如 Terminal-Bench 上 Claude 在
+OpenHands 领先 GPT 7.94 分,在 PI 里反而落后 30.16 分;openJiuwen 则让 Kimi 在三个 benchmark 都拿到最高分。
+它开源了 harness 适配器 + 6,204 条打分轨迹
+([数据集](https://huggingface.co/datasets/yixuanli97/finding-the-right-fit)),可直接作为测试平台方案 A
+的评测基线与方法论起点:"选 harness 要看 模型×harness×任务 组合"正是验收端该提供的能力。
+
 风险提示:与 AgentArts 企业版同源 >90%,商用前确认社区版/企业版功能边界,
 避免"社区版够用→企业版收费"的路径依赖。
 
 ## 参考
 
 - [GitHub: openJiuwen-ai](https://github.com/openJiuwen-ai)
+- [arXiv: openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents](https://arxiv.org/abs/2608.27969)
+- [Finding the Right Fit: Model-Harness Interactions across Agent Tasks](https://huggingface.co/papers/2610.00917)
 - [openJiuwen 上手指南(昇腾社区)](https://www.hiascend.com/developer/techArticles/20260325-1)
 - [解密国产开源 AI-Agent 平台 openJiuwen(51CTO)](https://blog.51cto.com/u_16213723/14945819)
 - [Agent 版 Hugging Face:openJiuwen 发布开源智能体资产平台(机器之心)](https://news.qq.com/rain/a/20260922A07K3400)
