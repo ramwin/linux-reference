@@ -173,11 +173,119 @@ OpenHands 领先 GPT 7.94 分,在 PI 里反而落后 30.16 分;openJiuwen 则让
 - 社区版与 AgentArts 企业版的具体功能差异和授权边界
 - GitHub 各仓 star/活跃度/issue 响应速度(本次未采集)
 
+### 5.8 Finding the Right Fit 论文(一手,arXiv:2610.00917)
+
+来源:论文 arXiv 页 + 配套仓库 [liyix/finding-the-right-fit](https://github.com/liyix/finding-the-right-fit)
+(已 clone 通读 README)。这篇是「把 harness 当被测对象」的现成工程,且**已带 openJiuwen 和 DSH 两个适配器**。
+
+**评测设计**:66 配置 = 4 个可配置 harness × 5 模型 × 3 benchmark,外加原生 Codex-GPT、Claude Code-Claude 配对。
+
+- 4 harness:OpenHands、DeepSeek Harness(DSH)、PI、openJiuwen
+- 5 模型(OpenRouter 锁定 provider):Claude Opus 5、GPT-6 Astra、GLM-5.3、Kimi K3、DeepSeek V4 Pro
+- 3 benchmark:TUA-Bench(120 通用终端任务)、ALE-CLI(99 专业工作流)、Terminal-Bench 4(63 硬核命令行任务)
+
+**关键结论**(含具体数字,可直接引用):
+
+- 模型排名随 harness 反转;Terminal-Bench 4 上 Claude 在 OpenHands 领先 GPT 7.94 分,在 PI 反而落后 30.16 分
+- 4/5 模型的最优 harness 随 benchmark 变;但 openJiuwen 让 Kimi 三个 benchmark 都拿到最高分(+5.61~11.11)
+- 厂商自家 harness 不一定是模型最优;更高成本不保证更高分
+- Terminal-Bench 4 上 GPT 在 PI 下比 DSH 下分数更高,单任务成本不到 1/4
+- 归因:模型几乎都自己发起修复,差别在于 harness 是否把失败以模型可用的形式交还;GPT 适合 PI 的 lean scaffold,
+  Kimi(常发畸形 tool call)适合 openJiuwen
+
+**完整结果表**(分数为 score%,成本为美元/任务,粗体为该模型该 benchmark 最优 harness):
+
+TUA-Bench:
+
+| 模型 | OpenHands | DSH | PI | openJiuwen | Native |
+|---|---:|---:|---:|---:|---:|
+| Claude Opus 5 | 65.2 / $0.72 | 58.8 / $0.76 | 58.2 / $0.59 | 65.4 / $1.35 | **68.9 / $0.95** |
+| GPT-6 Astra | 61.0 / $0.72 | 64.3 / $1.26 | 65.4 / $0.64 | **66.3 / $1.31** | 63.7 / $0.94 |
+| GLM-5.3 | 62.9 / $0.43 | 56.2 / $0.47 | 53.6 / $0.25 | **63.0 / $0.38** | – |
+| Kimi K3 | 50.5 / $0.39 | 58.4 / $0.40 | 58.8 / $0.28 | **64.4 / $0.47** | – |
+| DeepSeek V4 Pro | 56.5 / $0.12 | 51.9 / $0.11 | 57.6 / $0.10 | **62.6 / $0.36** | – |
+
+ALE-CLI:
+
+| 模型 | OpenHands | DSH | PI | openJiuwen | Native |
+|---|---:|---:|---:|---:|---:|
+| Claude Opus 5 | 53.1 / $5.03 | 43.5 / $3.56 | 50.2 / $3.27 | 51.3 / $4.89 | **54.3 / $5.76** |
+| GPT-6 Astra | 53.9 / $2.78 | 49.0 / $6.79 | **58.5 / $2.70** | 56.7 / $5.19 | 56.3 / $4.87 |
+| GLM-5.3 | **51.7 / $2.07** | 46.1 / $1.62 | 47.7 / $1.40 | 48.3 / $1.97 | – |
+| Kimi K3 | 39.1 / $2.19 | 41.7 / $1.07 | 48.0 / $1.53 | **54.9 / $2.23** | – |
+| DeepSeek V4 Pro | **51.2 / $0.50** | 40.9 / $0.42 | 47.7 / $0.26 | 50.8 / $0.68 | – |
+
+Terminal-Bench 4:
+
+| 模型 | OpenHands | DSH | PI | openJiuwen | Native |
+|---|---:|---:|---:|---:|---:|
+| Claude Opus 5 | **57.1 / $12.93** | 34.9 / $17.82 | 30.2 / $20.28 | 41.3 / $19.19 | 49.2 / $12.38 |
+| GPT-6 Astra | 49.2 / $5.40 | 52.4 / $19.94 | **60.3 / $4.66** | 54.0 / $11.07 | 55.6 / $4.61 |
+| GLM-5.3 | 41.3 / $7.39 | **42.9 / $6.53** | 31.7 / $5.98 | 41.3 / $11.38 | – |
+| Kimi K3 | 11.1 / $8.75 | 17.5 / $7.85 | 11.1 / $7.73 | **28.6 / $11.92** | – |
+| DeepSeek V4 Pro | 3.2 / $0.80 | **9.5 / $1.31** | 6.3 / $1.47 | 7.9 / $1.20 | – |
+
+### 5.9 finding-the-right-fit 仓库结构(一手)
+
+已 clone 通读。目录与工作流:
+
+| 路径 | 内容 |
+|---|---|
+| `experiment.py` | CLI 入口:`setup` / `doctor` / `prepare` / `run` / `status` / `audit` |
+| `experiment.yaml` | 论文配置:harness 版本锁定、每模型 OpenRouter 路由、reasoning/context/output/loop/timeouts/retries、成本对账、qualification 证据链 |
+| `integrations/` | harness 适配器(Harbor agents + ALE deployers + OpenRouter 注入器) |
+| `pilot/` | 各 campaign 启动脚本(含 openJiuwen 的 `pilot/*openjiuwen*`) |
+| `release_tools/` | 各 harness 原生日志 → 统一轨迹格式的转换器 |
+| `analysis/` | 结果表构建 + 论文图表复现脚本 |
+
+**成本护栏**(付费跑分防跑飞,值得抄):`prepare` 生成不可变 manifest → `run` 必须回传 manifest 的 SHA-256 才启动 → `audit --fetch-provider` 与 OpenRouter per-generation 结算对账。原始 run 目录从不覆盖,重跑用新 run ID。
+
+**harness 版本锁定表**(README):
+
+| Harness | 版本 | 安装源 | TUA-Bench / Terminal-Bench 4 | ALE-CLI |
+|---|---|---|---|---|
+| OpenHands | 1.44.1 | pypi(`openhands-sdk`+`openhands-tools`) | Harbor 0.22.0 | ALE runner |
+| DSH | 0.1.1-rc.2 | npm(`@deepseek-ai/dsh`) | Harbor 0.22.0 | ALE runner |
+| PI | 0.84.4 | npm(`@earendil-works/pi-coding-agent`) | Harbor 0.22.0 | ALE runner |
+| openJiuwen | 0.1.18 | pip(`openjiuwen`,用公开 harness API 组装) | Harbor 0.22.0 | ALE runner |
+| Codex | 0.150.1 | npm(`@openai/codex`) | Harbor 0.22.0 | ALE runner |
+| Claude Code | 2.1.251 | npm(`@anthropic-ai/claude-code`) | Harbor 0.22.0 | ALE runner |
+
+**openJiuwen 的接入文件**(README 明示 openJiuwen 是 framework 不是 packaged agent,不占 `experiment.py` 的 harness ID):
+
+- `integrations/harbor_openjiuwen.py`(Terminal-Bench)、`integrations/harbor_openjiuwen_tua.py`(TUA-Bench)
+- `integrations/ale_agents/study_openjiuwen`(ALE-CLI)
+- `integrations/openjiuwen_agent.py`(agent 组装,约 1300 行)
+
+### 5.10 openJiuwen harness 组装要点(通读 openjiuwen_agent.py 提炼)
+
+核心 API 与机制:
+
+- `from openjiuwen.harness import create_deep_agent` + `openjiuwen.core.runner.Runner`(`start`/`run_agent`/`stop`) + `openjiuwen.core.session.agent.Session`
+- **Rail 机制**(`openjiuwen.harness.rails.base.DeepAgentRail`):用 Rails 列表组装行为,组装用到
+  `SysOperationRail`、`ContextProcessorRail`、`TaskCompletionRail`、`ModelAnomalyDetectionRail` 等
+- `ModelClientConfig`(ProviderType.OpenRouter)+ `ModelRequestConfig` 配模型,`extra_body` 传 provider 路由与 reasoning effort
+
+论文作者踩过的坑(组装 benchmark agent 时的兼容性 patch,可作为"framework 型被测对象"的接入难度参考):
+
+- OpenRouter 推理回放:structured reasoning 只能经 `reasoning_details` 回放,plaintext 只能经 `reasoning_content`,二者不能同发
+- OpenRouter 流式 idle 超时标记需并入 openJiuwen 原生超时分类器,否则无法重试
+- 长 reasoning 的 SSE 累积存在 O(n²) 问题,需持久化链表优化
+- 完成判定用 promise + `required_confirmations=2` 的自定义 Rail 驱动多轮
+
+### 5.11 轨迹数据集(一手)
+
+[Hugging Face 数据集](https://huggingface.co/datasets/yixuanli97/finding-the-right-fit):6204 条打分轨迹 = 66 配置 × 各自任务集,统一 chat 格式,每条含完整 model–tool 对话、reward、cost、token 用量、agent 耗时。
+
+- 用途:分析 agent 行为、对比 harness、评测研究
+- **红线:禁止用于训练/微调/蒸馏模型**(benchmark 本身同样要求)
+- 代码 Apache 2.0;数据集另有条款,以数据集 card 为准
+
 ## 参考
 
 - [GitHub: openJiuwen-ai](https://github.com/openJiuwen-ai)
 - [arXiv: openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents](https://arxiv.org/abs/2608.27969)
-- [Finding the Right Fit: Model-Harness Interactions across Agent Tasks](https://huggingface.co/papers/2610.00917)
+- [Finding the Right Fit: Model-Harness Interactions across Agent Tasks](https://huggingface.co/papers/2610.00917)([arXiv](https://arxiv.org/abs/2610.00917) / [代码仓库](https://github.com/liyix/finding-the-right-fit) / [6204 条轨迹数据集](https://huggingface.co/datasets/yixuanli97/finding-the-right-fit))
 - [openJiuwen 上手指南(昇腾社区)](https://www.hiascend.com/developer/techArticles/20260325-1)
 - [解密国产开源 AI-Agent 平台 openJiuwen(51CTO)](https://blog.51cto.com/u_16213723/14945819)
 - [Agent 版 Hugging Face:openJiuwen 发布开源智能体资产平台(机器之心)](https://news.qq.com/rain/a/20260922A07K3400)
