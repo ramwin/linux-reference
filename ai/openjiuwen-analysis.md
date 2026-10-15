@@ -82,6 +82,97 @@ OpenHands 领先 GPT 7.94 分,在 PI 里反而落后 30.16 分;openJiuwen 则让
 风险提示:与 AgentArts 企业版同源 >90%,商用前确认社区版/企业版功能边界,
 避免"社区版够用→企业版收费"的路径依赖。
 
+## 五、原始资料整理(供横向对比)
+
+以下按来源整理搜索到的原始信息,保留细节以便后续与其他 Agent(平台)对比。
+
+### 5.1 发展时间线
+
+| 时间 | 事件 |
+|---|---|
+| 2025 年底 | openJiuwen 社区开源上线,采用 Studio / Core / Ops 分层架构 |
+| 2026-03 | 开源基于 Python 的 `JiuwenClaw`(小龙虾),支持与华为云 MaaS 服务和小艺开放平台对接 |
+| 2026-04-28 | 首发 **Coordination Engineering(协同工程)** 全栈技术体系,发布 `JiuwenClaw Team Skills`(业界首个面向多 Agent 协作的标准化能力包规范) |
+| 2026-05-21 | 发布 `JiuwenSwarm` 与 **Swarm Skills Hub** |
+| 2026-08-27 | 828 B2B 企业节上华为 openJiuwen 智能体平台正式发布(华为公司董事、华为云 CEO 周跃峰等出席) |
+| 2026-09 | 发布首个开源智能体资产平台 **Agentic Hub**(<https://agentichub.openjiuwen.com/>) |
+
+### 5.2 Coordination Engineering 与 Skills 体系
+
+来源:中华网、博客园、比特网等 2026-04/05 报道。
+
+- 行业叙事:Prompt Engineering → Context Engineering → Harness Engineering,单 Agent 能力增强后,
+  行业转向多 Agent 协同;痛点是团队编排、任务调度、通信协议都要从零造轮子
+- **Team Skills**:把智能体团队的协作流程、任务范式、沟通策略、执行规范沉淀为团队协作 SOP,
+  使团队能力可沉淀、可复用
+- **Swarm Skills**:把跑通的最佳实践、SOP、角色搭配、调度策略标准化封装成"团队级技能";
+  Swarm 基于 Coordination Engineering 实现多智能体自主分工、动态协商、持续演进,全程无需人工干预
+- **Skills 自主演进**:工具调用失败或需求理解错误时,系统主动记录、分析根因、生成改进建议,
+  弹审批窗口由用户决定是否更新("双层优化")
+- JiuwenClaw 已内置:开发编程、办公与生产力、内容创作、多模态与媒体、数据与科研、
+  合规与法律、生活与健康、金融等场景 Skills
+
+### 5.3 落地案例
+
+- **邮储银行 PSBC-Claw**:基于 JiuwenClaw 深度定制,覆盖数据接入、知识更新、技能准入、
+  模型运算到结果输出的全流程安全管控;用于内部情报监测、风险预警、技术洞察,
+  7×24 全自动值守,分钟级情报获取、智能分析、多渠道实时推送
+- **华为云 OfficeClaw**:聚焦 PPT 制作、邮件整理、纪要生成、文件处理、深度洞察等泛办公任务
+- 制造、医疗、金融等行业与软通动力、北明软件等伙伴共建
+
+### 5.4 Agentic Hub 五类资产模型
+
+来源:机器之心 2026-09 报道。
+
+- 问题定义:多数 Agent 产品把能力做成封闭内置功能,Prompt/MCP/工具/多 Agent 协作停留在
+  当前会话和项目里,任务完成后难以沉淀为可复用资产
+- 五类资源(不是五种互相替代的 Agent,而是围绕任务组合使用的资源单元):
+  - **技能(Skill)**:沉淀方法
+  - **连接器(Connector)**:接入外部系统
+  - **插件(Plugin)**:组合能力
+  - **专家(Expert)**:定义角色
+  - **专家团(Expert Team)**:组织协作
+- 生命周期:创建 → 安装 → 使用 → 发布 → 再次获取;本地验证后的能力可发布至 Agentic Hub 共享;
+  承载于蜂群智能体 WorkSwarm 和 Agentic Hub 中
+
+### 5.5 技术细节(51CTO 实测文)
+
+- 安装:`pip install openjiuwen`,要求 Python 3.11-3.13
+- `agent-core`:底层运行引擎,**ReAct Agent + Workflow 双模式**;异步流式、状态保存、任务中断恢复
+- 两种使用方式:SDK 代码调用(`import openjiuwen`,类似 langchain);或 Docker 拉起全套平台
+  用 Studio Web 界面拖拽编排(SDK 包本身不带 Web 界面)
+- 模型接入:`LLMConfig(api_base=..., api_key=..., model=..., provider="openai_compatible")`,
+  任意 OpenAI 兼容端点(Ollama、DashScope 兼容模式等)
+- 工具调用:`@tool` 装饰器自动解析函数签名和 description 生成 function-call schema,无需手写 JSON schema;
+  要求模型支持 function-call(qwen3-8b / qwen3.5 系列可用)
+- JiuwenSwarm 用法:`JiuwenSwarm(llm_config=..., agents=[子Agent1, 子Agent2])`,子 Agent 可各配工具
+- 适合场景:复杂任务多 Agent 分工、业务系统内嵌智能体、企业私有化部署、需要断点续跑/状态持久化;
+  不适合:简单聊天问答(太重,LangChain 更轻)
+
+与 LangChain 对比(该文观点):
+
+| | openJiuwen | LangChain |
+|---|---|---|
+| 侧重点 | 生产级多 Agent 蜂群、状态持久、断点续跑 | 通用 LLM 应用组件库 |
+| 可视化 | 自带 Studio 零代码 Web 界面 | 需自己搭 UI |
+| 多 Agent | JiuwenSwarm 原生蜂群协同 | 靠 LangGraph 手动编写图逻辑 |
+| 部署 | Docker 容器化整套平台 | 偏 SDK 库,部署自己实现 |
+| 模型 | 兼容所有 OpenAI 格式 API | 兼容几乎全部大模型 |
+
+### 5.6 与 Dify / Coze 选型对比(华为云社区文观点)
+
+- openJiuwen 与 Dify 均 Apache 2.0 开源,可自托管、数据不出网、迁移成本低;Coze 是纯 SaaS,有锁定/涨价风险
+- openJiuwen 独有优势:代码版权归属华为(公司背书,非社区野项目);与 AgentArts 企业版同源 >90%,
+  小项目用社区版、大项目平滑升级企业版
+- 该文同时提醒:开源不等于不被锁定,基于 openJiuwen Runtime 深度构建仍有平台绑定成本
+
+### 5.7 待核实项
+
+- `agent-core` 的 evaluation 模块具体能力边界(公开资料只提到"评测"二字,未深入)
+- `agent-gateway` 仓库状态(官方标注 Opening Soon)
+- 社区版与 AgentArts 企业版的具体功能差异和授权边界
+- GitHub 各仓 star/活跃度/issue 响应速度(本次未采集)
+
 ## 参考
 
 - [GitHub: openJiuwen-ai](https://github.com/openJiuwen-ai)
