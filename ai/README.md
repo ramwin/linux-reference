@@ -5,6 +5,7 @@
 ./local-ai-service.md
 ./agent.md
 ./agent-engineer.md
+./personal-ai-proficiency.md
 ./production-deployment.md
 ./pair-coding.md
 ./multi-model-debate.md
