@@ -43,6 +43,8 @@ make help
 ## 内容组织
 
 - 顶层 `.md` 文件是各主题的正文 (如 `git.md`、`vim.md`、`software.md`)
+- `index.rst` — 首页，只列主要章节 (`:maxdepth: 1`)
+- `contents.md` — **完整目录页**，按主题用 `{toctree}:glob:` 汇总全部文档；新增顶层目录时要在里面加一条 glob
 - 子目录 (如 `linux/`、`mysql/`、`redis/`、`nginx/`) 内包含更细粒度的主题文档
 - `shellprogramming/` — Shell 编程教程
 - `restructed/` — reStructuredText 语法参考
