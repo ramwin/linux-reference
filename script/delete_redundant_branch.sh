@@ -462,8 +462,8 @@ if [ "$DRY_RUN" = 0 ]; then
 	fi
 fi
 if [ "$JSON" = 1 ]; then
-	printf '{"repo":"%s","base":"%s","dryRun":%s,"deleted":{"local":%s,"remote":%s},"failed":{"local":%s,"remote":%s},"local":[' \
-		"$(json_escape "$(git rev-parse --show-toplevel)")" "$(json_escape "$BASE")" \
+	printf '{"repo":"%s","base":"%s","backup":"refs/backup/branch-cleaner/%s/","dryRun":%s,"deleted":{"local":%s,"remote":%s},"failed":{"local":%s,"remote":%s},"local":[' \
+		"$(json_escape "$(git rev-parse --show-toplevel)")" "$(json_escape "$BASE")" "$TS" \
 		"$([ "$DRY_RUN" = 1 ] && echo true || echo false)" \
 		"$executed" "$rdel" "$failed" "$rfailed"
 	first=1
