@@ -328,8 +328,9 @@ git branch -vv | grep '\[gone\]'  # 上游已经没了的分支
 
 ```
 script/delete_redundant_branch.sh                   # 体检: 列出「可删/保护/跳过」和原因
-script/delete_redundant_branch.sh --all             # 体检, 顺便看 squash 合并 / 补丁等价 / 上游已删 / 远程
-script/delete_redundant_branch.sh --all --yes       # 真删, 删前每个分支都留了备份 ref
+script/delete_redundant_branch.sh --all             # 体检, 顺便看 squash 合并 / 补丁等价 / 上游已删
+script/delete_redundant_branch.sh --all --yes       # 真删本地分支, 删前每个分支都留了备份 ref
+script/delete_redundant_branch.sh --all --remote --yes  # 连 origin 上的已合并分支一起删
 script/delete_redundant_branch.sh --recurse-submodules --all --yes   # 主仓 + 所有已初始化子模块
 ```
 
@@ -340,7 +341,7 @@ script/delete_redundant_branch.sh --recurse-submodules --all --yes   # 主仓 + 
 | `--patches` | 识别 rebase / cherry-pick 落地(`git cherry`) |
 | `--gone` | 识别上游已删除的分支; 本地还有独有提交的要再加 `-f` |
 | `--gh` | 用 `gh` 查「PR 已合并」, squash 合并最可靠的信号 |
-| `--remote` | 同时清理 origin 上已合并的远程分支 |
+| `--remote` | 同时清理 origin 上已合并的远程分支(要单独加, `--all` 不含它) |
 | `--prune` | 先 `git fetch --prune` 刷新 `[gone]` |
 | `-b/--base` | 指定基线分支(默认 `origin/HEAD` → main/master → 当前分支) |
 | `-k/--keep` | 追加保留规则, 支持 `*`; 默认已含 `main master develop release/* hotfix/* gh-pages` 等 |

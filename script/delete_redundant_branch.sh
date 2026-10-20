@@ -8,8 +8,8 @@
 # 删除前自动打备份 ref (refs/backup/branch-cleaner/...), 随时可以恢复.
 #
 #   ./delete_redundant_branch.sh                  # 只看不改
-#   ./delete_redundant_branch.sh --all            # 看 squash 合并 / 上游已删 / 远程
-#   ./delete_redundant_branch.sh --yes --all      # 真删(带备份)
+#   ./delete_redundant_branch.sh --all            # 看 squash 合并 / 补丁等价 / 上游已删
+#   ./delete_redundant_branch.sh --all --yes      # 真删本地分支(带备份); 远程要再加 --remote
 #   ./delete_redundant_branch.sh --recurse-submodules --yes --all
 #
 # 判定依据(全部只读, 不碰工作区):
@@ -70,9 +70,9 @@ $PROG $VERSION — 清理冗余分支(默认只报告, 不删除)
       --squash             额外识别 squash 合并: 把分支合回主线不会改变主线内容
       --patches            额外识别补丁等价: rebase/cherry-pick 落地(git cherry)
       --gh                 额外用 gh 检查「PR 已合并」的分支(需 gh 已登录)
-      --all                等于 --squash --patches --gone --prune --remote
+      --all                等于 --squash --patches --gone --prune (不含 --remote)
       --gone               额外清理上游已删除([gone])的分支
-      --remote             同时清理 origin 上已合并的远程分支(危险, 需 -y)
+      --remote             同时清理 origin 上已合并的远程分支(要单独加, --all 不含它)
       --prune              先 git fetch --prune 刷新 [gone] 状态
       --no-backup          不创建备份 ref(不推荐)
   -b, --base REF           指定基线分支(默认: origin/HEAD → main/master → 当前分支)
@@ -106,7 +106,7 @@ while [ $# -gt 0 ]; do
 	--patches) CHECK_PATCHES=1 ;;
 	--gone) CHECK_GONE=1 ;;
 	--gh) CHECK_GH=1 ;;
-	--all) CHECK_SQUASH=1; CHECK_PATCHES=1; CHECK_GONE=1; DO_PRUNE=1; CLEAN_REMOTE=1 ;;
+	--all) CHECK_SQUASH=1; CHECK_PATCHES=1; CHECK_GONE=1; DO_PRUNE=1 ;;
 	--remote) CLEAN_REMOTE=1 ;;
 	--prune) DO_PRUNE=1 ;;
 	--no-backup) BACKUP=0 ;;
