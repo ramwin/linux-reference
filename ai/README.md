@@ -26,6 +26,7 @@
 ./agent-testing-and-general-dag.md
 ./redis-upgrade-testing-agent-case.md
 ./openjiuwen-analysis.md
+./model-routing.md
 ```
 
 ## 学习笔记: 视频记录
