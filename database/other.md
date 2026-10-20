@@ -1,3 +1,5 @@
+# 数据库杂项
+
 #### Xiang Wang @ 2016-07-18 10:03:16
 
 * ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
