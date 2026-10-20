@@ -6,18 +6,21 @@
 Welcome to linux reference's documentation!
 ===========================================
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+本站是个人 Linux / AI / 数据库知识库。完整文档列表见 :doc:`目录 <contents>`。
 
-   ./ai/README.md
-   ./计算机组成原理.md
-   ./知识类.md
-   ./software.md
-   ./database.md
-   ./restructed/restructed语法.rst
+.. toctree::
+   :maxdepth: 1
+   :caption: 目录
+
+   ./contents.md
    ./README.md
+   ./ai/README.md
+   ./database.md
+   ./software.md
    ./hardware.md
+   ./知识类.md
+   ./restructed/restructed语法.rst
+   ./计算机组成原理.md
    ./开机速度.md
 
 
