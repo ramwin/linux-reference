@@ -294,6 +294,85 @@ git branch --merged --no-contains master  # 获取合入了master的分支的列
 * `--merged <ref>`
 只展示能够从 ref (往前)走到的分支
 
+### 清理冗余分支
+
+分支合进主线后没人删, 本地和远程都会越堆越多. 手工清理的标准动作是:
+
+```
+git fetch --prune                 # 刷新远程状态, 上游被删的分支会标成 [gone]
+git branch --merged master        # 已经是 master 祖先的分支
+git branch -d <branch>            # 安全删除, 没真正合并的会被 git 拦住
+git branch -vv | grep '\[gone\]'  # 上游已经没了的分支
+```
+
+只靠 `git branch --merged` 会漏掉三类「其实已经落地」的分支:
+
+| 落地方式 | `--merged` 认得出吗 | 可靠的判定 |
+| --- | --- | --- |
+| merge / fast-forward | 认(祖先关系) | `git merge-base --is-ancestor <branch> master` |
+| rebase / cherry-pick | 不认 | `git cherry master <branch>` 没有 `+` 开头的行, 说明补丁都已在主线 |
+| squash merge | 不认 | `git merge-tree --write-tree master <branch>` 的结果树等于 master 的树, 说明分支合回去也不会改变主线内容 |
+| GitHub 上合并的 PR | 看落地方式 | `gh pr list --head <branch> --state merged` |
+
+`git merge-tree` 只在对象库层面算合并, 不碰工作区, 可以放心当探测器用(需要 git 2.38+).
+
+现成工具的定位, 也是没有直接拿来用的原因:
+
+* `git-extras` 的 `delete-merged-branches` 只看 `--merged`; `delete-gone` 只看 `[gone]`;
+  `delete-squashed-branches` 用「分支的树等于主线某个提交的树」判断 squash, 要求 squash 之后主线
+  没再动过, 容易漏.
+* `gh pr list --state merged` 判 squash 合并最准, 但依赖 GitHub 并且要联网.
+* `gt` / `git branchless` 解决的是分支栈工作流, 不是清理.
+
+脚本 `script/delete_redundant_branch.sh` 把上面几种判定都做了, 默认只报告不删除:
+
+```
+script/delete_redundant_branch.sh                   # 体检: 列出「可删/保护/跳过」和原因
+script/delete_redundant_branch.sh --all             # 体检, 顺便看 squash 合并 / 补丁等价 / 上游已删 / 远程
+script/delete_redundant_branch.sh --all --yes       # 真删, 删前每个分支都留了备份 ref
+script/delete_redundant_branch.sh --recurse-submodules --all --yes   # 主仓 + 所有已初始化子模块
+```
+
+| 选项 | 作用 |
+| --- | --- |
+| `-n/--dry-run` | 只报告(默认); `-y/--yes` 才真删 |
+| `--squash` | 识别 squash 合并(合回主线不改变内容) |
+| `--patches` | 识别 rebase / cherry-pick 落地(`git cherry`) |
+| `--gone` | 识别上游已删除的分支; 本地还有独有提交的要再加 `-f` |
+| `--gh` | 用 `gh` 查「PR 已合并」, squash 合并最可靠的信号 |
+| `--remote` | 同时清理 origin 上已合并的远程分支 |
+| `--prune` | 先 `git fetch --prune` 刷新 `[gone]` |
+| `-b/--base` | 指定基线分支(默认 `origin/HEAD` → main/master → 当前分支) |
+| `-k/--keep` | 追加保留规则, 支持 `*`; 默认已含 `main master develop release/* hotfix/* gh-pages` 等 |
+| `--age N` | 最近 N 天有提交的分支不碰 |
+| `--json` | 输出 JSON, 给插件 / CI 用 |
+| `--recurse-submodules` | 对每个已初始化子模块各跑一遍 |
+
+永远不动的分支: 基线分支本身、当前检出的分支、任何 worktree 里检出的分支、命中保留规则的分支.
+脚本不切换分支、不 rebase、不动工作区, 删之前把每个分支的 SHA 记到
+`refs/backup/branch-cleaner/<时间戳>/<分支名>`, 要恢复:
+
+```
+git for-each-ref refs/backup/branch-cleaner/    # 看备份
+git branch <分支名> $(git rev-parse refs/backup/branch-cleaner/20260101-120000/<分支名>)
+```
+
+回归测试: `script/test_delete_redundant_branch.sh`, 11 个场景覆盖 squash / 补丁等价 / gone /
+worktree / -k / --age / 子模块 / 备份恢复.
+
+#### 旧脚本的问题
+
+旧的 `script/delete_redudant_branch.sh`(文件名拼写也是错的) 只有 26 行, 但踩了不少坑, 现在
+改成了指向新脚本的兼容入口:
+
+1. 第一行就调 `rebase_to_master.sh`, 删分支之前先把所有分支 rebase 到 master —— 冲突一次就卡住,
+   而且留下了本不该有的改写历史.
+2. `git checkout $masterbranch` 会切换用户当前分支, 纯粹的副作用.
+3. `grep -v $masterbranch` 是子串匹配: 基线叫 `main` 时, `domain`、`maintenance`、`maingo` 都会被
+   误当成主线排除; 反过来仓库里既没有 master 也没有 main 时, `grep -v ""` 匹配所有行, 一个分支都删不掉.
+4. `for x in $(git branch ...)` 按空格切词, `git branch -d` 也不带 `--`, 分支名有特殊字符就崩.
+5. 只认祖先合并, squash / rebase 落地的分支永远删不掉, 越积越多.
+6. 没有 dry-run、没有备份、不管远程分支、不看 worktree.
 
 ### checkout
 * 把文件还原到之前的某个版本
