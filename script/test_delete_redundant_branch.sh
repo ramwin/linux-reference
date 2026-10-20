@@ -207,12 +207,15 @@ mkdir -p "$ROOT/subrepo"
 )
 git -c protocol.file.allow=always submodule add -q "$ROOT/subrepo" sub >/dev/null 2>&1
 git commit -qm "add sub"
+add_commit feat-parent par.txt parent
+git merge -q --no-ff feat-parent -m merge-parent
 "$SCRIPT" --recurse-submodules --yes >/dev/null 2>&1
 if git -C sub rev-parse --verify --quiet refs/heads/sub-merged >/dev/null; then
 	fail "子模块里的已合并分支没被清理"
 else
 	pass "子模块里的已合并分支被清理"
 fi
+assert_missing "主仓自己的已合并分支也被清理" feat-parent
 
 echo
 if [ "$FAIL" -eq 0 ]; then

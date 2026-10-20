@@ -142,7 +142,16 @@ case "$AGE_DAYS" in '' | *[!0-9]*) die "--age 需要非负整数, 收到: $AGE_D
 if [ "$RECURSE" = 1 ] && [ "${BRANCH_CLEANER_NO_RECURSE:-0}" != 1 ]; then
 	GIT_TOP=$(git rev-parse --show-toplevel 2>/dev/null) || die "当前目录不是 git 仓库"
 	SELF=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
-	# 递归到子模块时只做本地分支清理: 去掉 --recurse-submodules,
+	status=0
+
+	# 1) 先处理主仓: 参数原样, 只去掉 --recurse-submodules
+	PARENT=()
+	for a in ${ARGS[@]+"${ARGS[@]}"}; do
+		[ "$a" = "--recurse-submodules" ] || PARENT=(${PARENT[@]+"${PARENT[@]}"} "$a")
+	done
+	BRANCH_CLEANER_NO_RECURSE=1 bash "$SELF" ${PARENT[@]+"${PARENT[@]}"} || status=1
+
+	# 2) 再处理子模块, 只做本地分支清理: 去掉 --recurse-submodules,
 	# 并且不带 --prune/--remote —— 那会在几十个子模块里各拉一次网、各删一次远程分支,
 	# 既慢又远超「清理这个仓的分支」的意图. --all 在子模块里降级为 squash+patches+gone.
 	PASS=()
@@ -154,7 +163,6 @@ if [ "$RECURSE" = 1 ] && [ "${BRANCH_CLEANER_NO_RECURSE:-0}" != 1 ]; then
 		esac
 	done
 	log "子模块只做本地清理(不带 --prune/--remote)"
-	status=0
 	# 列出已初始化的子模块(含嵌套)
 	SUB_LIST=$(git submodule status --recursive 2>/dev/null | awk '{print $2}')
 	[ -n "$SUB_LIST" ] || log "没有子模块, 只处理当前仓库"
