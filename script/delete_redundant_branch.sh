@@ -79,7 +79,7 @@ $PROG $VERSION — 清理冗余分支(默认只报告, 不删除)
   -k, --keep GLOB          额外保留的分支名模式, 可多次(如 -k 'wip/*')
       --no-protect         不使用默认保留规则(默认: $DEFAULT_KEEP)
       --age N              只清理最近 N 天都没提交过的分支
-      --json               以 JSON 输出结果(便于插件/CI 调用)
+      --json               以 JSON 输出结果(便于插件/CI 调用)。递归子模块时每个仓库输出一行 JSON
       --recurse-submodules 对本仓库所有已初始化的子模块各跑一遍
   -q, --quiet              安静模式(只输出结论)
   -V, --version            版本
@@ -142,18 +142,29 @@ case "$AGE_DAYS" in '' | *[!0-9]*) die "--age 需要非负整数, 收到: $AGE_D
 if [ "$RECURSE" = 1 ] && [ "${BRANCH_CLEANER_NO_RECURSE:-0}" != 1 ]; then
 	GIT_TOP=$(git rev-parse --show-toplevel 2>/dev/null) || die "当前目录不是 git 仓库"
 	SELF=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
-	# 去掉 --recurse-submodules, 其余参数原样传递
+	# 递归到子模块时只做本地分支清理: 去掉 --recurse-submodules,
+	# 并且不带 --prune/--remote —— 那会在几十个子模块里各拉一次网、各删一次远程分支,
+	# 既慢又远超「清理这个仓的分支」的意图. --all 在子模块里降级为 squash+patches+gone.
 	PASS=()
 	for a in ${ARGS[@]+"${ARGS[@]}"}; do
-		[ "$a" = "--recurse-submodules" ] || PASS=(${PASS[@]+"${PASS[@]}"} "$a")
+		case "$a" in
+		--recurse-submodules | --prune | --remote) ;;
+		--all) PASS=(${PASS[@]+"${PASS[@]}"} "--squash" "--patches" "--gone") ;;
+		*) PASS=(${PASS[@]+"${PASS[@]}"} "$a") ;;
+		esac
 	done
+	log "子模块只做本地清理(不带 --prune/--remote)"
 	status=0
 	# 列出已初始化的子模块(含嵌套)
 	SUB_LIST=$(git submodule status --recursive 2>/dev/null | awk '{print $2}')
 	[ -n "$SUB_LIST" ] || log "没有子模块, 只处理当前仓库"
 	for sub in $SUB_LIST; do
 		[ -d "$GIT_TOP/$sub/.git" ] || [ -f "$GIT_TOP/$sub/.git" ] || { log "跳过未初始化子模块: $sub"; continue; }
-		printf '\n=== 子模块 %s ===\n' "$sub"
+		if [ "$JSON" = 1 ]; then
+			printf '\n=== 子模块 %s ===\n' "$sub" >&2
+		else
+			printf '\n=== 子模块 %s ===\n' "$sub"
+		fi
 		(
 			cd "$GIT_TOP/$sub" || exit 1
 			BRANCH_CLEANER_NO_RECURSE=1 bash "$SELF" ${PASS[@]+"${PASS[@]}"}

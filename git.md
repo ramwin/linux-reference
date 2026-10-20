@@ -345,8 +345,8 @@ script/delete_redundant_branch.sh --recurse-submodules --all --yes   # 主仓 + 
 | `-b/--base` | 指定基线分支(默认 `origin/HEAD` → main/master → 当前分支) |
 | `-k/--keep` | 追加保留规则, 支持 `*`; 默认已含 `main master develop release/* hotfix/* gh-pages` 等 |
 | `--age N` | 最近 N 天有提交的分支不碰 |
-| `--json` | 输出 JSON, 给插件 / CI 用 |
-| `--recurse-submodules` | 对每个已初始化子模块各跑一遍 |
+| `--json` | 输出 JSON, 给插件 / CI 用; 递归子模块时每个仓库输出一行 |
+| `--recurse-submodules` | 对每个已初始化子模块各跑一遍; **只做本地清理**, 递归时不带 `--prune` / `--remote` |
 
 永远不动的分支: 基线分支本身、当前检出的分支、任何 worktree 里检出的分支、命中保留规则的分支.
 脚本不切换分支、不 rebase、不动工作区, 删之前把每个分支的 SHA 记到
@@ -356,6 +356,10 @@ script/delete_redundant_branch.sh --recurse-submodules --all --yes   # 主仓 + 
 git for-each-ref refs/backup/branch-cleaner/    # 看备份
 git branch <分支名> $(git rev-parse refs/backup/branch-cleaner/20260101-120000/<分支名>)
 ```
+
+递归到子模块时只处理本地分支: `--prune` 会让几十个子模块各拉一次网, `--remote` 会在每个子模块
+里删远程分支, 都远超「清理这个仓」的意图, 所以递归时被降级掉(`--all` 在子模块里等价于
+`--squash --patches --gone`)。实测 60+ 子模块只花 1.3 秒。
 
 回归测试: `script/test_delete_redundant_branch.sh`, 11 个场景覆盖 squash / 补丁等价 / gone /
 worktree / -k / --age / 子模块 / 备份恢复.
