@@ -1,4 +1,8 @@
 # fstab
+
+```{contents}
+```
+
 [参考](http://blog.csdn.net/jemmy858585/article/details/4724029)
 
 1. `sudo blkid /dev/md5` 看UUID

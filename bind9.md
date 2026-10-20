@@ -1,4 +1,8 @@
 # 刷新`dns`缓存
+
+```{contents}
+```
+
     sudo /etc/init.d/dns-clean start
 
 # bind9服务

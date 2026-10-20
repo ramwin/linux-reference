@@ -1,5 +1,8 @@
 # 系统
 
+```{contents}
+```
+
 * shell
     * 设置显示中文 `apt install language-pack-zh-hans`
     * pip安装   `export LC_ALL_C`

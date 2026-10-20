@@ -1,5 +1,8 @@
 # 用 Git 管理 AI Memory 的方案
 
+```{contents}
+```
+
 > 适用工具：Claude Code、Kimi Code CLI、DSH（DeepSeek Harness）。
 > 核心思路：**memory 就是 markdown 文件，git 仓库是唯一事实来源**，通过软链/导入机制分发到各工具的约定位置。
 

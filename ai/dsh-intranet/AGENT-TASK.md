@@ -1,5 +1,8 @@
 # 内网 DSH 接入任务书(交给内网编码 agent 执行)
 
+```{contents}
+```
+
 > 读者: 一个运行在公司内网、有 bash 与文件读写能力的编码 agent(Claude Code 之类的形态)。
 > 执行环境: 内网 Linux 机器, 能访问公司的大模型网关, **没有外网**。
 > 目标: 让这台机器上跑起 DeepSeek Harness(DSH), 模型走内网网关的 `glm5.3`。

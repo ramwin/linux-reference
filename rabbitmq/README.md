@@ -1,5 +1,8 @@
 # rabbitmq
 
+```{contents}
+```
+
 [Tutorials](https://www.rabbitmq.com/getstarted.html)
 
 ## [安装](https://www.rabbitmq.com/install-debian.html#managing-service)

@@ -1,5 +1,8 @@
 # terminal终端
 
+```{contents}
+```
+
 * [快捷键参考](https://github.com/hokein/Wiki/wiki/Bash-Shell%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE) [快捷键参考2](https://www.cnblogs.com/zhouj-happy/p/11375658.html)
 * 移动
 

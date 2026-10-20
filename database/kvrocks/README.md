@@ -1,5 +1,8 @@
 # Kvrocks 高可用集群部署方案
 
+```{contents}
+```
+
 基于 Docker Compose 的 Kvrocks 三主三从高可用集群部署方案，支持大数据量存储和故障自动切换。
 
 ## 数据持久化特性

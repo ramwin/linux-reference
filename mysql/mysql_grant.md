@@ -1,5 +1,8 @@
 # grant
 
+```{contents}
+```
+
 * [官方参考](https://dev.mysql.com/doc/refman/8.0/en/)
 
 ## 基础

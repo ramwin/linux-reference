@@ -1,4 +1,8 @@
 # 搭建文档
+
+```{contents}
+```
+
 [redis.io](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/#create-and-use-a-redis-cluster)
 
 ## 安装cluster

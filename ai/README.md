@@ -1,5 +1,8 @@
 # AI
 
+```{contents}
+```
+
 ```{toctree}
 :maxdepth: 1
 ./local-ai-service.md

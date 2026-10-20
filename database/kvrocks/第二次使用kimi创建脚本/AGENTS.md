@@ -1,5 +1,8 @@
 # Kvrocks 高可用集群部署项目
 
+```{contents}
+```
+
 ## 项目概述
 
 本项目是一个基于 Docker Compose 的 Apache Kvrocks 高可用集群部署方案。Kvrocks 是一个兼容 Redis 协议的键值存储系统，使用 RocksDB 作为底层存储引擎。

@@ -1,5 +1,8 @@
 # SOFTWARE软件
 
+```{contents}
+```
+
 ## 运维工具
 ```{toctree}
 ./software/mdadm.md

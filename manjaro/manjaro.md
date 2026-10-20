@@ -1,5 +1,8 @@
 # Manjaro
 
+```{contents}
+```
+
 ## 新系统的操作
 1. 安装显卡驱动: linux69-nvidia-470xx
 linux69通过`uname -a`判断的

@@ -1,4 +1,8 @@
 # shell
+
+```{contents}
+```
+
 ```{toctree}
 ./file_directory.md
 ```

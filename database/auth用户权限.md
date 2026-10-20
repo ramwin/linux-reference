@@ -1,5 +1,9 @@
 
 # MySQL
+
+```{contents}
+```
+
 ## 查看用户的权限
     show grants for <username>;
 ## 开启数据库远程连接

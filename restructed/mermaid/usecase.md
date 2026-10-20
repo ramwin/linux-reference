@@ -1,5 +1,8 @@
 # 用例图
 
+```{contents}
+```
+
 * mermaid 12.0 起原生支持用例图, 用 `usecase-beta` 关键字(语法: [usecase](https://mermaid.js.org/syntax/usecase.html)):
     * `actor ID("显示名")` 画小人, 标识符只能用 `[A-Za-z0-9_]`, 中文要写显示名里
     * `UC("用例")` 是椭圆用例, `UC[用例]` 是矩形用例

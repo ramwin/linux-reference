@@ -1,4 +1,8 @@
 # markdown
+
+```{contents}
+```
+
 ```
 前面3个` {include} file.md
 ```

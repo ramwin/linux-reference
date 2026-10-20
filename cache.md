@@ -1,6 +1,10 @@
 [Computer Organization and Architecture](https://www.youtube.com/playlist?list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q)
 
 # CPU架构
+
+```{contents}
+```
+
 ## 冯诺依曼结构
 指令和data都放memory
 

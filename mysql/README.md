@@ -1,4 +1,8 @@
 # mysql
+
+```{contents}
+```
+
 ```{toctree}
 ./security.md
 ./mysql_grant.md

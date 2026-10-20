@@ -1,4 +1,8 @@
 # vim
+
+```{contents}
+```
+
 ## 导航
 * [配置](http://edyfox.codecarver.org/html/_vimrc_for_beginners.html)
 ```

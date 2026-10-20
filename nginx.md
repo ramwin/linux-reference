@@ -1,5 +1,8 @@
 # nginx
 
+```{contents}
+```
+
 * [download](http://nginx.org/)
 * [tutorial in didital ocean](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
 * [compile and configure](http://nginx.org/en/docs/configure.html)

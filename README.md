@@ -1,4 +1,8 @@
 # linux基础知识
+
+```{contents}
+```
+
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
 * [markdown](./markdown.md)

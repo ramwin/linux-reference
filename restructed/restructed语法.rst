@@ -1,6 +1,8 @@
 restructured
 ============
 
+.. contents::
+
 .. toctree::
 
     ./markdown.md

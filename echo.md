@@ -1,4 +1,8 @@
 # echo
+
+```{contents}
+```
+
 输出文字
 
 ```shell

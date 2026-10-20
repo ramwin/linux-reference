@@ -1,4 +1,8 @@
 # flowchart
+
+```{contents}
+```
+
 [官网: https://mermaid.js.org/syntax/flowchart.html](https://mermaid.js.org/syntax/flowchart.html)
 
 ## 最基础,默认

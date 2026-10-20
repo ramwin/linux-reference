@@ -1,5 +1,8 @@
 # mdadm
 
+```{contents}
+```
+
 * 创建raid
 ```
 # 这个尺寸是2TB(不是2TiB)对应的最大kb（扣除了一百多M的metadata)

@@ -1,5 +1,8 @@
 # Agent 测试平台的自进化方案与多用户评分体系
 
+```{contents}
+```
+
 ## 一、自进化方案分类
 
 参照 [A Survey of Self-Evolving Agents (arXiv 2507.21046)](https://arxiv.org/html/2507.21046v4) 的 "What/When/How to Evolve" 框架，测试平台的自进化可按**进化对象**分四层：

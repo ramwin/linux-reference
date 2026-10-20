@@ -1,5 +1,8 @@
 # SoC 中 SRAM 的读写原理与总线时序
 
+```{contents}
+```
+
 SRAM (Static Random Access Memory) 是 SoC 中最常见的片上存储器：CPU 的一级/二级缓存、紧耦合内存 (TCM)、总线 FIFO、各种硬件加速器的缓冲区，本质上都是 SRAM 或由 SRAM 阵列构成的。本文从 6T 单元开始，逐步讲到总线节点上的读写并发，再讨论电压变化对时序的影响，以及芯片如何控制时序。
 
 ## 1. SRAM 存储单元：6T 结构
