@@ -20,6 +20,10 @@ make html
 # 或
 sphinx-build . _build/html/
 
+# 发布到线上 https://linux-reference.ramwin.com
+# 前提: 改动已 commit 并 push; 脚本会 ssh 到 ramwin 构建后替换线上目录
+./发布.sh [要校验的页面路径, 默认 ai/]
+
 # 构建其他格式
 make latexpdf
 make epub
