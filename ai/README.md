@@ -31,6 +31,7 @@
 ./openjiuwen-analysis.md
 ./model-routing.md
 ./ai-era-code-review-bottleneck.md
+./context-engineering.md
 ./parallel-feature-development.md
 ```
 
