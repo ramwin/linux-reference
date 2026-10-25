@@ -69,6 +69,7 @@
 
 ### 可重试 / 未知（exit 3/5）
 
+- `ERR_SUBMODULE_PUSH_FAILED` — 刚提交的子仓指针在远端还不存在（子仓推送失败）；此时**不推主仓**，先修子仓；
 - `ERR_PUSH_REJECTED` — 推送被拒（远端有新提交 / 钩子 / 网络）；先 `pull --rebase` 再推；
 - `ERR_REBASE_CONFLICT` — rebase 冲突，已 `--abort`；需要人判断取舍；
 - `ERR_MAIN_REBASE` — 主仓 rebase 失败；确认是否漏了 `-c submodule.recurse=false`；

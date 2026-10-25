@@ -437,20 +437,33 @@ def step_push(run: Run) -> None:
                     print(f"plan push {sub.path} ({ahead} commits)")
         run.done.append("push")
         return
-    # 子仓先推,主仓后推:主仓指针要指向已存在的提交
+    # 子仓先推,主仓后推:主仓指针必须指向"远端已存在"的提交
+    failed: list[str] = []
     for sub in collect(run):
         p = run.repo / sub.path
-        behind, ahead = ahead_behind(run, p, "@{u}", "HEAD") if git(
-            ["rev-parse", "--abbrev-ref", "@{u}"], p, run.timeout)[0] == 0 else (0, 0)
+        rc_up, up, _ = git(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], p, run.timeout)
+        if rc_up != 0:
+            continue
+        _, ahead = ahead_behind(run, p, "@{u}", "HEAD")
         if ahead <= 0:
             continue
-        print(f"plan push {sub.path} ({ahead} commits)")
-        rc, out, err = git(["push", "origin", "HEAD"], p, max(run.timeout, 300))
+        remote = up.strip().split("/", 1)[0]
+        print(f"plan push {sub.path} -> {remote} ({ahead} commits)")
+        rc, out, err = git(["push", remote, "HEAD"], p, max(run.timeout, 300))
         write_log(run, "push", f"{sub.path}: rc={rc}\n{out}{err}")
         if rc != 0:
             run.warns.append(f"WARN_REMOTE_UNREACHABLE {sub.path}")
+            failed.append(sub.path)
         else:
             run.pushed_subs.append(sub.path)
+
+    # 刚提交的指针里,只要有一个子仓没推上去,就不推主仓
+    blocked = [p for p in failed if p in run.staged]
+    if blocked:
+        bail(run, EXIT_RETRY, step="push", rc=0, code="ERR_SUBMODULE_PUSH_FAILED",
+             affected=blocked, hint=["子仓提交没推上去,主仓指针不能指向不存在的提交"],
+             suggested_next=[f"git -C {shlex.quote(p)} push" for p in blocked],
+             reversible=True)
 
     branch = git(["rev-parse", "--abbrev-ref", "HEAD"], run.repo, run.timeout)[1].strip()
     rc, out, err = git(["push", "--no-recurse-submodules", "origin", branch], run.repo, max(run.timeout, 300))
