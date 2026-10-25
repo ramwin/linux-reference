@@ -61,4 +61,4 @@ DAG 模块的汇报优势是可演示性——少讲设计文档, 多放运行�
 ## 参考资料
 
 - [AI 工作流里的 DAG](./dag.md)——四个收益的技术细节与最小执行器
-- [Agent 测试系统的意义与"通用 DAG"辨析](./agent-testing-and-general-dag.md)——DAG 与 Agent 的分工边界
+- [Agent 测试系统的意义与"通用 DAG"辨析](./agent-testing-platform/why-agent-testing.md)——DAG 与 Agent 的分工边界

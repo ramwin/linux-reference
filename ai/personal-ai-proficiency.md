@@ -140,9 +140,9 @@
 | 能力 | 本地依据 | 说明 |
 |---|---|---|
 | Agent 原理与工具化 | [Agent](./agent.md)、[MCP](./mcp.md)、[RAG](./rag.md) | 已覆盖循环、工具协议、检索和权限边界 |
-| 工作流与系统编排 | [DAG](./dag.md)、[测试系统架构](./test-agent-architecture.md) | 能区分 DAG、Agent 循环和多 Agent, 并设计阶段间契约 |
+| 工作流与系统编排 | [DAG](./dag.md)、[测试系统架构](./agent-testing-platform/architecture.md) | 能区分 DAG、Agent 循环和多 Agent, 并设计阶段间契约 |
 | 动手验证 | [RAG 评测脚本](./rag_demo/eval_rag.py)、[插件与 Skill 对照实验](./plugin_vs_skill_demo/plugin_vs_skill.py)、[DSH 内网工具箱](./dsh-intranet/README.md) | 不只是整理名词, 也有可执行实验、探测与自检验证 |
-| 生产与演进意识 | [生产部署](./production-deployment.md)、[自进化方案](./agent-testing-platform-self-evolution.md)、[多用户共享记忆](./multi-user-agent-shared-memory.md) | 已经关注评估、灰度、隔离、治理和反馈闭环 |
+| 生产与演进意识 | [生产部署](./production-deployment.md)、[自进化方案](./agent-testing-platform/self-evolution.md)、[多用户共享记忆](./multi-user-agent-shared-memory.md) | 已经关注评估、灰度、隔离、治理和反馈闭环 |
 
 但我不会仅凭这些记录把自己定为 L5。现有材料能证明“做过设计、跑通过实验、解决过具体接入问题”, 还不足以证明“同一套 Agent 已在真实业务中持续运行, 并长期用指标守住质量”。设计过生产方案, 和运营过生产系统, 是两种不同的经验。
 
@@ -179,7 +179,7 @@ L5 的分水岭不是系统更复杂, 而是出现了持续的证据链: 每次�
 
 本地记录中方案设计多, 连续运行数据相对少。需要让一条流程在真实项目里持续运行数周, 保存模型、提示词、工具和知识版本, 以及输入、工具调用、输出、耗时、token 和人工修改记录。
 
-重点不是追求“全自动”, 而是每周回答三个问题: 哪类失败最多, 人工在哪一步接管, 哪个改动让指标真实改善。这样才能把[自进化方案](./agent-testing-platform-self-evolution.md)里的“失败聚类 → 定位层级 → 实验验证”从设计变成经验。
+重点不是追求“全自动”, 而是每周回答三个问题: 哪类失败最多, 人工在哪一步接管, 哪个改动让指标真实改善。这样才能把[自进化方案](./agent-testing-platform/self-evolution.md)里的“失败聚类 → 定位层级 → 实验验证”从设计变成经验。
 
 ### 3. 把安全与可靠性知识变成演练记录
 

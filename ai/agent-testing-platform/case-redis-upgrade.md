@@ -3,7 +3,7 @@
 ```{contents}
 ```
 
-[智能体测试系统架构](./test-agent-architecture.md)把"AI 参与测试"拆成了七个阶段,这篇用一句话把它们归拢成测试工程师熟悉的三个词,再用一个完整案例——**公司云服务把 Redis 从 5.0 升级到 7.0**——走一遍每个阶段智能体怎么用、产出什么。
+[智能体测试系统架构](./architecture.md)把"AI 参与测试"拆成了七个阶段,这篇用一句话把它们归拢成测试工程师熟悉的三个词,再用一个完整案例——**公司云服务把 Redis 从 5.0 升级到 7.0**——走一遍每个阶段智能体怎么用、产出什么。
 
 ## 三个词与七阶段的对应关系
 
@@ -276,7 +276,7 @@ $(git log --oneline -20)"
 
 ## 参考资料
 
-- [智能体测试系统架构: 多智能体协作与模型可替换设计](./test-agent-architecture.md)——七阶段契约、三种拓扑、golden 集
-- [云服务测试的 AI 转型](./cloud-service-testing.md)——用例生成/评审/分诊的 prompt 模板原型
-- [Agent 测试系统的意义与"通用 DAG"辨析](./agent-testing-and-general-dag.md)——为什么测试骨架该用 DAG 定死
+- [智能体测试系统架构: 多智能体协作与模型可替换设计](./architecture.md)——七阶段契约、三种拓扑、golden 集
+- [云服务测试的 AI 转型](../cloud-service-testing.md)——用例生成/评审/分诊的 prompt 模板原型
+- [Agent 测试系统的意义与"通用 DAG"辨析](./why-agent-testing.md)——为什么测试骨架该用 DAG 定死
 - [Redis 7.0 release notes](https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES)

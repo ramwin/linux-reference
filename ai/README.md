@@ -21,14 +21,10 @@
 ./plugin-vs-skill.md
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
-./test-agent-architecture.md
-./testing-agent-skill-personalization.md
+./agent-testing-platform/README.md
 ./multi-user-agent-shared-memory.md
 ./memory-git.md
 ./requirements-prompting.md
-./agent-testing-and-general-dag.md
-./redis-upgrade-testing-agent-case.md
-./openjiuwen-analysis.md
 ./model-routing.md
 ./ai-era-code-review-bottleneck.md
 ./context-engineering.md

@@ -9,6 +9,7 @@
 
 ai/*
 ai/dsh-intranet/*
+ai/agent-testing-platform/*
 ```
 
 ```{toctree}
