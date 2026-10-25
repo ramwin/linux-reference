@@ -1,0 +1,82 @@
+# repo-update 的已知错误规则表。
+#
+# 约定:
+#   - code    : 与 codes.md、脚本里的 code 一致(自测会校验两边对得上)
+#   - match   : 命中 stderr 的正则(人工排查时用,脚本内部按 code 直接处理)
+#   - fix     : 可执行的修法模板,{{path}} / {{trunk}} 由脚本填充
+#   - retry   : 修完是否重试当前步骤
+#   - severity: ask / fix / retry / fatal
+#
+# 加新规则的流程: 先加一条 rules.toml 条目 + codes.md 一行, 再让脚本在对应步骤调用。
+
+[[rule]]
+code = "ERR_GITFILE_MISSING"
+match = "无法被更新|cannot checkout new HEAD|not a git repository"
+fix = "printf 'gitdir: ../../.git/modules/{{path}}\\n' > {{path}}/.git"
+retry = true
+severity = "fix"
+note = ".git/modules 有、工作区缺 .git 时会被当成普通未跟踪目录"
+
+[[rule]]
+code = "WARN_IGNORED_PATH"
+match = "根据您的一个 .gitignore 文件而被忽略|ignored by one of your .gitignore"
+fix = "git diff --cached --name-status -- {{path}}"
+retry = false
+severity = "fix"
+note = "git add 返回 1 但已暂存成功;用 diff --cached 判成败,别串联 &&"
+
+[[rule]]
+code = "ASK_MULTI_TRUNK"
+match = "multiple remote trunks|多个远端主干"
+fix = ""
+retry = false
+severity = "ask"
+note = "多远端已分叉,主干不唯一,必须由人指定"
+
+[[rule]]
+code = "ASK_HISTORY_REWRITE"
+match = "would rewrite published history|改写公开历史"
+fix = ""
+retry = false
+severity = "ask"
+note = "本地提交已在远端存在,rebase 会改写公开历史"
+
+[[rule]]
+code = "ASK_STALE_POINTER"
+match = "index is not an ancestor of HEAD|旧指针|悬空"
+fix = ""
+retry = false
+severity = "ask"
+note = "记录的指针不是 HEAD 祖先,不能自动降级,需要人确认方向"
+
+[[rule]]
+code = "ERR_SUBMODULE_CHECKOUT"
+match = "无法被更新|cannot checkout new HEAD"
+fix = "git -c submodule.recurse=false -C {{path}} checkout {{trunk}}"
+retry = false
+severity = "fix"
+note = "全局 submodule.recurse=true 时会递归;缺对象时先 fetch 再 checkout"
+
+[[rule]]
+code = "WARN_REMOTE_UNREACHABLE"
+match = "Could not read from remote repository|Connection refused|无法读取远程仓库"
+fix = ""
+retry = false
+severity = "fix"
+note = "降级用已有 remote-tracking 引用继续,不无限重试"
+
+[[rule]]
+code = "ERR_PUSH_REJECTED"
+match = "rejected|non-fast-forward|fatal: failed to push"
+fix = "git -c submodule.recurse=false pull --rebase && git push --no-recurse-submodules origin HEAD"
+retry = true
+severity = "retry"
+note = "远端有新提交或钩子拒绝"
+
+[[rule]]
+code = "ERR_REBASE_CONFLICT"
+match = "CONFLICT|冲突"
+fix = "git rebase --abort"
+retry = false
+severity = "fatal"
+note = "冲突取舍需要人判断;脚本已自动 abort"

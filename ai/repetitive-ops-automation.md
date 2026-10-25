@@ -255,7 +255,9 @@ script/repo-update/
 └── logs/<run_id>/      # 每步完整日志，只回路径不回内容
 ```
 
-骨架（bash 版，能跑通主流程；错误处理按第三节的分层留了钩子）：
+骨架（下面是 bash 版的设计草图；**仓里落地的实现是同目录契约的 Python 版**
+`script/repo-update/repo-update.py`，好处是 `tomllib` 解析规则表、子仓主干判定和信封字段
+都由类型/断言兜住，`--self-test` 会校验 `rules.toml` 与 `codes.md` 的 code 是否对得上）：
 
 ```bash
 #!/usr/bin/env bash
