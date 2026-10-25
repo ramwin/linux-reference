@@ -29,6 +29,7 @@
 ./ai-era-code-review-bottleneck.md
 ./context-engineering.md
 ./parallel-feature-development.md
+./repetitive-ops-automation.md
 ```
 
 ## 学习笔记: 视频记录
