@@ -152,7 +152,9 @@ def parse_submodule_status(text: str) -> list[Sub]:
         if len(parts) != 2:
             continue
         sha, path = parts[0], parts[1].split(" (")[0].strip()
-        subs.append(Sub(path=path, head="", index="" if flag == "-" else sha, flag=flag))
+        # 注意: status 行里的 sha 是"工作区检出"的提交,不是索引里的指针,
+        # 指针必须另取 `git rev-parse :<path>`,否则比较永远相等(实测踩过)。
+        subs.append(Sub(path=path, head=sha, index="", flag=flag))
     return subs
 
 
@@ -171,6 +173,8 @@ def collect(run: Run) -> list[Sub]:
         if r != 0:
             continue
         sub.head = h.strip()
+        ri, idx, _ = git(["rev-parse", ":" + sub.path], run.repo, run.timeout)
+        sub.index = idx.strip() if ri == 0 else ""
         keep.append(sub)
     return keep
 
@@ -519,11 +523,12 @@ def self_test() -> int:
             fails += 1
 
     subs = parse_submodule_status(
-        " 5eb0da1 c/x (heads/master)\n+90dcfa9 d/y (heads/main)\n-097da9d --\n"
+        " 5eb0da1 c/x (heads/master)\n+90dcfa9 d/y (heads/main)\n-097da9d e/z\n"
     )
-    check("解析: 一致行无差异", subs[0].index == subs[0].index and subs[0].flag == " ")
-    check("解析: '+' 标记", subs[1].flag == "+" and subs[1].path == "d/y")
-    check("解析: '-' 未初始化", subs[2].flag == "-")
+    check("解析: 一致行 flag 为空格", subs[0].flag == " " and subs[0].path == "c/x")
+    check("解析: '+' 标记且路径去括号", subs[1].flag == "+" and subs[1].path == "d/y")
+    check("解析: '-' 未初始化", subs[2].flag == "-" and subs[2].path == "e/z")
+    check("解析: 索引 SHA 不从 status 行取", subs[1].index == "")
     check("信封字段固定", set(ENVELOPE_KEYS) == {
         "step", "rc", "code", "affected", "stderr_tail", "hint",
         "reversible", "rollback", "suggested_next", "log"})
