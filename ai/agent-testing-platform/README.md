@@ -14,6 +14,7 @@
 ```{toctree}
 :maxdepth: 1
 ./architecture.md
+./dag-fixed-vs-custom.md
 ./why-agent-testing.md
 ./self-evolution.md
 ./skill-personalization.md
