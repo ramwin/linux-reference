@@ -18,6 +18,7 @@
 ./rag.md
 ./kv-cache.md
 ./mcp.md
+./tool-calling.md
 ./plugin-vs-skill.md
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
