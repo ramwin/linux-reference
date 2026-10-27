@@ -31,7 +31,7 @@ MOS, Metal Oxide Semiconductor Field Effect Transistor
 ## 中断的原理
 [youtube爱上半导体，用单片机的程序来讲中断](https://www.youtube.com/watch?v=9LJPstGDGnU)
 
-![](/gic.png)
+![](/_static/gic.png)
 
 当外部来了中断信号时，会把PC挪到中断的位置，堆栈信息保存起来。执行完中断程序后，回退到原来的PC指针。  
 

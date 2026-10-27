@@ -5,7 +5,7 @@
 
 * [system 系统 优化](./linux/system.md)
 * [user & group 用户和组](./linux/user_group.md)
-* [markdown](./markdown.md)
+* [markdown](./restructed/markdown-syntax.md)
 * [linux命令搜索网站](https://wangchujiang.com/linux-command/)
 
 ## mac
@@ -83,7 +83,7 @@ usr目录一般是从其他地方挂载的. shareable, read-only. 多个机器�
 
 # command
 ```{toctree}
-./echo.md
+./shellprogramming/echo.md
 ./network/http.md
 ```
 
@@ -345,7 +345,7 @@ no: 3
 `zip -r target.zip sourcedirectory/`
 
 ```{toctree}
-./zip.md
+./shellprogramming/zip.md
 ```
 
 

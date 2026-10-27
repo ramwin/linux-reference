@@ -66,13 +66,10 @@ rabbitmq/*
 :maxdepth: 1
 :glob:
 
-bash.md
-echo.md
-git.md
-vim.md
-markdown.md
-terminal.md
-zip.md
+git/README.md
+vim/README.md
+restructed/markdown-syntax.md
+software/terminal.md
 shellprogramming/*
 ```
 
@@ -81,8 +78,7 @@ shellprogramming/*
 :maxdepth: 1
 :glob:
 
-计算机组成原理.md
-知识类.md
+article/computer-organization.md
 restructed/*
 restructed/mermaid/*
 TODO.md

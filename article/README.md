@@ -4,9 +4,9 @@
 ```
 
 ```{toctree}
-./article/zram原理.md
-./article/cdc-no-loss-dfs.md
-./article/sram-read-write.md
+./zram原理.md
+./cdc-no-loss-dfs.md
+./sram-read-write.md
 ```
 
 ## TCP拥塞算法

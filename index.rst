@@ -18,9 +18,9 @@ Welcome to linux reference's documentation!
    ./database.md
    ./software.md
    ./linux/hardware.md
-   ./知识类.md
+   ./article/README.md
    ./restructed/restructed语法.rst
-   ./计算机组成原理.md
+   ./article/computer-organization.md
    ./linux/开机速度.md
 
 

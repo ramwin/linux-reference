@@ -61,10 +61,10 @@ syncthing serve --gui-address=example.com:8384
 
 ## 开发工具类
 ```{toctree}
-./git.md
-./vim.md
-./terminal.md
-./markdown.md
+./git/README.md
+./vim/README.md
+./software/terminal.md
+./restructed/markdown-syntax.md
 ```
 
 ### bat
@@ -373,7 +373,7 @@ server_type = 5
 tsocks firefox
 ```
 
-## [terminal终端](./terminal.md)
+## [terminal终端](./software/terminal.md)
 
 ## [tldr](https://github.com/tldr-pages/tldr)
 too long don't read, 解决用man查看文档过于冗长的情况.

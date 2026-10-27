@@ -5,7 +5,7 @@ restructured
 
 .. toctree::
 
-    ./markdown.md
+    ./markdown-syntax.md
 
 text style
 ----------
