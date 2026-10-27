@@ -137,7 +137,7 @@ git config --global push.default matching | current  # 默认推送当前分支
     bigFileThreshold = 1m  # 超过1M的文件不再当作文本去记录变化
 
 ~/.gitignore_global`
-cat gitignore_global >> ~/.gitignore_global
+cat git/gitignore_global >> ~/.gitignore_global
 ```
 
 * 服务器允许pull指定的commit

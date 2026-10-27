@@ -36,7 +36,7 @@ ln -s /home/wangx/github/secret/config/kioslaverc ./
 
 ### 服务配置
 * crontab
-```{literalinclude} ../crontab.sh
+```{literalinclude} ../script/crontab.sh
 ```
 
 * postgresq

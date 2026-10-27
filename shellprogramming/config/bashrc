@@ -54,7 +54,7 @@ function wxj(){
 # export CLICOLOR=1
 # export LSCOLORS=GxFxCxDxBxegedabagaced
 PYENV_ROOT="$HOME/.pyenv"
-source ~/github/linux-reference/baserc
+source ~/github/linux-reference/shellprogramming/config/baserc
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi

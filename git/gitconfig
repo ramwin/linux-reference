@@ -1,0 +1,62 @@
+[alias]
+    br = branch
+    co = checkout
+    cp = cherry-pick
+    cpc = "cherry-pick --continue"
+    lg = log --graph --pretty=format:\"%Cgreen%h %Cred%s %Creset----%C(yellow)%an %Creset@ %ad %C(green)%d\" --date=format:\"%Y-%m-%d %H:%M\"
+    mt = mergetool
+    rb = "rebase"
+    rbc = "rebase --continue"
+	wtpath = "!f(){ b=\"${1:-$(git branch --show-current)}\"; git worktree list --porcelain | while IFS= read -r line; do case \"$line\" in \"worktree \"*) p=\"${line#worktree }\" ;; \"branch refs/heads/\"*) br=\"${line#branch refs/heads/}\"; [ \"$br\" = \"$b\" ] && { echo \"$p\"; break; } ;; esac; done; }; f"
+    wl = worktree list
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+[core]
+    bigFileThreshold = 1M
+    excludesfile = ~/github/linux-reference/git/gitignore_global
+	filemode = true
+	fsmonitor = true
+    hooksPath = ~/github/linux-reference/git/git-hooks/
+    quotepath = false
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+[merge]
+    tool = vimdiff
+[pack]
+	threads = 0
+    windowMemory = 1g
+[user]
+    email = ramwin@qq.com
+    name = Xiang Wang
+[pull]
+    rebase = true
+    default = current
+[push]
+    default = current
+[safe]
+    directory = /run/media/wangx/samsung/github/coin
+	directory = /run/media/wangx/samsung/github/
+	directory = /home/wangx/github/其他小项目/rt_dc/src/binance-futures
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@github.com:"]
+    insteadOf = gh://
+[diff]
+	toll = vimdiff
+	wordRegex = "[^[:space:],;=]+"
+[checkout]
+    workers = 15
+[color]
+	status = always
+[submodule]
+	fetchJobs = 9
+	recurse = true
+[fetch]
+	recurseSubmodules = no
+	parallel = 9
+[lfs "remote"]
+	autoDetect = true
