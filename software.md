@@ -47,7 +47,7 @@ awk '{print $1}' filename
 ./software/supervisor.md
 ./celery/README.md
 ./rabbitmq/README.md
-./nfs.md
+./network/nfs.md
 ```
 
 ### [syncthing](https://docs.syncthing.net/intro/getting-started.html)
@@ -98,9 +98,9 @@ htpasswd -v <filename> <username>
 
 ## 网络类
 ```{toctree}
-./nginx.md
+./nginx/README.md
 ./shadowsocks/shadowsocks的用法.md
-./net网络.md
+./network/net网络.md
 ```
 ### chromium
 * 代理

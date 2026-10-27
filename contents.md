@@ -30,7 +30,6 @@ database/*
 database/kvrocks/*
 database/postgres/*
 mysql/*
-mongodb.md
 redis/*
 redis/redis-cluster/*
 sqlite/*
@@ -62,12 +61,8 @@ celery/*
 :maxdepth: 1
 :glob:
 
-net网络.md
-http.md
-nginx.md
-bind9.md
-nfs.md
-bbr.md
+network/*
+nginx/README.md
 crontab.md
 shadowsocks/*
 rabbitmq/*
