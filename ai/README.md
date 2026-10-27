@@ -31,6 +31,7 @@
 ./context-engineering.md
 ./parallel-feature-development.md
 ./repetitive-ops-automation.md
+./career-resilience-drone-embodied-ai.md
 ```
 
 ## 学习笔记: 视频记录
