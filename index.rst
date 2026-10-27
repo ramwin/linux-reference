@@ -17,11 +17,11 @@ Welcome to linux reference's documentation!
    ./ai/README.md
    ./database.md
    ./software.md
-   ./hardware.md
+   ./linux/hardware.md
    ./知识类.md
    ./restructed/restructed语法.rst
    ./计算机组成原理.md
-   ./开机速度.md
+   ./linux/开机速度.md
 
 
 Indices and tables

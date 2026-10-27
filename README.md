@@ -22,15 +22,15 @@ brew services stop|start redis
 ./shellprogramming/README.md
 ```
 
-## [cache](./cache.md)
+## [cache](./linux/cache.md)
 
 ## 操作系统
 ```{toctree}
-./fstab.md
+./linux/fstab.md
 ./linux/system.md
 ./manjaro/manjaro.md
-./gnome.md
-./windows.md
+./linux/gnome.md
+./linux/windows.md
 ./linux/user_group.md
 ```
 

@@ -181,7 +181,7 @@ sudo apt install imagemagick
 convert image.png -resize 50% image2.png
 ```
 
-## [crontab](./crontab.md)
+## [crontab](./linux/crontab.md)
 
 ## [daemon 守护进程](./daemon/README.md)
 
@@ -391,7 +391,7 @@ tldr ls
 ## other
 * alarm-clock-applet 闹钟
 * except: 自动输入账号密码的工具，用来自动化脚本里面避免卡住
-* [gnome](./gnome.md)
+* [gnome](./linux/gnome.md)
 * [gpg](https://statistics.berkeley.edu/computing/encrypt)
     * 创建密钥 gpg --full-gen-key
     * 加密文件 gpg -e -r USERNAME <file>  生成file.gpg文件

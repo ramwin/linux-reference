@@ -41,15 +41,9 @@ sqlite/*
 :glob:
 
 README.md
-fstab.md
 linux/*
 manjaro/*
 mac/*
-gnome.md
-windows.md
-hardware.md
-开机速度.md
-cache.md
 daemon/*
 software.md
 software/*
@@ -63,7 +57,6 @@ celery/*
 
 network/*
 nginx/README.md
-crontab.md
 shadowsocks/*
 rabbitmq/*
 ```
