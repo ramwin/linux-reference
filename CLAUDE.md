@@ -42,19 +42,19 @@ make help
 
 ## 内容组织
 
-- 顶层 `.md` 文件是各主题的正文 (如 `git.md`、`vim.md`、`software.md`)
+- 根目录保留 Sphinx 工程文件、仓库说明和 `database.md`、`software.md` 等主题聚合页，具体正文放入对应子目录
 - `index.rst` — 首页，只列主要章节 (`:maxdepth: 1`)
 - `contents.md` — **完整目录页**，按主题用 `{toctree}:glob:` 汇总全部文档；新增顶层目录时要在里面加一条 glob
 - 每篇文档标题下放一条 `{contents}`（`.md`）或 `.. contents::`（`.rst`），生成页内目录，参考 `ai/local-ai-service.md`
-- 子目录 (如 `linux/`、`mysql/`、`redis/`、`nginx/`) 内包含更细粒度的主题文档
-- `shellprogramming/` — Shell 编程教程
-- `restructed/` — reStructuredText 语法参考
+- 主题目录包括 `ai/`、`article/`、`database/`、`linux/`、`network/`、`software/` 等；`git/README.md`、`vim/README.md` 等同时作为对应主题的入口
+- `shellprogramming/` — Shell 编程教程，通用 Shell 配置在 `shellprogramming/config/`
+- `restructed/` — reStructuredText 与 Markdown 语法参考
+- `script/` — 通用脚本；各主题自己的配置和示例放在对应目录
 - `_static/` — 静态资源 (CSS、图片等)
-- `img/` — 文档图片
 
 ## 文件命名
 
-所有文件名和目录名均使用英文，文档内容为中文。Markdown 文件名与主题对应 (如 `git.md` → git 相关内容)。
+新增 Sphinx 源文件和目录使用英文，正文使用中文；`article/` 随笔及已有历史文件可以保留中文名。Markdown 文件名与主题对应。
 
 ## MyST Markdown 特有语法
 
