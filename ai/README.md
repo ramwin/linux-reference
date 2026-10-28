@@ -20,6 +20,7 @@
 ./mcp.md
 ./tool-calling.md
 ./plugin-vs-skill.md
+./dsh-install-guide.md
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
 ./agent-testing-platform/README.md
