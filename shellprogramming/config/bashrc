@@ -61,6 +61,13 @@ fi
 
 export NODE_PATH="${HOME}/node/lib/node_modules"
 
+# pnpm standalone 版, 独立于 node/nvm 版本
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  ":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+
 # 快捷操作
 alias l='ls'
 alias ll='ls -al'
