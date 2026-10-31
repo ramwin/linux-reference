@@ -9,6 +9,7 @@
 ./agent.md
 ./agent-engineer.md
 ./personal-ai-proficiency.md
+./ai-full-permission-data-safety.md
 ./production-deployment.md
 ./pair-coding.md
 ./multi-model-debate.md
