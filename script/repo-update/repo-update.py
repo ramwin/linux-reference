@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """repo-update —— 主仓 + 子仓的重复性维护入口.
 
-设计目标(见 ai/repetitive-ops-automation.md):
+设计目标(见 ai/coding/repetitive-ops-automation.md):
   常态路径只输出一行 `ok ...`;异常只输出结构化信封(错误码 + 最小字段),
   由 rules.toml 承接已知错误的自动修法,未知错误才交给 AI/人。
 

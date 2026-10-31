@@ -148,11 +148,11 @@ Claude Code 的 skill 遵循 [Agent Skills 开放标准](https://agentskills.io)
 
 ## 六、动手验证
 
-`ai/plugin_vs_skill_demo/` 下有一个**零依赖纯 Python** 的小实验, 不信上面的结论就直接跑——它读本机真实的安装目录, 数「哪些组件是要被执行的代码」:
+`ai/tools/plugin_vs_skill_demo/` 下有一个**零依赖纯 Python** 的小实验, 不信上面的结论就直接跑——它读本机真实的安装目录, 数「哪些组件是要被执行的代码」:
 
 ```bash
-python3 ai/plugin_vs_skill_demo/plugin_vs_skill.py            # 完整对照
-python3 ai/plugin_vs_skill_demo/plugin_vs_skill.py --json     # 机器可读
+python3 ai/tools/plugin_vs_skill_demo/plugin_vs_skill.py            # 完整对照
+python3 ai/tools/plugin_vs_skill_demo/plugin_vs_skill.py --json     # 机器可读
 ```
 
 它做的事:

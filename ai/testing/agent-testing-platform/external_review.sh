@@ -59,7 +59,7 @@ if [[ -z "$answer" ]]; then
     cat >&2 <<'EOF'
 没有可用的外部模型 CLI。两条路:
   1. 终端跑 `kimi`,输入 /login 重新授权(本机 Kimi 凭据已过期);
-     或按 ai/agent-testing-platform/external-review.md 装好 Claude CLI;
+     或按 ai/testing/agent-testing-platform/external-review.md 装好 Claude CLI;
   2. 把本文档正文 + 该文件里的「提问模板」粘到任意网页版模型,回答贴回 reviews/。
 EOF
     exit 2

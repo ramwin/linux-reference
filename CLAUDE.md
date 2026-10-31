@@ -45,7 +45,7 @@ make help
 - 根目录保留 Sphinx 工程文件、仓库说明和 `database.md`、`software.md` 等主题聚合页，具体正文放入对应子目录
 - `index.rst` — 首页，只列主要章节 (`:maxdepth: 1`)
 - `contents.md` — **完整目录页**，按主题用 `{toctree}:glob:` 汇总全部文档；新增顶层目录时要在里面加一条 glob
-- 每篇文档标题下放一条 `{contents}`（`.md`）或 `.. contents::`（`.rst`），生成页内目录，参考 `ai/local-ai-service.md`
+- 每篇文档标题下放一条 `{contents}`（`.md`）或 `.. contents::`（`.rst`），生成页内目录，参考 `ai/fundamentals/local-ai-service.md`
 - 主题目录包括 `ai/`、`article/`、`database/`、`linux/`、`network/`、`software/` 等；`git/README.md`、`vim/README.md` 等同时作为对应主题的入口
 - `shellprogramming/` — Shell 编程教程，通用 Shell 配置在 `shellprogramming/config/`
 - `restructed/` — reStructuredText 与 Markdown 语法参考

@@ -82,7 +82,7 @@
 
 ### 本地记录对照: 我已经跨过了这一阶段
 
-我的[需求提问记录](./requirements-prompting.md)已经使用需求编号、优先级、单一事实源、生成前复述、冲突裁决和验收溯源; [结对编程记录](./pair-coding.md)则把“开发与审查分离”“审查只读”“意见必须带文件和行号”落成了具体流程。这说明我已经不只是会要初稿, 而是在有意识地控制 AI 交付的质量。
+我的[需求提问记录](../coding/requirements-prompting.md)已经使用需求编号、优先级、单一事实源、生成前复述、冲突裁决和验收溯源; [结对编程记录](../coding/pair-coding.md)则把“开发与审查分离”“审查只读”“意见必须带文件和行号”落成了具体流程。这说明我已经不只是会要初稿, 而是在有意识地控制 AI 交付的质量。
 
 ## L3: 流程化——从“一次协作成功”到“流程可以重复执行”
 
@@ -107,7 +107,7 @@
 
 ### 本地记录对照: 我已经有了流程化实践, 不只是流程概念
 
-[DAG 记录](./dag.md)中的最小执行器包含拓扑调度、并行、节点缓存和失败重试, 并记录了缓存键遗漏代码版本这一真实问题及其修复; [内网 DSH 接入记录](./dsh-intranet/README.md)进一步把协议探测、配置、冒烟、故障诊断和 mock 验证做成了工具箱。这些实践说明我已经能把 AI 协作固化为可检查、可重跑的工程流程。
+[DAG 记录](../agent-engineering/dag.md)中的最小执行器包含拓扑调度、并行、节点缓存和失败重试, 并记录了缓存键遗漏代码版本这一真实问题及其修复; [内网 DSH 接入记录](../tools/dsh-intranet/README.md)进一步把协议探测、配置、冒烟、故障诊断和 mock 验证做成了工具箱。这些实践说明我已经能把 AI 协作固化为可检查、可重跑的工程流程。
 
 ## L4: 构建——从“调用 AI”到“设计能完成任务的 Agent 系统”
 
@@ -139,10 +139,10 @@
 
 | 能力 | 本地依据 | 说明 |
 |---|---|---|
-| Agent 原理与工具化 | [Agent](./agent.md)、[MCP](./mcp.md)、[RAG](./rag.md) | 已覆盖循环、工具协议、检索和权限边界 |
-| 工作流与系统编排 | [DAG](./dag.md)、[测试系统架构](./agent-testing-platform/architecture.md) | 能区分 DAG、Agent 循环和多 Agent, 并设计阶段间契约 |
-| 动手验证 | [RAG 评测脚本](./rag_demo/eval_rag.py)、[插件与 Skill 对照实验](./plugin_vs_skill_demo/plugin_vs_skill.py)、[DSH 内网工具箱](./dsh-intranet/README.md) | 不只是整理名词, 也有可执行实验、探测与自检验证 |
-| 生产与演进意识 | [生产部署](./production-deployment.md)、[自进化方案](./agent-testing-platform/self-evolution.md)、[多用户共享记忆](./multi-user-agent-shared-memory.md) | 已经关注评估、灰度、隔离、治理和反馈闭环 |
+| Agent 原理与工具化 | [Agent](../fundamentals/agent.md)、[MCP](../fundamentals/mcp.md)、[RAG](../fundamentals/rag.md) | 已覆盖循环、工具协议、检索和权限边界 |
+| 工作流与系统编排 | [DAG](../agent-engineering/dag.md)、[测试系统架构](../testing/agent-testing-platform/architecture.md) | 能区分 DAG、Agent 循环和多 Agent, 并设计阶段间契约 |
+| 动手验证 | [RAG 评测脚本](../fundamentals/rag_demo/eval_rag.py)、[插件与 Skill 对照实验](../tools/plugin_vs_skill_demo/plugin_vs_skill.py)、[DSH 内网工具箱](../tools/dsh-intranet/README.md) | 不只是整理名词, 也有可执行实验、探测与自检验证 |
+| 生产与演进意识 | [生产部署](../agent-engineering/production-deployment.md)、[自进化方案](../testing/agent-testing-platform/self-evolution.md)、[多用户共享记忆](../agent-engineering/multi-user-agent-shared-memory.md) | 已经关注评估、灰度、隔离、治理和反馈闭环 |
 
 但我不会仅凭这些记录把自己定为 L5。现有材料能证明“做过设计、跑通过实验、解决过具体接入问题”, 还不足以证明“同一套 Agent 已在真实业务中持续运行, 并长期用指标守住质量”。设计过生产方案, 和运营过生产系统, 是两种不同的经验。
 
@@ -171,7 +171,7 @@ L5 的分水岭不是系统更复杂, 而是出现了持续的证据链: 每次�
 
 ### 1. 把小型演示评测升级为真实任务评测
 
-[RAG 评测脚本](./rag_demo/eval_rag.py)已经用 12 道标注问题比较 HitRate@k, 这是很好的起点, 但它主要回答“检索器能否找到正确片段”, 不能代表完整 Agent 的任务成功率。
+[RAG 评测脚本](../fundamentals/rag_demo/eval_rag.py)已经用 12 道标注问题比较 HitRate@k, 这是很好的起点, 但它主要回答“检索器能否找到正确片段”, 不能代表完整 Agent 的任务成功率。
 
 下一步应选一条真实流程, 例如 CI 失败分诊或 Redis 升级测试, 先积累约 50 条来自真实工作的样本。每条样本包含输入、期望行为、证据出处、可接受的答案差异和风险等级, 并覆盖正常、边界、历史故障与对抗场景。每次换模型或改模板都跑同一套回归, 用分数变化代替“感觉更好”。
 
@@ -179,7 +179,7 @@ L5 的分水岭不是系统更复杂, 而是出现了持续的证据链: 每次�
 
 本地记录中方案设计多, 连续运行数据相对少。需要让一条流程在真实项目里持续运行数周, 保存模型、提示词、工具和知识版本, 以及输入、工具调用、输出、耗时、token 和人工修改记录。
 
-重点不是追求“全自动”, 而是每周回答三个问题: 哪类失败最多, 人工在哪一步接管, 哪个改动让指标真实改善。这样才能把[自进化方案](./agent-testing-platform/self-evolution.md)里的“失败聚类 → 定位层级 → 实验验证”从设计变成经验。
+重点不是追求“全自动”, 而是每周回答三个问题: 哪类失败最多, 人工在哪一步接管, 哪个改动让指标真实改善。这样才能把[自进化方案](../testing/agent-testing-platform/self-evolution.md)里的“失败聚类 → 定位层级 → 实验验证”从设计变成经验。
 
 ### 3. 把安全与可靠性知识变成演练记录
 

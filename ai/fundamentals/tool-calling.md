@@ -111,7 +111,7 @@ Kimi Code 的会话日志(`~/.kimi-code/sessions/<工作区>/<会话>/agents/mai
 |---|---|---|
 | 内置工具 | `Read` / `Edit` / `Bash` / `Grep` | CLI 自带, 每次请求固定声明 |
 | MCP 服务 | 数据库查询、内部系统 | 宿主连接 MCP server, 把它暴露的工具**翻译成同样的 JSON Schema** 注入清单, 见 [MCP: AI 应用的 "USB-C" 接口](./mcp.md) |
-| 插件 | DSH 插件 | 可执行代码, 能往注册表里动态加工具, 见 [DSH 插件与 Claude Skill 的区别](./plugin-vs-skill.md) |
+| 插件 | DSH 插件 | 可执行代码, 能往注册表里动态加工具, 见 [DSH 插件与 Claude Skill 的区别](../tools/plugin-vs-skill.md) |
 | skill | `SKILL.md` | **不是工具**, 只是提示词, 影响模型怎么决策, 不新增工具 |
 
 不管哪条路径, 最终都殊途同归: 变成 `tools` 字段里的一段 JSON Schema, 随请求发给模型。

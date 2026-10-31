@@ -8,8 +8,14 @@
 :glob:
 
 ai/*
-ai/dsh-intranet/*
-ai/agent-testing-platform/*
+ai/fundamentals/*
+ai/agent-engineering/*
+ai/coding/*
+ai/testing/*
+ai/testing/agent-testing-platform/*
+ai/tools/*
+ai/tools/dsh-intranet/*
+ai/personal-practice/*
 ```
 
 ```{toctree}

@@ -3,7 +3,7 @@
 ```{contents}
 ```
 
-前面几篇文章里,LLM 都是靠 prompt 里塞的材料干活:[DAG](./dag.md) 把构建日志喂给它做分析, [Agent](./agent.md) 把工具返回喂给它做决策。但有一个问题一直没回答:**材料从哪来?** 用户随口一句"我们公司的住宿报销标准是多少",模型 training 数据里怎么可能有你们公司的报销制度。
+前面几篇文章里,LLM 都是靠 prompt 里塞的材料干活:[DAG](../agent-engineering/dag.md) 把构建日志喂给它做分析, [Agent](./agent.md) 把工具返回喂给它做决策。但有一个问题一直没回答:**材料从哪来?** 用户随口一句"我们公司的住宿报销标准是多少",模型 training 数据里怎么可能有你们公司的报销制度。
 
 这篇文章介绍 AI 应用里最常用的一种补料姿势 —— **RAG(Retrieval-Augmented Generation,检索增强生成)**,并给出一个零依赖、单文件、已实际跑通的最小实现(核心 50 行)。
 
@@ -13,7 +13,7 @@
 2. 它治大模型的三个硬伤:**知识截止**(训练数据有截止日期, 之后的事不知道)、**私有数据**(你的公司制度、个人笔记不在训练集里)、**幻觉**(不知道也会一本正经地编);
 3. 管线就五步:**加载 → 分块 → 向量化入库 → 检索 → 拼 prompt**。demo 用纯 Python(TF-IDF 当 embedding)全链路跑通, 实测"住宿费报销标准"这个问题精准命中报销制度那一块;
 4. **边界**:RAG 的天花板是检索质量 —— **查不到就必然答不出**, 垃圾进垃圾出;它是"考试时给模型发参考资料", 不是"把知识灌进模型脑子", 后者靠微调。
-5. 从 demo 到生产,差距不在流程而在**用料**:embedding 模型(入库查询同一个、换模型重建全库)、按结构分块、混合检索+rerank、元数据与权限;建库里 AI 的刚需只有向量化那一步;向量没有直接质量指标,要用标注评测集算 HitRate@k **间接**评估(见 `ai/rag_demo/eval_rag.py` 的对照实验)。
+5. 从 demo 到生产,差距不在流程而在**用料**:embedding 模型(入库查询同一个、换模型重建全库)、按结构分块、混合检索+rerank、元数据与权限;建库里 AI 的刚需只有向量化那一步;向量没有直接质量指标,要用标注评测集算 HitRate@k **间接**评估(见 `ai/fundamentals/rag_demo/eval_rag.py` 的对照实验)。
 
 ## 为什么需要 RAG: 大模型的三个硬伤
 
@@ -75,7 +75,7 @@ RAG 三个词各对应一段:**R**etrieval 是第 4 步, **A**ugmented 是第 5 
 
 ## 最小 Demo: 一个文件跑通全链路
 
-`ai/rag_demo/rag_demo.py` 一个文件, 零第三方依赖(用 TF-IDF 代替 embedding 模型演示"文本→向量"), 流程和生产的 RAG 一模一样:
+`ai/fundamentals/rag_demo/rag_demo.py` 一个文件, 零第三方依赖(用 TF-IDF 代替 embedding 模型演示"文本→向量"), 流程和生产的 RAG 一模一样:
 
 ```python
 """最小 RAG: 分块 -> 向量化(TF-IDF) -> 索引 -> 检索 -> 拼 prompt。零依赖, 直接 python3 rag_demo.py"""
@@ -238,7 +238,7 @@ demo 跑通了流程, 真上生产前还有四个问题要答清楚。先放结�
 2. **换模型 = 重建整个库**。旧向量全部作废, 千万级块的库重算一遍是小时到天级的活;
 3. **模型版本升级按"换模型"对待**。哪怕厂商说"效果更好", 向量空间也可能变了——升级前先小流量评测(方法见下文最后一节)。
 
-"算法重要"到底重要到什么程度?`ai/rag_demo/eval_rag.py` 做了个对照实验:同一份知识库(12 块)、同一套标注问题(12 题——前 5 题字面提问, 后 7 题口语/同义改写, 库里故意放了 发票×3、住宿×2、过期×2 的干扰块), 只换分词方案, 实测:
+"算法重要"到底重要到什么程度?`ai/fundamentals/rag_demo/eval_rag.py` 做了个对照实验:同一份知识库(12 块)、同一套标注问题(12 题——前 5 题字面提问, 后 7 题口语/同义改写, 库里故意放了 发票×3、住宿×2、过期×2 的干扰块), 只换分词方案, 实测:
 
 ```text
 => HitRate @1=10/12  @3=12/12  (单字分词)
@@ -321,11 +321,11 @@ demo 跑通了流程, 真上生产前还有四个问题要答清楚。先放结�
 
 **3. RAG 和本仓库其他文章什么关系?**
 
-RAG 是**喂料的一种方式**, 不是工作流形态。搭在 [DAG](./dag.md) 里, 它就是"检索"那个节点;搭在 [Agent](./agent.md) 里, 它就是检索工具 —— 典型如"联网搜索"工具, 本质就是拿搜索引擎当知识库的 RAG。
+RAG 是**喂料的一种方式**, 不是工作流形态。搭在 [DAG](../agent-engineering/dag.md) 里, 它就是"检索"那个节点;搭在 [Agent](./agent.md) 里, 它就是检索工具 —— 典型如"联网搜索"工具, 本质就是拿搜索引擎当知识库的 RAG。
 
 ## 参考
 
 - 提出 RAG 的论文: *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*(Lewis et al., 2020), arXiv:2005.11401
-- 本文 demo: `ai/rag_demo/rag_demo.py`, `python3 rag_demo.py` 直接可跑, 上文输出为实测未删减
-- 检索质量对照实验: `ai/rag_demo/eval_rag.py`, `python3 eval_rag.py`, 两套向量化方案在同一评测集上比 HitRate@k, 上文数字为实测
+- 本文 demo: `ai/fundamentals/rag_demo/rag_demo.py`, `python3 rag_demo.py` 直接可跑, 上文输出为实测未删减
+- 检索质量对照实验: `ai/fundamentals/rag_demo/eval_rag.py`, `python3 eval_rag.py`, 两套向量化方案在同一评测集上比 HitRate@k, 上文数字为实测
 - [MTEB / C-MTEB 榜单](https://huggingface.co/spaces/mteb/leaderboard): embedding 模型初筛用, 不能替代自建评测集

@@ -151,7 +151,7 @@ DELETE /memories/{id}     ← 支持"被遗忘权", 合规需要
 
 ## 方案四: MCP 共享记忆服务器
 
-思路: 如果系统已经基于 MCP 搭工具生态(见 [MCP: AI 应用的"USB-C"接口](./mcp.md)), 那么"共享记忆"可以就是一个 MCP Server, 对外暴露 `search_knowledge` / `save_memory` 之类的工具。
+思路: 如果系统已经基于 MCP 搭工具生态(见 [MCP: AI 应用的"USB-C"接口](../fundamentals/mcp.md)), 那么"共享记忆"可以就是一个 MCP Server, 对外暴露 `search_knowledge` / `save_memory` 之类的工具。
 
 在 K8s 上把它部署成集群内的常驻服务:
 
@@ -251,4 +251,4 @@ Agent-1 写入记忆 ──► Kafka topic: memory-events
 - [Qdrant Multitenancy](https://qdrant.tech/documentation/guides/multiple-partitions/) —— 向量库多租户隔离的官方做法
 - [Model Context Protocol](https://modelcontextprotocol.io/) —— 方案四的协议基础
 
-延伸阅读: [RAG: 检索增强生成](./rag.md)、[MCP: AI 应用的"USB-C"接口](./mcp.md)、[从学习到生产](./production-deployment.md)。
+延伸阅读: [RAG: 检索增强生成](../fundamentals/rag.md)、[MCP: AI 应用的"USB-C"接口](../fundamentals/mcp.md)、[从学习到生产](./production-deployment.md)。

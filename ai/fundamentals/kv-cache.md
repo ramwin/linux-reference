@@ -246,10 +246,10 @@ DeepSeek 那份文档里的两个例子特别适合回答"改一点会怎样", �
 
 ### 3.5 一个能跑的最小验证
 
-`ai/kv_cache_demo/` 下有一个**零依赖纯 Python**(不需要 numpy, 只把"向量矩阵乘法"换成了显式的乘加计数)的小实验, 直接跑:
+`ai/fundamentals/kv_cache_demo/` 下有一个**零依赖纯 Python**(不需要 numpy, 只把"向量矩阵乘法"换成了显式的乘加计数)的小实验, 直接跑:
 
 ```bash
-python3 ai/kv_cache_demo/kv_cache_demo.py    # 全部跑完约 0.2 秒
+python3 ai/fundamentals/kv_cache_demo/kv_cache_demo.py    # 全部跑完约 0.2 秒
 ```
 
 它做三件事:
@@ -301,4 +301,4 @@ python3 ai/kv_cache_demo/kv_cache_demo.py    # 全部跑完约 0.2 秒
 - [Context Caching | DeepSeek](https://api-docs.deepseek.com/guides/kv_cache) —— "缓存前缀单元必须完整匹配"与 A+B / A+C / A+D 的例子
 - [vLLM Automatic Prefix Caching](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching.html) —— 自建推理服务里按块哈希共享前缀
 
-延伸阅读: [AI 学习笔记(Transformer 与 Q/K/V)](./README.md)、[RAG: 检索增强生成](./rag.md)、[从0开始搭建本地 AI 服务](./local-ai-service.md)。
+延伸阅读: [AI 学习笔记(Transformer 与 Q/K/V)](./transformer-learning-notes.md)、[RAG: 检索增强生成](./rag.md)、[从0开始搭建本地 AI 服务](./local-ai-service.md)。

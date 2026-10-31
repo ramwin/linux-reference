@@ -78,7 +78,7 @@ Node **20.20.2** 上 `dsh` 退出码 0、stdout/stderr 都是 0 字节、连模�
 ## 三步接通
 
 ```bash
-cd ai/dsh-intranet
+cd ai/tools/dsh-intranet
 
 # 1. 探测: 网关在哪个路径、两种协议哪种能用、哪些字段会被拒
 ./dsh-intranet.sh probe --url http://10.0.0.9:8000 --key sk-xxx

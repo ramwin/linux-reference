@@ -3,7 +3,7 @@
 ```{contents}
 ```
 
-上一篇[云服务测试的 AI 转型](./cloud-service-testing.md)里,用例生成、失败分诊都是"一句 prompt 干一件事"。任务一复杂——比如"分析日志、分类错误、排查嫌疑提交、再写报告"——直觉做法是把所有材料塞进一条长 prompt。这篇文章解释为什么更好的做法是把它拆成一张 **DAG(有向无环图)**,并给出一个 66 行、已实际跑通验证的最小执行器。
+上一篇[云服务测试的 AI 转型](../testing/cloud-service-testing.md)里,用例生成、失败分诊都是"一句 prompt 干一件事"。任务一复杂——比如"分析日志、分类错误、排查嫌疑提交、再写报告"——直觉做法是把所有材料塞进一条长 prompt。这篇文章解释为什么更好的做法是把它拆成一张 **DAG(有向无环图)**,并给出一个 66 行、已实际跑通验证的最小执行器。
 
 ## 结论先放在前面
 
@@ -292,7 +292,7 @@ def blame(errors, commits):
 
 - **Airflow**:数据管道的事实标准,任务依赖即 DAG——AI 工作流的 DAG 热是同一思想在 LLM 时代的重演;
 - **LangGraph / Dify / Coze / n8n**:把节点和边做成可视化画布,拖拽生成 AI 工作流,底层都是 DAG 执行器;
-- **本目录的 shell 脚本**:[结对编程](./pair-coding.md)的 `pair.sh`、"开发→提交→审查→修复"的循环、[多模型辩论](./multi-model-debate.md)的 `debate.sh`、"提案→批评→修订"——手工写的串行流程,画出来都是两三层的小 DAG。手写的版本没有缓存、没有并行、环靠人脑检查;流程稳定后,值得用执行器固化下来。
+- **本目录的 shell 脚本**:[结对编程](../coding/pair-coding.md)的 `pair.sh`、"开发→提交→审查→修复"的循环、[多模型辩论](../coding/multi-model-debate.md)的 `debate.sh`、"提案→批评→修订"——手工写的串行流程,画出来都是两三层的小 DAG。手写的版本没有缓存、没有并行、环靠人脑检查;流程稳定后,值得用执行器固化下来。
 
 ## 常见坑
 
@@ -314,10 +314,10 @@ def blame(errors, commits):
 
 ## 参考资料
 
-- [云服务测试的 AI 转型](./cloud-service-testing.md)——本文 demo 的"排查提交"节点即该文方向三的分诊
-- [Kimi Code + Claude Code 结对编程](./pair-coding.md)——`pair.sh` 是手工版两节点 DAG
-- [只有一个 Claude Code: 让多个模型讨论方案和 review 代码](./multi-model-debate.md)——`debate.sh` 的"提案→批评→修订"循环
-- [从 0 开始搭建一个 Agent](./agent.md)——Agent 循环与 DAG 的互补关系
+- [云服务测试的 AI 转型](../testing/cloud-service-testing.md)——本文 demo 的"排查提交"节点即该文方向三的分诊
+- [Kimi Code + Claude Code 结对编程](../coding/pair-coding.md)——`pair.sh` 是手工版两节点 DAG
+- [只有一个 Claude Code: 让多个模型讨论方案和 review 代码](../coding/multi-model-debate.md)——`debate.sh` 的"提案→批评→修订"循环
+- [从 0 开始搭建一个 Agent](../fundamentals/agent.md)——Agent 循环与 DAG 的互补关系
 - [LangGraph 官方文档](https://langchain-ai.github.io/langgraph/)
 - [Apache Airflow](https://airflow.apache.org/)
 - [Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)——工作流(workflow)与智能体(agent)的权威划分

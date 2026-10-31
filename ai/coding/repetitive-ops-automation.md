@@ -51,7 +51,7 @@
 | 返工成本 | 踩同一个坑、试错、回滚、再试 | 一轮里 3~5 次失败后重来 |
 
 三者相乘。因为 agent 的上下文是**按步计费**的：每加一轮，前面所有内容都要重发一遍
-（缓存只让单价降，不改变「累积」这个结构，详见[上下文工程](./context-engineering.md) 第 2.5 节）。
+（缓存只让单价降，不改变「累积」这个结构，详见[上下文工程](../agent-engineering/context-engineering.md) 第 2.5 节）。
 上表里 782 万缓存命中输入，就是「同一批内容被反复重发」的实证。
 
 所以优化的目标不是「让模型更聪明地探索」，而是**让探索这件事根本不发生**：
@@ -382,7 +382,7 @@ main "$@"
 **4）沉淀闭环。**
 一次新错误 →（a）脚本加 `rules.toml` 条目，（b）`kb/` 加一条给人和 AI 看的说明。
 下次命中规则零成本；AI 需要细读时才 `grep` 那条 kb。规则层和事实层分开维护，这一点和
-[用 git 管理 AI 记忆](./memory-git.md) 是同一个思路。
+[用 git 管理 AI 记忆](../agent-engineering/memory-git.md) 是同一个思路。
 
 ## 七、反模式：什么时候别上这套
 
@@ -412,9 +412,9 @@ main "$@"
 
 ## 参考
 
-- 本仓：[上下文工程](./context-engineering.md)：为什么上下文按步计费、最小高信号 token 集
-- 本仓：[Agent 工程师](./agent-engineer.md)：工具返回应该「内部先过滤，只回结构化结论」
-- 本仓：[从学习到生产](./production-deployment.md)：幂等、重试、可观测性在线上 Agent 里的位置
+- 本仓：[上下文工程](../agent-engineering/context-engineering.md)：为什么上下文按步计费、最小高信号 token 集
+- 本仓：[Agent 工程师](../personal-practice/agent-engineer.md)：工具返回应该「内部先过滤，只回结构化结论」
+- 本仓：[从学习到生产](../agent-engineering/production-deployment.md)：幂等、重试、可观测性在线上 Agent 里的位置
 - 仓内脚本：`script/rebase_to_master.sh`、`script/master_or_main.sh`、
   `script/判断仓库是否更新了.sh`、`script/添加submodule.sh`——这套脚本的既有碎片
 

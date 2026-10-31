@@ -60,11 +60,11 @@ curl -k -sS -o /dev/null -w '%{http_code}\n' https://<网关>/v1/models -H 'Auth
 
 ## 2. 主路径: 三条命令
 
-先确认你手上有 `ai/dsh-intranet/` 目录(与本文件同级)。
+先确认你手上有 `ai/tools/dsh-intranet/` 目录(与本文件同级)。
 **先自检脚本本身**, 再动真网关:
 
 ```bash
-cd ai/dsh-intranet
+cd ai/tools/dsh-intranet
 ./dsh-intranet.sh selftest          # 本机起 mock 网关, 不碰真网关、不花额度
 ```
 
@@ -253,7 +253,7 @@ dsh web --host 0.0.0.0 --port 3080 --no-open
 ## 附录 A: 文件清单与期望布局
 
 ```
-ai/dsh-intranet/
+ai/tools/dsh-intranet/
 ├── AGENT-TASK.md          # 本文件
 ├── README.md              # 给人看的完整方案(含 compat 归属表、手工配置法)
 ├── dsh-intranet.sh        # 主入口: probe/configure/smoke/doctor/show/install/bundle/selftest

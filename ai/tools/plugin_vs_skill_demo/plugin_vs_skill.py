@@ -12,9 +12,9 @@
   * 插件: package.json 有 `dsh` 字段, 且 main/exports 指向真实存在的 .js 文件
   * skill: 正文里出现 !`cmd` 或 ```! 代码块(渲染时由宿主执行), 以及 allowed-tools 授权
 
-    python3 ai/plugin_vs_skill_demo/plugin_vs_skill.py                    # 用默认路径
-    python3 ai/plugin_vs_skill_demo/plugin_vs_skill.py --json             # 只输出机器可读结果
-    python3 ai/plugin_vs_skill_demo/plugin_vs_skill.py --dsh-profile ~/.dsh/profiles/web
+    python3 ai/tools/plugin_vs_skill_demo/plugin_vs_skill.py                    # 用默认路径
+    python3 ai/tools/plugin_vs_skill_demo/plugin_vs_skill.py --json             # 只输出机器可读结果
+    python3 ai/tools/plugin_vs_skill_demo/plugin_vs_skill.py --dsh-profile ~/.dsh/profiles/web
 
 需要 Python 3.8+, 无第三方依赖。
 """
