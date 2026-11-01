@@ -34,9 +34,10 @@ fi
 #    走 pnpm 本地 store 缓存,不重复下载。pnpm-lock.yaml 是本地忽略文件
 #    (全局 gitignore 里有 pnpm-lock.yaml),服务器上可能不存在,所以按存在与否处理。
 STATIC_SHA=$(for f in _static/package.json _static/pnpm-lock.yaml; do
-    [ -f "$f" ] && sha256sum "$f"
+    if [ -f "$f" ]; then sha256sum "$f"; fi
 done | sha256sum | cut -d' ' -f1)
-if [ ! -d _static/node_modules ] || [ "$(cat "$STATIC_STAMP" 2>/dev/null)" != "$STATIC_SHA" ]; then
+if [ ! -d _static/node_modules ] \
+    || [ "$(cat "$STATIC_STAMP" 2>/dev/null || true)" != "$STATIC_SHA" ]; then
     NODE_BIN=$(ls -d "$HOME"/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1 || true)
     [ -n "${NODE_BIN:-}" ] && export PATH="$NODE_BIN:$PATH"
     if command -v pnpm >/dev/null 2>&1; then
