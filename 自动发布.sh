@@ -31,15 +31,26 @@ fi
 
 # ── 2. 前端静态依赖:mermaid 由浏览器从 _static/node_modules 加载 ─────────
 #    package.json / pnpm-lock.yaml 变了(或 node_modules 丢了)才装,
-#    走 pnpm 本地 store 缓存,不重复下载
-STATIC_SHA=$(cat _static/package.json _static/pnpm-lock.yaml | sha256sum | cut -d' ' -f1)
+#    走 pnpm 本地 store 缓存,不重复下载。pnpm-lock.yaml 是本地忽略文件
+#    (全局 gitignore 里有 pnpm-lock.yaml),服务器上可能不存在,所以按存在与否处理。
+STATIC_SHA=$(for f in _static/package.json _static/pnpm-lock.yaml; do
+    [ -f "$f" ] && sha256sum "$f"
+done | sha256sum | cut -d' ' -f1)
 if [ ! -d _static/node_modules ] || [ "$(cat "$STATIC_STAMP" 2>/dev/null)" != "$STATIC_SHA" ]; then
     NODE_BIN=$(ls -d "$HOME"/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1 || true)
     [ -n "${NODE_BIN:-}" ] && export PATH="$NODE_BIN:$PATH"
     if command -v pnpm >/dev/null 2>&1; then
         echo "同步前端静态依赖(_static,pnpm store 缓存)"
-        (cd _static && pnpm install --frozen-lockfile --prefer-offline --reporter=append-only)
-        echo "$STATIC_SHA" > "$STATIC_STAMP"
+        if [ -f _static/pnpm-lock.yaml ]; then
+            pnpm_install=(pnpm install --frozen-lockfile --prefer-offline --reporter=append-only)
+        else
+            pnpm_install=(pnpm install --prefer-offline --reporter=append-only)
+        fi
+        if (cd _static && "${pnpm_install[@]}"); then
+            echo "$STATIC_SHA" > "$STATIC_STAMP"
+        else
+            echo "警告: pnpm install 失败,继续构建(mermaid 图可能不渲染),下个周期重试" >&2
+        fi
     else
         echo "警告: 找不到 node/pnpm,跳过 _static 依赖同步(mermaid 图可能不渲染)" >&2
     fi
