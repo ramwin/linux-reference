@@ -47,7 +47,9 @@ if [ ! -d _static/node_modules ] \
         else
             pnpm_install=(pnpm install --prefer-offline --reporter=append-only)
         fi
-        if (cd _static && "${pnpm_install[@]}"); then
+        # CI=true:没有 TTY 时允许 pnpm 重建 node_modules(否则它会中止
+        # ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY);依赖仍走本地 store 缓存
+        if (cd _static && CI=true "${pnpm_install[@]}"); then
             echo "$STATIC_SHA" > "$STATIC_STAMP"
         else
             echo "警告: pnpm install 失败,继续构建(mermaid 图可能不渲染),下个周期重试" >&2
