@@ -21,7 +21,9 @@ make html
 sphinx-build . _build/html/
 
 # 发布到线上 https://linux-reference.ramwin.com
-# 前提: 改动已 commit 并 push; 脚本会 ssh 到 ramwin 构建后替换线上目录
+# 线上由服务器 systemd timer 自动部署(docs-autodeploy@linux-reference.timer,
+# 每 5 分钟 git pull origin/master,有新提交才跑仓内 自动发布.sh 构建)
+# 所以 push 后最多 5 分钟自动上线;想立刻上线再跑 ./发布.sh
 ./发布.sh [要校验的页面路径, 默认 ai/]
 
 # 构建其他格式
