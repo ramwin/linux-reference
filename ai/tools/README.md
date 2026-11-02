@@ -9,4 +9,5 @@
 ./dsh-intranet/README.md
 ./dsh-intranet/AGENT-TASK.md
 ./plugin-vs-skill.md
+./kimi-code-quota-resume.md
 ```
