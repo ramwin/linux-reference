@@ -12,4 +12,5 @@
 ./dag.md
 ./dag-owner-deliverables.md
 ./production-deployment.md
+./rag-protocol.md
 ```
