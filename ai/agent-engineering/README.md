@@ -9,6 +9,7 @@
 ./memory-git.md
 ./multi-user-agent-shared-memory.md
 ./model-routing.md
+./weak-model-layered-architecture.md
 ./dag.md
 ./dag-owner-deliverables.md
 ./production-deployment.md
