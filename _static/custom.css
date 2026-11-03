@@ -1,5 +1,7 @@
+/* 取消主题硬编码的 800px 内容宽度上限,消除宽屏右侧留白
+ * 上游 issue: https://github.com/readthedocs/sphinx_rtd_theme/issues/295 */
 .wy-nav-content {
-  max-width: 90%;
+  max-width: none;
 }
 
 blockquote {
