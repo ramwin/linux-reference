@@ -9,6 +9,7 @@
 ./local-ai-service.md
 ./agent.md
 ./kv-cache.md
+./kv-cache-pruning.md
 ./rag.md
 ./tool-calling.md
 ./mcp.md
