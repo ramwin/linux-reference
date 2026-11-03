@@ -12,5 +12,6 @@
 ./multi-model-debate.md
 ./parallel-feature-development.md
 ./ai-era-code-review-bottleneck.md
+./reduce-mr-conflicts.md
 ./repetitive-ops-automation.md
 ```
