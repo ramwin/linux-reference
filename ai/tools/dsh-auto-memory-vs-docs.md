@@ -71,7 +71,40 @@
 把 30 条记忆写进 AGENTS.md 等于每轮都付一次全量 token。
 memory 索引的 4KB 预算是按「索引条目」设计的，正是为了不撑爆这个成本。
 
+## 预算算得比想象的小：maxBytes 不是可用字节
+
+`indexByteBudget(maxBytes)` 的算法是**扣减式**的：
+
+```
+净预算 = maxBytes − MEMORY_POLICY_TEXT(~1192B) − 协议壳(~30B) − 96
+默认 maxBytes=4096 → 净预算 ≈ 2778 字节
+```
+
+那段「When to write a memory…」的写入指导本身就要吃掉 1.2KB，
+所以不要拿 4096 当可用量。实测：18 条记忆正文 3725 字节，
+**超出 947 字节，约 6 条被截断**（`memory/audit.jsonl` 的 `truncated` 字段会点名）。
+
+调大预算只需在 profile patch 里加一行：
+
+```yaml
+- id: auto-memory
+  config:
+    memoryDir: !!js process.env.HOME + '/github/个人/memory-repo/memory'
+    maxBytes: 6144     # 净预算 2778 → 4826
+```
+
+改完要重启 `dsh web` 才生效（`cordis.patch.yml` 只在启动时读）。
+
+### 这点 token 到底值不值
+
+实测一次会话：5M token / ¥0.243。索引从截断态变成全量只多注入约 950 字节
+（≈250 token），按 150 次请求、系统提示前缀命中上下文缓存估算，
+**整场会话多花不到一分钱**。所以不值得为了省钱让记忆被截断——
+截断的代价是「写了但看不到」，那才是真损失。
+
 ## 版本记录
 
+- v2（2026-11-05）：补 `maxBytes` 预算算式、实测截断数据与成本估算；
+  记录 `maxBytes` 调到 6144 及重启要求。
 - v1（2026-11-05）：初版。使用模型：DeepSeek Harness（deepseek-flash）。
   本次消耗 token 未统计。
