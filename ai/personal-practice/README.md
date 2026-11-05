@@ -9,4 +9,5 @@
 ./agent-engineer.md
 ./ai-full-permission-data-safety.md
 ./career-resilience-drone-embodied-ai.md
+./conversation-management.md
 ```
