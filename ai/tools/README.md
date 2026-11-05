@@ -11,4 +11,5 @@
 ./plugin-vs-skill.md
 ./kimi-code-quota-resume.md
 ./lexisharp-confidence-routing.md
+./dsh-auto-memory-vs-docs.md
 ```
