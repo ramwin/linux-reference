@@ -45,6 +45,7 @@ awk '{print $1}' filename
 ```{toctree}
 :maxdepth: 2
 ./software/supervisor.md
+./software/python-zero-downtime-reload.md
 ./celery/README.md
 ./rabbitmq/README.md
 ./network/nfs.md
