@@ -11,6 +11,7 @@ ai/*
 ai/fundamentals/*
 ai/agent-engineering/*
 ai/coding/*
+ai/enterprise/*
 ai/testing/*
 ai/testing/agent-testing-platform/*
 ai/tools/*
