@@ -20,6 +20,7 @@
 ./skill-personalization.md
 ./case-redis-upgrade.md
 ./landscape-openjiuwen.md
+./landscape-tools.md
 ./external-review.md
 ./qa/README.md
 ./reviews/README.md
@@ -154,6 +155,7 @@
 
 ## 七、外部方案与可复用点
 
+- **横向对比(Codex / DSH / openJiuwen / 扣子)**:四个供给端工具分别回答"把代码写完 / 把工作台改装 / 把 Agent 造出来 / 把画布拖出来",用七个维度打分并给出两组权重下的排名翻转,再说明验收端为什么不该用同一把尺子量。详见[四工具横评](./landscape-tools.md)。
 - **openJiuwen(华为)**:供给端,和我们重叠很小。建议"复用独立组件为主(`agent-protocol` / Swarm Skills 规范 / `agent-memory`)、把它做的 Agent 当作被测对象为辅";平台级底座(方案 C)不建议。风险:与 AgentArts 企业版同源,商用前要确认社区版边界。详见[openJiuwen 分析](./landscape-openjiuwen.md)。
 - **Finding the Right Fit(arXiv 2610.00917)**:对 openJiuwen / OpenHands / DSH / PI 四个 harness × 5 个模型做了 66 组交叉评测,结论是**模型 × harness × 任务必须联合评测,排名会随配置反转**——这正是验收端该提供的产品能力,其开源轨迹(6,204 条)可直接当基线。
 - **DeepSeek Harness(DSH)**:当作"方案二的活标本"评估过——它能被嵌进角色实现层,但框架 API 不能泄漏到契约层。
@@ -168,6 +170,7 @@
 | [skill-personalization.md](./skill-personalization.md) | Skill 怎么存、怎么做到千人千面、权限与多租户 | 中长,含 DDL |
 | [case-redis-upgrade.md](./case-redis-upgrade.md) | Redis 5.0→7.0 升级全流程,七阶段各自产出什么 | 长,含 prompt 与输出样例 |
 | [landscape-openjiuwen.md](./landscape-openjiuwen.md) | openJiuwen 是什么、和我们重叠多少、能复用哪些 | 中长,含一手资料摘录 |
+| [landscape-tools.md](./landscape-tools.md) | Codex / DSH / openJiuwen / 扣子 各做什么、七个维度怎么打分、和测试平台差在哪 | 中长,含评分表与选型建议 |
 | [external-review.md](./external-review.md) | 怎么让外部模型校对,和内部模型的差异怎么记 | 机制说明 |
 | [qa/](./qa/README.md) | 逐条问答台账(新问题往这里加) | 持续增长 |
 | [reviews/](./reviews/README.md) | 外部模型校对记录与待校验断言清单 | 持续增长 |
@@ -188,5 +191,6 @@
 | 版本 | 日期 | 变更 | 使用模型 |
 |---|---|---|---|
 | v1 | 2026-10-25 | 建文件夹:收拢 6 篇专题,新增本页总纲、外部模型对比机制、问答台账与待校验清单 | DeepSeek(deepseek-flash) |
+| v2 | 2026-11-12 | 新增《Codex、DSH、openJiuwen、扣子:四种 AI 工具,四种活法》横评,并接入外部方案与文档地图 | DeepSeek(deepseek-flash) |
 
 本次消耗:见会话 `session-a8f2edbd` 的 usage 汇总(约 1.2 万 token 输入 / 0.9 万 token 输出,含子任务)。
