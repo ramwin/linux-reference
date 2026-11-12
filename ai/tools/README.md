@@ -13,5 +13,6 @@
 ./kimi-code-quota-resume.md
 ./lexisharp-confidence-routing.md
 ./dsh-auto-memory-vs-docs.md
+./knowledge-base-layering.md
 ./dsh-web-mobile-reload.md
 ```
