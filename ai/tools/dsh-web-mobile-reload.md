@@ -131,6 +131,52 @@ grep -rIn "location\.reload\|location\.replace\|location\.assign\|location\.href
 4. **主文档补 `overscroll-behavior-y: contain`**（或 `none`），防下拉刷新误触。
 5. 临时手段：改用 Chrome / 少开标签 / 关省电模式。
 
+## 六、已落地的改动（2026-11-12）
+
+### 1) 两个插件的轮询节流（已生效，改的是 profile 里的客户端 bundle）
+
+插件 bundle 由宿主 `dsh-client-hmr` 每 500 ms stat 轮询，改动会被识别成新 rev
+并通过 `/plugins/events` 推给浏览器热替换——**不需要重启 dsh**。
+
+| 文件 | 改动 |
+|---|---|
+| `~/.dsh/profiles/web/node_modules/dsh-music-player/lib/client.js` | `/dsh-music/intent` 轮询 `2000 ms → 5000 ms`；页面隐藏且没在放音（`!store.playing && !store.radioPlaying`）时直接跳过 |
+| `~/.dsh/profiles/web/node_modules/dsh-better-sidebar/lib/client.js` | `session.phase` 轮询 `POLL_MS$1 = 1e3 → 5e3`；`document.hidden` 时跳过 |
+
+验证方式（宿主视角）：
+
+```bash
+# 拿一张新 graph，看这两个模块的 rev 是否变了（其余应不变）
+curl -sN -b cookies.txt http://127.0.0.1:3081/plugins/events | head -c 2000
+```
+
+实测：`graph rev 5f125b27783c → 4bb8258d9562`，只有 `dsh-music-player`、
+`dsh-better-sidebar` 两个 rev 变化，且把新 URL 抓下来能搜到补丁标记
+（`本地节流补丁`）—— 说明宿主读的是改后的文件、浏览器拿到的也是改后的 bundle。
+
+原文备份在 `~/.dsh/backup-poll-patch/*.orig`，回滚就是拷回去。
+**注意：插件升级/重装会覆盖这两个文件**（它们是 pnpm 硬链接，升级后是全新文件），
+届时需要重新打。
+
+### 2) nginx 给 `/assets/` 加 immutable（脚本已备好，需 root 执行一次）
+
+本会话的 sudo 被沙箱 `no_new_privs` 挡死，所以落成一个可直接跑的脚本：
+
+```bash
+bash ~/dsh-www-assets-cache.sh --dry-run   # 先看一眼插入的块
+sudo bash ~/dsh-www-assets-cache.sh        # 应用：备份 → 插入 → nginx -t（失败自动回滚）→ reload → 验证
+```
+
+脚本做的事：在 `dsh.www.ramwin.com` 的 443 server 里、`location /` 之前插入
+`location ^~ /assets/`，带 `Cache-Control: public, max-age=31536000, immutable`，
+并复刻原有的 cookie 门（`error_page 418 = @dsh_www_gate`）和 HSTS 等 `add_header`
+——因为 nginx 的 `add_header` 不跨 location 继承，漏写会把这些头弄丢。
+文件名带内容 hash，所以 immutable 安全；文档本身仍是 `no-store`（它的地址不带
+hash，必须继续走协商）。
+
+验证：`curl -sI https://dsh.www.ramwin.com/assets/index-*.js | grep -i cache-control`
+（未登录的 401 也会带，因为用了 `always`）。
+
 ## 附：这次用到的几个取证命令
 
 ```bash
@@ -155,6 +201,8 @@ grep -rIn "location.reload" --include=*.js ~/node_modules/@deepseek-ai
 
 ## 版本记录
 
+- v2（2026-11-12）：补「已落地的改动」——两个插件的轮询节流（实测 rev 变化 +
+  bundle 校验）与 nginx `/assets/` 长缓存脚本（sudo 被沙箱挡住，留待 root 执行）。
 - v1（2026-11-12）：初版。实测数据来自 11/11 00:52 → 12/11 09:27 的
   `dsh-www-access.log` 与当前 74 模块的 client graph。
   使用模型：DeepSeek Harness（deepseek-flash）。
