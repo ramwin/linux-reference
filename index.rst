@@ -17,6 +17,7 @@ Welcome to linux reference's documentation!
    ./ai/README.md
    ./database.md
    ./software.md
+   ./nas/README.md
    ./linux/hardware.md
    ./article/README.md
    ./restructed/restructed语法.rst
