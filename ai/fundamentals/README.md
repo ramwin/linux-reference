@@ -9,6 +9,7 @@
 ./local-ai-service.md
 ./agent.md
 ./kv-cache.md
+./deepseek-cache-ttl.md
 ./kv-cache-pruning.md
 ./rag.md
 ./tool-calling.md
