@@ -243,8 +243,137 @@ curl -sS -o /dev/null -w '%{http_code}\n' -u 'dsh:新密码' https://dsh.example
 | 换手机/换网络连不上 | DNS 缓存、证书过期 | `getent hosts <域名>`；`openssl s_client -connect <域名>:443 -servername <域名> \| openssl x509 -noout -enddate` |
 | 登录后一会儿掉线 | Host 头与地址栏不一致（Origin 围栏） | nginx `proxy_set_header Host` 必须是浏览器域名 |
 
+## `--public-url` 管"广告"，`--trusted-host` 管"信任"
+
+`dsh web --help` 里和公网相关的三个参数，职责别混：
+
+| 参数 | 作用 | 影响鉴权？ |
+|---|---|---|
+| `--public-url <url>` | 把打印的 URL、自动打开的 URL、`DSH_WEB_URL` 环境变量、模型运行时上下文里的"GUI URL"都换成这个根。帮助文本原话是 **grants no trust** | 否 |
+| `--trusted-host <authority>` | 给 `/api` 的 Host/Origin 围栏额外放行一个 authority；不加则公网域名访问 `/api` 一律 403（页面能开、看着像白屏） | 是 |
+| `--tls-cert` / `--tls-key` | DSH 自己终结 TLS。读一次固定文件，不续期、不做 80→443 跳转、不发 HSTS | 否 |
+
+只挂 `--trusted-host`、不挂 `--public-url` 的后果：启动日志打印的是
+`http://127.0.0.1:3080/?token=...`，`DSH_WEB_URL` 也是它，模型在回答里贴"GUI 地址"
+时贴出来的就是回环地址——用户点不开。所以反代部署建议两个都挂：
+
+```ini
+ExecStart=/home/<user>/node_modules/.bin/dsh web --port 3080 --no-open \
+  --trusted-host dsh.example.com \
+  --public-url https://dsh.example.com/
+```
+
+两个注意点：
+
+- 生效要重启进程；但 cookie 签名密钥是**持久化**在 credential provider 里的，
+  浏览器已有 cookie 重启后照常可用（固定 launch token 同理），不用重新登录。
+- 打印 URL 从 `http://127.0.0.1:...` 变成 https 之后，那种"从 journal 里 grep
+  `http://127.0.0.1:3080/?token=`"的救急脚本会失配，改成 grep
+  `token=[A-Za-z0-9_-]\{43\}` 即可。
+
+## 能不能不挂 nginx、直接裸跑公网
+
+技术上能：`--host <公网 IP> --tls-cert/--tls-key --trusted-host <域名>` 就够跑起来。
+但把两边逐项摊开看，反代赢在"它替 DSH 做了 DSH 不打算做的事"：
+
+| 维度 | nginx 前置 | `dsh web` 裸跑 |
+|---|---|---|
+| TLS / 证书续期 | certbot 续期 + reload，成熟 | 只吃静态 PEM，不续期，到期即挂；无 HSTS、无 80→443 跳转 |
+| HTTP/2 | `listen 443 ssl http2`，多路复用 | Node `https` 只有 HTTP/1.1，页面要并行拉 index/2×JS/2×CSS/2×插件 combo，全挤在 6 条连接里 |
+| 静态资源缓存头 | 可以按 location 注入 `immutable`（DSH 自己写死 `no-cache`） | 无配置项。`dsh-host-frontend-static` 源码里就是 `no-cache` + 弱 ETag，0.2.2-rc.2 也一样 |
+| 鉴权纵深 | Basic/cookie 门 + DSH token/cookie 两层 | 只剩 DSH 一层（token + 签名 cookie + Host 围栏） |
+| 限流 / 防爆破 / 连接数 | `limit_req` / `limit_conn` 可用 | 没有 |
+| 日志审计 | access_log 带 UA、字节数、状态码 | 只有 journald 里的应用日志 |
+| 额外开销 | nginx worker 实测 4.7 MB RSS | 0 |
+| 访问日志/字节统计 | 有，能直接算首屏字节 | 无 |
+
+**结论**：单人自用、且愿意自己续证书、且不要静态长缓存，裸跑也能活；否则维持
+nginx 前置。真正"贵"的那项是缓存头——裸跑等于放弃第 1 档优化（见下节），
+这一条就足够否掉裸跑。
+
+## 有没有 debug / release 两种模式
+
+没有。三条证据：
+
+- npm 包全量 grep，唯一读 `NODE_ENV` 的是 `@deepseek-ai/dsh-experimental-liveshare`；
+  `dsh web --help` 也没有 `--dev` / `--debug` / `--prod` 之类的开关，只有
+  `--host/--port/--no-open/--public-url/--trusted-host/--tls-*`。
+- 装进 `node_modules` 的是 Vite 预构建产物：JS 压缩，`dist` 里 **0 个 `.map`**。
+  所以线上永远是同一个 release 形态，不存在"生产模式少打日志/关断言"那种差异。
+- 唯一的"开发形态"是源码 checkout + `pnpm run dev:web`：Vite dev server 负责外壳，
+  客户端插件由 watcher 重建，`dsh-client-hmr` 每 500 ms stat 一次 rev，变了通过
+  `/plugins/events` 推给浏览器热替换。用 npm 包跑时这条链路常驻但空闲（无变化不推送）。
+
+排障只有 `journalctl -u <unit> -f` 和 `dsh --profile web --dump-config`，没有
+"打开 debug 就多打日志"的开关。所以"线上出问题想开 debug"这条路本身不存在，
+要靠复现 + `--dump-config` 对比配置。
+
+## 想更稳、少刷新、缓存更省、CPU/内存更低：可动项盘点
+
+先给实测基线（2 vCPU / 899 MB 阿里云小机，2026-11-13）：
+
+| 指标 | 实测 |
+|---|---|
+| 冷加载（全量） | **4.3 MB**（gzip 后）：index 7 KB + 外壳 JS 543 KB + CSS 29 KB + 插件 combo 3.7 MB；原始 14.8 MB |
+| 已缓存后的整页重载 | index 7 KB + 4 个 `/assets/` 条件请求（全 304，零字节） |
+| node 进程 RSS | 386–399 MB（约占整机 43%） |
+| nginx worker RSS | 4.7 MB |
+| 970 KB 的 JS gzip 一次 | 30–37 ms CPU |
+| 命中 ETag 的 304 | 5–10 ms（本机回环；移动端还要加 1 个 RTT） |
+| 插件 combo 缓存头 | 已是 `public, max-age=31536000, immutable`（对的） |
+| `/assets/` 缓存头 | `no-cache` + 弱 ETag（每次重载 4 个条件请求的来源） |
+
+按"收益/风险"分档：
+
+| 档 | 动作 | 需要 | 收益 | 风险 |
+|---|---|---|---|---|
+| 1 | nginx 给 `location ^~ /assets/` 注入 `immutable` | root + reload nginx，**不重启 dsh** | 每次重载少 4 个条件请求（移动端约省 1–4 个 RTT）；缓存被清时少下 470 KB；node 不再参与已缓存资源 | 极低（文件名带内容 hash） |
+| 2 | 补 `--public-url` | 重启 dsh | 日志 / `DSH_WEB_URL` / 模型上下文里的 URL 变正确 | 低 |
+| 3 | 给 OOM 定优先级（`OOMScoreAdjust` / `MemoryHigh`） | root + 重启 | 内存打满时先杀 dsh 并自动拉起，而不是连带 sshd/nginx 一起没 | 低 |
+| 4 | 砍掉不用的 client 模块 | 改 profile | 首屏 combo 3.7 MB 按比例下降，浏览器解析内存也降 | 中（要试） |
+| 5 | 让 nginx 直接 serve `/assets/`（绕过 node） | root | 冷加载省掉 node 的 gzip CPU | 中：路径耦合包目录 |
+| — | 关 gzip / 关 HTTP/2 / 改裸跑 | — | 负收益 | 不做 |
+
+**第 1 档的坑（实测，别踩）**：`add_header Cache-Control ...` 只是**追加**，nginx 会把
+上游的 `cache-control: no-cache` 一并透传。响应变成两行，浏览器按 `no-cache` 处理，
+immutable 白加。用临时 nginx 实例验证过：
+
+```text
+# 只 add_header
+cache-control: no-cache
+Cache-Control: public, max-age=31536000, immutable
+# 加一行 proxy_hide_header Cache-Control 之后
+Cache-Control: public, max-age=31536000, immutable
+```
+
+所以块里必须先 `proxy_hide_header Cache-Control;` 再 `add_header`；另外 `add_header`
+不跨 location 继承，复刻 cookie 门时要连 HSTS / nosniff / Referrer-Policy 一起写上。
+判定标准就一条：`curl -I` 之后**只有一行** Cache-Control。
+
+**第 3 档**的 systemd drop-in：
+
+```bash
+sudo systemctl edit dsh-www.service
+# [Service]
+# OOMScoreAdjust=500
+# MemoryHigh=700M
+```
+
+`OOMScoreAdjust` 为正数 = 更易被杀（内核优先杀 dsh 而不是 sshd），`MemoryHigh` 触发
+回收而不是直接 OOM。别设 `MemoryMax`——那等于到点直接 SIGKILL。
+
+**第 4 档**的数据支撑：3.7 MB gzip 的 combo 由 80 个 client 模块组成，纯 UI 插件是
+大头；每砍一个，`/plugins/??` 组合 URL 里就少一个 `client.js`。要按"我一周没用过"
+来量，别一次砍一片。
+
+最后一句实话：手机端"整页重载"的根因是**页面体积 + HyperOS 回收渲染进程**，
+缓存头只能让重载变便宜，不能阻止重载。想阻止只有两条：瘦身（第 4 档），或者把页面
+装成 PWA——`manifest.webmanifest` 里 `display: standalone`，Chrome 里"添加到主屏幕"
+后是独立窗口，比标签页抗回收（小米浏览器对 PWA 支持一般，能换 Chrome 再试）。
+
 ## 版本记录
 
 | 版本 | 日期 | 内容 | 使用模型 | 本次消耗 |
 |---|---|---|---|---|
 | v1 | 2026-11-12 | 首版：两种暴露拓扑、固定 token、cookie 门 + Basic、sha512crypt 坑位与排查表 | deepseek-flash | 输入 5.0 万 / 输出 4.4 万 token，cache 读 443 万，约 ¥0.63（cost-meter，写入时统计） |
+| v2 | 2026-11-13 | 增：`--public-url` 与 `--trusted-host` 分工、裸跑 vs 反代逐项对比、有无 debug/release 模式、缓存/CPU/内存分档优化（含 nginx `add_header` 追加导致 immutable 失效的实测坑） | deepseek-flash | 输入 8.6 万 / 输出 6.4 万 token，cache 读 595 万（cost-meter 口径） |

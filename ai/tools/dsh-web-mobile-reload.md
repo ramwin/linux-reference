@@ -117,12 +117,15 @@ grep -rIn "location\.reload\|location\.replace\|location\.assign\|location\.href
    nginx 站点里加：
    ```nginx
    location ^~ /assets/ {
+       proxy_hide_header Cache-Control;   # 必须：nginx 的 add_header 是追加
        add_header Cache-Control "public, max-age=31536000, immutable" always;
        proxy_pass http://127.0.0.1:3081;
        include /etc/nginx/snippets/dsh-www-proxy.inc;
    }
    ```
-   每次重载少下 470 KB、少一次全量解析。
+   每次重载少 4 个条件请求（移动端约 1–4 个 RTT）；缓存被系统清掉时省 470 KB 重下。
+   **只加 `add_header` 不 `proxy_hide_header` 等于白加**：上游的 `cache-control: no-cache`
+   会被原样透传，浏览器看到两行后按 no-cache 处理（2026-11-13 用临时 nginx 实例实测）。
 2. **上游修 `dsh-host-frontend-static`**：给静态资源写 `cache-control`/`ETag`，
    别只写 `content-type`。
 3. **轮询接事件驱动**：`session.phase`、`dsh-music/intent` 这些 1/s 的轮询
@@ -168,14 +171,19 @@ sudo bash ~/dsh-www-assets-cache.sh        # 应用：备份 → 插入 → ngin
 ```
 
 脚本做的事：在 `dsh.www.ramwin.com` 的 443 server 里、`location /` 之前插入
-`location ^~ /assets/`，带 `Cache-Control: public, max-age=31536000, immutable`，
-并复刻原有的 cookie 门（`error_page 418 = @dsh_www_gate`）和 HSTS 等 `add_header`
-——因为 nginx 的 `add_header` 不跨 location 继承，漏写会把这些头弄丢。
-文件名带内容 hash，所以 immutable 安全；文档本身仍是 `no-store`（它的地址不带
-hash，必须继续走协商）。
+`location ^~ /assets/`，带 `proxy_hide_header Cache-Control` + `Cache-Control: public,
+max-age=31536000, immutable`，并复刻原有的 cookie 门（`error_page 418 = @dsh_www_gate`）
+和 HSTS 等 `add_header` —— 因为 nginx 的 `add_header` 不跨 location 继承，漏写会把这些头弄丢。
+文件名带内容 hash，所以 immutable 安全；文档本身仍不带缓存头（它的地址不带 hash，
+必须继续走协商）。
 
-验证：`curl -sI https://dsh.www.ramwin.com/assets/index-*.js | grep -i cache-control`
-（未登录的 401 也会带，因为用了 `always`）。
+2026-11-13 修正了两处：① 原脚本只有 `add_header`，会被上游 `no-cache` 顶掉，已补
+`proxy_hide_header`；② 原来写"未登录的 401 也会带"，实际 401 来自 `@dsh_www_gate`
+那个 location，不带这条头，验证必须先过 cookie 门（脚本现在从 nginx 的 map 里取
+cookie 值再 curl）。
+
+验证：`curl -sI -H "Cookie: dsh_www_pass=<map 里的值>" https://dsh.www.ramwin.com/assets/<真实文件名>.js | grep -i cache-control`
+——**只有一行** Cache-Control 才算过；同时出现 `no-cache` 说明 `proxy_hide_header` 没生效。
 
 ## 附：这次用到的几个取证命令
 
@@ -201,6 +209,10 @@ grep -rIn "location.reload" --include=*.js ~/node_modules/@deepseek-ai
 
 ## 版本记录
 
+- v3（2026-11-13）：修正 `/assets/` 长缓存方案的两处硬伤——`add_header` 只是追加，
+  不 `proxy_hide_header Cache-Control` 会被上游 `no-cache` 顶掉（临时 nginx 实例实测）；
+  未登录的 401 来自 gate location，不带该头，验证必须先过 cookie 门。同步更新脚本
+  `~/dsh-www-assets-cache.sh`，并补实测基线（冷加载 4.3 MB / 重载 4×304 / RSS 386–399 MB）。
 - v2（2026-11-12）：补「已落地的改动」——两个插件的轮询节流（实测 rev 变化 +
   bundle 校验）与 nginx `/assets/` 长缓存脚本（sudo 被沙箱挡住，留待 root 执行）。
 - v1（2026-11-12）：初版。实测数据来自 11/11 00:52 → 12/11 09:27 的
