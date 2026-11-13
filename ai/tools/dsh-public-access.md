@@ -355,6 +355,10 @@ sudo bash ~/dsh-www-tuneup.sh --revert # 全部撤销
 - `--no-restart` 只改文件，等你挑时间 `systemctl restart dsh-www`（重启会掐断正在跑的
   会话，cookie 持久化所以不用重新登录）。
 - `/etc/nginx` 是 git 仓，脚本不替你 commit：`cd /etc/nginx && sudo git diff` 看过再提交。
+- **脚本刻意不写 `/tmp`**：Ubuntu 的 `fs.protected_regular=2` 会拒绝对 sticky 目录里
+  「别人建的」普通文件做 truncate/写，**root 也会被拒**（EACCES）。踩过一次：
+  普通用户测试时留下了 `/tmp/<固定名>.log`，之后 `sudo` 跑同一脚本重定向到该文件失败，
+  被误判成 `nginx -t` 失败而自动回滚。现在全部改成把命令输出接进变量。
 
 **第 1 档的坑（实测，别踩）**：`add_header Cache-Control ...` 只是**追加**，nginx 会把
 上游的 `cache-control: no-cache` 一并透传。响应变成两行，浏览器按 `no-cache` 处理，
