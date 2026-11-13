@@ -15,4 +15,5 @@
 ./dsh-auto-memory-vs-docs.md
 ./knowledge-base-layering.md
 ./dsh-web-mobile-reload.md
+./dsh-stale-lock-startup-failure.md
 ```
