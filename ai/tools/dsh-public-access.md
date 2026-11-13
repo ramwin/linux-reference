@@ -283,9 +283,9 @@ ExecStart=/home/<user>/node_modules/.bin/dsh web --port 3080 --no-open \
 | 静态资源缓存头 | 可以按 location 注入 `immutable`（DSH 自己写死 `no-cache`） | 无配置项。`dsh-host-frontend-static` 源码里就是 `no-cache` + 弱 ETag，0.2.2-rc.2 也一样 |
 | 鉴权纵深 | Basic/cookie 门 + DSH token/cookie 两层 | 只剩 DSH 一层（token + 签名 cookie + Host 围栏） |
 | 限流 / 防爆破 / 连接数 | `limit_req` / `limit_conn` 可用 | 没有 |
-| 日志审计 | access_log 带 UA、字节数、状态码 | 只有 journald 里的应用日志 |
+| 日志审计 | access_log 带 UA、字节数、状态码，可直接算首屏字节 | 只有 journald 里的应用日志 |
 | 额外开销 | nginx worker 实测 4.7 MB RSS | 0 |
-| 访问日志/字节统计 | 有，能直接算首屏字节 | 无 |
+| 防护面 | 可接 fail2ban / WAF / IP 白名单 | 全暴露给 Node，没有这些钩子 |
 
 **结论**：单人自用、且愿意自己续证书、且不要静态长缓存，裸跑也能活；否则维持
 nginx 前置。真正"贵"的那项是缓存头——裸跑等于放弃第 1 档优化（见下节），
@@ -360,7 +360,8 @@ sudo systemctl edit dsh-www.service
 ```
 
 `OOMScoreAdjust` 为正数 = 更易被杀（内核优先杀 dsh 而不是 sshd），`MemoryHigh` 触发
-回收而不是直接 OOM。别设 `MemoryMax`——那等于到点直接 SIGKILL。
+回收而不是直接 OOM。`MemoryMax` 是硬上限、到点直接杀 cgroup 里的进程——想硬隔离可以设，
+但要配合 `Restart=always` 并留够余量（比如 800M），否则正常峰值也会被杀。
 
 **第 4 档**的数据支撑：3.7 MB gzip 的 combo 由 80 个 client 模块组成，纯 UI 插件是
 大头；每砍一个，`/plugins/??` 组合 URL 里就少一个 `client.js`。要按"我一周没用过"
