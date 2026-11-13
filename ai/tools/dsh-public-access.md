@@ -334,6 +334,28 @@ nginx 前置。真正"贵"的那项是缓存头——裸跑等于放弃第 1 档
 | 5 | 让 nginx 直接 serve `/assets/`（绕过 node） | root | 冷加载省掉 node 的 gzip CPU | 中：路径耦合包目录 |
 | — | 关 gzip / 关 HTTP/2 / 改裸跑 | — | 负收益 | 不做 |
 
+### 一条命令做完（手机上 sudo 跑）
+
+上面五档真正要动手的是前三档，已经收进一个幂等脚本，SSH 上去一条命令：
+
+```bash
+bash ~/dsh-www-tuneup.sh --dry-run     # 先看会改什么（不需要 root）
+sudo bash ~/dsh-www-tuneup.sh          # 应用：nginx 长缓存 → public-url → OOM drop-in
+sudo bash ~/dsh-www-tuneup.sh --revert # 全部撤销
+```
+
+脚本行为：
+
+- 三步幂等，第二次跑全是「跳过」；只有真有改动才重启 dsh（2、3 步合并成一次）。
+- nginx 块用 `# >>> dsh-tuneup` 标记包住，`nginx -t` 失败自动回滚；
+  unit 改动前备份成 `*.bak-tuneup-<时间戳>`；drop-in 单独一个 `tuneup.conf`，不碰别的覆盖。
+- 跑完自带验证：资源响应只有一行 Cache-Control 且含 immutable；启动日志里出现
+  `dsh web: https://<域名>/?token=...`；cgroup 的 `OOMScoreAdjust`/`MemoryHigh` 已生效；
+  最后打印一个可直接点的登录链接。
+- `--no-restart` 只改文件，等你挑时间 `systemctl restart dsh-www`（重启会掐断正在跑的
+  会话，cookie 持久化所以不用重新登录）。
+- `/etc/nginx` 是 git 仓，脚本不替你 commit：`cd /etc/nginx && sudo git diff` 看过再提交。
+
 **第 1 档的坑（实测，别踩）**：`add_header Cache-Control ...` 只是**追加**，nginx 会把
 上游的 `cache-control: no-cache` 一并透传。响应变成两行，浏览器按 `no-cache` 处理，
 immutable 白加。用临时 nginx 实例验证过：
@@ -378,3 +400,4 @@ sudo systemctl edit dsh-www.service
 |---|---|---|---|---|
 | v1 | 2026-11-12 | 首版：两种暴露拓扑、固定 token、cookie 门 + Basic、sha512crypt 坑位与排查表 | deepseek-flash | 输入 5.0 万 / 输出 4.4 万 token，cache 读 443 万，约 ¥0.63（cost-meter，写入时统计） |
 | v2 | 2026-11-13 | 增：`--public-url` 与 `--trusted-host` 分工、裸跑 vs 反代逐项对比、有无 debug/release 模式、缓存/CPU/内存分档优化（含 nginx `add_header` 追加导致 immutable 失效的实测坑） | deepseek-flash | 输入 8.6 万 / 输出 6.4 万 token，cache 读 595 万（cost-meter 口径） |
+| v3 | 2026-11-13 | 增：一键脚本 `~/dsh-www-tuneup.sh`（幂等、dry-run、自动回滚、`--revert`、自带验证） | deepseek-flash | 输入缓存读为主，本会话累计 610 万 token（cost-meter 口径） |

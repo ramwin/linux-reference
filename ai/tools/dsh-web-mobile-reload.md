@@ -166,9 +166,13 @@ curl -sN -b cookies.txt http://127.0.0.1:3081/plugins/events | head -c 2000
 本会话的 sudo 被沙箱 `no_new_privs` 挡死，所以落成一个可直接跑的脚本：
 
 ```bash
-bash ~/dsh-www-assets-cache.sh --dry-run   # 先看一眼插入的块
-sudo bash ~/dsh-www-assets-cache.sh        # 应用：备份 → 插入 → nginx -t（失败自动回滚）→ reload → 验证
+bash ~/dsh-www-tuneup.sh --dry-run   # 先看三步会改什么（不需要 root）
+sudo bash ~/dsh-www-tuneup.sh        # 应用：nginx 长缓存 + public-url + OOM drop-in，一次重启
 ```
+
+（只管静态缓存、不碰 systemd 的窄版仍是 `~/dsh-www-assets-cache.sh`。）
+`~/dsh-www-tuneup.sh` 是幂等的：块用 `# >>> dsh-tuneup` 标记包住，`nginx -t`
+失败自动回滚，`--revert` 一键撤销，跑完自带缓存头/URL/cgroup 三项验证。
 
 脚本做的事：在 `dsh.www.ramwin.com` 的 443 server 里、`location /` 之前插入
 `location ^~ /assets/`，带 `proxy_hide_header Cache-Control` + `Cache-Control: public,
@@ -209,6 +213,7 @@ grep -rIn "location.reload" --include=*.js ~/node_modules/@deepseek-ai
 
 ## 版本记录
 
+- v4（2026-11-13）：三步优化收进幂等脚本 `~/dsh-www-tuneup.sh`（dry-run / 自动回滚 / `--revert`）。
 - v3（2026-11-13）：修正 `/assets/` 长缓存方案的两处硬伤——`add_header` 只是追加，
   不 `proxy_hide_header Cache-Control` 会被上游 `no-cache` 顶掉（临时 nginx 实例实测）；
   未登录的 401 来自 gate location，不带该头，验证必须先过 cookie 门。同步更新脚本
