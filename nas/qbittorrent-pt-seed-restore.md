@@ -4,11 +4,12 @@
 `manifest.csv` / `magnets.txt` / `torrents/*.torrent` 到 `_qbt_import/`）插到 NAS 上，
 要把这 137 个种子在 NAS 的 qBittorrent 里重新做种。
 
-结论先行：**能恢复，但不能直接 `add` 完就完事**。实测 137 个里 82 个真正恢复做种、
-6 个通过「重新指向实际目录」救回、40 个 m-team 种子必须重下 `.torrent`、
+结论先行：**能恢复，但不能直接 `add` 完就完事**。实测 137 个里 122 个挂回盘上做种
+（葡萄/BTSchool/CarPT 补 announce 即可；m-team 的 40 个用官方 API 重下 `.torrent`，
+其中 38 个成功）、6 个通过「重新指向实际目录」救回、
 11 个种子对应的文件已不存在或被打散重整。
 
-## 一、五个踩点
+## 一、六个踩点
 
 ### 1. 容器里根本看不到外接盘
 
@@ -70,7 +71,8 @@ curl -s -b cookie.txt --data-urlencode "hash=<info_hash>" \
 
 **m-team 是例外**：它的 announce 是
 `https://tracker.m-team.cc/announce?credential=<base64(sign=…&t=…&tid=…&uid=…)>`，
-`tid` 每个种子不同、`sign` 由站点签名，**无法仿造**，只能回站点重新下载 `.torrent`。
+`tid` 每个种子不同、`sign` 由站点签名，**无法仿造**，只能回站点重新下载 `.torrent`
+（见下面第 6 节，用 API 能全自动补回来）。
 （葡萄 / BTSchool / CarPT 都是 `announce.php?passkey=<固定值>`，可以补。）
 
 ### 4. qBittorrent 5.2 的 WebUI API 改名了
@@ -99,6 +101,41 @@ curl -s -b cookie.txt --data-urlencode "hash=<info_hash>" \
 # -> savepath=/downloads2/动画/海贼王 且 contentLayout=NoSubfolder（去掉种子里那层根目录）
 ```
 
+### 6. m-team 的种子可以用官方 API 全自动补回来
+
+站点给两样东西：**访问令牌**（UUID）和 **API 密钥**（32 位十六进制）。实测
+**只有访问令牌能用**——把它当 `x-api-key`：
+
+```bash
+UA='Mozilla/5.0 ... Chrome/131.0.0.0 Safari/537.36'   # 不带浏览器 UA 会被 302 到 google.com
+KEY='<访问令牌 UUID>'
+# 搜索：JSON body
+curl -s -A "$UA" -H 'Content-Type: application/json' -H "x-api-key: $KEY" \
+  -d '{"keyword":"JUMS-129","mode":"adult","pageNumber":1,"pageSize":100}' \
+  https://api.m-team.cc/api/torrent/search
+# 详情 / 生成下载链接：必须用「表单」，用 JSON 会报「參數錯誤」
+curl -s -A "$UA" -H "x-api-key: $KEY" -d 'id=<tid>' https://api.m-team.cc/api/torrent/genDlToken
+# -> {"code":"0","data":"https://api.m-team.cc/api/rss/dlv2?sign=..&t=..&tid=..&uid=.."}
+# 跟随 302 拿 .torrent（重定向后的请求不要再带 x-api-key）
+curl -sL -A "$UA" -o x.torrent '<上一步的 data>'
+```
+
+要点：
+
+- **`mode` 有两个分区**：`normal`（影视/音乐/普通）+ **`adult`**。成人内容（韩漫、JAV、
+  FC2、OnlyFans…）在 `normal` 下搜 `total=0`，必须 `mode=adult`。这点最容易误判成「站点没有」。
+- **限流**：连发会返回 `{"code":"4","message":"請求過於頻繁"}`；实测间隔 **2.6s** 稳定，
+  触发后等 45s 恢复。批量跑请自带节流 + 重试。
+- 搜索结果的 `infoHash` 是 `null`，**不能按 hash 搜**。可行的匹配法：
+  用 `size`（字节）精确过滤候选 → `genDlToken` 下载 → 自己算 `info.sha1` 比对，
+  完全一致才算命中（这样还能顺带确认拿到的不是同名不同内容）。
+- 下载到的 `.torrent` 里 `announce` 就是带 `credential` 的完整 URL，直接换进 qbt 即可，
+  老种子当年留下的 credential 也一直有效。
+- 删掉的种子 `visible=2` 才能搜到，而且 `genDlToken` 会失败，基本救不回来。
+
+自动化脚本：`mt_fetch2.py`（按 size+hash 匹配，normal/adult 双模式 + 分页 + 节流）、
+`mt_swap.py`（删旧不删文件 → 同 savepath 跳过校验重挂 → start）。
+
 ## 二、完整流程（可复用）
 
 ```bash
@@ -125,14 +162,18 @@ python3 qbt_index.py && python3 qbt_remap.py
 
 ## 三、这次的实际结果
 
-- 137 个种子里 133 个是新加的（4 个 NAS 上早已在做种）。
-- **82 个真正恢复**（葡萄 42 / BTSchool 31 / CarPT 9），progress=1、announce status=2，合计约 3.3TB。
-- **40 个 m-team 种子**挂上了但补不了 announce，需要回站点重新下载 `.torrent` 再导入。
-- **11 个没能恢复**：文件已不存在，或被打散进单片目录（结构对不上）。
-- 未恢复的**不会**自动下载，不会偷偷占盘。
+- 137 个种子里 133 个是新加的（4 个 NAS 上早已在做种），落在 `/downloads2` 的共 **122 个、3.3TB**。
+- **120 个 announce 生效**（`status=2`）：葡萄 42 / **m-team 38** / BTSchool 31 / CarPT 9。
+  m-team 那 38 个是用官方 API 按 `size`+`info_hash` 精确匹配重下的 `.torrent` 换进去的。
+- **2 个 m-team 种子没找到**（18MB 的 Makino 同人 CG、4.4GB 的「漫画」）：
+  站上按尺寸搜不到、`visible=2` 也没有，判断是站点已删，只留在 qbt 里但没有 announce。
+- **11 个没能恢复**：文件已不存在，或被打散进单片目录（结构对不上），没有加进 qbt。
+- 全部 122 个 `progress=1`、`amount_left=0`，**没有触发任何回下载**，盘余量仍是 1.7TB。
+- 恢复后几分钟内已产生真实上传流量（3 个处于 `uploading`）。
 
 ## 版本记录
 
+- v2（2026-11-14）：补上第 6 节 m-team API 全自动补种子的方法；结果更新为 120/122 生效。
 - v1（2026-11-14）：首次整理。现场：16T NTFS 盘插回绿联 NAS，
   把 `_qbt_import/` 的 137 个 PT 种子恢复到 NAS 的 qBittorrent 5.2.3。
   使用模型 DeepSeek（deepseek-flash），本次会话含大量盘上文件比对与 API 调用，未精确统计 tokens。
