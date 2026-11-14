@@ -119,6 +119,8 @@ curl -s 'https://api.ugnas.com/api/system/knowledge_center/sa/base/category?lang
 ## 本仓问答
 
 - [绿联 NAS 插硬盘柜后的权限控制，以及 ext4 能不能直接插](./ugreen-nas-external-storage-permissions.md)
+- [把外接盘上的 PT 种子恢复到 NAS 的 qBittorrent](./qbittorrent-pt-seed-restore.md)
+  —— 容器加挂载、NTFS 校验太慢改走文件稽核、种子丢了 announce 怎么补、qbt 5.2 API 改名
 
 ## 版本记录
 
