@@ -6,6 +6,7 @@
 ## 运维工具
 ```{toctree}
 ./software/mdadm.md
+./software/raid-levels.md
 ```
 
 ### nmon
