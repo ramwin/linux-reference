@@ -135,4 +135,4 @@ python3 qbt_index.py && python3 qbt_remap.py
 
 - v1（2026-11-14）：首次整理。现场：16T NTFS 盘插回绿联 NAS，
   把 `_qbt_import/` 的 137 个 PT 种子恢复到 NAS 的 qBittorrent 5.2.3。
-  使用模型 DeepSeek（deepseek-flash），本次会话约 20 万 tokens。
+  使用模型 DeepSeek（deepseek-flash），本次会话含大量盘上文件比对与 API 调用，未精确统计 tokens。
