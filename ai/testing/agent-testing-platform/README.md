@@ -17,6 +17,7 @@
 ./dag-fixed-vs-custom.md
 ./why-agent-testing.md
 ./self-evolution.md
+./agent-versioning.md
 ./skill-personalization.md
 ./case-redis-upgrade.md
 ./landscape-openjiuwen.md
@@ -167,6 +168,7 @@
 | [architecture.md](./architecture.md) | 七阶段、三拓扑、三档方案、六个横向关切、外部系统接入、插件体系、不变量清单 | 长文,平台总纲 |
 | [why-agent-testing.md](./why-agent-testing.md) | 测试系统到底解决什么?通用 DAG / 通用 Agent 平台能不能替代? | 短,立论 |
 | [self-evolution.md](./self-evolution.md) | 自进化分几层、多用户评分怎么设计、进化方向怎么找 | 中 |
+| [agent-versioning.md](./agent-versioning.md) | agent 要不要版本管理、版本什么、怎么和评测/门禁/回滚联动 | 中长,含 manifest 与 DDL |
 | [skill-personalization.md](./skill-personalization.md) | Skill 怎么存、怎么做到千人千面、权限与多租户 | 中长,含 DDL |
 | [case-redis-upgrade.md](./case-redis-upgrade.md) | Redis 5.0→7.0 升级全流程,七阶段各自产出什么 | 长,含 prompt 与输出样例 |
 | [landscape-openjiuwen.md](./landscape-openjiuwen.md) | openJiuwen 是什么、和我们重叠多少、能复用哪些 | 中长,含一手资料摘录 |
@@ -192,5 +194,7 @@
 |---|---|---|---|
 | v1 | 2026-10-25 | 建文件夹:收拢 6 篇专题,新增本页总纲、外部模型对比机制、问答台账与待校验清单 | DeepSeek(deepseek-flash) |
 | v2 | 2026-11-12 | 新增《Codex、DSH、openJiuwen、扣子:四种 AI 工具,四种活法》横评,并接入外部方案与文档地图 | DeepSeek(deepseek-flash) |
+| v3 | 2026-11-16 | 新增《Agent 版本管理:给"优化"和"评测"装一个坐标轴》,并接入文档地图 | DeepSeek(deepseek-flash) |
 
 本次消耗:见会话 `session-a8f2edbd` 的 usage 汇总(约 1.2 万 token 输入 / 0.9 万 token 输出,含子任务)。
+v3 消耗:会话 `session-14160842` 汇总输入 7.3 万 / 输出 3.7 万 token(累计上下文 115 万)。
