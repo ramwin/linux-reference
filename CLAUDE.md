@@ -2,6 +2,29 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 公开仓红线（先读这条）
+
+**本仓是公开仓库**：GitHub `ramwin/linux-reference` 是 public，站点
+<https://linux-reference.ramwin.com> 匿名可读。写任何内容前先假定它会被全网看到。
+
+**禁止写入的真实信息**（一律用占位符代替）：
+
+| 类别 | 占位写法 |
+| --- | --- |
+| 磁盘/文件系统 UUID | `UUID=11111111-1111-1111-1111-111111111111` |
+| 真实挂载点、磁盘布局、阵列成员 | `/mnt/data`、`/dev/sdX` |
+| 个人家目录、用户名 | `/home/user`、`/run/media/user` |
+| 内网 IP、内网域名、主机名 | `192.0.2.10`、`host.example.com` |
+| 账号、密码、token、私钥 | `user`、`password`、`$TOKEN` |
+
+真实的机器信息（挂载点、UUID、主机名、内网地址、账号）只记在私有仓
+`~/github/个人/life` 或 `~/github/secret`，不进本仓。
+
+**归档归属**：用户在哪里提问，解答就归档到那个工作区对应的仓。在 `life`
+工作区问的运维操作 → 记进 life 仓，不要顺手搬到本仓。本仓只沉淀可公开的通用知识。
+
+发现本仓已有真实信息泄露时，改成占位符并在 commit message 里说明。
+
 ## 项目概述
 
 这是个人的 Linux 知识参考库，使用 Sphinx 构建为静态文档站点，托管于 Read the Docs。内容为中文，涵盖 Linux 命令、系统管理、数据库、软件配置等。

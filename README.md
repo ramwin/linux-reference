@@ -197,8 +197,8 @@ flock path/to/lock.lock --nonblock --command "command"
 * 自动挂载
 ```
 /etc/fstab
-UUID=B2A0348DA03459D5 /run/media/wangx/samsung ntfs umask=0077,gid=1001,uid=1000 0 0
-UUID=222E77452E771151 /run/media/wangx/E ntfs defaults,rw,user 0 0
+UUID=00A011B022C033D0 /run/media/user/samsung ntfs umask=0077,gid=1001,uid=1000 0 0
+UUID=AA1BB2CC3DD4EE5F /run/media/user/E ntfs defaults,rw,user 0 0
 ```
 
 * 选项
