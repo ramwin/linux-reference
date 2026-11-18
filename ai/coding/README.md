@@ -1,6 +1,6 @@
 # AI 编程与协作
 
-覆盖需求表达与需求交付（含用例子表达需求）、结对编程、多模型审查、并行开发、代码审查瓶颈和重复性运维自动化。
+覆盖需求表达与需求交付（含用例子表达需求）、结对编程、多模型审查、并行开发、代码审查瓶颈、代码结构治理和重复性运维自动化。
 
 ```{toctree}
 :maxdepth: 1
@@ -14,4 +14,5 @@
 ./ai-era-code-review-bottleneck.md
 ./reduce-mr-conflicts.md
 ./repetitive-ops-automation.md
+./folder-fanout-for-ai.md
 ```
