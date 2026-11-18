@@ -10,3 +10,42 @@ blockquote {
   margin: 22px 0px 0px;
   display: block
 }
+
+/* 表格全局自动换行。
+ * 主题默认给单元格加 `white-space: nowrap`(见 theme.css 里
+ * `.wy-table-responsive table td`),里面再放长命令、长 URL、长路径时,
+ * 列宽被撑到远超页面宽度,窄屏上右侧内容直接看不见。
+ * 这里统一放开折行,并允许超长无空格串在任意位置断开,
+ * 让整张表始终在页面宽度内显示全;列数多到实在放不下的表,
+ * 仍由主题 `.wy-table-responsive` 的横向滚动兜底,不会丢内容。 */
+.rst-content table,
+.wy-table-responsive table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.rst-content table th,
+.rst-content table td,
+.wy-table-responsive table th,
+.wy-table-responsive table td {
+  white-space: normal !important;   /* 覆盖主题的 nowrap */
+  overflow-wrap: break-word;
+  overflow-wrap: anywhere;          /* 长 URL / 长路径优先断开 */
+  word-break: break-word;
+}
+
+/* 表头也放开(RTD 主题单独给 thead 加了 nowrap) */
+.rst-content table thead,
+.rst-content table thead th {
+  white-space: normal;
+}
+
+/* 单元格里的代码块跟着折行,不靠横向滚动条 */
+.rst-content table pre,
+.rst-content table .highlight,
+.wy-table-responsive table pre,
+.wy-table-responsive table .highlight {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
