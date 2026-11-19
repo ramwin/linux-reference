@@ -6,6 +6,8 @@
 :maxdepth: 1
 
 ./personal-ai-proficiency.md
+./architecture-option-refresh.md
+./solo-plus-ai-vs-delegation.md
 ./agent-engineer.md
 ./ai-full-permission-data-safety.md
 ./career-resilience-drone-embodied-ai.md
