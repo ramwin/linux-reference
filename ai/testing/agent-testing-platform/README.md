@@ -20,6 +20,7 @@
 ./agent-versioning.md
 ./skill-personalization.md
 ./case-redis-upgrade.md
+./environment-management-stability.md
 ./landscape-openjiuwen.md
 ./landscape-tools.md
 ./external-review.md
@@ -171,6 +172,7 @@
 | [agent-versioning.md](./agent-versioning.md) | agent 要不要版本管理、版本什么、怎么和评测/门禁/回滚联动 | 中长,含 manifest 与 DDL |
 | [skill-personalization.md](./skill-personalization.md) | Skill 怎么存、怎么做到千人千面、权限与多租户 | 中长,含 DDL |
 | [case-redis-upgrade.md](./case-redis-upgrade.md) | Redis 5.0→7.0 升级全流程,七阶段各自产出什么 | 长,含 prompt 与输出样例 |
+| [environment-management-stability.md](./environment-management-stability.md) | 环境管理系统怎么保证稳定性:7 条清单前提审计、风险排序、2026 技术对应、12 条设计、三档方案 | 长文,含 2026-11 核查的版本与链接 |
 | [landscape-openjiuwen.md](./landscape-openjiuwen.md) | openJiuwen 是什么、和我们重叠多少、能复用哪些 | 中长,含一手资料摘录 |
 | [landscape-tools.md](./landscape-tools.md) | Codex / DSH / openJiuwen / 扣子 各做什么、七个维度怎么打分、和测试平台差在哪 | 中长,含评分表与选型建议 |
 | [external-review.md](./external-review.md) | 怎么让外部模型校对,和内部模型的差异怎么记 | 机制说明 |
