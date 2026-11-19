@@ -8,6 +8,7 @@
 ./personal-ai-proficiency.md
 ./architecture-option-refresh.md
 ./solo-plus-ai-vs-delegation.md
+./systems-skills-gap.md
 ./agent-engineer.md
 ./ai-full-permission-data-safety.md
 ./career-resilience-drone-embodied-ai.md
