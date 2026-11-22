@@ -337,6 +337,9 @@ def step_rebase_subs(run: Run, all_subs: bool = False) -> None:
                  hint=[f"{sub.path} 有已推送的本地提交,rebase 会改写公开历史"],
                  suggested_next=[f"git -C {shlex.quote(sub.path)} log --oneline {trunk}..HEAD"],
                  reversible=False)
+        if not run.apply:
+            print(f"plan rebase {sub.path} behind={behind} ahead={ahead} trunk={trunk}")
+            continue
         rb, o, e = git(["rebase", trunk], p, run.timeout)
         write_log(run, "rebase-subs", f"{sub.path} rebase {trunk}: rc={rb}\n{o}{e}")
         if rb != 0:
