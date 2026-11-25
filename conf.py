@@ -29,6 +29,7 @@ exclude_patterns = [
         '.git',
         'Thumbs.db',
         "node_modules",
+        ".venv",
         ]
 
 language = 'zh_CN'
