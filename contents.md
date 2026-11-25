@@ -20,6 +20,14 @@ ai/personal-practice/*
 ```
 
 ```{toctree}
+:caption: 前端
+:maxdepth: 1
+:glob:
+
+frontend/*
+```
+
+```{toctree}
 :caption: 随笔与专题
 :maxdepth: 1
 :glob:
