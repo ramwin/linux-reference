@@ -34,23 +34,33 @@ log "reload nginx ok"
 
 # 3) 校验: 每个续期域名在 443 上实际服务的证书必须等于 live/ 下的新证书
 #    (按 SNI 命中本地 443,不需要改 DNS/走公网)
+#    reload 之后旧 worker 还会处理完手上的连接,刚重载的瞬间可能仍拿到旧证书,
+#    所以每个域名重试几秒,持续不一致才判失败。
+get_fp() {
+    echo | openssl s_client -connect 127.0.0.1:443 -servername "$1" 2>/dev/null \
+        | openssl x509 -noout -fingerprint -sha256 2>/dev/null | sed 's/^.*=//'
+}
 rc=0
 for d in $domains; do
-    served=$(echo | openssl s_client -connect 127.0.0.1:443 -servername "$d" 2>/dev/null \
-        | openssl x509 -noout -fingerprint -sha256 2>/dev/null | sed 's/^.*=//')
+    if [ -n "$lineage" ] && [ -r "$lineage/fullchain.pem" ]; then
+        want=$(openssl x509 -in "$lineage/fullchain.pem" -noout -fingerprint -sha256 | sed 's/^.*=//')
+    else
+        want=""
+    fi
+    served=""
+    for _i in 1 2 3 4 5 6; do
+        sleep 1
+        served=$(get_fp "$d")
+        [ -n "$served" ] && { [ -z "$want" ] || [ "$served" = "$want" ]; } && break
+    done
     if [ -z "$served" ]; then
         log "!! $d 无法从 127.0.0.1:443 取到证书"
         rc=1
-        continue
-    fi
-    if [ -n "$lineage" ] && [ -r "$lineage/fullchain.pem" ]; then
-        want=$(openssl x509 -in "$lineage/fullchain.pem" -noout -fingerprint -sha256 | sed 's/^.*=//')
-        if [ "$served" = "$want" ]; then
-            log "ok  $d 线上已生效 ${served:0:20}"
-        else
-            log "!! $d 线上证书与 $lineage 不一致 (served=${served:0:20} want=${want:0:20})"
-            rc=1
-        fi
+    elif [ -n "$want" ] && [ "$served" != "$want" ]; then
+        log "!! $d 线上证书与 $lineage 不一致 (served=${served:0:20} want=${want:0:20})"
+        rc=1
+    else
+        log "ok  $d 线上已生效 ${served:0:20}"
     fi
 done
 
