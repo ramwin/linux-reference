@@ -44,16 +44,20 @@ server {
 }
 
 server {
-    if ($host = www.ramwin.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
     listen 80;
     listen [::]:80;
 
-    server_name www.ramwin.com;
-    return 404; # managed by Certbot
+    server_name www.ramwin.com ramwin.com;
 
+    # certbot webroot 续期验证(http-01)。注意必须放在 server 级 return 之前,
+    # 否则 server 重写阶段会先 301 掉,ACME 验证失败。
+    location ^~ /.well-known/acme-challenge/ {
+        root         /var/www/letsencrypt;
+        default_type "text/plain";
+        access_log   off;
+    }
 
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
