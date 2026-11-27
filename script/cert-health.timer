@@ -1,0 +1,10 @@
+[Unit]
+Description=每天跑一次证书健康检查
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+RandomizedDelaySec=600
+Persistent=true
+
+[Install]
+WantedBy=timers.target

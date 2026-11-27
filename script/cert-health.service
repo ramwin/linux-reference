@@ -1,0 +1,7 @@
+[Unit]
+Description=证书健康检查(剩余天数 + 线上证书一致性)
+Documentation=file:///var/www/github/linux-reference/script/cert-health.sh
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/cert-health
