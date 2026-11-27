@@ -123,3 +123,79 @@ server {
     return 301 https://$host$request_uri;
 }
 ```
+
+## HTTPS 证书与自动续期(certbot)
+
+要点: **让续期只动证书文件、不动 nginx 配置**,并且**续期后必须 reload**,否则 nginx
+还在用内存里的旧证书——certbot 报"续期成功",浏览器却照样看到过期证书。
+
+### 1. 用 webroot,不要用 `--nginx` installer
+
+`--nginx` 会改写 nginx 配置(加 `listen 443 ssl`、`ssl_certificate` 等)。配置如果
+放在 git 仓里(软链进 `sites-enabled/`),续期就把仓弄脏,自动部署的
+`git merge --ff-only` 直接失败。推荐:
+
+```bash
+# 首次签发
+sudo certbot certonly --webroot -w /var/www/letsencrypt \
+     -d example.com -d www.example.com
+# 已有证书改续期方式(内部先跑一次 staging 验证,失败不落盘)
+sudo certbot reconfigure --cert-name example.com --webroot -w /var/www/letsencrypt
+# 清掉 nginx installer,避免续期改配置
+sudo certbot reconfigure --cert-name example.com --installer none
+```
+
+对应 80 端口要有 ACME 校验入口(注意放在 server 级 `return 301` **之前**,否则
+先被重定向掉):
+
+```nginx
+location ^~ /.well-known/acme-challenge/ {
+    root         /var/www/letsencrypt;
+    default_type "text/plain";
+    access_log   off;
+}
+```
+
+443 块里固定引用 `live/` 路径,续期后 reload 即可生效(软链指向新文件):
+
+```nginx
+ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+```
+
+### 2. 续期后自动 reload + 校验
+
+`/etc/letsencrypt/renewal-hooks/deploy/50-reload-nginx.sh`
+(脚本见 `script/certbot-reload-nginx.sh`):先 `nginx -t`,再
+`systemctl reload nginx`,然后按 SNI 连本地 443,比对**线上证书指纹 == live/ 下的
+新证书**;不一致就退非 0(旧 worker 还会收尾,所以要重试几秒)。这样"续期成功但
+线上没生效"会立刻在日志里暴露:
+
+```bash
+tail -f /var/log/certbot-deploy-nginx.log
+```
+
+### 3. 每天体检
+
+`script/cert-health.sh` + `script/cert-health.{service,timer}`:检查每张证书剩余
+天数(<20 天报警)、每个域名 443 上服务的证书是否是 `live/` 下那张、`nginx -t`
+是否通过。失败时 systemd 单元为 failed,日志在 `/var/log/cert-health.log`:
+
+```bash
+systemctl list-timers cert-health.timer
+journalctl -u cert-health.service -n 20
+```
+
+### 4. 踩坑:只有 80 配置的域名
+
+某个域名只写了 `listen 80`,访问 `https://` 时会落到 443 的**默认 server**
+(第一个 443 server 块),于是拿到别的站点的证书,浏览器报
+`ERR_CERT_COMMON_NAME_INVALID`。诊断:
+
+```bash
+echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \
+    | openssl x509 -noout -subject -dates
+```
+
+证书 CN 不是自己域名 => 这个站没有 443 server 块。给每个要 HTTPS 的域名都补
+443 块即可。
