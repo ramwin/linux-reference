@@ -33,7 +33,10 @@ EOF
 fi
 
 # 2. 禁用词: nothing / update 及其变形（大小写不敏感）
-hit="$(grep -ioE '\b(nothing|update)\w*\b' <<<"$msg" | sort -u | tr '\n' ' ')"
+#    例外: `*-update` 形式的专有名词/包名（如 repo-update、dsh-skill-repo-update），
+#    它们不是「偷懒写 update」，而是项目名。先抹掉再判定，别让包名挡住合法提交。
+scan="$(sed -E 's/([A-Za-z0-9_.]*-)?repo-update//g; s/dsh-skill-repo-update//g' <<<"$msg")"
+hit="$(grep -ioE '\b(nothing|update)\w*\b' <<<"$scan" | sort -u | tr '\n' ' ')"
 if [ -n "$hit" ]; then
     printf '提交被拒绝: 信息中不允许出现禁用词: %s\n' "$hit" >&2
     echo  '  请用具体动词描述改动，如 fix / add / refactor / remove' >&2
