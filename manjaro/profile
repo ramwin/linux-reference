@@ -1,0 +1,18 @@
+# ~/.profile
+# SDDM 的 /usr/share/sddm/scripts/wayland-session 会在 exec startplasma-wayland 之前
+# source /etc/profile 和本文件,所以这里的环境改动会进入整个 Plasma 会话。
+#
+# Manjaro 的 /etc/profile.d/input-support.sh(包 manjaro-asian-input-support-fcitx5)
+# 在 KDE Wayland 下仍然 export GTK_IM_MODULE/QT_IM_MODULE,和 KWin 通过
+# "虚拟键盘 -> Fcitx 5" 拉起的 fcitx5 Wayland 前端重复,于是 fcitx5 提示:
+#   检测到设置了 GTK_IM_MODULE 和 QT_IM_MODULE 而且 Wayland 输入法前端正在正常工作。
+#   推荐使用 Wayland 输入法前端。
+#
+# 按上游建议 https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#KDE_Plasma
+# KDE Wayland 下不设 GTK_IM_MODULE/QT_IM_MODULE(让 Gtk3/4、Qt6 走 text-input-v3,
+# Qt5 走 KWin 支持的 text-input-v2);保留 XMODIFIERS(XWayland 应用走 XIM)
+# 和 SDL_IM_MODULE(XWayland 下的 SDL2 应用需要)。
+# 放在用户目录而不是改 /etc/profile.d:包升级不会覆盖本文件。
+if [ "${XDG_SESSION_TYPE:-}" = "wayland" ] && [ "${XDG_CURRENT_DESKTOP:-}" = "KDE" ]; then
+    unset GTK_IM_MODULE QT_IM_MODULE
+fi
