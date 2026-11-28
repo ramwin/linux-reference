@@ -30,9 +30,14 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-CODES_MD = HERE / "codes.md"
-RULES_TOML = HERE / "rules.toml"
+HERE = Path(__file__).resolve().parent  # npm 包里是 skills/repo-update/scripts
+# codes.md / rules.toml 与脚本的相对位置取决于布局:
+#   npm 包      —— skills/repo-update/{codes.md,scripts/repo-update.py}  → 在上一级
+#   源仓 script —— script/repo-update/{codes.md,repo-update.py}          → 在同一级
+# 两种都要能跑，先看上一级，再回落到同级。
+SKILL_ROOT = HERE.parent if (HERE.parent / "codes.md").exists() else HERE
+CODES_MD = SKILL_ROOT / "codes.md"
+RULES_TOML = SKILL_ROOT / "rules.toml"
 STATE_DIR = Path(os.environ.get("REPO_UPDATE_STATE", "/tmp/repo-update"))
 STEPS = ("preflight", "fetch", "rebase-subs", "ff-main", "commit-pointers", "push", "verify")
 ENVELOPE_KEYS = ("step", "rc", "code", "affected", "stderr_tail", "hint", "reversible", "rollback", "suggested_next", "log")
